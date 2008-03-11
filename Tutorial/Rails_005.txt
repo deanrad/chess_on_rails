@@ -1,0 +1,7 @@
+1. Your running games are grouped, with the ones in which its your move on top, and the reset below. Each displays the last move (SMS notification would be nice too!!)
+
+2. Players can have some sort of avatar, in this case flags
+
+3. Move clocks - what these are saying never made sense to me !!
+
+4. A nice touch ! - looks up your opening sequence in a dictionary tand tells you what it happened to be.

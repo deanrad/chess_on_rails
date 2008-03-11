@@ -1,0 +1,3 @@
+1. The most recent move appears with a highlight
+2. Because I'm black, I see the board with h8 in the lower left - it's relative
+3. Moves played so far can be fast-forwarded, rewound, played to present, etc..
