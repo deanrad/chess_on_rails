@@ -1,0 +1,9 @@
+# SQL Server
+
+development:
+  adapter: sqlserver
+  host: .\SQLEXPRESS
+  database: ChessOnRails_development
+  username: chessonrails
+  password: ch3550nrails
+

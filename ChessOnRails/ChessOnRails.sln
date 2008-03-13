@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{325B8569-0C7C-4A6A-8AF8-89C3B6BC9E74}") = "ChessOnRails", "ChessOnRails.stproj", "{D4B143E2-8F58-49B7-A111-E57A42A6A4E3}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4B143E2-8F58-49B7-A111-E57A42A6A4E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4B143E2-8F58-49B7-A111-E57A42A6A4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4B143E2-8F58-49B7-A111-E57A42A6A4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4B143E2-8F58-49B7-A111-E57A42A6A4E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

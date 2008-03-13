@@ -1,0 +1,1365 @@
+  [4;36;1mSQL (0.047000)[0m   [0;1mCREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.313000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.015000)[0m   [0;1mINSERT INTO schema_info (version) VALUES(0)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.032000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.062000)[0m   [0;1mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL) [0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 1[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.047000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;35;1mSQL (0.015000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mSQL (0.203000)[0m   [0;1mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.016000)[0m   [0;1mDROP TABLE players[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.078000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.015000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.015000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.047000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL) [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mSQL (0.016000)[0m   [0;1mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'players' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL) [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'players' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(255) DEFAULT '0/0') [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.016000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(255) DEFAULT '0/0') [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mUPDATE schema_info SET version = 1[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.000000)[0m   [0mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.015000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.000000)[0m   [0;1mDROP TABLE players[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(255) DEFAULT '0/0') [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mUPDATE schema_info SET version = 1[0m
+  [4;35;1mSQL (0.016000)[0m   [0mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.015000)[0m   [0mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.000000)[0m   [0;1mDROP TABLE players[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.015000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(7) DEFAULT '0/0') [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mUPDATE schema_info SET version = 1[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.016000)[0m   [0mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.000000)[0m   [0;1mDROP TABLE players[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(7) DEFAULT '0/0') [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mSQL (0.016000)[0m   [0;1mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'players' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(7) DEFAULT '0/0') [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;35;1mSQL (0.015000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'players' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(7) DEFAULT '0/0') [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.016000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(7) DEFAULT '0/0') [0m
+  [4;36;1mPlayer Columns (0.015000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mPlayer Create (0.079000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Dean', '10/0')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mUPDATE schema_info SET version = 1[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.016000)[0m   [0mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.000000)[0m   [0;1mDROP TABLE players[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(7) DEFAULT '0/0') [0m
+  [4;36;1mPlayer Columns (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('NULL', '0/0')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('NULL', '0/0')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('NULL', '0/0')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('NULL', '0/0')[0m
+  [4;35;1mSQL (0.016000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mUPDATE schema_info SET version = 1[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.000000)[0m   [0mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.015000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.016000)[0m   [0;1mDROP TABLE players[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.015000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(7) DEFAULT '0/0') [0m
+  [4;36;1mPlayer Columns (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Dean', '5/5')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Maria', '5/0')[0m
+  [4;35;1mSQL (0.015000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Paul', '5/5')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Jones', '0/5')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mSQL (0.016000)[0m   [0;1mUPDATE schema_info SET version = 1[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.016000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.000000)[0m   [0mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreateSessions (2)
+  [4;36;1mSQL (0.016000)[0m   [0;1mCREATE TABLE sessions ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [session_id] varchar(255) NOT NULL, [data] text DEFAULT NULL, [created_at] datetime DEFAULT NULL, [updated_at] datetime DEFAULT NULL) [0m
+  [4;35;1mSQL (0.093000)[0m   [0mCREATE INDEX [index_sessions_on_session_id] ON sessions ([session_id])[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mCREATE INDEX [index_sessions_on_updated_at] ON sessions ([updated_at])[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 2[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mEXEC sp_helpindex 'players'[0m
+  [4;35;1mSQL (0.015000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'sessions' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mEXEC sp_helpindex 'sessions'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreateSessions (2)
+  [4;36;1mSQL (0.015000)[0m   [0;1mDROP TABLE sessions[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 1[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+Reached target version: 1
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mSQL (0.062000)[0m   [0;1mEXEC sp_helpindex 'players'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;36;1mSQL (0.015000)[0m   [0;1mDROP TABLE players[0m
+  [4;35;1mSQL (0.000000)[0m   [0mUPDATE schema_info SET version = 0[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;35;1mSQL (0.016000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.016000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.016000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'schema_info' 
+ [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mDBI::DatabaseError: Execute
+ OLE error code:80040E14 in Microsoft OLE DB Provider for SQL Server
+ There is already an object named 'schema_info' in the database.
+ HRESULT error code:0x80020009
+ Exception occurred.: CREATE TABLE schema_info (version integer)[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to CreatePlayers (1)
+  [4;35;1mSQL (0.000000)[0m   [0mCREATE TABLE players ([id] int NOT NULL IDENTITY(1, 1) PRIMARY KEY, [name] varchar(255) DEFAULT NULL, [win_loss] varchar(7) DEFAULT '0/0') [0m
+  [4;36;1mPlayer Columns (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.000000)[0m   [0m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Dean', '5/5')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Maria', '5/0')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Paul', '5/5')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mPlayer Create (0.000000)[0m   [0;1mINSERT INTO players ([name], [win_loss]) VALUES('Jones', '0/5')[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@IDENTITY AS Ident[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mUPDATE schema_info SET version = 1[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT @@ROWCOUNT AS AffectedRows[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mSELECT * FROM schema_info[0m
+  [4;35;1mSQL (0.000000)[0m   [0mSELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'[0m
+  [4;36;1mSQL (0.000000)[0m   [0;1m
+ SELECT 
+ cols.COLUMN_NAME as ColName, 
+ cols.COLUMN_DEFAULT as DefaultValue,
+ cols.NUMERIC_SCALE as numeric_scale,
+ cols.NUMERIC_PRECISION as numeric_precision, 
+ cols.DATA_TYPE as ColType, 
+ cols.IS_NULLABLE As IsNullable, 
+ COL_LENGTH(cols.TABLE_NAME, cols.COLUMN_NAME) as Length, 
+ COLUMNPROPERTY(OBJECT_ID(cols.TABLE_NAME), cols.COLUMN_NAME, 'IsIdentity') as IsIdentity, 
+ cols.NUMERIC_SCALE as Scale 
+ FROM INFORMATION_SCHEMA.COLUMNS cols 
+ WHERE cols.TABLE_NAME = 'players' 
+ [0m
+  [4;35;1mSQL (0.000000)[0m   [0mEXEC sp_helpindex 'players'[0m
