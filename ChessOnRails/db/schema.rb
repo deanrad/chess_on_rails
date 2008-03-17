@@ -9,11 +9,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 1) do
+ActiveRecord::Schema.define(:version => 2) do
+
+  create_table "matches", :force => true do |t|
+    t.integer  "player1_id",   :default => 0
+    t.integer  "player2_id",   :default => 0
+    t.integer  "next_to_move", :default => 0
+    t.integer  "status",       :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "players", :force => true do |t|
-    t.string "name",                  :default => "NULL"
-    t.string "win_loss", :limit => 7, :default => "0/0"
+    t.string "name",     :limit => 20, :default => "NULL"
+    t.string "win_loss", :limit => 7,  :default => "0/0"
   end
+
+  add_index "players", ["name"], :name => "index_players_on_name", :unique => true
 
 end

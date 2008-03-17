@@ -2,6 +2,7 @@
   <ItemGroup>
     <Ruby Include="app\controllers\application.rb" />
     <Ruby Include="app\helpers\application_helper.rb" />
+    <Ruby Include="app\models\match.rb" />
     <Ruby Include="app\models\player.rb" />
     <Ruby Include="config\environments\development.rb" />
     <Ruby Include="config\environments\production.rb" />
@@ -29,6 +30,7 @@
     <None Include="public\dispatch.cgi" />
     <None Include="public\dispatch.fcgi" />
     <Ruby Include="db\migrate\001_create_players.rb" />
+    <Ruby Include="db\migrate\002_create_matches.rb" />
     <Ruby Include="db\schema.rb" />
     <Ruby Include="public\dispatch.rb" />
     <None Include="public\favicon.ico" />
@@ -49,6 +51,7 @@
     <None Include="script\server" />
     <Ruby Include="script\steelserver.rb" />
     <Ruby Include="test\test_helper.rb" />
+    <Ruby Include="test\unit\match_test.rb" />
     <Ruby Include="test\unit\player_test.rb" />
     <None Include="Rakefile" />
     <None Include="README" />
@@ -98,6 +101,7 @@
     <Content Include="log\server.log" />
     <Content Include="log\test.log" />
     <Content Include="migratetoversion.bat" />
+    <Content Include="test\fixtures\matches.yml" />
     <Content Include="test\fixtures\players.yml" />
   </ItemGroup>
   <PropertyGroup>

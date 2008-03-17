@@ -7,3 +7,9 @@ development:
   username: chessonrails
   password: ch3550nrails
 
+test:
+  adapter: sqlserver
+  host: .\SQLEXPRESS
+  database: ChessOnRails_test
+  username: chessonrails
+  password: ch3550nrails

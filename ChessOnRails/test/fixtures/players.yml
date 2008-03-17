@@ -1,7 +1,12 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+# A better way than procedural commands declared in migrations for defining
+# a set of objects and their properties to be used 
 
-# one:
-#   column: value
-#
-# two:
-#   column: value
+ Dean:
+   id:      1
+   name:    Dean
+ Maria:
+   id:      2
+   name:    Maria
+ Paul:
+   id:      3
+   name:    Paul
