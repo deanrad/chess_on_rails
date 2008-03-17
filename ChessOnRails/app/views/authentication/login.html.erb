@@ -1,0 +1,24 @@
+<h1>Authenticate#login</h1>
+
+<% if flash[:notice] -%>
+	<div id="notice"><%= flash[:notice] %></div>	
+<% end -%>
+
+<% form_tag do %>
+	<p>
+	<label for="email">Email:</label>
+	<%= text_field_tag :email, params[:email] %>	
+	</p>
+	
+	<p>
+	<label for="security_phrase">Security Phrase:</label>
+	<%= text_field_tag :security_phrase, params[:security_phrase] %>	
+	</p>
+	
+	<p>
+	<%= submit_tag "Login" %>
+	</p>
+	
+<% end %>
+
+<p>Find me in app/views/authentication/login.html.erb</p>

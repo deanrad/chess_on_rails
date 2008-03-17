@@ -1,0 +1,11 @@
+<h1>Authenticate#index</h1>
+Hi. You are logged in as player # <%= session[:player_id] %>
+
+
+<% if @player -%>
+	Logged in 
+<% else -%>
+	<%= link_to "Login", "login" %>
+<% end -%>
+
+<p>Find me in app/views/authenticate/index.html.erb</p>

@@ -1,5 +1,7 @@
 class Player < ActiveRecord::Base
 
+	belongs_to :user
+	
 	validates_length_of :name, :maximum=>20
 	validates_uniqueness_of :name
 	

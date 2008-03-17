@@ -1,9 +1,11 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Ruby Include="app\controllers\application.rb" />
+    <Ruby Include="app\controllers\authentication_controller.rb" />
     <Ruby Include="app\helpers\application_helper.rb" />
-    <Ruby Include="app\models\match.rb" />
+    <Ruby Include="app\helpers\authentication_helper.rb" />
     <Ruby Include="app\models\player.rb" />
+    <Ruby Include="app\models\user.rb" />
     <Ruby Include="config\environments\development.rb" />
     <Ruby Include="config\environments\production.rb" />
     <Ruby Include="config\environments\test.rb" />
@@ -30,7 +32,7 @@
     <None Include="public\dispatch.cgi" />
     <None Include="public\dispatch.fcgi" />
     <Ruby Include="db\migrate\001_create_players.rb" />
-    <Ruby Include="db\migrate\002_create_matches.rb" />
+    <Ruby Include="db\migrate\002_create_users.rb" />
     <Ruby Include="db\schema.rb" />
     <Ruby Include="public\dispatch.rb" />
     <None Include="public\favicon.ico" />
@@ -50,9 +52,10 @@
     <None Include="script\runner" />
     <None Include="script\server" />
     <Ruby Include="script\steelserver.rb" />
+    <Ruby Include="test\functional\authentication_controller_test.rb" />
     <Ruby Include="test\test_helper.rb" />
-    <Ruby Include="test\unit\match_test.rb" />
     <Ruby Include="test\unit\player_test.rb" />
+    <Ruby Include="test\unit\user_test.rb" />
     <None Include="Rakefile" />
     <None Include="README" />
   </ItemGroup>
@@ -62,6 +65,7 @@
     <Folder Include="app\helpers\" />
     <Folder Include="app\models\" />
     <Folder Include="app\views\" />
+    <Folder Include="app\views\authentication" />
     <Folder Include="app\views\layouts\" />
     <Folder Include="config\" />
     <Folder Include="config\environments\" />
@@ -101,8 +105,14 @@
     <Content Include="log\server.log" />
     <Content Include="log\test.log" />
     <Content Include="migratetoversion.bat" />
-    <Content Include="test\fixtures\matches.yml" />
     <Content Include="test\fixtures\players.yml" />
+    <Content Include="test\fixtures\users.yml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedRuby Include="app\views\authentication\change_security_question.html.erb" />
+    <EmbeddedRuby Include="app\views\authentication\index.html.erb" />
+    <EmbeddedRuby Include="app\views\authentication\login.html.erb" />
+    <EmbeddedRuby Include="app\views\authentication\logout.html.erb" />
   </ItemGroup>
   <PropertyGroup>
     <RailsProject>True</RailsProject>

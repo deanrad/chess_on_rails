@@ -11,20 +11,20 @@
 
 ActiveRecord::Schema.define(:version => 2) do
 
-  create_table "matches", :force => true do |t|
-    t.integer  "player1_id",   :default => 0
-    t.integer  "player2_id",   :default => 0
-    t.integer  "next_to_move", :default => 0
-    t.integer  "status",       :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "players", :force => true do |t|
     t.string "name",     :limit => 20, :default => "NULL"
     t.string "win_loss", :limit => 7,  :default => "0/0"
   end
 
   add_index "players", ["name"], :name => "index_players_on_name", :unique => true
+
+  create_table "users", :force => true do |t|
+    t.string   "email",                :limit => 50,  :default => "NULL"
+    t.integer  "playing_as",                          :default => 0
+    t.string   "security_phrase",      :limit => 200, :default => "NULL"
+    t.string   "security_phrase_hint", :limit => 200, :default => "NULL"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
