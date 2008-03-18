@@ -5,6 +5,7 @@
     <Ruby Include="app\helpers\application_helper.rb" />
     <Ruby Include="app\helpers\authentication_helper.rb" />
     <Ruby Include="app\models\match.rb" />
+    <Ruby Include="app\models\move.rb" />
     <Ruby Include="app\models\player.rb" />
     <Ruby Include="app\models\user.rb" />
     <Ruby Include="config\environments\development.rb" />
@@ -35,6 +36,7 @@
     <Ruby Include="db\migrate\001_create_players.rb" />
     <Ruby Include="db\migrate\002_create_users.rb" />
     <Ruby Include="db\migrate\003_create_matches.rb" />
+    <Ruby Include="db\migrate\004_create_moves.rb" />
     <Ruby Include="db\schema.rb" />
     <Ruby Include="public\dispatch.rb" />
     <None Include="public\favicon.ico" />
@@ -57,6 +59,7 @@
     <Ruby Include="test\functional\authentication_controller_test.rb" />
     <Ruby Include="test\test_helper.rb" />
     <Ruby Include="test\unit\match_test.rb" />
+    <Ruby Include="test\unit\move_test.rb" />
     <Ruby Include="test\unit\player_test.rb" />
     <Ruby Include="test\unit\user_test.rb" />
     <None Include="Rakefile" />
@@ -104,10 +107,13 @@
     <Folder Include="vendor\plugins\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="db\fixtures\matches.yml" />
+    <Content Include="lib\tasks\seed.rake" />
     <Content Include="log\development.log" />
     <Content Include="log\test.log" />
     <Content Include="migratetoversion.bat" />
     <Content Include="test\fixtures\matches.yml" />
+    <Content Include="test\fixtures\moves.yml" />
     <Content Include="test\fixtures\players.yml" />
     <Content Include="test\fixtures\users.yml" />
   </ItemGroup>

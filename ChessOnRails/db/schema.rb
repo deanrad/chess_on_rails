@@ -9,12 +9,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 3) do
+ActiveRecord::Schema.define(:version => 4) do
 
   create_table "matches", :force => true do |t|
     t.integer  "player1",                   :null => false
     t.integer  "player2",                   :null => false
     t.integer  "state",      :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "moves", :force => true do |t|
+    t.integer  "match_id",                 :default => 0
+    t.integer  "moved_by",                 :default => 0
+    t.string   "from_coord", :limit => 2,  :default => "NULL"
+    t.string   "to_coord",   :limit => 2,  :default => "NULL"
+    t.string   "notation",   :limit => 10, :default => "NULL"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

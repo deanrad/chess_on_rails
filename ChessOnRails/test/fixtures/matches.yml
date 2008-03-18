@@ -1,10 +1,17 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 dean_vs_maria:
+   id: 1
    player1: 1
    player2: 2
 
 paul_vs_dean:
+   id: 2
    player1: 3
    player2: 1
+   
+unstarted_match:
+   id: 3
+   player1: 3
+   player2: 2
    
