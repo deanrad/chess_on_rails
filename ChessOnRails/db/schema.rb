@@ -9,7 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 2) do
+ActiveRecord::Schema.define(:version => 3) do
+
+  create_table "matches", :force => true do |t|
+    t.integer  "player1",                   :null => false
+    t.integer  "player2",                   :null => false
+    t.integer  "state",      :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "players", :force => true do |t|
     t.string "name",     :limit => 20, :default => "NULL"

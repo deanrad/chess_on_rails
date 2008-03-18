@@ -32,7 +32,7 @@ class PlayerTest < ActiveSupport::TestCase
 	#  any other test
 	def test_can_roundtrip_to_db_during_test
 		@super_streak = "100/0"
-		p = players(:Dean)
+		p = players(:dean)
 		assert_not_equal p.win_loss, @super_streak
 		
 		p.win_loss = @super_streak
@@ -62,10 +62,10 @@ class PlayerTest < ActiveSupport::TestCase
 	# now prove this class variable will be accessible in later tests. Also,
 	# update in db for later tests to prove the value doesn't persist across tests
 	# and to flex our muscles with alternate ways of accessing the fixture data
-	# - eg find_by_name, players(:Dean)
+	# - eg find_by_name, players(:dean)
 	def test_class_variable_accessible_in_later_tests_2
 		assert_equal "7/7", @@class_var_win_loss
-		p = players(:Dean)
+		p = players(:dean)
 		p.win_loss = @@class_var_win_loss
 		p.save!
 	end

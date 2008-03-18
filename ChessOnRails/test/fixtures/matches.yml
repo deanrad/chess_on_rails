@@ -1,0 +1,10 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+dean_vs_maria:
+   player1: 1
+   player2: 2
+
+paul_vs_dean:
+   player1: 3
+   player2: 1
+   
