@@ -8,8 +8,11 @@
     <Ruby Include="app\helpers\authentication_helper.rb" />
     <Ruby Include="app\helpers\match_helper.rb" />
     <Ruby Include="app\helpers\move_helper.rb" />
+    <Ruby Include="app\models\chess.rb" />
+    <Ruby Include="app\models\game.rb" />
     <Ruby Include="app\models\match.rb" />
     <Ruby Include="app\models\move.rb" />
+    <Ruby Include="app\models\piece.rb" />
     <Ruby Include="app\models\player.rb" />
     <Ruby Include="app\models\user.rb" />
     <Ruby Include="config\environments\development.rb" />
@@ -41,6 +44,7 @@
     <Ruby Include="db\migrate\002_create_users.rb" />
     <Ruby Include="db\migrate\003_create_matches.rb" />
     <Ruby Include="db\migrate\004_create_moves.rb" />
+    <Ruby Include="db\migrate\005_create_pieces.rb" />
     <Ruby Include="db\schema.rb" />
     <Ruby Include="public\dispatch.rb" />
     <None Include="public\favicon.ico" />
@@ -66,9 +70,10 @@
     <Ruby Include="test\functional\match_controller_test.rb" />
     <Ruby Include="test\functional\move_controller_test.rb" />
     <Ruby Include="test\test_helper.rb" />
+    <Ruby Include="test\unit\game_test.rb" />
     <Ruby Include="test\unit\match_test.rb" />
     <Ruby Include="test\unit\move_test.rb" />
-    <Ruby Include="test\unit\pieces_test.rb" />
+    <Ruby Include="test\unit\piece_test.rb" />
     <Ruby Include="test\unit\player_test.rb" />
     <Ruby Include="test\unit\user_test.rb" />
     <None Include="Rakefile" />
@@ -161,9 +166,11 @@
     <Content Include="db\fixtures\moves.yml" />
     <Content Include="db\fixtures\players.yml" />
     <Content Include="lib\tasks\seed.rake" />
+    <Content Include="lib\tasks\test_doc.rake" />
     <Content Include="log\development.log" />
     <Content Include="log\test.log" />
     <Content Include="migratetoversion.bat" />
+    <Content Include="ruby" />
     <Content Include="script\add_test" />
     <Content Include="script\dirtest" />
     <Content Include="script\dirtest.txt" />
@@ -213,6 +220,7 @@
     <Content Include="script\public\stylesheets\.svn\format" />
     <Content Include="test\fixtures\matches.yml" />
     <Content Include="test\fixtures\moves.yml" />
+    <Content Include="test\fixtures\pieces.yml" />
     <Content Include="test\fixtures\players.yml" />
     <Content Include="test\fixtures\users.yml" />
   </ItemGroup>
