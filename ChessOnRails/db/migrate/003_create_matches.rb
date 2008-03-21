@@ -3,7 +3,7 @@ class CreateMatches < ActiveRecord::Migration
     create_table :matches do |t|
       t.column :player1, :int, :null=>false
       t.column :player2, :int, :null=>false
-      t.column :state, :int
+      t.column :active, :int, :default=>1
 
       t.timestamps
     end

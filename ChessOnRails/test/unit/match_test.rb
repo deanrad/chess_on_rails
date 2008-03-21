@@ -28,4 +28,10 @@ class MatchTest < ActiveSupport::TestCase
 		assert_equal players(:dean), m1.next_to_move
 	end
 	
+	def test_returns_active_matches
+		matches=[]
+		d = players(:dean)
+		assert_equal 2, d.active_matches.count
+		assert_equal 2, d.matches.count
+		end
 end

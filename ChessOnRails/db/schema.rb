@@ -14,7 +14,7 @@ ActiveRecord::Schema.define(:version => 4) do
   create_table "matches", :force => true do |t|
     t.integer  "player1",                   :null => false
     t.integer  "player2",                   :null => false
-    t.integer  "state",      :default => 0
+    t.integer  "active",     :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end
