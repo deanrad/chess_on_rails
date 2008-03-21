@@ -68,7 +68,6 @@
     <Ruby Include="test\test_helper.rb" />
     <Ruby Include="test\unit\match_test.rb" />
     <Ruby Include="test\unit\move_test.rb" />
-    <Ruby Include="test\unit\new_test.rb" />
     <Ruby Include="test\unit\pieces_test.rb" />
     <Ruby Include="test\unit\player_test.rb" />
     <Ruby Include="test\unit\user_test.rb" />

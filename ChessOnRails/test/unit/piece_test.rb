@@ -5,9 +5,4 @@ class MatchTest < ActiveSupport::TestCase
 	def test_truth
 		assert true
 	end
-	
-	#def test_initializes_chess
-	#	assert_equal 32, Chess.initial_pieces.count
-	#	
-	#end
 end
