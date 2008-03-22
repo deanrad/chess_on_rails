@@ -9,7 +9,7 @@ class PlayerTest < ActiveSupport::TestCase
 		assert true
 	end
 	
-	def test_can_create
+	def test_can_be_created
 		p = Player.new
 		assert true
 	end
@@ -30,7 +30,7 @@ class PlayerTest < ActiveSupport::TestCase
 	#  method freely(provided the time it costs to do them is small enough) but
 	#  each test only sees the fresh fixture data, not any polluted version from
 	#  any other test
-	def test_can_roundtrip_to_db_during_test
+	def test_be_savable
 		@super_streak = "100/0"
 		p = players(:dean)
 		assert_not_equal p.win_loss, @super_streak
@@ -48,14 +48,14 @@ class PlayerTest < ActiveSupport::TestCase
 	# each test gets a fresh instance of the class
 	# Note: the exception to this rule is for instance variables defined in the 'setup'
 	# method - these run in the same instance as the test, just before each one 
-	def test_instance_variable_INaccessible_in_later_tests
+	def test_nodoc_instance_variable_INaccessible_in_later_tests
 		assert_not_equal "100/0", @super_streak
 	end
 	
 	# however class level variables are a possible way to communicate between tests since
 	# the class is loaded once. That is not to say communication between tests should be 
 	# done often - it's best used for more static data like constants.
-	def test_class_variable_accessible_in_later_tests_1
+	def test_nodoc_class_variable_accessible_in_later_tests_1
 		@@class_var_win_loss = "7/7"
 	end
 	
@@ -63,7 +63,7 @@ class PlayerTest < ActiveSupport::TestCase
 	# update in db for later tests to prove the value doesn't persist across tests
 	# and to flex our muscles with alternate ways of accessing the fixture data
 	# - eg find_by_name, players(:dean)
-	def test_class_variable_accessible_in_later_tests_2
+	def test_nodoc_class_variable_accessible_in_later_tests_2
 		assert_equal "7/7", @@class_var_win_loss
 		p = players(:dean)
 		p.win_loss = @@class_var_win_loss
@@ -71,7 +71,7 @@ class PlayerTest < ActiveSupport::TestCase
 	end
 	
 	# if test fixtures are reloaded each time, we'd expect changes saved in previous
-	def test_fixtures_freshly_reloaded_each_time
+	def test_nodoc_fixtures_freshly_reloaded_each_time
 		p = Player.find_by_name "Dean"
 		assert_not_equal @@class_var_win_loss, p.win_loss
 		assert_equal "0/0", p.win_loss
@@ -85,7 +85,7 @@ class PlayerTest < ActiveSupport::TestCase
 	#endregion
 	
 	#region Player Database Integrity Tests
-	def test_player_name_not_infinite
+	def test_reject_names_that_exceed_allowed_length
 		#schema allows 20 chars max
 		p = Player.new :name=>"3.141592653589793238462643383279502"
 		
@@ -101,7 +101,7 @@ class PlayerTest < ActiveSupport::TestCase
 		#	p.errors.on(:name)
 		
 	end
-	def test_unique_player_name
+	def test_reject_registering_duplicate_player_names
 		#already one named Dean loaded by fixture
 		p = Player.new :name=>"Dean"
 		assert !p.valid?

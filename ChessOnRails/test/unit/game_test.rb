@@ -5,14 +5,11 @@ class GameTest < ActiveSupport::TestCase
 	def test_truth
 		assert true
 	end
-	def test_chess_pieces_singleton
-		#due to singletonian nature of Chess.initial_pieces, repeated
-		# calls for those pieces should be returning 
-		ip1 = Chess.initial_pieces
-		ip2 = Chess.initial_pieces
-		assert_same ip1, ip2, "Chess.initial_pieces returned multiple instances of the piece array - possible memory leak."
+	def test_initial_pieces_in_chess_numbers
+		assert_equal 32, Chess.initial_pieces.length
 	end
-	def test_chess_pieces_number_32
-                assert_equal 32, Chess.initial_pieces
+	def test_noone_to_move_defaults_to_player1
+		m1 = matches(:dean_vs_maria)
+		assert_equal players(:dean), m1.next_to_move
 	end
 end

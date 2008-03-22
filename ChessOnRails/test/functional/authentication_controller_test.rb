@@ -2,13 +2,6 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class AuthenticationControllerTest < ActionController::TestCase
 	
-	#	def setup
-	#		@controller = AuthenticationController.new
-	#		@request = ActionController::TestRequest.new
-	#		@response = ActionController::TestResponse.new
-	#	end
-	
-	# Replace this with your real tests.
 	def test_truth
 		assert true
 	end
@@ -16,15 +9,12 @@ class AuthenticationControllerTest < ActionController::TestCase
 	#You can request or GET methods from controllers which, mind you don't neccessarily
 	# run in a web server environment, but indicate success and failure similarly to 
 	# HTTP error codes , for developer convenience !
-	def test_actions_exist
+	def test_have_index_login_logout_actions
 		
 		[:index, :login, :logout].each do |action|
 			get action
 			assert_response :success, "Failure on #{action} action"
 		end
-		
-		get :change_security_question
-		assert_response 302
 	end
 	
 	def test_only_logged_in_can_change_security_question
@@ -45,7 +35,7 @@ class AuthenticationControllerTest < ActionController::TestCase
 		assert_equal dean, dean2
 	end
 	
-	def test_login_success_dean
+	def test_test_user_dean_can_login
 		post :login, :email=>"chicagogrooves@gmail.com", :security_phrase=>"9"
 		
 		assert_equal 1, session[:player_id]
@@ -53,7 +43,7 @@ class AuthenticationControllerTest < ActionController::TestCase
 		assert_equal "You are logged in.", flash[:notice]
 	end
 	
-	def test_login_success_maria
+	def test_test_user_maria_can_login
 		post :login, :email=>"maria_poulos@yahoo.com"
 		assert_response :success
 		
@@ -61,12 +51,30 @@ class AuthenticationControllerTest < ActionController::TestCase
 		assert_not_nil assigns(:player)
 	end
 	
-	def test_login_fail
-		
+	def test_reject_incorrect_login
 		post :login, :email=>"chicagogrooves@gmail.com", :security_phrase=>"nowaynoway"
 		assert_response :success
 		assert_nil session[:player_id]
 		assert_nil assigns(:player)
 		assert_equal "Your credentials do not check out.", flash[:notice]				
 	end
+	
+	def test_reject_move_without_login
+		in_move_controller do
+			post :create
+			assert_response 302
+		end
+	end
+	
+	#region Helper functions
+	#I love this little idiomatic function that will execute the block passed to it
+	# on a different controller by swapping it for the duration of the code execution.
+	# note the little yield statement, during which the passed block is executed
+	def in_move_controller(new_controller = MoveController)
+		old_controller = @controller
+		@controller = new_controller.new
+		yield
+		@controller = old_controller
+	end
+	#endregion
 end

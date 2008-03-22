@@ -6,7 +6,7 @@ class MoveTest < ActiveSupport::TestCase
 		assert true
 	end
 	
-	def test_match1_has_2_moves
+	def test_nodoc_match1_has_2_moves
 		m1 = matches(:dean_vs_maria)
 		assert_equal 2, m1.moves.count
 	end
@@ -16,7 +16,7 @@ class MoveTest < ActiveSupport::TestCase
 		assert_equal 0, m1.moves.count
 	end
 	
-	def test_match_has_moves_in_proper_order
+	def test_moves_are_returned_in_order_created
 		m1 = matches(:dean_vs_maria)
 		assert_equal 2, m1.moves.count
 		assert_equal players(:dean), m1.moves[0].player
