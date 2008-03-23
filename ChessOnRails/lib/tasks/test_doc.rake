@@ -10,7 +10,7 @@ task :doc => :environment do
   tests.each do |file|
     m = %r".*/([^/].*)_test.rb".match(file)
     puts m[1]+" should:\n" 
-    test_definitions = File::readlines(file).select {|line| line =~ /.*def test.*/}
+    test_definitions = File::readlines(file).select {|line| line =~ /^[^#]*def test.*/}
     test_definitions.each do |definition|
       m = %r"test_(should_)?(.*)".match(definition)
       if m[2]!="truth" && !m[2].include?("nodoc_")

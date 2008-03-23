@@ -4,6 +4,9 @@ class Chess < Game
 	# (exactly as board is supposed to have)
 	@@pieces = nil
 	@@chess_initial_board_file = "C:\\ChessOnRails\\ChessOnRails\\config\\chess\\initial_board.yaml"
+
+	@@ranks = "abcdefgh"
+	@@files = "12345678"
 	
 	def self.initial_board
 		return @@pieces if @@pieces

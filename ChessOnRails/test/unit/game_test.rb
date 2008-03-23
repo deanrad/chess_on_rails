@@ -12,4 +12,13 @@ class GameTest < ActiveSupport::TestCase
 		m1 = matches(:dean_vs_maria)
 		assert_equal players(:dean), m1.next_to_move
 	end
+
+	#tests related to game play
+	def test_nodoc_lets_me_know_its_my_move
+		assert true
+	end
+	
+	def test_nodoc_lets_me_know_what_move_it_is
+		assert true
+	end
 end
