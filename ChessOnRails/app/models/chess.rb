@@ -1,19 +1,21 @@
 class Chess < Game
 	
+	#TODO: pieces will become @@board and contain union of piece and position data ...
+	# (exactly as board is supposed to have)
 	@@pieces = nil
-	@@chess_pieces_file = "C:\\ChessOnRails\\ChessOnRails\\config\\chess\\initial_pieces.yaml"
+	@@chess_initial_board_file = "C:\\ChessOnRails\\ChessOnRails\\config\\chess\\initial_board.yaml"
 	
-	def self.initial_pieces
+	def self.initial_board
 		return @@pieces if @@pieces
 		
 		@@pieces = []
 		@@pieces << Piece.new
 		
 		begin
-			diskstrm = File.open( @@chess_pieces_file )
+			diskstrm = File.open( @@chess_initial_board_file )
 			@@pieces = YAML::load( diskstrm )
 		rescue
-			raise "Could not load initial pieces from #{@@chess_pieces_file}"
+			raise "Could not load initial pieces from #{@@chess_initial_board_file}"
 		ensure
 			diskstrm.close
 		end

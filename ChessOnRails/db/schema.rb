@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 5) do
+ActiveRecord::Schema.define(:version => 4) do
 
   create_table "matches", :force => true do |t|
     t.integer  "player1",                   :null => false
@@ -25,11 +25,6 @@ ActiveRecord::Schema.define(:version => 5) do
     t.string   "from_coord", :limit => 2,  :default => "NULL"
     t.string   "to_coord",   :limit => 2,  :default => "NULL"
     t.string   "notation",   :limit => 10, :default => "NULL"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "pieces", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
