@@ -23,9 +23,27 @@ class MoveTest < ActiveSupport::TestCase
 		assert_equal players(:maria), m1.moves[1].player
 	end
 	
+	def test_white_can_make_first_move
+		m1 = matches(:unstarted_match)	  
+		m1.moves << Move.new( :from_coord=>"e2", :to_coord=>"e4", :notation=>"e4", :moved_by=>1 )
+		m1.save!
+		
+		assert_equal 1, m1.moves.count
+	end
+
+	def test_black_cannot_make_first_move
+		match1 = matches(:unstarted_match)	  
+		match1.moves << Move.new( :from_coord=>"e7", :to_coord=>"e5", :notation=>"e5", :moved_by=>2 )
+		move1 =  match1.moves[0]
+
+		assert_equal false, move1.valid?
+		assert_equal false, match1.valid?
+	end
+		
 	def test_can_play_first_two_moves_correctly
 		m1 = matches(:unstarted_match)	  
 		
+
 		m1.moves << Move.new( :from_coord=>"e2", :to_coord=>"e4", :notation=>"e4", :moved_by=>1 )
 		m1.moves << Move.new( :from_coord=>"d7", :to_coord=>"d5", :notation=>"d5", :moved_by=>2 )
 		

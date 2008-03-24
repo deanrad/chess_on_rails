@@ -107,6 +107,7 @@
     <Folder Include="log\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
+    <Folder Include="public\images\chess_pieces" />
     <Folder Include="public\javascripts\" />
     <Folder Include="public\stylesheets\" />
     <Folder Include="script\" />
@@ -165,7 +166,7 @@
     <Folder Include="vendor\plugins\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config\chess\initial_pieces.yaml" />
+    <Content Include="config\chess\initial_board.yaml" />
     <Content Include="config\chess\initial_pieces_chess.json" />
     <Content Include="db\fixtures\matches.yml" />
     <Content Include="db\fixtures\moves.yml" />
@@ -176,6 +177,19 @@
     <Content Include="log\development.log" />
     <Content Include="log\test.log" />
     <Content Include="migratetoversion.bat" />
+    <Content Include="public\images\chess_pieces\bishop_b.gif" />
+    <Content Include="public\images\chess_pieces\bishop_w.gif" />
+    <Content Include="public\images\chess_pieces\king_b.gif" />
+    <Content Include="public\images\chess_pieces\king_w.gif" />
+    <Content Include="public\images\chess_pieces\knight_b.gif" />
+    <Content Include="public\images\chess_pieces\knight_w.gif" />
+    <Content Include="public\images\chess_pieces\pawn_b.gif" />
+    <Content Include="public\images\chess_pieces\pawn_w.gif" />
+    <Content Include="public\images\chess_pieces\queen_b.gif" />
+    <Content Include="public\images\chess_pieces\queen_w.gif" />
+    <Content Include="public\images\chess_pieces\rook_b.gif" />
+    <Content Include="public\images\chess_pieces\rook_w.gif" />
+    <Content Include="public\images\chess_pieces\source.png" />
     <Content Include="ruby" />
     <Content Include="script\add_test" />
     <Content Include="script\dirtest" />

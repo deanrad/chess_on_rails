@@ -10,12 +10,17 @@ class GameTest < ActiveSupport::TestCase
 	end
 	def test_noone_to_move_defaults_to_player1
 		m1 = matches(:dean_vs_maria)
-		assert_equal players(:dean), m1.next_to_move
+		assert_equal 1, m1.next_to_move
 	end
 
 	#tests related to game play
-	def test_nodoc_lets_me_know_its_my_move
-		assert true
+	def test_next_to_move_alternates_sides
+		m1 = matches(:unstarted_match)
+		assert_equal 0, m1.moves.count
+		assert_equal 1, m1.next_to_move
+		
+		m1.moves << Move.new(:from_coord=>"b2", :to_coord=>"c3", :moved_by=>1)
+		assert_equal 2, m1.next_to_move
 	end
 	
 	def test_nodoc_lets_me_know_what_move_it_is

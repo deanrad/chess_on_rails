@@ -8,19 +8,23 @@ class Match < ActiveRecord::Base
 	has_many :moves, :order=>"created_at ASC"
 	
 	def next_to_move
-		return player1
+		#todo may have to be revised - is castling actually two moves ?
+		if moves.count & 1 == 0
+			return 1
+		else 
+			return 2
+		end
 	end
 	
-	def validate
-		last_moved_by = -1
-		moves.each do |m|
-			if (last_moved_by == m.moved_by)
-			  errors.add(:order, "The other player hasn't gone yet, wait your turn !")
-			  return
-		  end
-		  last_moved_by = m.moved_by
-	  end
-  end
-  
+#	def validate
+#		last_moved_by = -1
+#		moves.each do |m|
+#			if (last_moved_by == m.moved_by)
+#				errors.add(:order, "The other player hasn't gone yet, wait your turn !")
+#				return
+#			end
+#			last_moved_by = m.moved_by
+#		end
+#	end
+	
 end
-				
