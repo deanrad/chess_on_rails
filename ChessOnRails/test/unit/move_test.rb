@@ -52,7 +52,7 @@ class MoveTest < ActiveSupport::TestCase
 	end
 
 	#really a test of match validation
-	def test_cannot_move_twice_by_same_player
+	def test_cant_move_if_its_not_your_turn
 		m1 = matches(:dean_vs_maria)
 		
 		assert_equal 2, m1.moves.count
@@ -66,6 +66,10 @@ class MoveTest < ActiveSupport::TestCase
 		#assure its in the third position, or consecutive move detection could be broken
 		assert_equal m3, m1.moves[2] 
 
+		#assert its invalid at the match level
 		assert !m1.valid?
+		
+		#but already it should be invalid at the move level
+		assert !m3.valid?
 	end
 end

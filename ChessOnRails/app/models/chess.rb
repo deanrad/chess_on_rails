@@ -12,7 +12,7 @@ class Chess < Game
 		return @@pieces if @@pieces
 		
 		@@pieces = []
-		@@pieces << Piece.new
+		@@pieces << Piece.new(:white, :kings_knight)
 		
 		begin
 			diskstrm = File.open( @@chess_initial_board_file )
