@@ -9,4 +9,5 @@ class Game
 		return false if ! @@files.include? pos[1]
 		return true
 	end
+	
 end

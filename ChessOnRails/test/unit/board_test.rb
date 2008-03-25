@@ -51,6 +51,34 @@ class BoardTest < ActiveSupport::TestCase
 		assert_equal 4, moves.length
 	end
 	
+	def test_longest_move_in_chess_is_8_units
+		assert true
+	end
+	def test_piece_cannot_move_off_edge_of_board
+		edge_pawn = Piece.new(:white, :pawn)
+		edge_pawn.file, edge_pawn.rank  = 'a', '2'
+		
+		center_pawn = Piece.new(:white, :pawn)
+		center_pawn.file, center_pawn.rank  = 'f', '2'
+		
+		assert_operator edge_pawn.theoretical_moves.length, :<, center_pawn.theoretical_moves.length
+	end
+	
+	def test_knight_has_more_moves_in_the_center
+		center_knight = Piece.new(:white, :queens_knight)
+		center_knight.file, center_knight.rank = 'd', '4'
+		
+		corner_knight = Piece.new(:white, :kings_knight)
+		corner_knight.file, corner_knight.rank = 'h', '8'
+		
+		assert_equal 8, center_knight.theoretical_moves.length, "In #{center_knight.theoretical_moves}"
+		assert center_knight.theoretical_moves.include?( 'e6' )
+		
+		assert_equal 2, corner_knight.theoretical_moves.length
+		assert corner_knight.theoretical_moves.include?('g6')
+		assert corner_knight.theoretical_moves.include?('f7')
+		end
+	
 	def test_nodoc_can_put_new_move_and_get_board_back
 		assert true
 	end

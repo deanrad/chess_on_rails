@@ -2,15 +2,10 @@
   <ItemGroup>
     <Ruby Include="app\controllers\application.rb" />
     <Ruby Include="app\controllers\authentication_controller.rb" />
-    <Ruby Include="app\controllers\board_controller.rb" />
     <Ruby Include="app\controllers\match_controller.rb" />
     <Ruby Include="app\controllers\move_controller.rb" />
     <Ruby Include="app\helpers\application_helper.rb" />
     <Ruby Include="app\helpers\authentication_helper.rb" />
-    <Ruby Include="app\helpers\board_helper.rb" />
-    <Ruby Include="app\helpers\match_helper.rb" />
-    <Ruby Include="app\helpers\move_helper.rb" />
-    <Ruby Include="app\models\board.rb" />
     <Ruby Include="app\models\chess.rb" />
     <Ruby Include="app\models\game.rb" />
     <Ruby Include="app\models\match.rb" />
@@ -69,7 +64,6 @@
     <Ruby Include="script\public\dispatch.rb" />
     <Ruby Include="script\steelserver.rb" />
     <Ruby Include="test\functional\authentication_controller_test.rb" />
-    <Ruby Include="test\functional\board_controller_test.rb" />
     <Ruby Include="test\functional\match_controller_test.rb" />
     <Ruby Include="test\functional\move_controller_test.rb" />
     <Ruby Include="test\test_helper.rb" />
@@ -90,10 +84,7 @@
     <Folder Include="app\models\" />
     <Folder Include="app\views\" />
     <Folder Include="app\views\authentication" />
-    <Folder Include="app\views\board" />
     <Folder Include="app\views\layouts\" />
-    <Folder Include="app\views\match" />
-    <Folder Include="app\views\move" />
     <Folder Include="config\" />
     <Folder Include="config\chess" />
     <Folder Include="config\environments\" />
@@ -172,6 +163,7 @@
     <Content Include="db\fixtures\moves.yml" />
     <Content Include="db\fixtures\players.yml" />
     <Content Include="doc\functionality_verified_by_tests.txt" />
+    <Content Include="doc\stats.txt" />
     <Content Include="lib\tasks\db_seed.rake" />
     <Content Include="lib\tasks\test_doc.rake" />
     <Content Include="log\development.log" />
@@ -248,8 +240,6 @@
     <EmbeddedRuby Include="app\views\authentication\index.html.erb" />
     <EmbeddedRuby Include="app\views\authentication\login.html.erb" />
     <EmbeddedRuby Include="app\views\authentication\logout.html.erb" />
-    <EmbeddedRuby Include="app\views\match\show.html.erb" />
-    <EmbeddedRuby Include="app\views\match\index.html.erb" />
   </ItemGroup>
   <PropertyGroup>
     <RailsProject>True</RailsProject>
