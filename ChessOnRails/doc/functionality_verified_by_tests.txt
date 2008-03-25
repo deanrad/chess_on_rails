@@ -17,6 +17,9 @@ move_controller should:
 
 board should:
  - knows a valid location and distinguishes between invalid one
+ - pawn can advance one or two on first move
+ - pawn can only advance one on successive moves
+ - pawn diagonal captures possible accounting for ends
 
 game should:
  - 32 pieces on chess initial board

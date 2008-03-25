@@ -18,21 +18,57 @@ class Piece < ActiveRecord::Base
 	
 	attr_accessor :match_id, :int
 	
-	#thanks Steven for this initialization tip
-	#	def initialize(opts = {})
-	#		opts.symbolize_keys!
-	#		
-	#		default_configuration = {
-	#			:side => :white,
-	#			:type=> :pawn
-	#		}.update(opts)
-	#		
-	#		@side = opts[:side]
-	#		@type = opts[:type]
-	#	end
+	def advance_direction
+		return 1 if @side == :white
+		return -1 if @side == :black
+	end
+	
+	def theoretical_moves
+		raise 'Only pawns written yet' if @type != :pawn
+		if @type == :pawn
+			return theoretical_moves_pawn
+		end
+	end
+	
+	def theoretical_moves_pawn
+		moves = []
+		
+		[ [:white,'2'], [:black,'7'] ].each do |side, front_rank|
+			if @side == side
+				
+				#the single advance, and double from home rank
+				moves << @file.to_s + (@rank.to_i + advance_direction).to_s
+				
+				if @rank==front_rank
+					moves << @file.to_s + (@rank.to_i + 2 * advance_direction).to_s
+				end
+				
+				#the diagonal captures
+				moves << (@file[0].to_i - 1).chr + (@rank.to_i + advance_direction).to_s
+				moves << (@file[0].to_i + 1).chr + (@rank.to_i + advance_direction).to_s
+			end
+			
+		end
+		
+		#		if @side == :white
+		#			
+		#			#the single advance, and double from home rank
+		#			moves << @file.to_s + (@rank.to_i + advance_direction).to_s
+		#			
+		#			if @rank=='2'
+		#				moves << @file.to_s + (@rank.to_i + 2 * advance_direction).to_s
+		#			end
+		#			
+		#			#the diagonal captures
+		#			moves << (@file[0].to_i - 1).chr + (@rank.to_i + advance_direction).to_s
+		#			moves << (@file[0].to_i + 1).chr + (@rank.to_i + advance_direction).to_s
+		#		end
+		
+		return moves
+	end
 	
 	def notation
-	   #%Q{"#{f}"}
+		#%Q{"#{f}"}
 		type_text = @@types[@type]
 		return eval %Q{ "#{type_text}" }
 	end
