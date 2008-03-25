@@ -1,3 +1,4 @@
+(in C:/ChessOnRails/ChessOnRails)
 Note: this document should be regenerated periodically by running
 	rake test:doc
 
@@ -14,9 +15,13 @@ match_controller should:
 
 move_controller should:
 
+board should:
+ - knows a valid location and distinguishes between invalid one
+
 game should:
- - initial pieces in chess numbers
+ - 32 pieces on chess initial board
  - noone to move defaults to player1
+ - next to move alternates sides
 
 match should:
  - returns active matches
@@ -24,10 +29,17 @@ match should:
 move should:
  - unstarted match has no moves
  - moves are returned in order created
+ - white can make first move
+ - black cannot make first move
  - can play first two moves correctly
- - cannot move twice by same player
+ - cant move if its not your turn
 
 piece should:
+ - recognizes valid piece types
+ - rejects invalid piece types
+ - has a notation for king and queen
+ - has a notation for minor and rook
+ - has a notation for pawn
 
 player should:
  - can be created
