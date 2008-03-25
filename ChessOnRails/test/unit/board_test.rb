@@ -67,17 +67,19 @@ class BoardTest < ActiveSupport::TestCase
 	def test_knight_has_more_moves_in_the_center
 		center_knight = Piece.new(:white, :queens_knight)
 		center_knight.file, center_knight.rank = 'd', '4'
+		assert_equal 'd4', center_knight.position
+		
+		assert_equal 8, center_knight.theoretical_moves.length, "In #{center_knight.theoretical_moves} #{center_knight.position}"
+		assert center_knight.theoretical_moves.include?( 'e6' )
 		
 		corner_knight = Piece.new(:white, :kings_knight)
 		corner_knight.file, corner_knight.rank = 'h', '8'
 		
-		assert_equal 8, center_knight.theoretical_moves.length, "In #{center_knight.theoretical_moves}"
-		assert center_knight.theoretical_moves.include?( 'e6' )
 		
 		assert_equal 2, corner_knight.theoretical_moves.length
 		assert corner_knight.theoretical_moves.include?('g6')
 		assert corner_knight.theoretical_moves.include?('f7')
-		end
+	end
 	
 	def test_nodoc_can_put_new_move_and_get_board_back
 		assert true

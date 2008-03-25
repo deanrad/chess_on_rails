@@ -20,6 +20,9 @@ board should:
  - pawn can advance one or two on first move
  - pawn can only advance one on successive moves
  - pawn diagonal captures possible accounting for ends
+ - longest move in chess is 8 units
+ - piece cannot move off edge of board
+ - knight has more moves in the center
 
 game should:
  - 32 pieces on chess initial board

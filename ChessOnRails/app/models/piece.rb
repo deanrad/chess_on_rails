@@ -23,14 +23,19 @@ class Piece < ActiveRecord::Base
 		return -1 if @side == :black
 	end
 	
+	def position
+		@file+@rank
+	end
+	
 	#the moves a piece could move to on an empty board
 	def theoretical_moves
 		return @moves if @moves != nil 
 		
 		@moves = []
+
 		if @type == :pawn
 			calc_theoretical_moves_pawn
-		elsif @type.to_s.include?( "knight")
+		elsif @type == :queens_knight || @type == :kings_knight
 			calc_theoretical_moves_knight
 		end
 		
@@ -38,14 +43,12 @@ class Piece < ActiveRecord::Base
 		return @moves
 	end
 	
-	private
-	
 	def calc_theoretical_moves_knight
 		directions = [1, -1]
 		units = [1,2]
 		
 		[ [1,2], [1,-2], [-1,2], [-1,-2], [2,1], [2,-1], [-2,1], [-2,-1] ].each do | file_unit, rank_unit |
-			move = (@file[0] + (file_unit) ).chr + (@rank.to_i + (rank_unit)).to_s
+			@moves << (@file[0] + (file_unit) ).chr + (@rank.to_i + (rank_unit)).to_s
 		end
 	end
 	
