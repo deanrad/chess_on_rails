@@ -1,0 +1,10 @@
+
+<table>
+	<% @ranks.each_byte do |rank| -%>
+		<tr>
+		<% @files.each_byte do |file| -%>
+			<td class="<%= file.chr + rank.chr %>">&nbsp;</td>	
+		<% end %>
+		</tr>
+	<% end %>
+</table>
