@@ -52,8 +52,9 @@ class BoardTest < ActiveSupport::TestCase
 	end
 	
 	def test_longest_move_in_chess_is_8_units
-		assert true
+		assert_equal 8, Chess.maximum_move_length
 	end
+
 	def test_piece_cannot_move_off_edge_of_board
 		edge_pawn = Piece.new(:white, :pawn)
 		edge_pawn.file, edge_pawn.rank  = 'a', '2'

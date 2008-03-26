@@ -3,6 +3,15 @@ class Game
 	@@ranks = ""
 	@@files = ""
 	
+	def self.files
+		@@files
+	end
+	def self.ranks
+		@@ranks
+	end
+	def self.initial_board
+		return nil
+	end
 	def self.valid_position?(pos)
 		return false if pos.length != 2
 		return false if ! @@ranks.include? pos[0]
@@ -10,4 +19,7 @@ class Game
 		return true
 	end
 	
+	def self.maximum_move_length
+		return files.length
+	end
 end

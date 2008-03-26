@@ -62,4 +62,34 @@ class PieceTest < ActiveSupport::TestCase
 		p1.file = 'b'
 		assert_equal 'b', p1.notation
 	end
+	
+	def test_nodoc_can_set_get_position
+	end
+	
+	def test_queen_moves_correctly
+		p = Piece.new(:white, :queen)
+		p.file, p.rank =  'd', '4'
+		assert_equal '4', p.rank
+		assert_equal 'd', p.file
+		
+		assert p.theoretical_moves.include?('e5')
+		assert p.theoretical_moves.include?('a1')
+		assert p.theoretical_moves.include?('f2')
+		assert p.theoretical_moves.include?('g1')
+		assert p.theoretical_moves.include?('h8')
+		assert !p.theoretical_moves.include?('e6')
+	end
+	
+	def test_rook_moves_correctly
+		p = Piece.new(:white, :kings_rook)
+		p.file, p.rank =  'd', '4'
+		
+		assert p.theoretical_moves.include?('e4')
+		assert p.theoretical_moves.include?('c4')
+		assert p.theoretical_moves.include?('d5')
+		assert p.theoretical_moves.include?('d6')
+		
+		assert_equal 14, p.theoretical_moves.length, "#{p.theoretical_moves.to_s}"
+		
+	end
 end

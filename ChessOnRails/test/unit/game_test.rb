@@ -6,7 +6,7 @@ class GameTest < ActiveSupport::TestCase
 		assert true
 	end
 	def test_32_pieces_on_chess_initial_board
-		assert_equal 32, Chess.initial_board.length
+		assert_equal 32, Chess.initial_board.num_active_pieces
 	end
 	def test_noone_to_move_defaults_to_player1
 		m1 = matches(:dean_vs_maria)

@@ -1,4 +1,4 @@
-(in C:/ChessOnRails/ChessOnRails)
+(in C:/CHESSO~1/CHESSO~1)
 Note: this document should be regenerated periodically by running
 	rake test:doc
 
@@ -10,6 +10,8 @@ authentication_controller should:
  - test user maria can login
  - reject incorrect login
  - reject move without login
+
+board_controller should:
 
 match_controller should:
 
@@ -46,6 +48,8 @@ piece should:
  - has a notation for king and queen
  - has a notation for minor and rook
  - has a notation for pawn
+ - queen moves correctly
+ - rook moves correctly
 
 player should:
  - can be created
