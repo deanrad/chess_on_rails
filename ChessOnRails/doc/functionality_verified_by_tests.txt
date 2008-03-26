@@ -18,6 +18,7 @@ match_controller should:
 move_controller should:
 
 board should:
+ - new match gets an initial board
  - knows a valid location and distinguishes between invalid one
  - pawn can advance one or two on first move
  - pawn can only advance one on successive moves
@@ -25,6 +26,7 @@ board should:
  - longest move in chess is 8 units
  - piece cannot move off edge of board
  - knight has more moves in the center
+ - knows what side occupies a square
 
 game should:
  - 32 pieces on chess initial board
@@ -44,7 +46,6 @@ move should:
 
 piece should:
  - recognizes valid piece types
- - rejects invalid piece types
  - has a notation for king and queen
  - has a notation for minor and rook
  - has a notation for pawn

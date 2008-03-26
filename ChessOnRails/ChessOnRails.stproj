@@ -2,10 +2,13 @@
   <ItemGroup>
     <Ruby Include="app\controllers\application.rb" />
     <Ruby Include="app\controllers\authentication_controller.rb" />
+    <Ruby Include="app\controllers\board_controller.rb" />
     <Ruby Include="app\controllers\match_controller.rb" />
     <Ruby Include="app\controllers\move_controller.rb" />
     <Ruby Include="app\helpers\application_helper.rb" />
     <Ruby Include="app\helpers\authentication_helper.rb" />
+    <Ruby Include="app\helpers\board_helper.rb" />
+    <Ruby Include="app\models\board.rb" />
     <Ruby Include="app\models\chess.rb" />
     <Ruby Include="app\models\game.rb" />
     <Ruby Include="app\models\match.rb" />
@@ -43,6 +46,7 @@
     <Ruby Include="db\migrate\003_create_matches.rb" />
     <Ruby Include="db\migrate\004_create_moves.rb" />
     <Ruby Include="db\schema.rb" />
+    <Ruby Include="lib\Enumerable.rb" />
     <Ruby Include="public\dispatch.rb" />
     <None Include="public\favicon.ico" />
     <None Include="public\index.html" />
@@ -60,10 +64,10 @@
     <None Include="script\plugin" />
     <None Include="script\runner" />
     <None Include="script\server" />
-    <Ruby Include="script\add_test.rb" />
     <Ruby Include="script\public\dispatch.rb" />
     <Ruby Include="script\steelserver.rb" />
     <Ruby Include="test\functional\authentication_controller_test.rb" />
+    <Ruby Include="test\functional\board_controller_test.rb" />
     <Ruby Include="test\functional\match_controller_test.rb" />
     <Ruby Include="test\functional\move_controller_test.rb" />
     <Ruby Include="test\test_helper.rb" />
@@ -84,6 +88,7 @@
     <Folder Include="app\models\" />
     <Folder Include="app\views\" />
     <Folder Include="app\views\authentication" />
+    <Folder Include="app\views\board" />
     <Folder Include="app\views\layouts\" />
     <Folder Include="config\" />
     <Folder Include="config\chess" />
@@ -93,6 +98,15 @@
     <Folder Include="db\migrate" />
     <Folder Include="db\fixtures" />
     <Folder Include="doc\" />
+    <Folder Include="doc\app" />
+    <Folder Include="doc\app\classes" />
+    <Folder Include="doc\app\files" />
+    <Folder Include="doc\app\files\app" />
+    <Folder Include="doc\app\files\app\controllers" />
+    <Folder Include="doc\app\files\app\helpers" />
+    <Folder Include="doc\app\files\app\models" />
+    <Folder Include="doc\app\files\doc" />
+    <Folder Include="doc\app\files\lib" />
     <Folder Include="lib\" />
     <Folder Include="lib\tasks\" />
     <Folder Include="log\" />
@@ -157,18 +171,55 @@
     <Folder Include="vendor\plugins\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config\chess\initial_board.yaml" />
     <Content Include="config\chess\initial_pieces_chess.json" />
     <Content Include="db\fixtures\matches.yml" />
     <Content Include="db\fixtures\moves.yml" />
     <Content Include="db\fixtures\players.yml" />
+    <Content Include="doc\app\classes\ApplicationController.html" />
+    <Content Include="doc\app\classes\ApplicationHelper.html" />
+    <Content Include="doc\app\classes\AuthenticationController.html" />
+    <Content Include="doc\app\classes\AuthenticationHelper.html" />
+    <Content Include="doc\app\classes\BoardController.html" />
+    <Content Include="doc\app\classes\BoardHelper.html" />
+    <Content Include="doc\app\classes\Chess.html" />
+    <Content Include="doc\app\classes\Enumerable.html" />
+    <Content Include="doc\app\classes\Game.html" />
+    <Content Include="doc\app\classes\Match.html" />
+    <Content Include="doc\app\classes\MatchController.html" />
+    <Content Include="doc\app\classes\Move.html" />
+    <Content Include="doc\app\classes\MoveController.html" />
+    <Content Include="doc\app\classes\Piece.html" />
+    <Content Include="doc\app\classes\Player.html" />
+    <Content Include="doc\app\classes\User.html" />
+    <Content Include="doc\app\created.rid" />
+    <Content Include="doc\app\files\app\controllers\application_rb.html" />
+    <Content Include="doc\app\files\app\controllers\authentication_controller_rb.html" />
+    <Content Include="doc\app\files\app\controllers\board_controller_rb.html" />
+    <Content Include="doc\app\files\app\controllers\match_controller_rb.html" />
+    <Content Include="doc\app\files\app\controllers\move_controller_rb.html" />
+    <Content Include="doc\app\files\app\helpers\application_helper_rb.html" />
+    <Content Include="doc\app\files\app\helpers\authentication_helper_rb.html" />
+    <Content Include="doc\app\files\app\helpers\board_helper_rb.html" />
+    <Content Include="doc\app\files\app\models\chess_rb.html" />
+    <Content Include="doc\app\files\app\models\game_rb.html" />
+    <Content Include="doc\app\files\app\models\match_rb.html" />
+    <Content Include="doc\app\files\app\models\move_rb.html" />
+    <Content Include="doc\app\files\app\models\piece_rb.html" />
+    <Content Include="doc\app\files\app\models\player_rb.html" />
+    <Content Include="doc\app\files\app\models\user_rb.html" />
+    <Content Include="doc\app\files\doc\README_FOR_APP.html" />
+    <Content Include="doc\app\files\lib\Enumerable_rb.html" />
+    <Content Include="doc\app\fr_class_index.html" />
+    <Content Include="doc\app\fr_file_index.html" />
+    <Content Include="doc\app\fr_method_index.html" />
+    <Content Include="doc\app\index.html" />
+    <Content Include="doc\app\rdoc-style.css" />
     <Content Include="doc\functionality_verified_by_tests.txt" />
     <Content Include="doc\stats.txt" />
     <Content Include="lib\tasks\db_seed.rake" />
     <Content Include="lib\tasks\test_doc.rake" />
     <Content Include="log\development.log" />
     <Content Include="log\test.log" />
-    <Content Include="migratetoversion.bat" />
     <Content Include="public\images\chess_pieces\bishop_b.gif" />
     <Content Include="public\images\chess_pieces\bishop_w.gif" />
     <Content Include="public\images\chess_pieces\king_b.gif" />
@@ -182,8 +233,6 @@
     <Content Include="public\images\chess_pieces\rook_b.gif" />
     <Content Include="public\images\chess_pieces\rook_w.gif" />
     <Content Include="public\images\chess_pieces\source.png" />
-    <Content Include="ruby" />
-    <Content Include="script\add_test" />
     <Content Include="script\dirtest" />
     <Content Include="script\dirtest.txt" />
     <Content Include="script\public\.htaccess" />
@@ -234,12 +283,14 @@
     <Content Include="test\fixtures\moves.yml" />
     <Content Include="test\fixtures\players.yml" />
     <Content Include="test\fixtures\users.yml" />
+    <Content Include="test\unit\_test.rb.new" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedRuby Include="app\views\authentication\change_security_question.html.erb" />
     <EmbeddedRuby Include="app\views\authentication\index.html.erb" />
     <EmbeddedRuby Include="app\views\authentication\login.html.erb" />
     <EmbeddedRuby Include="app\views\authentication\logout.html.erb" />
+    <EmbeddedRuby Include="app\views\board\display.html.erb" />
   </ItemGroup>
   <PropertyGroup>
     <RailsProject>True</RailsProject>

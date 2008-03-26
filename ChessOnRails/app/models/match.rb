@@ -7,6 +7,13 @@ class Match < ActiveRecord::Base
 	
 	has_many :moves, :order=>"created_at ASC"
 	
+	def initial_board
+		return @board if @board
+		
+		@board = Chess.initial_board( self )
+		return @board
+	end
+		
 	def next_to_move
 		#todo may have to be revised - is castling actually two moves ?
 		if moves.count & 1 == 0

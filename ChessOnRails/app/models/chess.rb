@@ -1,29 +1,26 @@
 class Chess < Game
 	
-	#TODO: pieces will become @@board and contain union of piece and position data ...
-	# (exactly as board is supposed to have)
-	@@initial_board = nil
-	@@chess_initial_board_file = "C:\\ChessOnRails\\ChessOnRails\\config\\chess\\initial_board.yaml"
+	require 'Enumerable'
 	
-	@@ranks = "abcdefgh"
-	@@files = "12345678"
+	@@files = "abcdefgh"
+	@@ranks = "12345678"
 	
-	def self.initial_board
-		return @@initial_board if @@initial_board
+	def self.initial_board(match)
 		
 		@@pieces = []
-		@@pieces << Piece.new(:white, :kings_knight)
-		
-		begin
-			diskstrm = File.open( @@chess_initial_board_file )
-			@@pieces = YAML::load( diskstrm )
-		rescue
-			raise "Could not load initial pieces from #{@@chess_initial_board_file}"
-		ensure
-			diskstrm.close
+		[:white, :black].each do |side|
+			Piece.types.each do |type|
+				if type == :pawn
+					@@files.each_byte do |file|
+						@@pieces << Piece.new( side, type, file.chr+ (side==:white ? '2' : '7') )
+					end
+				else
+					@@pieces << Piece.new( side, type, 'a1' )
+				end
+			end
 		end
 		
-		return Board.new(@@pieces)
+		return Board.new(match, @@pieces )
 	end
 	
 end

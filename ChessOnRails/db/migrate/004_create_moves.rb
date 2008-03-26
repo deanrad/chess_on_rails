@@ -7,8 +7,8 @@ class CreateMoves < ActiveRecord::Migration
 			
 			#example a2, b8 - note for 8x8 board, a one byte uint could indicate
 			# a to/from coordinate in far less space, but for now string rep is fine
-			t.column :from_coord, :string, :limit=>2
-			t.column :to_coord, :string, :limit=>2
+			t.column :from_coord, :string, :limit=>10
+			t.column :to_coord, :string, :limit=>10
 			
 			#a notation summary of the move
 			t.column :notation, :string, :limit=>10
@@ -17,7 +17,7 @@ class CreateMoves < ActiveRecord::Migration
 			
 			#calculated but stored for ease of computation
 			t.column :castled, :int, :default=>0 #used as bool
-			t.column :captured_piece_coord, :string, :limit=>2
+			t.column :captured_piece_coord, :string, :limit=>10, :default=>nil
 			
 			
 			t.timestamps

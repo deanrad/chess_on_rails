@@ -1,5 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
+#without forcing the created_at times to differ, the moves are inserted with
+# exactly the same time making their order nondeterministic
  m1m1:
    match_id: 1
    moved_by: 1

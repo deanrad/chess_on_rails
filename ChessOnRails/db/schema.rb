@@ -20,11 +20,13 @@ ActiveRecord::Schema.define(:version => 4) do
   end
 
   create_table "moves", :force => true do |t|
-    t.integer  "match_id",                 :default => 0
-    t.integer  "moved_by",                 :default => 0
-    t.string   "from_coord", :limit => 2,  :default => "NULL"
-    t.string   "to_coord",   :limit => 2,  :default => "NULL"
-    t.string   "notation",   :limit => 10, :default => "NULL"
+    t.integer  "match_id",                           :default => 0
+    t.integer  "moved_by",                           :default => 0
+    t.string   "from_coord",           :limit => 10, :default => "NULL"
+    t.string   "to_coord",             :limit => 10, :default => "NULL"
+    t.string   "notation",             :limit => 10, :default => "NULL"
+    t.integer  "castled",                            :default => 0
+    t.string   "captured_piece_coord", :limit => 10, :default => "NULL"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

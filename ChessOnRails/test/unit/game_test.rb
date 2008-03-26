@@ -6,7 +6,7 @@ class GameTest < ActiveSupport::TestCase
 		assert true
 	end
 	def test_32_pieces_on_chess_initial_board
-		assert_equal 32, Chess.initial_board.num_active_pieces
+		assert_equal 32, matches(:unstarted_match).initial_board.num_active_pieces
 	end
 	def test_noone_to_move_defaults_to_player1
 		m1 = matches(:dean_vs_maria)
@@ -20,6 +20,7 @@ class GameTest < ActiveSupport::TestCase
 		assert_equal 1, m1.next_to_move
 		
 		m1.moves << Move.new(:from_coord=>"b2", :to_coord=>"c3", :moved_by=>1)
+		
 		assert_equal 2, m1.next_to_move
 	end
 	
