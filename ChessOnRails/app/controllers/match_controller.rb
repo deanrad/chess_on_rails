@@ -5,12 +5,13 @@ class MatchController < ApplicationController
 	# GET /match/1
 	def show
 		# shows whose move it is 
+		@match = Match.find( params[:id] )
 	end
 	
 	# GET /match/  GET /matches/
 	def index
-		# returns list of playable matches
-		@matches = Match.find(:all, "player_id = " + "1")
+		# shows primary match
+		@match = Player.current.match
 	end
 	
 	# GET /match/new

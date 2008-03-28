@@ -1,3 +1,14 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-# 3 players currently inserted by migration
+ dean:
+   id:      1
+   name:    Dean
+   current_match: 2
+ maria:
+   id:      2
+   name:    Maria
+   current_match: 1
+ paul:
+   id:      3
+   name:    Paul
+   current_match: 2

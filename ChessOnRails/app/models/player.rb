@@ -26,8 +26,9 @@ class Player < ActiveRecord::Base
 
 
     def self.current
-       #return nil if ! session[:player_id]
-       return Player.find( 1 )
+        #todo: cannot refer to session here - find some other way
+        #return nil if ! session[:player_id]
+        return Player.find( 1 )
     end
 
     def match(id=nil)

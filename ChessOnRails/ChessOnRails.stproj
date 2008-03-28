@@ -8,12 +8,8 @@
     <Ruby Include="app\helpers\application_helper.rb" />
     <Ruby Include="app\helpers\authentication_helper.rb" />
     <Ruby Include="app\helpers\board_helper.rb" />
-    <Ruby Include="app\models\board.rb" />
-    <Ruby Include="app\models\chess.rb" />
-    <Ruby Include="app\models\game.rb" />
     <Ruby Include="app\models\match.rb" />
     <Ruby Include="app\models\move.rb" />
-    <Ruby Include="app\models\piece.rb" />
     <Ruby Include="app\models\player.rb" />
     <Ruby Include="app\models\user.rb" />
     <Ruby Include="config\environments\development.rb" />
@@ -46,7 +42,11 @@
     <Ruby Include="db\migrate\003_create_matches.rb" />
     <Ruby Include="db\migrate\004_create_moves.rb" />
     <Ruby Include="db\schema.rb" />
+    <Ruby Include="lib\board.rb" />
+    <Ruby Include="lib\chess.rb" />
     <Ruby Include="lib\Enumerable.rb" />
+    <Ruby Include="lib\game.rb" />
+    <Ruby Include="lib\piece.rb" />
     <Ruby Include="public\dispatch.rb" />
     <None Include="public\favicon.ico" />
     <None Include="public\index.html" />
@@ -90,6 +90,7 @@
     <Folder Include="app\views\authentication" />
     <Folder Include="app\views\board" />
     <Folder Include="app\views\layouts\" />
+    <Folder Include="app\views\match" />
     <Folder Include="config\" />
     <Folder Include="config\chess" />
     <Folder Include="config\environments\" />
@@ -107,6 +108,7 @@
     <Folder Include="doc\app\files\app\models" />
     <Folder Include="doc\app\files\doc" />
     <Folder Include="doc\app\files\lib" />
+    <Folder Include="doc\tickets" />
     <Folder Include="lib\" />
     <Folder Include="lib\tasks\" />
     <Folder Include="log\" />
@@ -179,6 +181,7 @@
     <Content Include="doc\app\classes\ApplicationHelper.html" />
     <Content Include="doc\app\classes\AuthenticationController.html" />
     <Content Include="doc\app\classes\AuthenticationHelper.html" />
+    <Content Include="doc\app\classes\Board.html" />
     <Content Include="doc\app\classes\BoardController.html" />
     <Content Include="doc\app\classes\BoardHelper.html" />
     <Content Include="doc\app\classes\Chess.html" />
@@ -200,6 +203,7 @@
     <Content Include="doc\app\files\app\helpers\application_helper_rb.html" />
     <Content Include="doc\app\files\app\helpers\authentication_helper_rb.html" />
     <Content Include="doc\app\files\app\helpers\board_helper_rb.html" />
+    <Content Include="doc\app\files\app\models\board_rb.html" />
     <Content Include="doc\app\files\app\models\chess_rb.html" />
     <Content Include="doc\app\files\app\models\game_rb.html" />
     <Content Include="doc\app\files\app\models\match_rb.html" />
@@ -216,6 +220,7 @@
     <Content Include="doc\app\rdoc-style.css" />
     <Content Include="doc\functionality_verified_by_tests.txt" />
     <Content Include="doc\stats.txt" />
+    <Content Include="doc\tickets\2.txt" />
     <Content Include="lib\tasks\db_seed.rake" />
     <Content Include="lib\tasks\test_doc.rake" />
     <Content Include="log\development.log" />
@@ -289,6 +294,7 @@
     <EmbeddedRuby Include="app\views\authentication\logout.html.erb" />
     <EmbeddedRuby Include="app\views\board\display.html.erb" />
     <EmbeddedRuby Include="app\views\board\physical.html.erb" />
+    <EmbeddedRuby Include="app\views\match\index.html.erb" />
   </ItemGroup>
   <PropertyGroup>
     <RailsProject>True</RailsProject>
