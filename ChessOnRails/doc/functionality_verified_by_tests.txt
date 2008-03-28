@@ -55,9 +55,8 @@ piece should:
 player should:
  - can be created
  - stores name
- - be savable
- - reject names that exceed allowed length
  - reject registering duplicate player names
+ - has current match if has any matches
 
 user should:
 

@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(:version => 4) do
   end
 
   create_table "players", :force => true do |t|
-    t.string "name",     :limit => 20, :default => "NULL"
-    t.string "win_loss", :limit => 7,  :default => "0/0"
+    t.string  "name",          :limit => 20, :default => "NULL"
+    t.integer "current_match",               :default => 0
   end
 
   add_index "players", ["name"], :name => "index_players_on_name", :unique => true
