@@ -6,13 +6,31 @@ class PieceTest < ActiveSupport::TestCase
 		assert true
 	end
 	
-	def test_recognizes_valid_piece_types
+	def test_recognize_valid_piece_types
 		p = Piece.new(:white, :queens_knight)
 		assert p.valid?
 		
 		p = Piece.new(:black, :pawn)
 		assert p.valid?
 		
+		assert_raises ArgumentError do
+			p = Piece.new(:black, :mamas_jamas)
+		end
+	end
+	
+	def test_recognize_queen_vs_kings_bishop
+		#three places in memory - are they the same under the == operator ?
+		p1 = Piece.new(:white, :queens_knight)
+		p2 = Piece.new(:black, :queens_knight)
+		
+		assert_not_nil p1
+		assert_not_nil p2
+		assert_not_equal p1.side, p2.side
+		
+		p3 = Piece.new(:white, :queens_bishop)
+		p4 = Piece.new(:white, :kings_bishop)
+		
+		assert_not_equal p3.type, p4.type
 	end
 	
 	def test_nodoc_remembers_position

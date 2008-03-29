@@ -5,7 +5,7 @@ class Chess < Game
 	@@files = "abcdefgh"
 	@@ranks = "12345678"
 	
-	def self.initial_board(match)
+	def self.initial_pieces
 		
 		@@pieces = []
 		[:white, :black].each do |side|
@@ -20,7 +20,7 @@ class Chess < Game
 			end
 		end
 		
-		return Board.new(match, @@pieces )
+		return @@pieces
 	end
 	
 end

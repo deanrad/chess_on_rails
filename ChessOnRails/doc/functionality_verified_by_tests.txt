@@ -2,20 +2,21 @@
 Note: this document should be regenerated periodically by running
 	rake test:doc
 
-authentication_controller should:
- - have index login logout actions
- - only logged in can change security question
- - login security question only
- - test user dean can login
- - test user maria can login
- - reject incorrect login
- - reject move without login
-
-board_controller should:
-
-match_controller should:
-
 move_controller should:
+ - cannot move without coordinates
+ - accepts move with coordinates
+ - uses your default match if none specified
+ - uses explicit match if specified
+ - errs if specified match not there or active
+ - reject attempt to move someone elses piece
+
+move should:
+ - unstarted match has no moves
+ - moves are returned in order created
+ - white can make first move
+ - black cannot make first move
+ - can play first two moves correctly
+ - cant move if its not your turn
 
 board should:
  - new match gets an initial board
@@ -35,17 +36,11 @@ game should:
 
 match should:
  - returns active matches
-
-move should:
- - unstarted match has no moves
- - moves are returned in order created
- - white can make first move
- - black cannot make first move
- - can play first two moves correctly
- - cant move if its not your turn
+ - be able to tell you what side a player is
 
 piece should:
  - recognizes valid piece types
+ - recognize queen vs kings bishop
  - has a notation for king and queen
  - has a notation for minor and rook
  - has a notation for pawn
@@ -58,5 +53,12 @@ player should:
  - reject registering duplicate player names
  - has current match if has any matches
 
-user should:
+authentication_controller should:
+ - have index login logout actions
+ - only logged in can change security question
+ - login security question only
+ - test user dean can login
+ - test user maria can login
+ - reject incorrect login
+ - reject move without login
 

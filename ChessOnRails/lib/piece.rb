@@ -33,7 +33,7 @@ class Piece < ActiveRecord::Base
 		end
 		
         if !valid?
-			raise "Invalid side:#{side} or type:#{type} in piece creation"
+			raise ArgumentError, "Invalid side:#{side} or type:#{type} in piece creation"
 		end
 	end
 	

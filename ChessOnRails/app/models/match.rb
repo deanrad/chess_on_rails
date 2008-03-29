@@ -8,12 +8,16 @@ class Match < ActiveRecord::Base
 	has_many :moves, :order=>"created_at ASC"
 	
 	def initial_board
-		return @board if @board
-		
-		@board = Chess.initial_board( self )
-		return @board
+		return board(0)
 	end
-		
+	
+	def board(as_of_move = :current)
+		if as_of_move == 0
+			return Board.new( self, Chess.initial_pieces )
+		end
+		return Board.new( self, Chess.initial_pieces, as_of_move ) 		
+	end
+	
 	def next_to_move
 		#todo may have to be revised - is castling actually two moves ?
 		if moves.count & 1 == 0
@@ -22,16 +26,10 @@ class Match < ActiveRecord::Base
 			return 2
 		end
 	end
-	
-#	def validate
-#		last_moved_by = -1
-#		moves.each do |m|
-#			if (last_moved_by == m.moved_by)
-#				errors.add(:order, "The other player hasn't gone yet, wait your turn !")
-#				return
-#			end
-#			last_moved_by = m.moved_by
-#		end
-#	end
+	def side_of( plyr ) 
+		return :white if plyr == @player1
+		return :black if plyr == @player2
+		return nil
+	end
 	
 end

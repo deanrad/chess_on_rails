@@ -28,4 +28,17 @@ class MatchTest < ActiveSupport::TestCase
 		assert_equal 2, d.active_matches.count
 		assert_equal 2, d.matches.count
 	end
+	
+    def test_knows_what_side_player_is_on
+		m1 = matches(:paul_vs_dean)
+		assert_equal players(:paul).id, m1.player1.id
+		assert_equal players(:dean).id, m1.player2.id
+		
+		puts "Paul on " + m1.side_of( players(:paul) ).to_s
+		puts "Dean on " + m1.side_of( players(:dean) ).to_s
+		
+		assert_equal :white, m1.side_of( players(:paul) )
+		assert_equal :black, m1.side_of( players(:dean) )
+		
+	end
 end

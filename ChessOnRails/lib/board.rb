@@ -5,12 +5,19 @@ class Board
 	attr_accessor :pieces
 	attr_accessor :as_of_move
 	
+	#todo remove need for pieces
 	def initialize(match, pieces, as_of_move=:current)
-		@match = match
+		
+		#initialize from the game's initial board, but replay moves...
 		@pieces = pieces
-		@as_of_move = as_of_move
+		
+		#raise ArgumentError if as_of_move > @match.moves.count
 	end
 
+	def piece_at(pos)
+		@pieces.find { |piece| piece.position == pos }
+	end
+	
 	def position_occupied_by?(pos, side)
 		p = @pieces.find { |p|  p.position == pos }
 		
