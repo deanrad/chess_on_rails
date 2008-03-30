@@ -10,7 +10,7 @@ class PieceTest < ActiveSupport::TestCase
 		p = Piece.new(:white, :queens_knight)
 		assert p.valid?
 		
-		p = Piece.new(:black, :pawn)
+		p = Piece.new(:black, :a_pawn)
 		assert p.valid?
 		
 		assert_raises ArgumentError do
@@ -84,7 +84,7 @@ class PieceTest < ActiveSupport::TestCase
 	end
 	
 	def test_has_a_notation_for_pawn
-		p1 = Piece.new(:black, :pawn)
+		p1 = Piece.new(:black, :b_pawn)
 		p1.position = 'b2'
 		assert_equal 'b', p1.notation
 	end

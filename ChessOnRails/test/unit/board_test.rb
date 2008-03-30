@@ -9,6 +9,7 @@ class BoardTest < ActiveSupport::TestCase
 	def test_new_match_gets_an_initial_board
 		m1 = matches(:unstarted_match)
 		board = m1.initial_board
+		
 		assert_equal 32, board.num_active_pieces
 		
 		#havent enabled move replay just yet
@@ -41,37 +42,38 @@ class BoardTest < ActiveSupport::TestCase
 	end
 	
 	def test_pawn_can_advance_one_or_two_on_first_move
-		p = Piece.new(:white, :pawn)
+		p = Piece.new(:white, :d_pawn)
 		p.position = 'd2'
 		moves = p.theoretical_moves
+
 		['d3','d4'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
 		
-		p = Piece.new(:black, :pawn)
+		p = Piece.new(:black, :e_pawn)
 		p.position = 'e7'
 		moves = p.theoretical_moves
 		['e6','e5'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
 	end
 	
 	def test_pawn_can_only_advance_one_on_successive_moves
-		p = Piece.new(:white, :pawn)
+		p = Piece.new(:white, :d_pawn)
 		p.position='d4'
 		moves = p.theoretical_moves
 		assert !moves.include?('d6')
 		
-		p = Piece.new(:black, :pawn)
+		p = Piece.new(:black, :e_pawn)
 		p.position = 'e3'
 		moves = p.theoretical_moves
 		assert !moves.include?('e1')
 	end
 	
 	def test_pawn_diagonal_captures_possible_accounting_for_ends
-		p = Piece.new(:white, :pawn)
+		p = Piece.new(:white, :d_pawn)
 		p.position = 'd2'
 		moves = p.theoretical_moves
 		['e3','c3'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}" }
 		assert_equal 4, moves.length
 		
-		p = Piece.new(:black, :pawn)
+		p = Piece.new(:black, :e_pawn)
 		p.position='e7'
 		moves = p.theoretical_moves
 		['f6','d6'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
@@ -83,10 +85,10 @@ class BoardTest < ActiveSupport::TestCase
 	end
 	
 	def test_piece_cannot_move_off_edge_of_board
-		edge_pawn = Piece.new(:white, :pawn)
+		edge_pawn = Piece.new(:white, :a_pawn)
 		edge_pawn.position='a2'
 		
-		center_pawn = Piece.new(:white, :pawn)
+		center_pawn = Piece.new(:white, :f_pawn)
 		center_pawn.position='f2'
 		
 		assert_operator edge_pawn.theoretical_moves.length, :<, center_pawn.theoretical_moves.length
@@ -111,7 +113,7 @@ class BoardTest < ActiveSupport::TestCase
 	def test_knows_what_side_occupies_a_square
 		board = matches(:unstarted_match).initial_board
 				
-		assert board.position_occupied_by?( 'a2', :white )
+		assert_equal :white, board.side_occupying('a2')
 		assert !board.position_occupied_by?( 'a2', :black )
 		
 		assert board.position_occupied_by?( 'e7', :black )

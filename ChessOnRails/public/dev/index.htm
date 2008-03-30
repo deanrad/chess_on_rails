@@ -1,0 +1,215 @@
+<html>
+<head>
+
+  <script src="/javascripts/prototype.js"></script>
+
+  <script src="/javascripts/effects.js" />
+
+  <script src="/javascripts/dragdrop.js" />
+
+  <script src="board_pieces.js" />
+
+  <script src="move_list.js" />
+
+  <style>
+    #board_table { border-width: 1px; border-style:solid; border-color:black; }
+    #board_table td{
+      width:45px; height:45px;
+      border-width: 1px; border-style:solid; border-color:black;
+      margin:0px; padding: 0px;
+     }
+    .ml { height: 20px; }
+    .hoverActive { background-color: #aaaacc; }
+  </style>
+</head>
+<body>
+  <div id="board_div" style="float: right">
+    <table id="board_table">
+      <tr>
+        <td class="a8" id="a8">
+          &nbsp;</td>
+        <td class="b8" id="b8">
+          &nbsp;</td>
+        <td class="c8" id="c8">
+          &nbsp;</td>
+        <td class="d8" id="d8">
+          &nbsp;</td>
+        <td class="e8" id="e8">
+          &nbsp;</td>
+        <td class="f8" id="f8">
+          &nbsp;</td>
+        <td class="g8" id="g8">
+          &nbsp;</td>
+        <td class="h8" id="h8">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td class="a7" id="a7">
+          &nbsp;</td>
+        <td class="b7" id="b7">
+          &nbsp;</td>
+        <td class="c7" id="c7">
+          &nbsp;</td>
+        <td class="d7" id="d7">
+          &nbsp;</td>
+        <td class="e7" id="e7">
+          &nbsp;</td>
+        <td class="f7" id="f7">
+          &nbsp;</td>
+        <td class="g7" id="g7">
+          &nbsp;</td>
+        <td class="h7" id="h7">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td class="a6" id="a6">
+          &nbsp;</td>
+        <td class="b6" id="b6">
+          &nbsp;</td>
+        <td class="c6" id="c6">
+          &nbsp;</td>
+        <td class="d6" id="d6">
+          &nbsp;</td>
+        <td class="e6" id="e6">
+          &nbsp;</td>
+        <td class="f6" id="f6">
+          &nbsp;</td>
+        <td class="g6" id="g6">
+          &nbsp;</td>
+        <td class="h6" id="h6">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td class="a5" id="a5">
+          &nbsp;</td>
+        <td class="b5" id="b5">
+          &nbsp;</td>
+        <td class="c5" id="c5">
+          &nbsp;</td>
+        <td class="d5" id="d5">
+          &nbsp;</td>
+        <td class="e5" id="e5">
+          &nbsp;</td>
+        <td class="f5" id="f5">
+          &nbsp;</td>
+        <td class="g5" id="g5">
+          &nbsp;</td>
+        <td class="h5" id="h5">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td class="a4" id="a4">
+          &nbsp;</td>
+        <td class="b4" id="b4">
+          &nbsp;</td>
+        <td class="c4" id="c4">
+          &nbsp;</td>
+        <td class="d4" id="d4">
+          &nbsp;</td>
+        <td class="e4" id="e4">
+          &nbsp;</td>
+        <td class="f4" id="f4">
+          &nbsp;</td>
+        <td class="g4" id="g4">
+          &nbsp;</td>
+        <td class="h4" id="h4">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td class="a3" id="a3">
+          &nbsp;</td>
+        <td class="b3" id="b3">
+          &nbsp;</td>
+        <td class="c3" id="c3">
+          &nbsp;</td>
+        <td class="d3" id="d3">
+          &nbsp;</td>
+        <td class="e3" id="e3">
+          &nbsp;</td>
+        <td class="f3" id="f3">
+          &nbsp;</td>
+        <td class="g3" id="g3">
+          &nbsp;</td>
+        <td class="h3" id="h3">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td class="a2" id="a2">
+          &nbsp;</td>
+        <td class="b2" id="b2">
+          &nbsp;</td>
+        <td class="c2" id="c2">
+          &nbsp;</td>
+        <td class="d2" id="d2">
+          &nbsp;</td>
+        <td class="e2" id="e2">
+          &nbsp;</td>
+        <td class="f2" id="f2">
+          &nbsp;</td>
+        <td class="g2" id="g2">
+          &nbsp;</td>
+        <td class="h2" id="h2">
+          &nbsp;</td>
+      </tr>
+      <tr>
+        <td class="a1" id="a1">
+          &nbsp;</td>
+        <td class="b1" id="b1">
+          &nbsp;</td>
+        <td class="c1" id="c1">
+          &nbsp;</td>
+        <td class="d1" id="d1">
+          &nbsp;</td>
+        <td class="e1" id="e1">
+          &nbsp;</td>
+        <td class="f1" id="f1">
+          &nbsp;</td>
+        <td class="g1" id="g1">
+          &nbsp;</td>
+        <td class="h1" id="h1">
+          &nbsp;</td>
+      </tr>
+    </table>
+  </div>
+
+  <script src="board_action.js" />
+
+  <div id="movelist_div" style="float: right">
+    <table id="movelist_table">
+      <thead>
+        <tr>
+          <td>
+            Turn</td>
+          <td>
+            White</td>
+          <td>
+            Black</td>
+        </tr>
+      </thead>
+      <tbody id="turn_container">
+        <tr id="turn_template">
+          <td>
+            1.</td>
+          <td>
+            Nc3</td>
+          <td>
+            Nf6</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div id="new_move_div">
+    <form id="new_move">
+      Make a move
+      <input type="text" name="from_coord" id="new_move_from_coord" value="" />
+      <input type="text" name="to_coord" id="new_move_to_coord" value="" />
+      <input type="submit" name="submit" value="Make Move" />
+      <input type="button" name="reset" value="Reconsider" />
+    </form>
+  </div>
+
+  <script src="move_list_actions.js" />
+
+</body>
+</html>

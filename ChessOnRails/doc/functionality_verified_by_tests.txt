@@ -1,6 +1,21 @@
-(in C:/CHESSO~1/CHESSO~1)
+(in C:/ChessOnRails/ChessOnRails)
 Note: this document should be regenerated periodically by running
 	rake test:doc
+
+authentication_controller should:
+ - have index login logout actions
+ - only logged in can change security question
+ - login security question only
+ - test user dean can login
+ - test user maria can login
+ - reject incorrect login
+ - reject move without login
+
+board_controller should:
+ - knows what piece is on a square
+ - can refer to as many boards as there are moves
+
+match_controller should:
 
 move_controller should:
  - cannot move without coordinates
@@ -8,18 +23,10 @@ move_controller should:
  - uses your default match if none specified
  - uses explicit match if specified
  - errs if specified match not there or active
- - reject attempt to move someone elses piece
-
-move should:
- - unstarted match has no moves
- - moves are returned in order created
- - white can make first move
- - black cannot make first move
- - can play first two moves correctly
- - cant move if its not your turn
 
 board should:
  - new match gets an initial board
+ - board can refer to move number or refer to current move
  - knows a valid location and distinguishes between invalid one
  - pawn can advance one or two on first move
  - pawn can only advance one on successive moves
@@ -36,10 +43,18 @@ game should:
 
 match should:
  - returns active matches
- - be able to tell you what side a player is
+ - knows what side player is on
+
+move should:
+ - unstarted match has no moves
+ - moves are returned in order created
+ - white can make first move
+ - black cannot make first move
+ - can play first two moves correctly
+ - cant move if its not your turn
 
 piece should:
- - recognizes valid piece types
+ - recognize valid piece types
  - recognize queen vs kings bishop
  - has a notation for king and queen
  - has a notation for minor and rook
@@ -53,12 +68,5 @@ player should:
  - reject registering duplicate player names
  - has current match if has any matches
 
-authentication_controller should:
- - have index login logout actions
- - only logged in can change security question
- - login security question only
- - test user dean can login
- - test user maria can login
- - reject incorrect login
- - reject move without login
+user should:
 

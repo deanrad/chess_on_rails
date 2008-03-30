@@ -15,9 +15,15 @@ class Board
 	end
 
 	def piece_at(pos)
-		@pieces.find { |piece| piece.position == pos }
+		p = @pieces.find { |piece| piece.position == pos }
+		return p
 	end
 	
+	def side_occupying(pos)
+		p = @pieces.find { |p|  p.position == pos }
+		return nil if !p 
+		return p.side
+	end
 	def position_occupied_by?(pos, side)
 		p = @pieces.find { |p|  p.position == pos }
 		

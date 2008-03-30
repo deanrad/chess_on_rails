@@ -6,9 +6,13 @@ class Piece < ActiveRecord::Base
 	require 'Enumerable'
 	
 	#the allowed types for the type instance accessor (and their shorthand)
+	#todo: remove pawn
 	@@types = {:kings_rook =>'R#{file}', :kings_knight =>'N#{file}',  :kings_bishop=>'B',  
 		:queens_rook=>'R#{file}', :queens_knight=>'N#{file}',  :queens_bishop=>'B', 
-		:king=>'K',  :queen=>'Q',  :pawn=>'#{file}'}
+		:king=>'K',  :queen=>'Q',
+		:a_pawn=>'a', :b_pawn=>'b', :c_pawn=>'c', :d_pawn=>'d',
+		:e_pawn=>'e', :f_pawn=>'f', :g_pawn=>'g', :h_pawn=>'h'
+	}
 	
 	#the allowed sides for the side instance accessor (and their shorthand)
 	@@sides = {:white=>"W", :black=>"B"}
@@ -67,7 +71,7 @@ class Piece < ActiveRecord::Base
 		
 		@moves = []
 		
-		if @type == :pawn
+		if @type.to_s.include?(:pawn.to_s)
 			calc_theoretical_moves_pawn
 		elsif @type == :queen
 			calc_theoretical_moves_queen

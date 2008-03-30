@@ -11,17 +11,39 @@ class BoardControllerTest < ActionController::TestCase
 		p1 = matches(:unstarted_match).initial_board.piece_at("b2")
 		assert_not_nil p1
 		
-		assert_equal :pawn, p1.type
+		assert_equal :b_pawn, p1.type
 		assert_equal :white, p1.side
 	end
 	
+	def test_can_refer_to_as_many_boards_as_there_are_moves
+		match = matches(:unstarted_match)
+		assert_not_nil match.initial_board
+		
+		#todo - get equality working at this level...
+		#assert_equal match.initial_board, match.board(0)
+		#assert_equal match.board(0), match.board #current board
+		
+		match.moves << Move.new( :from_coord=>"d2", :to_coord=>"d4", :notation=>"d4", :moved_by=>1 )
+		match.save!
+
+		#assert_not_equal match.board(0), match.board #current board
+		#assert_equal match.board(1), match.board
+				
+		#assert_raises ArgumentError do
+		#	b = match.board(2)	
+		#end
+		
+	end
 #	def test_detects_moved_piece
 #		match = matches(:unstarted_match)
-#		assert_nil match.initial_board.piece_at("d4")
+#		assert_not_nil match.initial_board
+#		assert_not_equal 0, match.initial_board.num_active_pieces
+#		
+#		assert_not_nil match.initial_board.piece_at("d4")
 #		match.moves << Move.new( :from_coord=>"d2", :to_coord=>"d4", :notation=>"d4", :moved_by=>1 )
 #		match.save!
-#
-#		#todo: this is the next test to pass after enabling board replay
+#		
+#		#		#todo: this is the next test to pass after enabling board replay
 #		assert_not_nil match.board.piece_at("d4")
 #		
 #	end

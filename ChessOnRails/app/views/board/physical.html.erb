@@ -3,7 +3,7 @@
 	<% @ranks.each_byte do |rank| -%>
 		<tr>
 		<% @files.each_byte do |file| -%>
-			<td class="<%= file.chr + rank.chr %>">&nbsp;</td>	
+			<td class="<%= file.chr + rank.chr %>" id="<%= file.chr + rank.chr %>">&nbsp;</td>	
 		<% end %>
 		</tr>
 	<% end %>
