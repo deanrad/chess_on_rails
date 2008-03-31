@@ -1,0 +1,11 @@
+<h1><%= "A Duel to the Death between #{@match.player1.name} and #{@match.player2.name}!" -%></h1>
+
+Hi. Welcome, <%= Player.current.name %>.
+
+<!-- doesnt work!  -->
+<%= render :controller=>"board", :action=>"physical" %>
+
+<%= render :controller=>"move", :action=>"create" %>
+
+
+<p>Find me in views/match/show.html.erb</p>

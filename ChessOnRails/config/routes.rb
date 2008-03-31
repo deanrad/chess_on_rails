@@ -30,8 +30,12 @@ ActionController::Routing::Routes.draw do |map|
   # See how all your routes lay out with "rake routes"
   # map.move 'move/'
   # map.move_notated 'move/notation/:notation'
+
+  #allow typical REST commands over match 
+  map.resources :match
   
   # Install the default routes as the lowest priority.
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
+  
 end

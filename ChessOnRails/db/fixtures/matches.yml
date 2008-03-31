@@ -10,3 +10,7 @@ paul_vs_dean:
    player1: 3
    player2: 1
    
+dean_vs_paul:
+   id: 3
+   player1: 1
+   player2: 3

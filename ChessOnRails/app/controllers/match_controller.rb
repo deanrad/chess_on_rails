@@ -16,6 +16,6 @@ class MatchController < ApplicationController
 	
 	# GET /match/new
 	def create
-		#redirects to one created with defaults
+		#gets from for creating one with defaults
 	end
 end
