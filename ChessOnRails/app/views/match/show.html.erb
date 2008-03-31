@@ -2,10 +2,16 @@
 
 Hi. Welcome, <%= Player.current.name %>.
 
-<!-- doesnt work!  -->
-<%= render :controller=>"board", :action=>"physical" %>
+<%= render "move/create" %>
 
-<%= render :controller=>"move", :action=>"create" %>
+<!-- these dont work however render_component does -->
+
+<!-- render "board/physical" -->
+<!-- render :controller=>"board", :action=>"physical" -->
+
+
+<%= render_component :controller=>'board', :action=>'physical', :params=>{:side=>@viewed_from_side.to_s} %>
+
 
 
 <p>Find me in views/match/show.html.erb</p>
