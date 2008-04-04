@@ -91,6 +91,7 @@
     <Folder Include="app\views\board" />
     <Folder Include="app\views\layouts\" />
     <Folder Include="app\views\match" />
+    <Folder Include="app\views\move" />
     <Folder Include="config\" />
     <Folder Include="config\chess" />
     <Folder Include="config\environments\" />
@@ -113,6 +114,7 @@
     <Folder Include="lib\tasks\" />
     <Folder Include="log\" />
     <Folder Include="public\" />
+    <Folder Include="public\dev" />
     <Folder Include="public\images\" />
     <Folder Include="public\images\chess_pieces" />
     <Folder Include="public\javascripts\" />
@@ -225,6 +227,11 @@
     <Content Include="lib\tasks\test_doc.rake" />
     <Content Include="log\development.log" />
     <Content Include="log\test.log" />
+    <Content Include="public\dev\board_action.js" />
+    <Content Include="public\dev\board_pieces.js" />
+    <Content Include="public\dev\index.htm" />
+    <Content Include="public\dev\move_list.js" />
+    <Content Include="public\dev\move_list_actions.js" />
     <Content Include="public\images\chess_pieces\bishop_b.gif" />
     <Content Include="public\images\chess_pieces\bishop_w.gif" />
     <Content Include="public\images\chess_pieces\king_b.gif" />
@@ -238,6 +245,7 @@
     <Content Include="public\images\chess_pieces\rook_b.gif" />
     <Content Include="public\images\chess_pieces\rook_w.gif" />
     <Content Include="public\images\chess_pieces\source.png" />
+    <Content Include="public\stylesheets\board.css" />
     <Content Include="script\public\.htaccess" />
     <Content Include="script\public\.svn\all-wcprops" />
     <Content Include="script\public\.svn\entries" />
@@ -294,7 +302,10 @@
     <EmbeddedRuby Include="app\views\authentication\logout.html.erb" />
     <EmbeddedRuby Include="app\views\board\display.html.erb" />
     <EmbeddedRuby Include="app\views\board\physical.html.erb" />
+    <EmbeddedRuby Include="app\views\board\_physical.html.erb" />
     <EmbeddedRuby Include="app\views\match\index.html.erb" />
+    <EmbeddedRuby Include="app\views\match\show.html.erb" />
+    <EmbeddedRuby Include="app\views\move\create.html.erb" />
   </ItemGroup>
   <PropertyGroup>
     <RailsProject>True</RailsProject>

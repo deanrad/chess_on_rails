@@ -6,7 +6,16 @@ class MatchController < ApplicationController
 	def show
 		# shows whose move it is 
 		@match = Match.find( params[:id] )
-		@viewed_from_side = (Player.current == @match.player1) ? :white : :black
+		
+		@board = @match.initial_board
+		@pieces = @board.pieces
+		
+		get_ranks_and_files
+		@viewed_from_side = (@current_player == @match.player1) ? :white : :black
+		if @viewed_from_side == :black
+			@files.reverse!
+			@ranks.reverse!
+		end
 	end
 	
 	# GET /match/  GET /matches/

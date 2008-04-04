@@ -6,11 +6,17 @@ Hi. Welcome, <%= Player.current.name %>.
 
 <!-- these dont work however render_component does -->
 
-<!-- render "board/physical" -->
-<!-- render :controller=>"board", :action=>"physical" -->
+<%= render "board/physical", :locals => { :ranks => @ranks, :files => @files } %>
 
 
-<%= render_component :controller=>'board', :action=>'physical', :params=>{:side=>@viewed_from_side.to_s} %>
+<script>
+<%= render "board/pieces", :locals => { :pieces => @pieces } %>
+</script>
+
+<script src="/dev/board_action.js"/>
+
+
+<!--  render_component :controller=>'board', :action=>'physical', :params => { :side=>@viewed_from_side.to_s} -->
 
 
 
