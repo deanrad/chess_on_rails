@@ -33,6 +33,8 @@ ActionController::Routing::Routes.draw do |map|
 
   #allow typical REST commands over match 
   map.resources :match
+
+  map.match_pieces 'match/:id/pieces.xml', :controller => 'match', :action=>'pieces', :format=>'xml'
   
   # Install the default routes as the lowest priority.
   map.connect ':controller/:action/:id'

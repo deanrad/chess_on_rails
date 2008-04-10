@@ -34,10 +34,4 @@ class PlayerTest < ActiveSupport::TestCase
 		assert_equal ActiveRecord::Errors.default_error_messages[:taken],
 		p.errors.on(:name)
 	end
-
-    def test_has_current_match_if_has_any_matches
-        assert_equal players(:dean), Player.current
-        puts Player.current.match.player1
-        assert_equal 2, Player.current.match.id
-    end
 end

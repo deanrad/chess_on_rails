@@ -1,10 +1,8 @@
 
 #An instance of a piece bound to a particular match
 # (Currently not aware of matches in any tests)
-class Piece < ActiveRecord::Base
-	
-	require 'Enumerable'
-	
+class Piece  # < ActiveRecord::Base
+		
 	#the allowed types for the type instance accessor (and their shorthand)
 	#todo: remove pawn
 	@@types = {:kings_rook =>'R#{file}', :kings_knight =>'N#{file}',  :kings_bishop=>'B',  
@@ -23,7 +21,6 @@ class Piece < ActiveRecord::Base
 	
 	attr_accessor :type
 	attr_accessor :side
-	
 	attr_accessor :position
 	
 	attr_accessor :match_id, :int
@@ -36,9 +33,15 @@ class Piece < ActiveRecord::Base
 			@position=pos
 		end
 		
-        if !valid?
-			raise ArgumentError, "Invalid side:#{side} or type:#{type} in piece creation"
-		end
+        #if !valid?
+		#	raise ArgumentError, "Invalid side:#{side} or type:#{type} in piece creation"
+		#end
+	end
+	
+	#when rendered the client id uniquely specifies an individual piece within a board
+	#example: white_f_pawn
+	def client_id
+		"#{@side}_#{@type}"
 	end
 	
 	def file
@@ -87,6 +90,11 @@ class Piece < ActiveRecord::Base
 		
 		@moves.reject! { |pos| ! Chess.valid_position?( pos ) }
 		return @moves
+	end
+	
+	# aka friendly fire
+	def moves_not_on_ones_own_piece
+		theoretical_moves.find {  |move| 1==1   }
 	end
 	
 	def calc_theoretical_moves_king
@@ -154,22 +162,23 @@ class Piece < ActiveRecord::Base
 			
 		end
 	end
-	
-	def validate
+
+#	def validate
 		
 		#errors.add(:side, "I dont like that side " + @side.to_s)
 		
-		if ! @@types.has_key? @type
-			errors.add(:type, "Unknown type " + @type.to_s + ". It may help to specify :queens_bishop instead of :bishop for example ")
-		end
-		
-		if ! @@sides.has_key? @side
-			errors.add(:side, "Unknown side " + @side.to_s + ". Valid sides are :black and :white")
-		end
+		#if ! @@types.has_key? @type
+		#	errors.add(:type, "Unknown type " + @type.to_s + ". It may help to specify :queens_bishop instead of :bishop for example ")
+		#end
+		#
+		#if ! @@sides.has_key? @side
+		#	errors.add(:side, "Unknown side " + @side.to_s + ". Valid sides are :black and :white")
+		#end
 		
 		#must be a known type
 		#if !@@types.includes?(@type) 
 		#	errors.add(:type, "Unknown type [${@type}]")
 		#end
-	end
+
+#	end
 end

@@ -8,13 +8,10 @@ class Match < ActiveRecord::Base
 	has_many :moves, :order=>"created_at ASC"
 	
 	def initial_board
-		return board(0)
+		return Board.new( self, Chess.initial_pieces, 0 )
 	end
 	
-	def board(as_of_move = :current)
-		if as_of_move == 0
-			return Board.new( self, Chess.initial_pieces )
-		end
+	def board(as_of_move)
 		return Board.new( self, Chess.initial_pieces, as_of_move ) 		
 	end
 	

@@ -1,0 +1,8 @@
+
+
+<% form_for :move, :url => {:controller => "move", :action => "create"}  do |f| %>
+    <%= f.text_field :from_coord %>
+    <%= f.hidden_field :match_id, :value => match_id %>
+    <%= f.text_field :to_coord %>
+    <%= submit_tag "Do it!" %>
+<% end %>

@@ -7,6 +7,6 @@ class Move < ActiveRecord::Base
 	end
 	
 	def validate
-		errors.add(:turn, "It is not your turn to move yet.") if moved_by!= match.next_to_move
+		errors.add(:turn, "It is not your turn to move yet.") if moved_by != match.next_to_move
 	end
 end

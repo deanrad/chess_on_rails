@@ -1,13 +1,17 @@
 .label {background-color:gray; color:white; font-family:Arial; font-size:smaller}
 
 #board_table { border-width: 1px; border-style:solid; border-color:black; }
+
+#board_table .rank {width:20px; }
+#board_table .file {height:20px;}
+
+.piece {font-weight:bold;}
+
 #board_table td{
   width:45px; height:45px;
   border-width: 1px; border-style:solid; border-color:black;
   margin:0px; padding: 0px;
  }
-#board_table .rank {width:20px; }
-#board_table .file {height:20px;}
 
 .ml { height: 20px; }
 .hoverActive { background-color: #aaaacc; }

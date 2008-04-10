@@ -6,12 +6,42 @@ class Board
 	attr_accessor :as_of_move
 	
 	#todo remove need for pieces
-	def initialize(match, pieces, as_of_move=:current)
+	def initialize(match, pieces, as_of_move)
 		
 		#initialize from the game's initial board, but replay moves...
 		@pieces = pieces
+		@match = match
 		
-		#raise ArgumentError if as_of_move > @match.moves.count
+		#figure out the number of moves we're replaying to
+		if( as_of_move==:current)
+			@as_of_move = @match.moves.count
+		else
+			@as_of_move = as_of_move.to_i
+		end
+		
+		#todo rails has much cleaner iteration options than this - learn to use them
+		i = 0 
+	    for m in @match.moves
+			if i < @as_of_move
+	
+				#kill any existing piece we're moving onto			
+				for p in @pieces
+					if p.position == m.to_coord
+						@pieces.delete(p)
+					end
+				end
+
+				#move to that square
+				for p in @pieces
+					if p.position == m.from_coord
+						p.position = m.to_coord 
+					end
+				end
+				
+			end
+			i+=1
+		end
+			
 	end
 
 	def piece_at(pos)
@@ -36,6 +66,4 @@ class Board
 		@pieces.length
 	end
 	
-	def validate
-	end
 end

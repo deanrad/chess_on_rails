@@ -20,16 +20,11 @@ class Player < ActiveRecord::Base
 						WHERE ( player1 = #{id} OR player2= #{id} )'
 
     # named so as not to conflict with AR current_match, referenced below
+    # TODO can override with same name and call base.current_match within
     def my_current_match
         Match.find( current_match )
     end
 
-
-    def self.current
-        #todo: cannot refer to session here - find some other way
-        #return nil if ! session[:player_id]
-        return Player.find( 1 )
-    end
 
     def match(id=nil)
        return my_current_match if !id

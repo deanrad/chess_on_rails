@@ -1,0 +1,10 @@
+<style>
+	.active_yours {background-color:black; color:white; font-weight:bold}
+	.active_theirs {background-color:eee; color:bbb; font-weight:bold}
+</style>
+<table id="move_indicator">
+<tr>
+<td class="<%= your_turn  ? "active_yours"  : "" -%>">Yours</td>
+<td class="<%= !your_turn ? "active_theirs" : "" -%>">Theirs</td>
+</tr>
+</table>

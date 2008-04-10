@@ -10,18 +10,10 @@ class CreateUsers < ActiveRecord::Migration
 		  t.timestamps
 	  end
 	
-	  create_users
   end
 
   def self.down
 	  drop_table :users
   end
-  
-  def self.create_users
-	u = User.new :email=>'chicagogrooves@gmail.com'
-	u.playing_as = Player.find_by_id 1
-	u.security_phrase = '9'
-	u.security_phrase_hint = 'Which version of Chessmaster do you own?'
-	u.save!
-  end
-end
+ 
+ end
