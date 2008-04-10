@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+ dean:
+   id:      1
+   email:    chicagogrooves@gmail.com
+   playing_as: 1
+   security_phrase: 9
+ maria:
+   id:      2
+   email:    maria_poulos@yahoo.com
+   playing_as: 2
+   security_phrase: 3
+ paul:
+   id:      3
+   email:   paulfletter@gmail.com
+   playing_as: 3
+   security_phrase: 4

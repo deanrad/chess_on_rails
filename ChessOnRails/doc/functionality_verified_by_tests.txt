@@ -12,16 +12,10 @@ authentication_controller should:
  - reject move without login
 
 board_controller should:
- - knows what piece is on a square
- - can refer to as many boards as there are moves
 
 match_controller should:
 
 move_controller should:
- - cannot move without coordinates
- - accepts move with coordinates
- - uses your default match if none specified
- - uses explicit match if specified
  - errs if specified match not there or active
 
 board should:
@@ -35,6 +29,8 @@ board should:
  - piece cannot move off edge of board
  - knight has more moves in the center
  - knows what side occupies a square
+ - knows what piece is on a square
+ - can refer to as many boards as there are moves
 
 game should:
  - 32 pieces on chess initial board
@@ -61,12 +57,12 @@ piece should:
  - has a notation for pawn
  - queen moves correctly
  - rook moves correctly
+ - knows advancable squares
 
 player should:
  - can be created
  - stores name
  - reject registering duplicate player names
- - has current match if has any matches
 
 user should:
 

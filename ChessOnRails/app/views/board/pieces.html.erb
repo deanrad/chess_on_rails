@@ -1,0 +1,12 @@
+// JS Comment
+var pieces = [
+	<% @pieces.each_with_index do |p, i| -%>
+		{
+		"position": "<%= p.position %>",
+		"side": "<%= p.side %>",
+		"type": "<%= p.type %>"
+		}
+		<%= "," if i<(@pieces.length-1) %>
+	<% end %>
+];
+
