@@ -21,14 +21,7 @@ class MatchTest < ActiveSupport::TestCase
 		assert_equal "Paul", m1.player1.name
 		assert_equal "Dean", m1.player2.name
 	end
-	
-	def test_returns_active_matches
-		matches=[]
-		d = players(:dean)
-		assert_equal 2, d.active_matches.count
-		assert_equal 2, d.matches.count
-	end
-	
+		
     def test_knows_what_side_player_is_on
 		m1 = matches(:paul_vs_dean)
 		assert_equal players(:paul).id, m1.player1.id

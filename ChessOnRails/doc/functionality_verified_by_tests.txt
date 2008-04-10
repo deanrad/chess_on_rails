@@ -38,7 +38,6 @@ game should:
  - next to move alternates sides
 
 match should:
- - returns active matches
  - knows what side player is on
 
 move should:
@@ -52,12 +51,16 @@ move should:
 piece should:
  - recognize valid piece types
  - recognize queen vs kings bishop
+ - position composed of rank and file
  - has a notation for king and queen
  - has a notation for minor and rook
  - has a notation for pawn
  - queen moves correctly
  - rook moves correctly
- - knows advancable squares
+ - rook has four lines of attack
+ - bishop has four lines of attack
+ - queen has eight lines of attack
+ - pieces with no lines of attack
 
 player should:
  - can be created

@@ -2,6 +2,8 @@
 #An instance of a piece bound to a particular match
 # (Currently not aware of matches in any tests)
 class Piece  # < ActiveRecord::Base
+
+	require 'Enumerable'
 		
 	#the allowed types for the type instance accessor (and their shorthand)
 	#todo: remove pawn
@@ -60,6 +62,13 @@ class Piece  # < ActiveRecord::Base
 		return -1 if @side == :black
 	end
 	
+	#bishops and rooks (and the queen) have 'lines of attack', or directions which can be stopped by ones own piece
+	def lines_of_attack
+		return [] if ! @lines_of_attack
+		
+		@lines_of_attack
+	end
+	
 	#The part of the notation - with a piece disambiguator for pawns minors and rooks
 	# It will be removed later if deemed unnecessary
 	def notation
@@ -67,11 +76,17 @@ class Piece  # < ActiveRecord::Base
 		type_text = @@types[@type]
 		return eval( %Q{ "#{type_text}" } )
 	end
-		
+	
+	#eliminates theoretical moves that would not be applicable on a certain board
+	# for reasons of: 1) would be on your own sides square
+	# 2) would place your king in check
+	def allowed_moves(board)
+		theoretical_moves
+	end
+	
 	#the moves a piece could move to on an empty board
 	def theoretical_moves
-		return @moves if @moves != nil 
-		
+		raise ArgumentError, "Cannot determine theoretical moves of piece #{self.to_s} if position unspecified" if ! position
 		@moves = []
 		
 		if @type.to_s.include?(:pawn.to_s)
@@ -88,27 +103,24 @@ class Piece  # < ActiveRecord::Base
 			calc_theoretical_moves_bishop
 		end
 		
+		#puts "\nLines of attack for piece #{self.to_s}:\t" + (self.lines_of_attack.join(','))
+
 		@moves.reject! { |pos| ! Chess.valid_position?( pos ) }
 		return @moves
 	end
-	
-	# aka friendly fire
-	def moves_not_on_ones_own_piece
-		theoretical_moves.find {  |move| 1==1   }
-	end
-	
+		
 	def calc_theoretical_moves_king
 		
-		one_moves = [1,0,-1].cartesian( [1,0,-1] ).reject! { |x| x==[0,0] }
-		one_moves.each do |file_unit, rank_unit|
-			@moves << (@file[0] + (file_unit) ).chr + (@rank.to_i + (rank_unit)).to_s
+		lines_of_attack = [1,0,-1].cartesian( [1,0,-1] ).reject! { |x| x==[0,0] }
+		lines_of_attack.each do |file_unit, rank_unit|
+			@moves << (file[0] + (file_unit) ).chr + (rank.to_i + (rank_unit)).to_s
 		end
 	end
 	
 	def calc_theoretical_moves_queen
 		
-		one_moves = [1,0,-1].cartesian( [1,0,-1] ).reject! { |x| x==[0,0] }
-		one_moves.each do |file_unit, rank_unit|
+		@lines_of_attack = [1,0,-1].cartesian( [1,0,-1] ).reject! { |x| x==[0,0] }
+		@lines_of_attack.each do |file_unit, rank_unit|
 			(1..8).each do |length|
 				@moves << (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
 			end
@@ -117,8 +129,8 @@ class Piece  # < ActiveRecord::Base
 	
 	def calc_theoretical_moves_rook
 		
-		one_moves = [ [1,0], [-1,0], [0,1], [0,-1] ]
-		one_moves.each do |file_unit, rank_unit|
+		@lines_of_attack = [ [1,0], [-1,0], [0,1], [0,-1] ]
+		@lines_of_attack.each do |file_unit, rank_unit|
 			(1..8).each do |length|
 				@moves << (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
 			end
@@ -127,15 +139,16 @@ class Piece  # < ActiveRecord::Base
 	
 	def calc_theoretical_moves_bishop
 		
-		one_moves = [ [1,1], [-1,1], [1,-1], [-1,-1] ]
-		one_moves.each do |file_unit, rank_unit|
+		@lines_of_attack = [ [1,1], [-1,1], [1,-1], [-1,-1] ]
+		@lines_of_attack.each do |file_unit, rank_unit|
 			(1..8).each do |length|
 				@moves << (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
 			end
 		end
 	end
 	
-	
+
+	# a knight has no lines of attack	
 	def calc_theoretical_moves_knight
 		
 		[ [1,2], [1,-2], [-1,2], [-1,-2], [2,1], [2,-1], [-2,1], [-2,-1] ].each do | file_unit, rank_unit |

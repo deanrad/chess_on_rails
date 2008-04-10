@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <pieces match="<%= @match.id %>" moves_played="<%= @moves_played %>" pieces_remaining="<%= @pieces.length %>" debug="<%= @debug %>">
+
 <% for piece in @pieces %>
 <piece id="<%= piece.client_id %>"
 position="<%= piece.position %>"
 side="<%= piece.side %>"
 type="<%= piece.type %>"
+theoretical_moves="<%= piece.theoretical_moves * ',' %>"
 />
 <% end %>
 </pieces>
