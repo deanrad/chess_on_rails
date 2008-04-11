@@ -60,7 +60,9 @@ piece should:
  - rook has four lines of attack
  - bishop has four lines of attack
  - queen has eight lines of attack
- - pieces with no lines of attack
+ - kings knights pawns have no lines of attack
+ - rook can move nowhere on initial board
+ - queen and bishop can move when queens pawn moved
 
 player should:
  - can be created

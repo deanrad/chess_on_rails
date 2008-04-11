@@ -17,4 +17,12 @@
    to_coord: e5
    notation: e5
    created_at: 2008-01-02
+   
+ m3m1:
+   match_id: 3
+   moved_by: 1
+   from_coord: d2
+   to_coord: d4
+   notation: d4
+   created_at: 2008-01-02
 

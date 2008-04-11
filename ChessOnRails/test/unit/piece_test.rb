@@ -108,7 +108,7 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 8, p.lines_of_attack.length
 	end
 
-	def test_pieces_with_no_lines_of_attack
+	def test_kings_knights_pawns_have_no_lines_of_attack
 		k = Piece.new(:white, :king, "h8")
 		n = Piece.new(:black, :knight, "b2")
 		p = Piece.new(:white, :pawn, "d2")
@@ -117,9 +117,35 @@ class PieceTest < ActiveSupport::TestCase
 		# (kind of backwards, yes, but)
 		[k,n,p].each do |piece|
 			ms = piece.theoretical_moves
+			assert_equal 0, piece.lines_of_attack.length, "Piece #{piece.to_s} had lines of attack unexpectedly"
 		end
 		
-		assert_equal 0, k.lines_of_attack.length
 	end
+
+	def test_rook_can_move_nowhere_on_initial_board
+		r = Piece.new(:black, :queens_rook, "a8")
+		b = matches(:unstarted_match).initial_board
+		
+		assert_equal 14, r.theoretical_moves.length
+		assert_equal 0,  r.allowed_moves( b ).length
+	end
+
+	def test_queen_and_bishop_can_move_when_queens_pawn_moved
+		b = matches(:dean_vs_paul).board(:current)
+
+		#the bishop
+		bishop = b.piece_at("c1")
+		assert_equal :queens_bishop, bishop.type
+		bishop.theoretical_moves
+		assert_equal 5, bishop.allowed_moves(b).length
+
+		#the queen
+		queen = b.piece_at("d1")
+		queen.theoretical_moves
+		assert_equal :queen, queen.type
+		assert_equal 2, queen.allowed_moves(b).length
+
+	end
+	
 	
 end

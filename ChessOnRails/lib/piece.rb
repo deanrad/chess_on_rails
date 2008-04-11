@@ -81,7 +81,32 @@ class Piece  # < ActiveRecord::Base
 	# for reasons of: 1) would be on your own sides square
 	# 2) would place your king in check
 	def allowed_moves(board)
-		theoretical_moves
+		m = []
+		if lines_of_attack.length > 0 
+			@lines_of_attack.each do |line_of_attack|
+				# if a line of attack is blocked, remove it from the list
+				line_worth_following = true
+				
+				file_unit, rank_unit = line_of_attack
+				
+				(1..8).each do |length|
+					pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+					if( Chess.valid_position?( pos ) && line_worth_following )
+						if( @side == board.side_occupying(pos) )
+							# ran into your own piece- disregard this line
+							puts "disregarded line #{line_of_attack} due to piece at #{pos}"
+							line_worth_following = false
+						else
+							m << pos
+						end
+					end
+				end
+				
+			end
+			return m
+		else
+			return theoretical_moves
+		end
 	end
 	
 	#the moves a piece could move to on an empty board
@@ -113,7 +138,8 @@ class Piece  # < ActiveRecord::Base
 		
 		lines_of_attack = [1,0,-1].cartesian( [1,0,-1] ).reject! { |x| x==[0,0] }
 		lines_of_attack.each do |file_unit, rank_unit|
-			@moves << (file[0] + (file_unit) ).chr + (rank.to_i + (rank_unit)).to_s
+			pos = (file[0] + (file_unit) ).chr + (rank.to_i + (rank_unit)).to_s
+			@moves << pos if Chess.valid_position?( pos )
 		end
 	end
 	
@@ -122,7 +148,8 @@ class Piece  # < ActiveRecord::Base
 		@lines_of_attack = [1,0,-1].cartesian( [1,0,-1] ).reject! { |x| x==[0,0] }
 		@lines_of_attack.each do |file_unit, rank_unit|
 			(1..8).each do |length|
-				@moves << (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+				pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+				@moves << pos if Chess.valid_position?( pos )
 			end
 		end
 	end
@@ -132,7 +159,8 @@ class Piece  # < ActiveRecord::Base
 		@lines_of_attack = [ [1,0], [-1,0], [0,1], [0,-1] ]
 		@lines_of_attack.each do |file_unit, rank_unit|
 			(1..8).each do |length|
-				@moves << (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+				pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+				@moves << pos if Chess.valid_position?( pos )
 			end
 		end
 	end
@@ -142,7 +170,8 @@ class Piece  # < ActiveRecord::Base
 		@lines_of_attack = [ [1,1], [-1,1], [1,-1], [-1,-1] ]
 		@lines_of_attack.each do |file_unit, rank_unit|
 			(1..8).each do |length|
-				@moves << (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+				pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+				@moves << pos if Chess.valid_position?( pos )
 			end
 		end
 	end
@@ -152,7 +181,8 @@ class Piece  # < ActiveRecord::Base
 	def calc_theoretical_moves_knight
 		
 		[ [1,2], [1,-2], [-1,2], [-1,-2], [2,1], [2,-1], [-2,1], [-2,-1] ].each do | file_unit, rank_unit |
-			@moves << (file[0] + (file_unit) ).chr + (rank.to_i + (rank_unit)).to_s
+			pos = (file[0] + (file_unit) ).chr + (rank.to_i + (rank_unit)).to_s
+			@moves << pos if Chess.valid_position?( pos )
 		end
 	end
 	
