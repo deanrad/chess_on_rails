@@ -82,8 +82,10 @@ class Piece  # < ActiveRecord::Base
 	# 2) would place your king in check
 	def allowed_moves(board)
 		m = []
+		tm = theoretical_moves # fetch these, only return if needed
+		
 		if lines_of_attack.length > 0 
-			@lines_of_attack.each do |line_of_attack|
+			lines_of_attack.each do |line_of_attack|
 				# if a line of attack is blocked, remove it from the list
 				line_worth_following = true
 				
@@ -94,7 +96,7 @@ class Piece  # < ActiveRecord::Base
 					if( Chess.valid_position?( pos ) && line_worth_following )
 						if( @side == board.side_occupying(pos) )
 							# ran into your own piece- disregard this line
-							puts "disregarded line #{line_of_attack} due to piece at #{pos}"
+							#puts "disregarded line #{line_of_attack} due to piece at #{pos}"
 							line_worth_following = false
 						else
 							m << pos
@@ -105,7 +107,7 @@ class Piece  # < ActiveRecord::Base
 			end
 			return m
 		else
-			return theoretical_moves
+			return tm
 		end
 	end
 	

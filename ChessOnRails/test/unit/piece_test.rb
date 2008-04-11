@@ -136,12 +136,10 @@ class PieceTest < ActiveSupport::TestCase
 		#the bishop
 		bishop = b.piece_at("c1")
 		assert_equal :queens_bishop, bishop.type
-		bishop.theoretical_moves
 		assert_equal 5, bishop.allowed_moves(b).length
 
 		#the queen
 		queen = b.piece_at("d1")
-		queen.theoretical_moves
 		assert_equal :queen, queen.type
 		assert_equal 2, queen.allowed_moves(b).length
 
