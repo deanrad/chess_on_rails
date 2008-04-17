@@ -10,7 +10,10 @@ class MatchController < ApplicationController
 		@board = @match.board( @match.moves.count )
 		@pieces = @board.pieces
 		
-		get_ranks_and_files
+		#begin candidate new method
+		@files = Chess.files
+		@ranks = Chess.ranks.reverse
+
 		@viewed_from_side = (@current_player == @match.player1) ? :white : :black
 		@your_turn = ((@current_player == @match.player1) && (@match.next_to_move==1)) || (@current_player == @match.player2) && (@match.next_to_move==2)
 		
@@ -18,6 +21,7 @@ class MatchController < ApplicationController
 			@files.reverse!
 			@ranks.reverse!
 		end
+		#end candidate new method
 	end
 	
 	# GET /match/  GET /matches/
@@ -28,6 +32,8 @@ class MatchController < ApplicationController
 	
 	def pieces
 		@match = Match.find( params[:id] )
+		@files = Chess.files
+		@ranks = Chess.ranks.reverse
 
 		if( ! params[:move] )		
 			@board = @match.initial_board

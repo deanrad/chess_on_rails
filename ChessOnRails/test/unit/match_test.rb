@@ -27,9 +27,6 @@ class MatchTest < ActiveSupport::TestCase
 		assert_equal players(:paul).id, m1.player1.id
 		assert_equal players(:dean).id, m1.player2.id
 		
-		puts "Paul on " + m1.side_of( players(:paul) ).to_s
-		puts "Dean on " + m1.side_of( players(:dean) ).to_s
-		
 		assert_equal :white, m1.side_of( players(:paul) )
 		assert_equal :black, m1.side_of( players(:dean) )
 		

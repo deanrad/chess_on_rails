@@ -3,12 +3,7 @@
 
 class ApplicationController < ActionController::Base
 	helper :all # include all helpers, all the time
-	
-	def get_ranks_and_files
-		@files = Chess.files
-		@ranks = Chess.ranks.reverse
-	end
-	
+		
 	def authorize
 		if Player.find_by_id session[:player_id] 
 			@current_player = Player.find( session[:player_id] )
