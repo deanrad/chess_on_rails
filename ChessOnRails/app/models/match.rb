@@ -23,10 +23,14 @@ class Match < ActiveRecord::Base
 			return 2
 		end
 	end
+	
 	def side_of( plyr ) 
 		return :white if plyr == @player1
 		return :black if plyr == @player2
 		return nil
 	end
 	
+	def lineup
+		"Blah vs Blah"
+	end
 end

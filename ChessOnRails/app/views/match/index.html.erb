@@ -1,6 +1,12 @@
-<h1>A duel to the Death !</h1>
-Hi. Welcome, <%= Player.current.name %>.
+<h1>Your current duels</h1>
+Hi. Welcome, <%= @current_player.name %>.
 
-<%= render :controller=>"board", :action=>"physical" %>
+<div id="your_matches">.. No matches loaded ..</div>
+
+<%= periodically_call_remote :url => {:action => 'index_data'},
+	:update => 'your_matches',
+	:frequency => 5
+%>
+	
 
 <p>Find me in views/match/index.html.erb</p>

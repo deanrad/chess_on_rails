@@ -27,9 +27,11 @@ class MatchController < ApplicationController
 	# GET /match/  GET /matches/
 	def index
 		# shows primary match
-		@match = @current_player.match
 	end
-	
+	def index_data
+		@matches = @current_player.active_matches
+	end
+
 	def pieces
 		@match = Match.find( params[:id] )
 		@files = Chess.files

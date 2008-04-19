@@ -4,7 +4,8 @@ var pieces = [
 		{
 		"position": "<%= p.position %>",
 		"side": "<%= p.side %>",
-		"type": "<%= p.type %>"
+		"type": "<%= p.type %>",
+		"allowed_moves": "<%= p.allowed_moves(@board) * ' ' %>"
 		}
 		<%= "," if i<(@pieces.length-1) %>
 	<% end %>
