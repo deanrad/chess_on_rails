@@ -34,10 +34,6 @@ class Piece  # < ActiveRecord::Base
 		if pos
 			@position=pos
 		end
-		
-        #if !valid?
-		#	raise ArgumentError, "Invalid side:#{side} or type:#{type} in piece creation"
-		#end
 	end
 	
 	#when rendered the client id uniquely specifies an individual piece within a board
@@ -84,6 +80,7 @@ class Piece  # < ActiveRecord::Base
 		m = []
 		tm = theoretical_moves # fetch these, only return if needed
 		
+		#bishops queens and rooks have 'lines of attack' rules
 		if lines_of_attack.length > 0 
 			lines_of_attack.each do |line_of_attack|
 				# if a line of attack is blocked, remove it from the list
@@ -107,7 +104,20 @@ class Piece  # < ActiveRecord::Base
 			end
 			return m
 		else
-			return tm
+			#knights pawns and kings
+			
+			#start by excluding squares you occupy 
+			m = tm.reject { |pos| @side == board.side_occupying(pos) }
+			
+			#for pawns 
+			if( @type.to_s.include?(:pawn.to_s) )
+				# exclude non-forward moves unless captures
+				m.reject! { |pos| (pos[0] != @position[0]) && ( board.side_occupying(pos) == nil ) }
+				
+				# exclude forward moves if blocked 
+				m.reject! { |pos| (pos[0] == @position[0]) && ( board.side_occupying(pos) != nil ) }
+			end
+			return m
 		end
 	end
 	
@@ -207,23 +217,4 @@ class Piece  # < ActiveRecord::Base
 			
 		end
 	end
-
-#	def validate
-		
-		#errors.add(:side, "I dont like that side " + @side.to_s)
-		
-		#if ! @@types.has_key? @type
-		#	errors.add(:type, "Unknown type " + @type.to_s + ". It may help to specify :queens_bishop instead of :bishop for example ")
-		#end
-		#
-		#if ! @@sides.has_key? @side
-		#	errors.add(:side, "Unknown side " + @side.to_s + ". Valid sides are :black and :white")
-		#end
-		
-		#must be a known type
-		#if !@@types.includes?(@type) 
-		#	errors.add(:type, "Unknown type [${@type}]")
-		#end
-
-#	end
 end
