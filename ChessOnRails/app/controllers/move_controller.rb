@@ -47,4 +47,18 @@ class MoveController < ApplicationController
 		@move.save!
 		redirect_to(:back)
 	end
+
+	#xhr controller action
+	def notate
+		params[:from_coord] = params[:move][:from_coord] if ! params[:from_coord]
+		params[:to_coord] = params[:move][:to_coord] if ! params[:to_coord]
+		params[:match_id] = params[:move][:match_id] if ! params[:match_id] && params[:move][:match_id] 
+
+		move = Move.new( :match_id => params[:match_id], :from_coord => params[:from_coord], :to_coord => params[:to_coord] ) 
+		
+		render :text => move.notation
+		
+	rescue 
+		render :text => "?"
+	end
 end

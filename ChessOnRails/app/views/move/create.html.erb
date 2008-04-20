@@ -1,8 +1,0 @@
-
-The preview of your move with a form to actually submit it.
-
-<% form_for :move, :url => {:controller => "move", :action=>"create"}  do |f| %>
-    <%= f.text_field :from_coord %>
-    <%= f.text_field :to_coord %>
-    <%= submit_tag "Do it!" %>
-<% end %>

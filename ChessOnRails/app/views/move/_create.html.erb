@@ -1,8 +1,14 @@
 
 
-<% form_for :move, :url => {:controller => "move", :action => "create"}  do |f| %>
+<% form_for :move,  :html => {:id => 'new_move_form'}, :url => {:controller => "move", :action => "create"}  do |f| %>
     <%= f.text_field :from_coord %>
     <%= f.hidden_field :match_id, :value => match_id %>
     <%= f.text_field :to_coord %>
+    Move: <span id="new_move_notation"></span>
     <%= submit_tag "Do it!" %>
 <% end %>
+
+<%= observe_form :new_move_form,
+				 :update => 'new_move_notation',
+				 :url => { :controller => "move", :action => "notate" }
+%>
