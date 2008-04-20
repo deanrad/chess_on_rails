@@ -25,7 +25,7 @@ class MoveTest < ActiveSupport::TestCase
 	
 	def test_white_can_make_first_move
 		m1 = matches(:unstarted_match)	  
-		m1.moves << Move.new( :from_coord=>"e2", :to_coord=>"e4", :notation=>"e4", :moved_by=>1 )
+		m1.moves << Move.new( :from_coord => "e2", :to_coord => "e4", :notation => "e4", :moved_by => 1 )
 		m1.save!
 		
 		assert_equal 1, m1.moves.count
@@ -33,19 +33,19 @@ class MoveTest < ActiveSupport::TestCase
 
 	def test_black_cannot_make_first_move
 		match1 = matches(:unstarted_match)	  
-		match1.moves << Move.new( :from_coord=>"e7", :to_coord=>"e5", :notation=>"e5", :moved_by=>2 )
+		match1.moves << Move.new( :from_coord => "e7", :to_coord => "e5", :notation => "e5", :moved_by => 2 )
 		move1 =  match1.moves[0]
 
 		assert_equal false, move1.valid?
 		assert_equal false, match1.valid?
 	end
 		
-	def test_can_play_first_two_moves_correctly
+	def test_nodoc_can_play_first_two_moves_correctly
 		m1 = matches(:unstarted_match)	  
 		
 
-		m1.moves << Move.new( :from_coord=>"e2", :to_coord=>"e4", :notation=>"e4", :moved_by=>1 )
-		m1.moves << Move.new( :from_coord=>"d7", :to_coord=>"d5", :notation=>"d5", :moved_by=>2 )
+		m1.moves << Move.new( :from_coord => "e2", :to_coord => "e4", :notation => "e4", :moved_by => 1 )
+		m1.moves << Move.new( :from_coord => "d7", :to_coord => "d5", :notation => "d5", :moved_by => 2 )
 		
 		assert m1.valid?
 		assert m1.save!
@@ -60,7 +60,7 @@ class MoveTest < ActiveSupport::TestCase
 		assert_equal 2, m1.moves[1].moved_by
 		assert m1.valid?
 		
-		m3 = Move.new( :from_coord=>"d7", :to_coord=>"d5", :notation=>"d5", :moved_by=>2 )
+		m3 = Move.new( :from_coord => "d7", :to_coord => "d5", :notation => "d5", :moved_by => 2 )
 		m1.moves << m3
 		
 		#assure its in the third position, or consecutive move detection could be broken
@@ -72,4 +72,27 @@ class MoveTest < ActiveSupport::TestCase
 		#but already it should be invalid at the move level
 		assert !m3.valid?
 	end
+	
+	def test_notates_simple_move
+		match = matches(:unstarted_match)
+		move = Move.new( :match_id => match.id, :from_coord => "b1", :to_coord => "c3", :moved_by => 1 ) #knight opening
+		assert_equal "Nc3", move.notation
+		match.moves << move
+	end
+	
+	def test_notates_pawn_moves_correctly
+		match = matches(:unstarted_match)
+		move1 = Move.new( :match_id => match.id, :from_coord => "d2", :to_coord => "d4", :moved_by => 1 ) #queens pawn
+		assert_equal "d4", move1.notation
+		match.moves << move1
+	
+		move2 = Move.new( :match_id => match.id, :from_coord => "e7", :to_coord => "e5", :moved_by => 2 ) 
+		assert_equal "e5", move2.notation
+		match.moves << move2
+
+		move3 = Move.new( :match_id => match.id, :from_coord => "d4", :to_coord => "e5", :moved_by => 1 ) 
+		assert_equal "dxe5", move3.notation
+		match.moves << move3
+	end
+	
 end

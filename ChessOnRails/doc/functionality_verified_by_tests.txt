@@ -14,6 +14,9 @@ authentication_controller should:
 board_controller should:
 
 match_controller should:
+ - shows a match from the correct side
+ - returns xml doc of pieces when asked for it
+ - returns html doc of pieces in board when asked
 
 move_controller should:
  - errs if specified match not there or active
@@ -45,8 +48,9 @@ move should:
  - moves are returned in order created
  - white can make first move
  - black cannot make first move
- - can play first two moves correctly
  - cant move if its not your turn
+ - notates simple move
+ - notates pawn moves correctly
 
 piece should:
  - recognize valid piece types
