@@ -17,6 +17,8 @@ class CreateMoves < ActiveRecord::Migration
 			
 			#calculated but stored for ease of computation
 			t.column :castled, :int, :default=>0 #used as bool
+			
+			#if the piece captured was not on the to_coord square as in en passant capture
 			t.column :captured_piece_coord, :string, :limit=>10, :default=>nil
 			
 			

@@ -11,7 +11,7 @@ class Match < ActiveRecord::Base
 		return Board.new( self, Chess.initial_pieces, 0 )
 	end
 	
-	def board(as_of_move)
+	def board(as_of_move = :current)
 		return Board.new( self, Chess.initial_pieces, as_of_move ) 		
 	end
 	

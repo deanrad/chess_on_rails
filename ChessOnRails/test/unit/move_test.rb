@@ -95,4 +95,11 @@ class MoveTest < ActiveSupport::TestCase
 		match.moves << move3
 	end
 	
+	def test_nodoc_detects_check
+		match = matches(:endgame) # todo cannot load game directly currently without replaying moves
+	end		
+	
+	def test_nodoc_allows_pawn_promotion
+		assert true
+	end
 end

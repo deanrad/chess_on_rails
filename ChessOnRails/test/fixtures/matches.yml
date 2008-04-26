@@ -19,3 +19,8 @@ unstarted_match:
    id: 4
    player1: 2
    player2: 3
+
+endgame:
+   id: 5
+   player1: 3
+   player2: 1
