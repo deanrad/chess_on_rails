@@ -7,7 +7,6 @@
 position="<%= piece.position %>"
 side="<%= piece.side %>"
 type="<%= piece.type %>"
-theoretical_moves="<%= piece.theoretical_moves * ',' %>"
 allowed_moves="<%= piece.allowed_moves(@match.board(:current)) * ',' %>"
 />
 <% end %>

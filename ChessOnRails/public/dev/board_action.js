@@ -21,10 +21,14 @@ function handle_release_of_piece(draggable, droparea){
    $('move_from_coord').value = draggable.parentNode.id;
    $('move_to_coord').value = droparea.id;
 
-   draggable.parentNode.removeChild(draggable);
+   var origSquare = draggable.parentNode;
+
+   origSquare.removeChild(draggable);
+   origSquare.innerHTML = '&nbsp;';
    
    droparea.innerHTML = '';
    droparea.appendChild(draggable);
+
    
    //request the server notate this move
    //todo: this authenticity token is unlikely to be correct in all sessions

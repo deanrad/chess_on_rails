@@ -53,6 +53,14 @@ class Piece  # < ActiveRecord::Base
 		return "Side: #{@side} type:#{@type} at #{position}"
 	end
 	
+	def piece_type
+		if @type.to_s.include?('_')
+			return @type.to_s.split('_')[1];
+		else
+			return @type.to_s
+		end
+	end
+	
 	def advance_direction
 		return 1 if @side == :white
 		return -1 if @side == :black

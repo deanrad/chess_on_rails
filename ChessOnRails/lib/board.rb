@@ -54,16 +54,21 @@ class Board
 		return nil if !p 
 		return p.side
 	end
+
 	def position_occupied_by?(pos, side)
 		p = @pieces.find { |p|  p.position == pos }
 		
 		return false if ! p
 		return (p.side == side)
 	end
-	
+
 	def num_active_pieces
 		return 0 if ! @pieces
 		@pieces.length
+	end
+
+	def sister_piece_of( piece )
+		p = @pieces.find { |p| (p.side == piece.side) && (p.piece_type == piece.piece_type ) && (p.type != piece.type) }
 	end
 	
 end

@@ -8,7 +8,7 @@ class Move < ActiveRecord::Base
 	
 	def validate
 		#easy to disable validation for a superuser to practice gameplay
-		return if false
+		return if true
 
 		errors.add(:turn, "It is not your turn to move yet.") if moved_by != match.next_to_move
 	end
@@ -17,14 +17,24 @@ class Move < ActiveRecord::Base
 		#return saved notation if calculated
 		return super if super && (super != "NULL") 
 		
-		piece_moving = match.board(:current).piece_at( from_coord )
+		this_board = match.board(:current)
+		piece_moving = this_board.piece_at( from_coord )
 		
-		#start off with the pieces own notation
-		# strip disambiguator for now - 
-		# later only strip if to_coord is in the other pieces allowed moves)
+		# start off with the pieces own notation
 		mynotation = piece_moving.notation
+		
+		# disambiguate which piece moved if a 'sister_piece' could have moved there as well
 		if( piece_moving.type.to_s.include?("rook") || piece_moving.type.to_s.include?("knight") )
 			mynotation = mynotation[0].chr
+			sister_piece = this_board.sister_piece_of(piece_moving)
+			if( sister_piece != nil && sister_piece.allowed_moves(this_board).include?(to_coord) )
+				#prefer using file to disambiguate but use rank if file insufficient
+				if ( piece_moving.file != sister_piece.file)
+					mynotation += piece_moving.file
+				else
+					mynotation += piece_moving.rank
+				end
+			end
 		end
 		
 		#todo figure out captures
