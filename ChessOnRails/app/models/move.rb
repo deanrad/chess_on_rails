@@ -24,7 +24,7 @@ class Move < ActiveRecord::Base
 		mynotation = piece_moving.notation
 		
 		# disambiguate which piece moved if a 'sister_piece' could have moved there as well
-		if( piece_moving.type.to_s.include?("rook") || piece_moving.type.to_s.include?("knight") )
+		if( piece_moving.piece_type=="rook") || (piece_moving.piece_type=="knight")
 			mynotation = mynotation[0].chr
 			sister_piece = this_board.sister_piece_of(piece_moving)
 			if( sister_piece != nil && sister_piece.allowed_moves(this_board).include?(to_coord) )
@@ -37,8 +37,6 @@ class Move < ActiveRecord::Base
 			end
 		end
 		
-		#todo figure out captures
-		#puts "#{piece_moving.to_s} to #{to_coord}"
 		piece_moved_upon  = match.board(:current).piece_at( to_coord )
 		
 		if piece_moved_upon && (piece_moving.side != piece_moved_upon.side)
@@ -52,6 +50,28 @@ class Move < ActiveRecord::Base
 		else
 			mynotation += to_coord
 		end
+		
+		#castling
+		if ( piece_moving.piece_type=="king")
+			if( from_coord[0].chr=="e" && to_coord[0].chr=="g")
+				mynotation="O-O"
+			end
+			if( from_coord[0].chr=="e" && to_coord[0].chr=="c")
+				mynotation="O-O-O"
+			end
+		end
+		
+		#check - from destination position, if opposing king is on any of the moved piece's
+		# next allowed moves, the king is in check
+		piece_moving.position = to_coord
+		piece_moving.allowed_moves( this_board ).each do |square|
+			piece_on_square = this_board.piece_at( square )
+			if (piece_on_square != nil) && (piece_on_square.side != piece_moving.side) && (piece_on_square.type == :king)
+				check = true
+				mynotation += "+"
+			end
+		end
+		piece_moving.position = from_coord #move back
 		
 		return mynotation
 	end

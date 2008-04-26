@@ -110,7 +110,6 @@ class Piece  # < ActiveRecord::Base
 				end
 				
 			end
-			return m
 		else
 			#knights pawns and kings
 			
@@ -125,8 +124,32 @@ class Piece  # < ActiveRecord::Base
 				# exclude forward moves if blocked 
 				m.reject! { |pos| (pos[0] == @position[0]) && ( board.side_occupying(pos) != nil ) }
 			end
-			return m
+
+			#todo - in dire need of test cases and therefore sample boards (CSV fixture?) - figure out ASAP
+			if( piece_type=="king")
+				#castling
+				castle_rank = (side==:white) ? "1" : "8"
+				
+				#not accounting for previous moves, yes, or castling across check, but this to be remedied with test coverage
+				king_on_initial_square = (position == ("e"+castle_rank) )
+				kings_rook_on_initial_square = (board.piece_at( "h"+castle_rank) != nil) && (board.piece_at( "h"+castle_rank).piece_type=="rook")
+				intervening_kingside_squares_empty = (board.piece_at( "g"+castle_rank) == nil) && (board.piece_at( "f"+castle_rank) == nil)
+				
+				if(king_on_initial_square && kings_rook_on_initial_square && intervening_kingside_squares_empty  )
+					m << "g"+castle_rank
+				end
+				
+				queens_rook_on_initial_square = (board.piece_at( "a"+castle_rank) != nil) && (board.piece_at( "a"+castle_rank).piece_type=="rook")
+				intervening_queenside_squares_empty = (board.piece_at( "d"+castle_rank) == nil) && (board.piece_at( "c"+castle_rank) == nil) && (board.piece_at( "b"+castle_rank) == nil)
+
+				if(king_on_initial_square && queens_rook_on_initial_square && intervening_queenside_squares_empty  )
+					m << "c"+castle_rank
+				end
+
+			end
 		end
+		
+		return m
 	end
 	
 	#the moves a piece could move to on an empty board
