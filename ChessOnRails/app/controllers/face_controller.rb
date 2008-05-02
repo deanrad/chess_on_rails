@@ -5,6 +5,10 @@ class FaceController < ApplicationController
 
   def index
     @userF = session[:facebook_session].user
+
+    @current_player = Player.find( FacebookUser.find(@userF.id).playing_as )
+    session[:player_id] = @current_player.id
+
   end
 
 end
