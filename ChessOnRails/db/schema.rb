@@ -20,29 +20,29 @@ ActiveRecord::Schema.define(:version => 4) do
   end
 
   create_table "moves", :force => true do |t|
-    t.integer  "match_id",                           :default => 0
-    t.integer  "moved_by",                           :default => 0
-    t.string   "from_coord",           :limit => 10, :default => "NULL"
-    t.string   "to_coord",             :limit => 10, :default => "NULL"
-    t.string   "notation",             :limit => 10, :default => "NULL"
+    t.integer  "match_id"
+    t.integer  "moved_by"
+    t.string   "from_coord",           :limit => 10
+    t.string   "to_coord",             :limit => 10
+    t.string   "notation",             :limit => 10
     t.integer  "castled",                            :default => 0
-    t.string   "captured_piece_coord", :limit => 10, :default => "NULL"
+    t.string   "captured_piece_coord", :limit => 10
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "players", :force => true do |t|
-    t.string  "name",          :limit => 20, :default => "NULL"
-    t.integer "current_match",               :default => 0
+    t.string  "name",          :limit => 20
+    t.integer "current_match"
   end
 
   add_index "players", ["name"], :name => "index_players_on_name", :unique => true
 
   create_table "users", :force => true do |t|
-    t.string   "email",                :limit => 50,  :default => "NULL"
-    t.integer  "playing_as",                          :default => 0
-    t.string   "security_phrase",      :limit => 200, :default => "NULL"
-    t.string   "security_phrase_hint", :limit => 200, :default => "NULL"
+    t.string   "email",                :limit => 50
+    t.integer  "playing_as"
+    t.string   "security_phrase",      :limit => 200
+    t.string   "security_phrase_hint", :limit => 200
     t.datetime "created_at"
     t.datetime "updated_at"
   end
