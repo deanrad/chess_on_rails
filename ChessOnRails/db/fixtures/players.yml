@@ -12,6 +12,10 @@
    id:      3
    name:    Paul
    current_match: 2
- paul:
+ rich:
    id:      4
    name:    Bignz
+ chris:
+   id:      5
+   name:    Chris
+
