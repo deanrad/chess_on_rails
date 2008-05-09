@@ -17,5 +17,9 @@ class MatchControllerTest < ActionController::TestCase
 	get :pieces, { :format => "html", :id => 3 }, {:player_id=>1}
   	assert_select "table[id='board_table']"
   end
+
+  def test_lets_you_know_when_its_your_turn_(ajax,_not_thru_facebook)
+	#assert true
+  end
   	
 end

@@ -23,6 +23,10 @@ class Match < ActiveRecord::Base
 			return 2
 		end
 	end
+
+	def turn_of?( plyr )	
+		((plyr == player1) && (next_to_move==1)) || (plyr == player2) && (next_to_move==2)
+	end
 	
 	def side_of( plyr ) 
 		return :white if plyr == @player1

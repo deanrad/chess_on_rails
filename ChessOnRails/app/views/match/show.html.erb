@@ -4,7 +4,12 @@ Hi. Welcome, <%= @current_player.name %>.
 
 <%= render :partial => "move/create", :locals => {:match_id => @match.id} %>
 
+<%= periodically_call_remote  :method => 'get', :frequency => 10, :url => {:action => 'status', :id => @match} , :update => 'move_indicator_parent' %>
+
+
+<span id="move_indicator_parent">
 <%= render :partial => "move_indicator", :locals => {:your_turn => @your_turn} %>
+</span>
 
 <!-- these dont work however render_component does -->
 

@@ -5,24 +5,8 @@ class MatchTest < ActiveSupport::TestCase
 	def test_truth
 		assert true
 	end
-	
-	def test_nodoc_finds_fixture1
-		m1 = matches(:dean_vs_maria)
-		assert_not_nil m1
-		assert_equal players(:dean), m1.player1
-		assert_equal players(:maria), m1.player2
-		assert_equal 1, m1.player1.id
-		assert_equal "Maria", m1.player2.name
-	end
-	
-	def test_nodoc_finds_fixture2
-		m1 = matches(:paul_vs_dean)
-		assert_not_nil m1
-		assert_equal "Paul", m1.player1.name
-		assert_equal "Dean", m1.player2.name
-	end
-		
-    def test_knows_what_side_player_is_on
+			
+	def test_knows_what_side_player_is_on
 		m1 = matches(:paul_vs_dean)
 		assert_equal players(:paul).id, m1.player1.id
 		assert_equal players(:dean).id, m1.player2.id
@@ -31,4 +15,24 @@ class MatchTest < ActiveSupport::TestCase
 		assert_equal :black, m1.side_of( players(:dean) )
 		
 	end
+
+	def test_can_invite_anyone_to_match
+	end
+
+	def test_can_invite_as_white_or_black
+	end
+
+	def test_player_can_resign
+	end
+
+	def test_player_can_claim_win
+	end
+
+	def test_opponent_can_deny_win
+	end
+
+	def test_opponent_can_acknowledge_win
+	end
+
+
 end

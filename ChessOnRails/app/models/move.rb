@@ -8,7 +8,7 @@ class Move < ActiveRecord::Base
 	
 	def validate
 		#easy to disable validation for a superuser to practice gameplay
-		return if true
+		#return if true
 
 		errors.add(:turn, "It is not your turn to move yet.") if moved_by != match.next_to_move
 	end

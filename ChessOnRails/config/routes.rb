@@ -7,17 +7,21 @@ ActionController::Routing::Routes.draw do |map|
   # Facebook hookup
   map.facebook_root '', :controller => "face", :conditions => {:canvas => true}
 
-  # soon to be changed to: 
-  #   map.match_pieces 'match/:id/pieces.:format', :controller => 'match', :action=>'pieces'	
   map.match_pieces 'match/:id/pieces.xml', :controller => 'match', :action=>'pieces', :format=>'xml'
-  
+  map.match_status 'match/:id/:action.:format', :controller => 'match', :action => 'status'
+  map.match_show   'match/show/:id', :controller => 'match', :action=>'show'
+
   # Install the default routes as the lowest priority.
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
   map.connect ':controller/:action'
 
+  #map.match_action 'match/show/:id/:action', :controller => 'match', :format => 'html'
+  #map.match_action 'match/show/:id/:action.:format', :controller => 'match'
+  
+
   #Allow typical REST commands over match (possibly overkill)
-  map.resources :match
+  #map.resources :match
   
   map.root :controller => "authentication"
   

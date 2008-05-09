@@ -15,7 +15,7 @@ class MatchController < ApplicationController
 		@ranks = Chess.ranks.reverse
 
 		@viewed_from_side = (@current_player == @match.player1) ? :white : :black
-		@your_turn = ((@current_player == @match.player1) && (@match.next_to_move==1)) || (@current_player == @match.player2) && (@match.next_to_move==2)
+		@your_turn = @match.turn_of?( @current_player )
 		
 		if @viewed_from_side == :black
 			@files.reverse!
@@ -30,6 +30,14 @@ class MatchController < ApplicationController
 	end
 	def index_data
 		@matches = @current_player.active_matches
+	end
+
+	def status 
+		@match = Match.find( params[:id] )
+		@your_turn = @match.turn_of?( @current_player) 
+
+		#if request.xhr?
+		render :partial => "move_indicator", :locals => {:your_turn => @your_turn} 
 	end
 
 	def pieces
