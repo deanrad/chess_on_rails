@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 		else
 			flash[:notice] = "Login is required in order to take this action."
 			session[:original_uri] = request.request_uri
-			redirect_to :controller=>"authentication", :action=>"index"
+			redirect_to :controller=>"authentication", :action=>"login"
 		end
 	end
 	
