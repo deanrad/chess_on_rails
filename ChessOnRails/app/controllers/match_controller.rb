@@ -26,9 +26,7 @@ class MatchController < ApplicationController
 	
 	# GET /match/  GET /matches/
 	def index
-		# shows primary match
-	end
-	def index_data
+		# shows active matches
 		@matches = @current_player.active_matches
 	end
 

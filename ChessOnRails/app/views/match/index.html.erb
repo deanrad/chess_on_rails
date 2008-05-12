@@ -1,12 +1,13 @@
 <h1>Your current duels</h1>
 Hi. Welcome, <%= @current_player.name %>.
 
-<div id="your_matches">.. No matches loaded ..</div>
+<ul>
+<% @matches.each do |m| %>
+	<li>
+		<a href="/match/show/<%= m.id %>"><%= m.player1.name %> vs. <%= m.player2.name %></a> 
+		<%=  '(Your move)' if m.turn_of?( @current_player ) %>
+	</li>
+<% end%>
+</ul>	
 
-<%= periodically_call_remote :url => {:action => 'index_data'},
-	:update => 'your_matches',
-	:frequency => 5
-%>
-	
-
-<p>Find me in views/match/index.html.erb</p>
+<a href="/match/new">New match</a>

@@ -17,6 +17,7 @@ match_controller should:
  - shows a match from the correct side
  - returns xml doc of pieces when asked for it
  - returns html doc of pieces in board when asked
+ - lets you know when its your turn (ajax, not thru facebook)
 
 move_controller should:
  - errs if specified match not there or active
@@ -34,6 +35,9 @@ board should:
  - knows what side occupies a square
  - knows what piece is on a square
  - can refer to as many boards as there are moves
+ - detects moved piece
+
+facebook_user should:
 
 game should:
  - 32 pieces on chess initial board
@@ -42,6 +46,12 @@ game should:
 
 match should:
  - knows what side player is on
+ - can invite anyone to match
+ - can invite as white or black
+ - player can resign
+ - player can claim win
+ - opponent can deny win
+ - opponent can acknowledge win
 
 move should:
  - unstarted match has no moves
