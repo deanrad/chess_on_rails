@@ -10,7 +10,10 @@ class AuthenticationController < ApplicationController
 		if user != nil
 			@player = user.playing_as
 			session[:player_id] = @player.id
-			flash[:notice] = "You are logged in."
+			flash[:notice] = "Welcome, #{@player.name}."
+
+			#return them to original page requested
+			redirect_to session[:original_uri] if session[:original_uri]
 		else
 			flash[:notice] = "Your credentials do not check out."
 		end

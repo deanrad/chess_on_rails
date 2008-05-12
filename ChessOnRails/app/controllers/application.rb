@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 			@current_player = Player.find( session[:player_id] )
 		else
 			flash[:notice] = "Login is required in order to take this action."
+			session[:original_uri] = request.request_uri
 			redirect_to :controller=>"authentication", :action=>"index"
 		end
 	end

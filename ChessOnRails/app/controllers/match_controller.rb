@@ -57,6 +57,6 @@ class MatchController < ApplicationController
 	
 	# GET /match/new
 	def create
-		#gets from for creating one with defaults
+		#gets form for creating one with defaults
 	end
 end
