@@ -1,0 +1,12 @@
+<h2>New match !</h2>
+
+<% form_for(:match, :url => {:action => 'create'} ) do |f| %>
+<div>
+Opponent: <%= text_field_tag :opponent_id %>
+</div>
+<div>
+They can play: <%= select_tag 'opponent_side', options_for_select(Match::SIDES)  %>
+</div>
+<%= submit_tag "Start" %>
+	
+<% end %>

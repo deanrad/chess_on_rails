@@ -1,4 +1,9 @@
 class Match < ActiveRecord::Base
+
+	SIDES = [
+		['White', '1'],
+		['Black', '2']
+	]
 	
 	belongs_to :player1, :class_name=>"Player",
     :foreign_key=>"player1"
@@ -7,6 +12,11 @@ class Match < ActiveRecord::Base
 	
 	has_many :moves, :order=>"created_at ASC"
 	
+	def self.from_player_ids( player1_id, player2_id )
+		@player1 = Player.find(player1_id)
+		@player2 = Player.find(player2_id)
+	end
+
 	def initial_board
 		return Board.new( self, Chess.initial_pieces, 0 )
 	end

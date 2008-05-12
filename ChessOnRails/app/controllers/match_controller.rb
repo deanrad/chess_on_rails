@@ -56,7 +56,24 @@ class MatchController < ApplicationController
 	end
 	
 	# GET /match/new
-	def create
+	def new
 		#gets form for creating one with defaults
+		@match = Match.new
+		#render :template => "match/new"
+	end
+
+	# POST /match/create
+	def create
+	    if request.post?
+
+		    player1_id = params[:opponent_side] == '1' ? params[:opponent_id] : @current_player.id
+		    player2_id = params[:opponent_side] == '2' ? params[:opponent_id] : @current_player.id
+
+		    @match = Match.create( :player1 => Player.find(player1_id), :player2 => Player.find(player2_id) )
+	
+		    if @match
+			redirect_to '/match/show/' + @match.id.to_s
+		    end
+	    end
 	end
 end
