@@ -2,6 +2,8 @@
 
 Hi. Welcome, <%= @current_player.name %>.
 
+<%= render :partial => "match/ender" %>
+
 <%= render :partial => "move/create", :locals => {:match_id => @match.id} %>
 
 <%= periodically_call_remote  :method => 'get', :frequency => 10, :url => {:action => 'status', :id => @match} , :update => 'move_indicator_parent' %>
@@ -13,7 +15,16 @@ Hi. Welcome, <%= @current_player.name %>.
 
 <!-- these dont work however render_component does -->
 
+<table width="100%" border="0">
+<tr>
+<td>
 <%= render "board/physical", :locals => { :ranks => @ranks, :files => @files } %>
+</td>
+<td>
+<%= render :partial => "match/moves" %>
+</td>
+</tr>
+</table>
 
 
 <script>

@@ -21,6 +21,11 @@ class MatchController < ApplicationController
 			@files.reverse!
 			@ranks.reverse!
 		end
+
+		if @match.active == 0
+			render :template => 'match/result' and return
+		end
+
 		#end candidate new method
 	end
 	
@@ -58,6 +63,16 @@ class MatchController < ApplicationController
 		#gets form for creating one with defaults
 		@match = Match.new
 		#render :template => "match/new"
+	end
+
+	def resign
+		@match = Match.find( params[:id] )
+
+		@match.resign( @current_player )
+
+		@match.save!
+
+		redirect_to "/match/" 
 	end
 
 	# POST /match/create

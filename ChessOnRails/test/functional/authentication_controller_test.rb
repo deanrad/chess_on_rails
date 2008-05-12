@@ -6,17 +6,6 @@ class AuthenticationControllerTest < ActionController::TestCase
 		assert true
 	end
 	
-	#You can request or GET methods from controllers which, mind you don't neccessarily
-	# run in a web server environment, but indicate success and failure similarly to 
-	# HTTP error codes , for developer convenience !
-	def test_have_index_login_logout_actions
-		
-		[:index, :login, :logout].each do |action|
-			get action
-			assert_response :success, "Failure on #{action} action"
-		end
-	end
-	
 	def test_only_logged_in_can_change_security_question
 		get :change_security_question
 		assert_response 302
@@ -40,12 +29,11 @@ class AuthenticationControllerTest < ActionController::TestCase
 		
 		assert_equal 1, session[:player_id]
 		assert_not_nil assigns(:player)
-		assert_equal "You are logged in.", flash[:notice]
 	end
 	
 	def test_test_user_maria_can_login
 		post :login, :email=>"maria_poulos@yahoo.com"
-		assert_response :success
+		assert_response 302
 		
 		assert_equal 2, session[:player_id]
 		assert_not_nil assigns(:player)

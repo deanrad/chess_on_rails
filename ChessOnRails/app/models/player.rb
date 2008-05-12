@@ -12,6 +12,12 @@ class Player < ActiveRecord::Base
 					    FROM matches
 						WHERE ( player1 = #{id} OR player2= #{id} )
 						AND active=1'
+
+	has_many :completed_matches, :class_name=>"Match",
+		:finder_sql=>'SELECT matches.*
+					    FROM matches
+						WHERE ( player1 = #{id} OR player2= #{id} )
+						AND active=0'
 	
     has_many  :matches, :class_name=>"Match",
 

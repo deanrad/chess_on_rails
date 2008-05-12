@@ -13,9 +13,7 @@ class Move < ActiveRecord::Base
 		errors.add(:turn, "It is not your turn to move yet.") if moved_by != match.next_to_move
 	end
 	
-	def notation
-		#return saved notation if calculated
-		return super if super && (super != "NULL") 
+	def notate
 		
 		this_board = match.board(:current)
 		piece_moving = this_board.piece_at( from_coord )

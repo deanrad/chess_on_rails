@@ -43,6 +43,7 @@ class MoveController < ApplicationController
 		@move.match = @match
 		@move.update_attributes( params[:move] )
 		@move.moved_by = (@current_player == @match.player1) ? 1 : 2
+		@move.notation = @move.notate
 
 		@move.save!
 		redirect_to(:back)
@@ -56,7 +57,7 @@ class MoveController < ApplicationController
 
 		move = Move.new( :match_id => params[:match_id], :from_coord => params[:from_coord], :to_coord => params[:to_coord] ) 
 		
-		render :text => move.notation
+		render :text => move.notate
 		
 	#rescue 
 	#	render :text => "?"

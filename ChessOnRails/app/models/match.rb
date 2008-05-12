@@ -5,10 +5,9 @@ class Match < ActiveRecord::Base
 		['Black', '2']
 	]
 	
-	belongs_to :player1, :class_name=>"Player",
-    :foreign_key=>"player1"
-	belongs_to :player2, :class_name=>"Player",
-    :foreign_key=>"player2"
+	belongs_to :player1,	:class_name => 'Player', :foreign_key => 'player1'
+	belongs_to :player2,	:class_name => 'Player', :foreign_key => 'player2'
+	belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 	
 	has_many :moves, :order=>"created_at ASC"
 	
@@ -43,8 +42,11 @@ class Match < ActiveRecord::Base
 		return :black if plyr == @player2
 		return nil
 	end
-	
-	def lineup
-		"Blah vs Blah"
+
+	def resign( plyr )
+		write_attribute :result, 'Resigned'
+		write_attribute :active, 0
+		winning_player = (plyr.id==player1.id) ? player2 : player1
 	end
+	
 end

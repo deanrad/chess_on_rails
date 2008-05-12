@@ -76,22 +76,22 @@ class MoveTest < ActiveSupport::TestCase
 	def test_notates_simple_move
 		match = matches(:unstarted_match)
 		move = Move.new( :match_id => match.id, :from_coord => "b1", :to_coord => "c3", :moved_by => 1 ) #knight opening
-		assert_equal "Nc3", move.notation
+		assert_equal "Nc3", move.notate
 		match.moves << move
 	end
 	
 	def test_notates_pawn_moves_correctly
 		match = matches(:unstarted_match)
 		move1 = Move.new( :match_id => match.id, :from_coord => "d2", :to_coord => "d4", :moved_by => 1 ) #queens pawn
-		assert_equal "d4", move1.notation
+		assert_equal "d4", move1.notate
 		match.moves << move1
 	
 		move2 = Move.new( :match_id => match.id, :from_coord => "e7", :to_coord => "e5", :moved_by => 2 ) 
-		assert_equal "e5", move2.notation
+		assert_equal "e5", move2.notate
 		match.moves << move2
 
 		move3 = Move.new( :match_id => match.id, :from_coord => "d4", :to_coord => "e5", :moved_by => 1 ) 
-		assert_equal "dxe5", move3.notation
+		assert_equal "dxe5", move3.notate
 		match.moves << move3
 	end
 	

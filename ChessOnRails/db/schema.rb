@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 6) do
+ActiveRecord::Schema.define(:version => 7) do
 
   create_table "facebook_users", :force => true do |t|
     t.integer  "fb_user_id", :limit => 20
@@ -19,11 +19,14 @@ ActiveRecord::Schema.define(:version => 6) do
   end
 
   create_table "matches", :force => true do |t|
-    t.integer  "player1",                   :null => false
-    t.integer  "player2",                   :null => false
-    t.integer  "active",     :default => 1
+    t.integer  "player1",                       :null => false
+    t.integer  "player2",                       :null => false
+    t.integer  "active",         :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "result"
+    t.integer  "win_claimed_by"
+    t.integer  "winning_player"
   end
 
   create_table "moves", :force => true do |t|

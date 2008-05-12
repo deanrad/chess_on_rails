@@ -1,11 +1,22 @@
 <h1>Your current duels</h1>
 Hi. Welcome, <%= @current_player.name %>.
 
+<h3>Active Matches</h3>
 <ul>
-<% @matches.each do |m| %>
+<% @current_player.active_matches.each do |m| %>
 	<li>
 		<a href="/match/show/<%= m.id %>"><%= m.player1.name %> vs. <%= m.player2.name %></a> 
 		<%=  '(Your move)' if m.turn_of?( @current_player ) %>
+	</li>
+<% end%>
+</ul>	
+
+<h3>Completed Matches</h3>
+<ul>
+<% @current_player.completed_matches.each do |m| %>
+	<li>
+		<a href="/match/show/<%= m.id %>"><%= m.player1.name %> vs. <%= m.player2.name %></a> 
+		(<%=  m.result %>)
 	</li>
 <% end%>
 </ul>	
