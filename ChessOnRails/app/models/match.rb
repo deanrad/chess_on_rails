@@ -46,7 +46,7 @@ class Match < ActiveRecord::Base
 	def resign( plyr )
 		write_attribute :result, 'Resigned'
 		write_attribute :active, 0
-		winning_player = (plyr.id==player1.id) ? player2 : player1
+		write_attribute :winning_player, (plyr==player1) ? player2.id : player1.id
 	end
 	
 end
