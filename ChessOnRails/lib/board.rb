@@ -24,20 +24,19 @@ class Board
 	    for m in @match.moves
 			if i < @as_of_move
 	
-				#kill any existing piece we're moving onto			
-				for p in @pieces
-					if p.position == m.to_coord
-						@pieces.delete(p)
-					end
-				end
+				#kill any existing piece we're moving onto
+				@pieces.reject!{ |p| p.position == m.to_coord }	
 
 				#move to that square
-				for p in @pieces
-					if p.position == m.from_coord
-						p.position = m.to_coord 
+				@pieces.each{ |p| p.position = m.to_coord if p.position==m.from_coord }
+				
+				#reflect castling
+				if m.castled==1
+					castling_rank = m.to_coord[1].chr
+					[['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, rook_file, orig_rook_file|
+						@pieces.each { |p| p.position = "#{rook_file}#{castling_rank}" if m.to_coord[0].chr==king_file && p.position=="#{orig_rook_file}#{castling_rank}"}
 					end
 				end
-				
 			end
 			i+=1
 		end

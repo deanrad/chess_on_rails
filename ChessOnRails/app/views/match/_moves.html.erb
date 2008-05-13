@@ -1,9 +1,3 @@
-<div id="move_list">
-
-	<% for move in @match.moves %>
-	<p>
-		<%= move.player.name %>: 
-		<%= move.from_coord %>-<%= move.to_coord %> (<%= move.notation %>)
-	</p>
-	<% end %>
-</div>
+<% @match.moves.each_with_index do |m, i| -%>
+<%=  (i%2)==0 ? "#{((i+2)/2)}." + m.notation : "\t#{m.notation}\n" -%>
+<% end %>

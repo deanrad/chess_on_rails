@@ -43,7 +43,8 @@ class MoveController < ApplicationController
 		@move.match = @match
 		@move.update_attributes( params[:move] )
 		@move.moved_by = (@current_player == @match.player1) ? 1 : 2
-		@move.notation = @move.notate
+		@move.notation = @move.notate #detects a castling
+		@move.castled = @move.notation.include?( "O-" )
 
 		@move.save!
 		redirect_to(:back)

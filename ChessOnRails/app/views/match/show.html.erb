@@ -17,11 +17,13 @@ Hi. Welcome, <%= @current_player.name %>.
 
 <table width="100%" border="0">
 <tr>
-<td>
+<td width="50%">
 <%= render "board/physical", :locals => { :ranks => @ranks, :files => @files } %>
 </td>
-<td>
+<td valign="top" align="left" width="50%">
+<pre id="move_list" style="border:solid 1px black; width:180px; height:350px">
 <%= render :partial => "match/moves" %>
+</pre>
 </td>
 </tr>
 </table>
