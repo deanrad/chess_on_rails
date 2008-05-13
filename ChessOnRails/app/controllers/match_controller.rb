@@ -1,6 +1,6 @@
 class MatchController < ApplicationController
 	
-	before_filter :authorize
+	before_filter :authorize, :fbml_cleanup
 	
 	# GET /match/1
 	def show
