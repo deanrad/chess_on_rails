@@ -1,4 +1,6 @@
 <div id="match_ender">
-	<a href="<%= match_resign_url( @match ) %>">Resign</a> | 
-	<!-- <a href="<%= match_claim_win_url( @match ) %>">Claim Win</a> --> Claim Win
+	<%= link_to "Resign", match_resign_url( @match ), :confirm => 'Are you truly ready to accept disgrace and sulk back to the rock from under which you came ?' %>
+	| 
+	<%= link_to "Claim Win", match_claim_win_url( @match ) %>
+
 </div>
