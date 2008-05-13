@@ -6,6 +6,7 @@
     <%= f.text_field :to_coord %>
     Move: <span id="new_move_notation"></span>
     <%= submit_tag "Do it!" %>
+    <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
 
 <%= observe_form :new_move_form,
