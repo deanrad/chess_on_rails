@@ -1,17 +1,14 @@
-(in C:/ChessOnRails/ChessOnRails)
+(in C:/ChessOnRails/trunk)
 Note: this document should be regenerated periodically by running
 	rake test:doc
 
 authentication_controller should:
- - have index login logout actions
  - only logged in can change security question
  - login security question only
  - test user dean can login
  - test user maria can login
  - reject incorrect login
  - reject move without login
-
-board_controller should:
 
 match_controller should:
  - shows a match from the correct side
@@ -36,8 +33,6 @@ board should:
  - knows what piece is on a square
  - can refer to as many boards as there are moves
  - detects moved piece
-
-facebook_user should:
 
 game should:
  - 32 pieces on chess initial board
