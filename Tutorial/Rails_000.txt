@@ -1,4 +1,0 @@
-1. The Game tab shows the moves and lets you rewind, forward etc..
-2. The Chat tab sends notes, not tied to any move, into a Chat window for both players to see
-3. The Notes tab has each player's notes, privately for only them to see.
-4. The resign button, curiously placed, has come in handy on more than one occasion !
