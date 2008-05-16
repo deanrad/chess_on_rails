@@ -4,14 +4,7 @@
 class ApplicationController < ActionController::Base
 	helper :all # include all helpers, all the time
 
-	#turn off body and other such elements pulled in from layout for facebook
 	layout proc{ |c| c.params[:fb_sig] ? false : "application" }
-
-	#otherwise we use the same templates for now so maintain html format		
-	def fbml_cleanup
-		params[:format]='html' if params[:format]=='fbml'
-	end
-
 		
 	def authorize
 		if Player.find_by_id session[:player_id] 

@@ -1,7 +1,12 @@
 class MatchController < ApplicationController
 	
-	before_filter :authorize, :fbml_cleanup
+	before_filter :authorize
+	before_filter :fbml_cleanup, :except => 'show'
 	
+	def fbml_cleanup
+		params[:format]='html' if params[:format]=='fbml'
+	end
+
 	# GET /match/1
 	def show
 		# shows whose move it is 
