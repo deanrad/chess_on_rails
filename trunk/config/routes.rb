@@ -11,7 +11,6 @@ ActionController::Routing::Routes.draw do |map|
   map.match_status 'match/:id/:action.:format', :controller => 'match', :action => 'status'
   map.match_show   'match/show/:id', :controller => 'match', :action=>'show'
   map.match_resign 'match/resign/:id', :controller => 'match', :action=>'resign'
-  map.match_claim_win 'match/claim_win/:id', :controller => 'match', :action=>'claim_win'
 
   # Install the default routes as the lowest priority.
   map.connect ':controller/:action/:id'
