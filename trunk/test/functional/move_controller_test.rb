@@ -35,5 +35,9 @@ class MoveControllerTest < ActionController::TestCase
 			post :create, {:match_id=>9, :from_coord=>"e2", :to_coord=>"e4"}, {:player_id=>1}
 		end
 	end
-	
+
+	def test_notates_basic_move
+		get :notate, {:match_id => matches(:dean_vs_maria), :from_coord => 'd2', :to_coord => 'd4' }, {:player_id => players(:dean).id}
+		assert_response 200
+	end	
 end

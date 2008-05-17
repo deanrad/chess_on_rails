@@ -40,7 +40,6 @@ class Match < ActiveRecord::Base
 	def side_of( plyr ) 
 		return :white if plyr == @player1
 		return :black if plyr == @player2
-		return nil
 	end
 
 	def resign( plyr )

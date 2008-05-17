@@ -14,9 +14,6 @@ class MoveController < ApplicationController
 		params[:to_coord] = params[:move][:to_coord] if ! params[:to_coord]
 		params[:match_id] = params[:move][:match_id] if ! params[:match_id] && params[:move][:match_id] 
 		
-		if ! params[:from_coord] || ! params[:to_coord]
-			raise ArgumentError, "You must specify a from/to coordinate pair in this version of the game"
-		end
         [:from_coord, :to_coord].each do |coord|
             if ! Chess.valid_position?( params[coord] )
                 raise ArgumentError, "#{params[coord]} is not a valid Chess board coordinate!"
@@ -28,8 +25,6 @@ class MoveController < ApplicationController
 			@current_player.matches.each do |m|
 				@match = m if m.id == params[:match_id].to_i
 			end
-		else
-			@match = @current_player.match
 		end
 
 		if ! @match 

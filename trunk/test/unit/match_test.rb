@@ -15,6 +15,11 @@ class MatchTest < ActiveSupport::TestCase
 		assert_equal :black, m1.side_of( players(:dean) )
 		
 	end
+	def test_knows_whose_turn_it_is
+		m1 = matches(:paul_vs_dean)
+		assert_equal 0, m1.moves.count
+		assert m1.turn_of?( players(:paul) )		
+	end
 
 	def test_can_invite_anyone_to_match
 	end

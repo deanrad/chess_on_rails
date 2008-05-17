@@ -31,10 +31,9 @@ class MatchController < ApplicationController
 			render :template => 'match/result' and return
 		end
 
-		#end candidate new method
 	end
 	
-	# GET /match/  GET /matches/
+	# GET /match/ 
 	def index
 		# shows active matches
 		@matches = @current_player.active_matches

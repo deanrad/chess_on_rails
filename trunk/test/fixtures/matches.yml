@@ -24,3 +24,11 @@ endgame:
    id: 5
    player1: 3
    player2: 1
+
+resigned:
+   id: 6
+   player1: 3
+   player2: 1
+   active: 0
+   result: Resigned
+   winning_player: 3
