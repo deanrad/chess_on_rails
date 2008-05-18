@@ -14,10 +14,22 @@ match_controller should:
  - shows a match from the correct side
  - returns xml doc of pieces when asked for it
  - returns html doc of pieces in board when asked
- - lets you know when its your turn (ajax, not thru facebook)
+ - lets you know when its your turn(ajax, not thru facebook)
+ - redirected to match listing page when resigning match
+ - white view of board when requested by white
+ - black view of board when requested by black
+ - requesting ended match yields result template
+ - gets form for creating new match
+ - creates new match opponent as black
+ - gets match status
+ - gets list of active matches
 
 move_controller should:
+ - reject move made without coordinates
+ - reject move made with one or more invalid coordinates
+ - accepts move with coordinates
  - errs if specified match not there or active
+ - notates basic move
 
 board should:
  - new match gets an initial board
@@ -41,6 +53,7 @@ game should:
 
 match should:
  - knows what side player is on
+ - knows whose turn it is
  - can invite anyone to match
  - can invite as white or black
  - player can resign

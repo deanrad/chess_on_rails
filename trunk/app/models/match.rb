@@ -42,6 +42,10 @@ class Match < ActiveRecord::Base
 		return :black if plyr == @player2
 	end
 
+	def lineup
+		"#{player1.name} vs. #{player2.name}"
+	end
+
 	def resign( plyr )
 		write_attribute :result, 'Resigned'
 		write_attribute :active, 0

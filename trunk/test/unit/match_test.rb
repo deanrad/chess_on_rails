@@ -20,6 +20,10 @@ class MatchTest < ActiveSupport::TestCase
 		assert_equal 0, m1.moves.count
 		assert m1.turn_of?( players(:paul) )		
 	end
+	def test_shows_lineup
+		assert_equal 'Paul vs. Dean', matches(:paul_vs_dean).lineup
+		assert_equal 'Dean vs. Paul', matches(:dean_vs_paul).lineup
+	end
 
 	def test_can_invite_anyone_to_match
 	end

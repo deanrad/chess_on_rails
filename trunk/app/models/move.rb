@@ -1,16 +1,21 @@
 class Move < ActiveRecord::Base
 	belongs_to :match
-	
+
 	def player
 		return match.player1 if(moved_by==1) 
 		return match.player2 if(moved_by==2) 
 	end
 	
 	def validate
-		#easy to disable validation for a superuser to practice gameplay
-		#return if true
-
+		errors.add(:match, "You have not specified which match.") and raise ArgumentError, "No match" if ! match
+		errors.add(:active, "You cannot make a move for an inactive match, silly !") if ! match.active
 		errors.add(:turn, "It is not your turn to move yet.") if moved_by != match.next_to_move
+		[from_coord, to_coord].each do |coord|
+			raise ArgumentError, "#{coord} is not a valid coordinate" if ! Chess.valid_position?( coord )
+		end
+	end
+
+	def before_save
 	end
 	
 	def notate
