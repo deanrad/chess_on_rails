@@ -12,8 +12,8 @@ paul_vs_dean:
    
 dean_vs_paul:
    id: 3
-   player1: 3
-   player2: 1
+   player1: 1
+   player2: 3
    
 unstarted_match:
    id: 4
