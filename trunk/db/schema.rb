@@ -9,10 +9,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 7) do
+ActiveRecord::Schema.define(:version => 8) do
 
-  create_table "facebook_users", :force => true do |t|
-    t.integer  "fb_user_id", :limit => 20
+  create_table "fbusers", :force => true do |t|
     t.integer  "playing_as"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -25,7 +24,6 @@ ActiveRecord::Schema.define(:version => 7) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "result"
-    t.integer  "win_claimed_by"
     t.integer  "winning_player"
   end
 

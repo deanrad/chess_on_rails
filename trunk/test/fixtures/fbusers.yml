@@ -1,5 +1,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
  dean:
-   fb_user_id:      829567899
+   id:      829567899
    playing_as: 1
+
