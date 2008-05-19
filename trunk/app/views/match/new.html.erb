@@ -2,7 +2,7 @@
 
 <% form_for(:match, :url => {:action => 'create'} ) do |f| %>
 <div>
-Opponent: <%= text_field_tag :opponent_id %>
+Opponent: [Dean]<input type="hidden" name="match[opponent_id]" value="1" /> <!-- hard-coded till ajax/facebook opponent-chooser ready -->
 </div>
 <div>
 They can play: <%= select_tag 'opponent_side', options_for_select(Match::SIDES)  %>
