@@ -1,25 +1,22 @@
 class FbuserController < ApplicationController
+
+   #calling these conditionally allows for running this app under functional test environment
    before_filter { |controller| controller.send(:ensure_authenticated_to_facebook) if controller.params["format"] == "fbml" }
    before_filter { |controller| controller.send(:ensure_application_is_installed_by_facebook_user) if controller.params["format"] == "fbml" }
 
-  #ensure_application_is_installed_by_facebook_user
-  #ensure_authenticated_to_facebook
+   # for testing only ! (hack otherwise) simulate facebook authentication with an fb_sig_user post as facebook does
+   # (the only reason its a hack is we are not checking the signautre is valid in this version)
 
   #visiting this controller action will create a session from facebook request info
   def index
 
-    #authenticate the normal facebook way
-    #@userF = session[:facebook_session].user
-
-
     if session[:facebook_session]
 	@userF = session[:facebook_session].user
-      @current_player = Player.find( Fbuser.find(@userF.id).playing_as )
+      session[:player_id] = Fbuser.find(@userF.id).playing_as
+	@current_player = Player.find( session[:player_id] )
     else
-      # for testing only ! (hack otherwise) simulate facebook authentication with an fb_sig_user post as facebook does
-      # (the only reason its a hack is we are not checking the signautre is valid in this version)
-
-      @current_player = Player.find( Fbuser.find( params[:fb_sig_user] ).playing_as )
+      session[:player_id] = Fbuser.find( params[:fb_sig_user] ).playing_as
+	@current_player = Player.find( session[:player_id] )
     end
 
   end

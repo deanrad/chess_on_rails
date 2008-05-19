@@ -10,6 +10,9 @@ authentication_controller should:
  - reject incorrect login
  - reject move without login
 
+fbuser_controller should:
+ - facebook request is good as authenticated for known and mapped player
+
 match_controller should:
  - shows a match from the correct side
  - returns xml doc of pieces when asked for it
@@ -46,6 +49,8 @@ board should:
  - can refer to as many boards as there are moves
  - detects moved piece
 
+fbuser should:
+
 game should:
  - 32 pieces on chess initial board
  - noone to move defaults to player1
@@ -54,6 +59,7 @@ game should:
 match should:
  - knows what side player is on
  - knows whose turn it is
+ - shows lineup
  - can invite anyone to match
  - can invite as white or black
  - player can resign

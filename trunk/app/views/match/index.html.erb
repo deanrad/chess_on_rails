@@ -5,7 +5,7 @@ Hi. Welcome, <%= @current_player.name %>.
 <ul>
 <% @current_player.active_matches.each do |m| %>
 	<li>
-		<a href="<%= m.id %>/show.html"><%= m.player1.name %> vs. <%= m.player2.name %></a> 
+		<%= link_to m.lineup, "#{m.id}/show"  %> 
 		<%=  '(Your move)' if m.turn_of?( @current_player ) %>
 	</li>
 <% end%>
@@ -15,7 +15,7 @@ Hi. Welcome, <%= @current_player.name %>.
 <ul>
 <% @current_player.completed_matches.each do |m| %>
 	<li>
-		<a href="<%= m.id %>/show.html"><%= m.player1.name %> vs. <%= m.player2.name %></a> 
+		<%= link_to m.lineup, "#{m.id}/show" %> 
 		(<%=  m.result %>)
 	</li>
 <% end%>
