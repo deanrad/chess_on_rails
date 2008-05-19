@@ -1,3 +1,5 @@
+#todo - haven't found a way to get this fully under test - actual facebook requests i can't simulate as far as i can tell
+
 class FbuserController < ApplicationController
 
    #calling these conditionally allows for running this app under functional test environment

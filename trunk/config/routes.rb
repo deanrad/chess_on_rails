@@ -8,8 +8,9 @@ ActionController::Routing::Routes.draw do |map|
   map.facebook_root '', :controller => "fbuser", :conditions => {:canvas => true}
   map.root :controller => "authentication", :conditions => {:canvas => false}
 
-  # move notation a special case
+  # move routes still in need of unfuddling
   map.notation 'move/notate', :controller=>'move', :action=>'notate'
+  map.creation 'move/create', :controller=>'move', :action=>'create'
 
   # typical route for actions over match
   map.match ':controller/:id/:action'
