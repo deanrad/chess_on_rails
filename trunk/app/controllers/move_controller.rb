@@ -24,12 +24,9 @@ class MoveController < ApplicationController
 		redirect_to(:back)
 	end
 
-	#xhr controller action
+	#deprecated for move_notate under match
 	def notate
 		move = Move.new( params[:move] ) 
 		render :text => move.notate
-		
-	#rescue 
-	#	render :text => "?"
 	end
 end

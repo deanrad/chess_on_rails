@@ -5,6 +5,7 @@ Note: this document should be regenerated periodically by running
 authentication_controller should:
  - only logged in can change security question
  - login security question only
+ - not redirected when requesting login action
  - test user dean can login
  - user can login
  - user can logout
@@ -35,6 +36,15 @@ move_controller should:
  - accepts move with coordinates
  - errs if specified match not there or active
  - notates basic move
+
+routes should:
+ - authentication url is authentication slash login
+ - redirection to login is autentication controller login action
+ - routes match display without format
+ - routes match display with format
+ - generates relative url for match status
+ - generates relative url for move notation
+ - resignation url includes id
 
 board should:
  - new match gets an initial board

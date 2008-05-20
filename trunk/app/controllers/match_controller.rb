@@ -61,6 +61,11 @@ class MatchController < ApplicationController
 		end
 		@pieces = @board.pieces
 	end
+
+	def notate_move
+		move = Move.new( params[:move] ) 
+		render :text => move.notate
+	end
 	
 	# GET /match/new
 	def new

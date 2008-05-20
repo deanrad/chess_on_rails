@@ -24,6 +24,11 @@ class AuthenticationControllerTest < ActionController::TestCase
 		assert_equal dean, dean2
 	end
 	
+	def test_not_redirected_when_requesting_login_action
+		get :login
+		assert_response 200
+	end
+
 	def test_test_user_dean_can_login
 		post :login, :email=>"chicagogrooves@gmail.com", :security_phrase=>"9"
 		
