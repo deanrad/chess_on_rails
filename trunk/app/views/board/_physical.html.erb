@@ -16,6 +16,7 @@
 
 					<img class="piece <%= (p.allowed_moves(board) << position) * ' ' %>"
 						id="<%= p.client_id %>"
+						alt="<%= p.img_name %>"
 						src="<%= "/images/chess_pieces/#{p.img_name}.gif" %>"/>
 
 					<!-- new Draggable( p.client_id , {snap:[48,48],revert:true}); -->
