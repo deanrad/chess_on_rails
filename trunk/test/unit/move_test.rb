@@ -94,5 +94,11 @@ class MoveTest < ActiveSupport::TestCase
 		wc = Move.new( :match_id => match.id, :from_coord => "e1", :to_coord => "g1", :moved_by => 1 ) 
 		assert_equal "O-O", wc.notate
 	end
+
+	def test_notates_check
+		match = matches(:dean_vs_paul)
+		ck = Move.new( :match_id => match.id, :from_coord => "f8", :to_coord => "b4", :moved_by => 2 ) 
+		assert_equal "Bb4+", ck.notate
+	end
 	
 end

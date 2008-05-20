@@ -18,9 +18,4 @@ class MoveController < ApplicationController
 		redirect_to(:back)
 	end
 
-	#deprecated for move_notate under match
-	def notate
-		move = Move.new( params[:move] ) 
-		render :text => move.notate
-	end
 end

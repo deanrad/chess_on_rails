@@ -131,7 +131,7 @@ class PieceTest < ActiveSupport::TestCase
 	end
 
 	def test_queen_and_bishop_can_move_when_queens_pawn_moved
-		b = matches(:dean_vs_paul).board(:current)
+		b = matches(:dean_vs_paul).board(2)
 
 		#the bishop
 		bishop = b.piece_at("c1")

@@ -1,9 +1,19 @@
-match_id, moved_by, from_coord, to_coord, notation
+match_id, moved_by, from_coord, to_coord, notation, castled
 3, 1, d2, d4, d4
 3, 2, g8, f6, Nf6
+3, 1, e2, e3, e3
+3, 2, e7, e6, e6
 1, 1, e2, e4, e4
 1, 2, e7, e5, e5
 1, 1, f1, d3, Bd3
 1, 2, f8, d6, Bd6
 1, 1, g1, f3, Nf3
 1, 2, g8, f6, Nf6
+5, 1, e2, e4, e4
+5, 2, e7, e5, e5
+5, 1, f1, d3, Bd3
+5, 2, f8, d6, Bd6
+5, 1, g1, f3, Nf3
+5, 2, g8, f6, Nf6
+5, 1, e1, g1, O-O, 1
+

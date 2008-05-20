@@ -29,13 +29,13 @@ match_controller should:
  - creates new match opponent as black
  - gets match status
  - gets list of active matches
+ - notates basic move
 
 move_controller should:
  - reject move made without coordinates
  - reject move made with one or more invalid coordinates
  - accepts move with coordinates
  - errs if specified match not there or active
- - notates basic move
 
 routes should:
  - authentication url is authentication slash login
@@ -89,6 +89,7 @@ move should:
  - notates simple move
  - notates pawn moves correctly
  - notates white kingside castle correctly
+ - notates check
 
 piece should:
  - recognize valid piece types
@@ -105,6 +106,7 @@ piece should:
  - kings knights pawns have no lines of attack
  - rook can move nowhere on initial board
  - queen and bishop can move when queens pawn moved
+ - image names abstract away irrelevant details
 
 player should:
  - can be created

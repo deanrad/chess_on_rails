@@ -17,7 +17,7 @@ class MoveControllerTest < ActionController::TestCase
 	
       def test_accepts_move_with_coordinates
 		@request.env['HTTP_REFERER'] = '/match/6/show.html'
-		post :create, { :move=>{:from_coord => "e2", :to_coord => "e4", :match_id => 3, :moved_by => 1} }, {:player_id => 1}
+		post :create, { :move=>{:from_coord => "a2", :to_coord => "a4", :match_id => 3, :moved_by => 1} }, {:player_id => 1}
 		assert_response 302
 	end
 	
@@ -27,10 +27,4 @@ class MoveControllerTest < ActionController::TestCase
 		end
 	end
 
-	def test_notates_basic_move
-		get :notate, { :move=>{ :match_id => matches(:dean_vs_maria), :from_coord => 'd2', :to_coord => 'd4' } }, {:player_id => players(:dean).id}
-		assert_response 200
-	end	
-
-	#more notation tests
 end

@@ -7,7 +7,7 @@ development:
   secret_key: 1db3ad4ff3a616db8912ac3bf7608fda
   canvas_page_name: http://apps.facebook.com/enpassant/
   #i notice that javascript_include_tag defaults uses this - not sure it should - hmm
-  callback_url: http://enpassant.dyndns.org:3000/
+  #callback_url: http://enpassant.dyndns.org:3000/
   tunnel:
     public_host_username: 
     public_host: 

@@ -1,6 +1,8 @@
 match_id, moved_by, from_coord, to_coord, notation, castled
 3, 1, d2, d4, d4
 3, 2, g8, f6, Nf6
+3, 1, e2, e3, e3
+3, 2, e7, e6, e6
 1, 1, e2, e4, e4
 1, 2, e7, e5, e5
 1, 1, f1, d3, Bd3
