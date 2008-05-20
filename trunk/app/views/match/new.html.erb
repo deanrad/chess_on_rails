@@ -1,6 +1,6 @@
 <h2>New match !</h2>
 
-<% form_for(:match, :url => {:action => 'create'} ) do |f| %>
+<% form_for(:match, :url => 'create' ) do |f| %>
 <div>
 Opponent: [Dean]<input type="hidden" name="match[opponent_id]" value="1" /> <!-- hard-coded till ajax/facebook opponent-chooser ready -->
 </div>
