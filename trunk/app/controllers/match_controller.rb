@@ -42,9 +42,6 @@ class MatchController < ApplicationController
 	def status 
 		@match = Match.find( params[:id] )
 		@your_turn = @match.turn_of?( @current_player) 
-
-		#if request.xhr?
-		render :partial => "move_indicator", :locals => {:your_turn => @your_turn} 
 	end
 
 	def pieces

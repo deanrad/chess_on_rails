@@ -8,7 +8,7 @@ Hi. Welcome, <%= @current_player.name %>.
 
 <%= render :partial => "move/create", :locals => {:match_id => @match.id} %>
 
-<%= periodically_call_remote  :method => 'get', :frequency => 10, :url => {:action => 'status', :id => @match} , :update => 'move_indicator_parent' %>
+<%= periodically_call_remote  :method => 'get', :frequency => 10, :url => {:action => 'status', :id => @match} %>
 
 
 <span id="move_indicator_parent">
@@ -24,7 +24,7 @@ Hi. Welcome, <%= @current_player.name %>.
 </td>
 <td valign="top" align="left" width="50%">
 <pre id="move_list" style="border:solid 1px black; width:180px; height:350px">
-<%= render :partial => "match/moves" %>
+<%= render :partial => 'move_list' %>
 </pre>
 </td>
 </tr>
