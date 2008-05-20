@@ -20,7 +20,7 @@ unstarted_match:
    player1: 2
    player2: 3
 
-endgame:
+castled:
    id: 5
    player1: 3
    player2: 1

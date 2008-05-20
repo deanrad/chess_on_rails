@@ -165,5 +165,18 @@ class BoardTest < ActiveSupport::TestCase
 		assert_not_nil match.board.piece_at("d4")
 		
 	end
-			
+
+	def test_castled_short_white_king_on_g1
+		match = matches(:castled)
+		puts match.moves[-1].notation, match.moves[-1].castled
+
+		piece = match.board(:current).piece_at('g1')
+		assert_not_nil piece
+		assert_equal :king, piece.type
+
+		piece = match.board(:current).piece_at('f1')
+		assert_not_nil piece
+		assert_equal :kings_rook, piece.type
+
+	end
 end

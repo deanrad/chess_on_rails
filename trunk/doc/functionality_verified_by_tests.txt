@@ -60,6 +60,7 @@ board should:
  - knows what piece is on a square
  - can refer to as many boards as there are moves
  - detects moved piece
+ - castled short white king on g1
 
 fbuser should:
 
