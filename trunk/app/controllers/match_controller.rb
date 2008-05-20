@@ -83,7 +83,7 @@ class MatchController < ApplicationController
 
 		@match.save!
 
-		redirect_to "/match/" 
+		redirect_to :action => 'index'
 	end
 
 	# POST /match/create
@@ -94,9 +94,9 @@ class MatchController < ApplicationController
 		    player2_id = params[:opponent_side] == '2' ? params[:opponent_id] : @current_player.id
 
 		    @match = Match.create( :player1 => Player.find(player1_id), :player2 => Player.find(player2_id) )
-	
+
 		    if @match
-			redirect_to '/match/show/' + @match.id.to_s
+			redirect_to :action => 'show', :id=>@match.id
 		    end
 	    end
 	end
