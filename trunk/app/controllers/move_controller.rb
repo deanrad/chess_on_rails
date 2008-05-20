@@ -7,12 +7,6 @@ class MoveController < ApplicationController
 
 		@move = Move.new( params[:move] )
 
-		#if theres not a piece of yours
-		
-		#@move = Move.new
-		#@move.match = @match
-		#@move.update_attributes( params[:move] )
-
 		puts @move.errors and raise ArgumentError if ! @move.valid?
 
 		#ensure these computed fields get stored to db - todo move to model if possible

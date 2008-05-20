@@ -144,6 +144,9 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 2, queen.allowed_moves(b).length
 
 	end
-	
+	def test_image_names_abstract_away_irrelevant_details
+		assert_equal 'rook_b', Piece.new(:black, :queens_rook, "a8").img_name
+		assert_equal 'pawn_w', Piece.new(:white, :b_pawn, "b2").img_name
+	end	
 	
 end

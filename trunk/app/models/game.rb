@@ -1,3 +1,4 @@
+#todo - can remove the distinction between chess and game and lose some code 
 class Game
 	#the actual values for ranks and files are overridden by the game
 	@@ranks = ""

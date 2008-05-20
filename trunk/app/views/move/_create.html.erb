@@ -9,7 +9,3 @@
     <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
 
-<%= observe_form :new_move_form,
-				 :update => 'new_move_notation',
-				 :url => url_for( :action => 'notate_move' )
-%>

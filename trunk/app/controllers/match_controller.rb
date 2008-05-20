@@ -15,7 +15,15 @@ class MatchController < ApplicationController
 		@board = @match.board( @match.moves.count )
 		@pieces = @board.pieces
 		
-		#begin candidate new method
+		set_view_variables
+
+		if @match.active == 0
+			render :template => 'match/result' and return
+		end
+
+	end
+
+	def set_view_variables
 		@files = Chess.files
 		@ranks = Chess.ranks.reverse
 
@@ -26,13 +34,8 @@ class MatchController < ApplicationController
 			@files.reverse!
 			@ranks.reverse!
 		end
+	end	
 
-		if @match.active == 0
-			render :template => 'match/result' and return
-		end
-
-	end
-	
 	# GET /match/ 
 	def index
 		# shows active matches
@@ -41,7 +44,9 @@ class MatchController < ApplicationController
 
 	def status 
 		@match = Match.find( params[:id] )
-		@your_turn = @match.turn_of?( @current_player) 
+		@board = @match.board(:current)
+
+		set_view_variables
 	end
 
 	def pieces

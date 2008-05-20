@@ -43,6 +43,7 @@ class Board
 			
 	end
 
+	#todo - can dry up these methods 
 	def piece_at(pos)
 		p = @pieces.find { |piece| piece.position == pos }
 		return p

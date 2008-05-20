@@ -95,11 +95,4 @@ class MoveTest < ActiveSupport::TestCase
 		assert_equal "O-O", wc.notate
 	end
 	
-	def test_nodoc_detects_check
-		match = matches(:endgame) # todo cannot load game directly currently without replaying moves
-	end		
-	
-	def test_nodoc_allows_pawn_promotion
-		assert true
-	end
 end

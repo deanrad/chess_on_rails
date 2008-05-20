@@ -1,0 +1,40 @@
+<!-- Physical layout of chess board -->
+
+<%= stylesheet_link_tag "board" %>
+<table id="board_table">
+	<% ranks.each_byte do |rank| -%>
+		<tr>
+		<td class="label rank"><%= rank.chr %></td>
+		<% files.each_byte do |file|
+			position = file.chr + rank.chr -%>
+			<td class="<%= position %>" id="<%= position %>">
+
+				<script>    Droppables.add('<%= position %>', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: '<%= position %>' } ); </script>
+
+				<% p = board.piece_at(position)
+				   if p                                       -%>
+
+					<img class="piece <%= (p.allowed_moves(board) << position) * ' ' %>"
+						id="<%= p.client_id %>"
+						src="<%= "/images/chess_pieces/#{p.img_name}.gif" %>"/>
+
+					<!-- new Draggable( p.client_id , {snap:[48,48],revert:true}); -->
+					<%= draggable_element( p.client_id, :revert => 'true', :snap => '[48,48]'  ) if @match.turn_of?(@current_player) %> 
+
+				<% else %>
+					&nbsp;
+				<% end %>
+			</td>	
+		<% end %>
+		</tr>
+		
+		<% if rank==ranks[7] %>
+			<tr>
+				<td>&nbsp;</td>
+				<% files.each_byte do |file| -%>
+					<td class="label file"><%= file.chr %></td>	
+				<% end %>
+			</tr>
+		<% end %>
+	<% end %>
+</table>

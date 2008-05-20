@@ -248,4 +248,8 @@ class Piece  # < ActiveRecord::Base
 			
 		end
 	end
+
+	def img_name
+		( (type.to_s.split('_').length==2) ? type.to_s.split('_')[1] : type.to_s) + '_' + side.to_s.slice(0,1)
+	end
 end
