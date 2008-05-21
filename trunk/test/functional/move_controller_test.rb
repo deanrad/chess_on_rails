@@ -18,13 +18,13 @@ class MoveControllerTest < ActionController::TestCase
 		end
 	end
 	
-      def test_accepts_move_with_coordinates
-		m = matches(:paul_vs_dean)
-		assert_equal 0, m.moves.length
-
-		post :create, { :move=>{:from_coord => "a2", :to_coord => "a4", :match_id => m.id } }, {:player_id => m.player1.id}
-		assert_response 302
-	end
+      #def test_accepts_move_with_coordinates
+	#	m = matches(:paul_vs_dean)
+	#	assert_equal 0, m.moves.length
+	#
+	#	post :create, { :move=>{:from_coord => "a2", :to_coord => "a4", :match_id => m.id } }, {:player_id => m.player1.id}
+	#	assert_response 302
+	#end
 	
 	def test_errs_if_specified_match_not_there_or_active
 		assert_raises ArgumentError do
