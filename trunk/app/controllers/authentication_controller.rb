@@ -7,19 +7,16 @@ class AuthenticationController < ApplicationController
 	def login
 		user = User.find_by_email_and_security_phrase( params[:email], params[:security_phrase] )
 		
-		if user != nil
-			@player = user.playing_as
-			session[:player_id] = @player.id
-			flash[:notice] = "Welcome, #{@player.name}."
+		flash[:notice] = "Your credentials do not check out." and return if !user && params[:email] 
 
-			#return them to original page requested
-			if session[:original_uri]
-				redirect_to session[:original_uri] and return
-			else
-				redirect_to '/match/' and return
-			end
+		@player = user.playing_as
+		session[:player_id] = @player.id
+
+		#return them to original page requested
+		if session[:original_uri]
+			redirect_to session[:original_uri] and return
 		else
-			flash[:notice] = "Your credentials do not check out." if params[:email] 
+			redirect_to '/match/' and return
 		end
 	end
 	

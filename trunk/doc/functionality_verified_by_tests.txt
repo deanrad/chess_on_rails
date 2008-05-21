@@ -5,7 +5,6 @@ Note: this document should be regenerated periodically by running
 authentication_controller should:
  - only logged in can change security question
  - login security question only
- - not redirected when requesting login action
  - test user dean can login
  - user can login
  - user can logout
