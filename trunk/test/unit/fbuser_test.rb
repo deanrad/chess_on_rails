@@ -1,8 +1,15 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class FbuserTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  def test_truth
-    assert true
-  end
+
+	def test_can_install_hitherto_unknown_user
+		fb_user_id = 31415926
+		assert_nil Fbuser.find_by_facebook_user_id( fb_user_id )
+
+		fb = Fbuser.install( fb_user_id )
+		assert_not_nil fb
+		assert_not_nil fb.playing_as
+		assert_equal "Facebook #{fb_user_id}", fb.playing_as.name
+	end
+
 end

@@ -12,14 +12,24 @@ class FbuserController < ApplicationController
   #visiting this controller action will create a session from facebook request info
   def index
 
+    #users 
     if session[:facebook_session]
 	@userF = session[:facebook_session].user
-      session[:player_id] = Fbuser.find_by_facebook_user_id(@userF.id).playing_as
-	@current_player = Player.find( session[:player_id] )
+
+      fb_user = Fbuser.find_by_facebook_user_id(@userF.id)
+
+	#if we dont have them, 'install them
+      if fb_user == nil
+		fb_user = Fbuser.install( @userF.id ) 
+	end
+
+	session[:player_id] = fb_user.playing_as.id
     else
+	#this branch taken only by test cases 
       session[:player_id] = Fbuser.find_by_facebook_user_id( params[:fb_sig_user] ).playing_as
-	@current_player = Player.find( session[:player_id] )
     end
+
+   authorize #set up instance variables as before
 
   end
 
