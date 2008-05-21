@@ -2,8 +2,8 @@ ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Default routes - facebook or not
-  map.root :controller => "authentication", :conditions => {:canvas => false}
   map.facebook_root '', :controller => "fbuser", :conditions => {:canvas => true}
+  map.root :controller => "authentication", :conditions => {:canvas => false}
 
 
   #place these higher to keep a nil :id from creeping in when caught by lower ones
