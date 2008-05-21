@@ -67,14 +67,7 @@ class AuthenticationControllerTest < ActionController::TestCase
 		assert_nil assigns(:player)
 		assert_equal "Your credentials do not check out.", flash[:notice]				
 	end
-	
-	def test_reject_move_without_login
-		in_move_controller do
-			post :create
-			assert_response 302
-		end
-	end
-	
+		
 	#region Helper functions
 	#I love this little idiomatic function that will execute the block passed to it
 	# on a different controller by swapping it for the duration of the code execution.

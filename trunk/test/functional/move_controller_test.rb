@@ -16,7 +16,7 @@ class MoveControllerTest < ActionController::TestCase
 	end
 	
       def test_accepts_move_with_coordinates
-		@request.env['HTTP_REFERER'] = '/match/6/show.html'
+		@request.env['HTTP_REFERER'] = '/match/3/show.html'
 		post :create, { :move=>{:from_coord => "a2", :to_coord => "a4", :match_id => 3, :moved_by => 1} }, {:player_id => 1}
 		assert_response 302
 	end
