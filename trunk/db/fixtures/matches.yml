@@ -30,3 +30,8 @@ chris_vs_dean:
    player1: 5
    player2: 1
 
+jack_vs_dean:
+   id: 7
+   player1: 6
+   player2: 1
+   

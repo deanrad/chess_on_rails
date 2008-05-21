@@ -9,9 +9,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 8) do
+ActiveRecord::Schema.define(:version => 7) do
 
   create_table "fbusers", :force => true do |t|
+    t.integer  "facebook_user_id", :limit => 20
     t.integer  "playing_as"
     t.datetime "created_at"
     t.datetime "updated_at"
