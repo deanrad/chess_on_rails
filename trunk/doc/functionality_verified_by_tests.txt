@@ -63,6 +63,7 @@ board should:
  - castled short white king on g1
 
 fbuser should:
+ - can install hitherto unknown user
 
 game should:
  - 32 pieces on chess initial board

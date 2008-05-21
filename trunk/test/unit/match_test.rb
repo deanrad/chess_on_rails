@@ -1,9 +1,24 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class MatchTest < ActiveSupport::TestCase
-	# Replace this with your real tests.
-	def test_truth
-		assert true
+
+	def test_32_pieces_on_chess_initial_board
+		assert_equal 32, matches(:unstarted_match).initial_board.num_active_pieces
+	end
+	def test_noone_to_move_defaults_to_player1
+		m1 = matches(:dean_vs_maria)
+		assert_equal 1, m1.next_to_move
+	end
+
+	#tests related to game play
+	def test_next_to_move_alternates_sides
+		m1 = matches(:unstarted_match)
+		assert_equal 0, m1.moves.count
+		assert_equal 1, m1.next_to_move
+		
+		m1.moves << Move.new(:from_coord=>"b2", :to_coord=>"c3", :moved_by=>1)
+		
+		assert_equal 2, m1.next_to_move
 	end
 			
 	def test_knows_what_side_player_is_on
@@ -15,20 +30,16 @@ class MatchTest < ActiveSupport::TestCase
 		assert_equal :black, m1.side_of( players(:dean) )
 		
 	end
+
 	def test_knows_whose_turn_it_is
 		m1 = matches(:paul_vs_dean)
 		assert_equal 0, m1.moves.count
 		assert m1.turn_of?( players(:paul) )		
 	end
+
 	def test_shows_lineup
 		assert_equal 'Paul vs. Dean', matches(:paul_vs_dean).lineup
 		assert_equal 'Dean vs. Paul', matches(:dean_vs_paul).lineup
-	end
-
-	def test_can_invite_anyone_to_match
-	end
-
-	def test_can_invite_as_white_or_black
 	end
 
 	def test_player_can_resign
@@ -48,15 +59,5 @@ class MatchTest < ActiveSupport::TestCase
 		assert_not_nil m3.winning_player
 		assert_equal players(:dean), m3.winning_player
 	end
-
-	def test_player_can_claim_win
-	end
-
-	def test_opponent_can_deny_win
-	end
-
-	def test_opponent_can_acknowledge_win
-	end
-
 
 end

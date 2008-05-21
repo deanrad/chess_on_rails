@@ -79,7 +79,7 @@ class BoardTest < ActiveSupport::TestCase
 	end
 	
 	def test_longest_move_in_chess_is_8_units
-		assert_equal 8, Chess.maximum_move_length
+		assert_equal 8, Chess::maximum_move_length
 	end
 	
 	def test_piece_cannot_move_off_edge_of_board
@@ -117,11 +117,6 @@ class BoardTest < ActiveSupport::TestCase
 		assert board.position_occupied_by?( 'e7', :black )
 		assert !board.position_occupied_by?( 'e7', :white )
 	end 
-
-	# Replace this with your real tests.
-	def test_truth
-		assert true
-	end
 	
 	def test_knows_what_piece_is_on_a_square
 		assert_nil matches(:unstarted_match).initial_board.piece_at("d4")
@@ -161,14 +156,12 @@ class BoardTest < ActiveSupport::TestCase
 		match.moves << Move.new( :from_coord=>"d2", :to_coord=>"d4", :notation=>"d4", :moved_by=>1 )
 		match.save!
 		
-		#		#todo: this is the next test to pass after enabling board replay
 		assert_not_nil match.board.piece_at("d4")
 		
 	end
 
 	def test_castled_short_white_king_on_g1
 		match = matches(:castled)
-		puts match.moves[-1].notation, match.moves[-1].castled
 
 		piece = match.board(:current).piece_at('g1')
 		assert_not_nil piece

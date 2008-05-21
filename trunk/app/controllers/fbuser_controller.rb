@@ -26,7 +26,7 @@ class FbuserController < ApplicationController
 	session[:player_id] = fb_user.playing_as.id
     else
 	#this branch taken only by test cases 
-      session[:player_id] = Fbuser.find_by_facebook_user_id( params[:fb_sig_user] ).playing_as
+      session[:player_id] = Fbuser.find_by_facebook_user_id( params[:fb_sig_user] ).playing_as.id
     end
 
    authorize #set up instance variables as before

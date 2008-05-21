@@ -49,21 +49,6 @@ class MatchController < ApplicationController
 		set_view_variables
 	end
 
-	def pieces
-		@match = Match.find( params[:id] )
-		@files = Chess.files
-		@ranks = Chess.ranks.reverse
-
-		if( ! params[:move] )		
-			@board = @match.initial_board
-			@moves_played = @match.moves.count
-		else
-			@board = @match.board( params[:move] )
-			@moves_played = params[:move]
-		end
-		@pieces = @board.pieces
-	end
-
 	def notate_move
 		move = Move.new( params[:move] ) 
 		render :text => move.notate
