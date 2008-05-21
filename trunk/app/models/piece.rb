@@ -1,10 +1,9 @@
 
 #An instance of a piece bound to a particular match
 # (Currently not aware of matches in any tests)
-class Piece  # < ActiveRecord::Base
-
+class Piece  
 	require 'Enumerable'
-		
+
 	#the allowed types for the type instance accessor (and their shorthand)
 	#todo: remove pawn
 	@@types = {:kings_rook =>'R#{file}', :kings_knight =>'N#{file}',  :kings_bishop=>'B',  
@@ -125,7 +124,6 @@ class Piece  # < ActiveRecord::Base
 				m.reject! { |pos| (pos[0] == @position[0]) && ( board.side_occupying(pos) != nil ) }
 			end
 
-			#todo - in dire need of test cases and therefore sample boards (CSV fixture?) - figure out ASAP
 			if( piece_type=="king")
 				#castling
 				castle_rank = (side==:white) ? "1" : "8"
@@ -154,7 +152,7 @@ class Piece  # < ActiveRecord::Base
 	
 	#the moves a piece could move to on an empty board
 	def theoretical_moves
-		raise ArgumentError, "Cannot determine theoretical moves of piece #{self.to_s} if position unspecified" if ! position
+		#raise ArgumentError, "Cannot determine theoretical moves of piece #{self.to_s} if position unspecified" if ! position
 		@moves = []
 		
 		if @type.to_s.include?(:pawn.to_s)
@@ -252,4 +250,5 @@ class Piece  # < ActiveRecord::Base
 	def img_name
 		( (type.to_s.split('_').length==2) ? type.to_s.split('_')[1] : type.to_s) + '_' + side.to_s.slice(0,1)
 	end
+
 end

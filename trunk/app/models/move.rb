@@ -9,7 +9,6 @@ class Move < ActiveRecord::Base
 	def validate
 		errors.add(:match, "You have not specified which match.") and raise ArgumentError, "No match" if ! match
 		errors.add(:active, "You cannot make a move for an inactive match, silly !") if ! match.active
-		errors.add(:turn, "It is not your turn to move yet.") if moved_by != match.next_to_move
 		[from_coord, to_coord].each do |coord|
 			raise ArgumentError, "#{coord} is not a valid coordinate" if ! Chess.valid_position?( coord )
 		end

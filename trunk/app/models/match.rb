@@ -11,11 +11,6 @@ class Match < ActiveRecord::Base
 	
 	has_many :moves, :order=>"created_at ASC"
 	
-	#def self.from_player_ids( player1_id, player2_id )
-	#	@player1 = Player.find(player1_id)
-	#	@player2 = Player.find(player2_id)
-	#end
-
 	def initial_board
 		return Board.new( self, Chess.initial_pieces, 0 )
 	end
@@ -26,11 +21,7 @@ class Match < ActiveRecord::Base
 	
 	def next_to_move
 		#todo may have to be revised - is castling actually two moves ?
-		if moves.count & 1 == 0
-			return 1
-		else 
-			return 2
-		end
+		(moves.count & 1) + 1
 	end
 
 	def turn_of?( plyr )	

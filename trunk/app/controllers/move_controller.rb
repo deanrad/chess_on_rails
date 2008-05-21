@@ -8,9 +8,9 @@ class MoveController < ApplicationController
 		@move = Move.new( params[:move] )
 
 		puts @move.errors and raise ArgumentError if ! @move.valid?
+		raise ArgumentError, "It's not your turn to move" if ! @move.match.turn_of?( @current_player )
 
 		#ensure these computed fields get stored to db - todo move to model if possible
-		@move.moved_by = (@current_player == @move.match.player1) ? 1 : 2
 		@move.notation = @move.notate
 		@move.castled = @move.notation.include?( "O-" )
 
