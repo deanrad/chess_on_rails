@@ -14,10 +14,10 @@ class FbuserController < ApplicationController
 
     if session[:facebook_session]
 	@userF = session[:facebook_session].user
-      session[:player_id] = Fbuser.find(@userF.id).playing_as
+      session[:player_id] = Fbuser.find_by_facebook_user_id(@userF.id).playing_as
 	@current_player = Player.find( session[:player_id] )
     else
-      session[:player_id] = Fbuser.find( params[:fb_sig_user] ).playing_as
+      session[:player_id] = Fbuser.find_by_facebook_user_id( params[:fb_sig_user] ).playing_as
 	@current_player = Player.find( session[:player_id] )
     end
 
