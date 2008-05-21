@@ -10,7 +10,7 @@ ActionController::Routing::Routes.draw do |map|
   # (this only happens due to my preference for having :id earlier in the URL than convention
   map.auth    'authentication/:action', :controller => 'authentication'
   map.move	  'move/:action', :controller => 'move'
-  map.match   'match/new', :controller => 'match', :action => 'new'
+  map.match   'match/:action', :controller => 'match'
 
   # Install the default routes as the lowest priority.
   map.connect ':controller/:id/:action'
