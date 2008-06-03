@@ -46,6 +46,11 @@ class MatchController < ApplicationController
 		@match = Match.find( params[:id] )
 		@board = @match.board(:current)
 
+		# too small to refactor away - but indicates whether the status has changed since last requested
+		session[:move_count] = @match.moves.length if session[:move_count] == nil 
+		@status_has_changed  = ( session[:move_count] != @match.moves.length )
+		session[:move_count] = @match.moves.length
+
 		set_view_variables
 	end
 

@@ -1,3 +1,5 @@
-page.replace_html 'move_list', :partial => 'move_list'
-page.replace_html 'move_indicator_parent', :partial => 'move_indicator', :locals => {:your_turn => @your_turn}
-page.replace_html 'board_parent', :partial => "board/physical", :locals => { :ranks => @ranks, :files => @files, :board => @board }
+if @status_has_changed
+  page.replace_html 'move_list', :partial => 'move_list'
+  page.replace_html 'move_indicator_parent', :partial => 'move_indicator', :locals => {:your_turn => @your_turn}
+  page.replace_html 'board_parent', :partial => "board/physical", :locals => { :ranks => @ranks, :files => @files, :board => @board }
+end
