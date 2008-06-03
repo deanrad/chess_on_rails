@@ -10,7 +10,7 @@ Hi. Welcome, <%= @current_player.name %>.
 <%= render :partial => "move/create", :locals => {:match_id => @match.id} %>
 
 
-<%= periodically_call_remote(:method => 'get', :frequency => 15, :url => {:id => @match.id, :action => 'status' })  %>
+<%= periodically_call_remote(:method => 'get', :frequency => 10, :url => {:id => @match.id, :action => 'status' })  %>
 
 <span id="move_indicator_parent">
 <%= render :partial => "move_indicator", :locals => {:your_turn => @your_turn} %>
