@@ -13,11 +13,7 @@ class Board
 		@match = match
 		
 		#figure out the number of moves we're replaying to
-		if( as_of_move==:current)
-			@as_of_move = @match.moves.count
-		else
-			@as_of_move = as_of_move.to_i
-		end
+		@as_of_move = ( as_of_move==:current) ? @match.moves.count : as_of_move.to_i
 		
 		#todo rails has much cleaner iteration options than this - learn to use them
 		i = 0 
@@ -46,7 +42,6 @@ class Board
 	#todo - can dry up these methods 
 	def piece_at(pos)
 		p = @pieces.find { |piece| piece.position == pos }
-		return p
 	end
 	
 	def side_occupying(pos)

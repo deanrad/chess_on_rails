@@ -13,7 +13,7 @@ class PieceTest < ActiveSupport::TestCase
 		p = Piece.new(:black, :a_pawn)
 		
 		#assert_raises ArgumentError do
-			p = Piece.new(:black, :mamas_jamas)
+		#	p = Piece.new(:black, :mamas_jamas)
 		#end
 	end
 	
@@ -91,27 +91,27 @@ class PieceTest < ActiveSupport::TestCase
 	end
 	
 	def test_rook_has_four_lines_of_attack
-		p = Piece.new(:black, :queens_rook, "a8")
+		p = Piece.new(:black, :queens_rook, 'a8')
 		assert_equal 14, p.theoretical_moves.length
 		assert_equal 4, p.lines_of_attack.length
 	end
 
 	def test_bishop_has_four_lines_of_attack
-		p = Piece.new(:white, :queens_bishop, "c1")
+		p = Piece.new(:white, :queens_bishop, 'c1')
 		assert_equal 7, p.theoretical_moves.length
 		assert_equal 4, p.lines_of_attack.length
 	end
 
 	def test_queen_has_eight_lines_of_attack
-		p = Piece.new(:white, :queen, "h8")
+		p = Piece.new(:white, :queen, 'h8')
 		assert_equal 21, p.theoretical_moves.length
 		assert_equal 8, p.lines_of_attack.length
 	end
 
 	def test_kings_knights_pawns_have_no_lines_of_attack
-		k = Piece.new(:white, :king, "h8")
-		n = Piece.new(:black, :knight, "b2")
-		p = Piece.new(:white, :pawn, "d2")
+		k = Piece.new(:white, :king, 'h8')
+		n = Piece.new(:black, :knight, 'b2')
+		p = Piece.new(:white, :pawn, 'd2')
 		
 		#the theoretical moves must be evaluated first before lines of attack can be known
 		# (kind of backwards, yes, but)
@@ -123,7 +123,7 @@ class PieceTest < ActiveSupport::TestCase
 	end
 
 	def test_rook_can_move_nowhere_on_initial_board
-		r = Piece.new(:black, :queens_rook, "a8")
+		r = Piece.new(:black, :queens_rook, 'a8')
 		b = matches(:unstarted_match).initial_board
 		
 		assert_equal 14, r.theoretical_moves.length
@@ -134,19 +134,19 @@ class PieceTest < ActiveSupport::TestCase
 		b = matches(:dean_vs_paul).board(2)
 
 		#the bishop
-		bishop = b.piece_at("c1")
+		bishop = b.piece_at('c1')
 		assert_equal :queens_bishop, bishop.type
 		assert_equal 5, bishop.allowed_moves(b).length
 
 		#the queen
-		queen = b.piece_at("d1")
+		queen = b.piece_at('d1')
 		assert_equal :queen, queen.type
 		assert_equal 2, queen.allowed_moves(b).length
 
 	end
 	def test_image_names_abstract_away_irrelevant_details
-		assert_equal 'rook_b', Piece.new(:black, :queens_rook, "a8").img_name
-		assert_equal 'pawn_w', Piece.new(:white, :b_pawn, "b2").img_name
+		assert_equal 'rook_b', Piece.new(:black, :queens_rook, 'a8').img_name
+		assert_equal 'pawn_w', Piece.new(:white, :b_pawn, 'b2').img_name
 	end	
 	
 end

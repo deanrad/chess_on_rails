@@ -57,10 +57,15 @@ class MoveTest < ActiveSupport::TestCase
 		assert_equal "O-O", wc.notate
 	end
 
-	def test_notates_check
+	def test_does_not_notate_check_if_intervening_piece_blocks_check
 		match = matches(:dean_vs_paul)
-		ck = Move.new( :match_id => match.id, :from_coord => "f8", :to_coord => "b4", :moved_by => 2 ) 
-		assert_equal "Bb4+", ck.notate
+		ck = Move.new( :match_id => match.id, :from_coord => "f1", :to_coord => "b5" ) 
+		assert_equal "Bb5", ck.notate
 	end
-	
+
+	def test_does_notate_check_if_no_intervening_piece_blocks_check
+		match = matches(:dean_vs_paul)
+		ck = Move.new( :match_id => match.id, :from_coord => "f8", :to_coord => "b4" ) 
+		assert_equal "Bb4+", ck.notate
+	end	
 end

@@ -29,10 +29,7 @@ class Piece
 	def initialize(side, type, pos=nil)
 		@side = side
 		@type = type
-		
-		if pos
-			@position=pos
-		end
+		@position = pos
 	end
 	
 	#when rendered the client id uniquely specifies an individual piece within a board
@@ -96,14 +93,19 @@ class Piece
 				file_unit, rank_unit = line_of_attack
 				
 				(1..8).each do |length|
-					pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
-					if( Chess.valid_position?( pos ) && line_worth_following )
-						if( @side == board.side_occupying(pos) )
-							# ran into your own piece- disregard this line
-							#puts "disregarded line #{line_of_attack} due to piece at #{pos}"
-							line_worth_following = false
-						else
-							m << pos
+					if line_worth_following
+						pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+						if( Chess.valid_position?( pos ) )
+							if( @side == board.side_occupying(pos) )
+								# ran into your own piece- disregard this line
+								line_worth_following = false
+							elsif ( board.side_occupying(pos) == nil )
+								m << pos
+							else
+								#ran into opponents piece -this is the last position you can occupy on this line
+								m << pos
+								line_worth_following = false
+							end
 						end
 					end
 				end
