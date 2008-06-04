@@ -29,7 +29,7 @@ class MatchController < ApplicationController
 
 		@viewed_from_side = (@current_player == @match.player1) ? :white : :black
 		@your_turn = @match.turn_of?( @current_player )
-		
+
 		if @viewed_from_side == :black
 			@files.reverse!
 			@ranks.reverse!
@@ -52,6 +52,7 @@ class MatchController < ApplicationController
 		session[:move_count] = @match.moves.length
 
 		set_view_variables
+		@last_move = @match.moves.last
 	end
 
 	def notate_move

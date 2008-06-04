@@ -63,16 +63,9 @@ class Move < ActiveRecord::Base
 			end
 		end
 		
-		#check - from destination position, if opposing king is on any of the moved piece's
-		# next allowed moves, the king is in check
 		piece_moving.position = to_coord
-		piece_moving.allowed_moves( this_board ).each do |square|
-			piece_on_square = this_board.piece_at( square )
-			if (piece_on_square != nil) && (piece_on_square.side != piece_moving.side) && (piece_on_square.type == :king)
-				check = true
-				mynotation += "+"
-			end
-		end
+		mynotation += "+" if this_board.in_check?(  piece_moving.side==:white ? :black : :white  )
+
 		piece_moving.position = from_coord #move back
 		
 		return mynotation

@@ -28,7 +28,6 @@ match_controller should:
 move_controller should:
  - reject move made without coordinates
  - reject move made with one or more invalid coordinates
- - accepts move with coordinates
  - errs if specified match not there or active
  - cant move when on match you dont own
  - cant move when not your turn
@@ -57,6 +56,8 @@ board should:
  - can refer to as many boards as there are moves
  - detects moved piece
  - castled short white king on g1
+ - can refer to previous board with negative index
+ - knows if side is in check
 
 fbuser should:
  - can install hitherto unknown user
@@ -76,7 +77,8 @@ move should:
  - notates simple move
  - notates pawn moves correctly
  - notates white kingside castle correctly
- - notates check
+ - does not notate check if intervening piece blocks check
+ - does notate check if no intervening piece blocks check
 
 piece should:
  - recognize valid piece types

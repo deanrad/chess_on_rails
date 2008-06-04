@@ -163,7 +163,7 @@ class BoardTest < ActiveSupport::TestCase
 	def test_castled_short_white_king_on_g1
 		match = matches(:castled)
 
-		piece = match.board(:current).piece_at('g1')
+		piece = match.board.piece_at('g1')
 		assert_not_nil piece
 		assert_equal :king, piece.type
 
@@ -171,5 +171,26 @@ class BoardTest < ActiveSupport::TestCase
 		assert_not_nil piece
 		assert_equal :kings_rook, piece.type
 
+	end
+
+	def test_can_refer_to_previous_board_with_negative_index
+		match = matches(:castled)
+
+		#the king is on the square he started on
+		piece = match.board(-1).piece_at('e1')
+		assert_not_nil piece
+		assert_equal :king, piece.type
+
+		#other pieces are moved
+		assert_nil match.board(-1).piece_at('f1')
+	end
+
+	def test_knows_if_side_is_in_check
+		match = matches(:dean_vs_paul)
+		ck = Move.new( :match_id => match.id, :from_coord => "f8", :to_coord => "b4" ) 
+		assert_equal "Bb4+", ck.notate
+		
+		match.moves << ck
+		assert_equal true, match.board.in_check?( :white ) #nope
 	end
 end

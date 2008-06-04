@@ -2,4 +2,7 @@ if @status_has_changed
   page.replace_html 'move_list', :partial => 'move_list'
   page.replace_html 'move_indicator_parent', :partial => 'move_indicator', :locals => {:your_turn => @your_turn}
   page.replace_html 'board_parent', :partial => "board/physical", :locals => { :ranks => @ranks, :files => @files, :board => @board }
+
+  #todo play with start/end color to signify things
+  page.visual_effect(:highlight, @last_move.to_coord, :startcolor => (@last_move.notation.include?('x') ? 'ff0000' : '00ff00') , :duration => 5) if @your_turn 
 end

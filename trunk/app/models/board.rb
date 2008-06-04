@@ -13,7 +13,13 @@ class Board
 		@match = match
 		
 		#figure out the number of moves we're replaying to
-		@as_of_move = ( as_of_move==:current) ? @match.moves.count : as_of_move.to_i
+		if (as_of_move==:current)
+			@as_of_move = @match.moves.count
+		elsif  as_of_move.to_i < 0
+			@as_of_move = @match.moves.count + as_of_move.to_i
+		else
+			@as_of_move = as_of_move.to_i
+		end
 		
 		#todo rails has much cleaner iteration options than this - learn to use them
 		i = 0 
@@ -66,4 +72,13 @@ class Board
 		p = @pieces.find { |p| (p.side == piece.side) && (p.piece_type == piece.piece_type ) && (p.type != piece.type) }
 	end
 	
+	def in_check?( side )
+		king_to_check = @pieces.find{ |p| p.type==:king && p.side == side }
+		side_to_check = (side==:white) ? :black : :white
+
+		@pieces.select { |p| p.side == side_to_check}.each do |attacker|
+			return true if attacker.allowed_moves( self ).include?( king_to_check.position )
+		end
+		return false
+	end
 end
