@@ -21,3 +21,21 @@
  jack:
    id:      6
    name:    Jack
+ milan:
+   id:      7
+   name:    Milan
+ dustin:
+   id:      8
+   name:    Dustin
+ jones:
+   id:      9
+   name:    Jones
+ paul_fb:
+   id:      10
+   name:    Paul (facebook)
+ stephen:
+   id:      11
+   name:    Stephen
+ maula:
+   id:      12
+   name:    Maula

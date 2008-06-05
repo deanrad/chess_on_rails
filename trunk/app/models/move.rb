@@ -1,22 +1,27 @@
 class Move < ActiveRecord::Base
 	belongs_to :match
-
-	def player
-		return match.player1 if(moved_by==1) 
-		return match.player2 if(moved_by==2) 
-	end
 	
 	def validate
 		errors.add(:match, "You have not specified which match.") and raise ArgumentError, "No match" if ! match
 		errors.add(:active, "You cannot make a move for an inactive match, silly !") if ! match.active
+
+		if( notation && (!from_coord || !to_coord))
+			self[:to_coord] =  notation.to_s[-2,2]
+			side = match.next_to_move == 1 ? :white : :black
+			case notation[0,1]
+			when "B"
+				type= "bishop"
+			end
+			p = match.board.pieces.find{ |p| p.side == side && p.piece_type == type && p.allowed_moves(match.board).include?( self[:to_coord] ) }
+			raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board" if !p 
+			self[:from_coord] = p.position
+		end
+
 		[from_coord, to_coord].each do |coord|
 			raise ArgumentError, "#{coord} is not a valid coordinate" if ! Chess.valid_position?( coord )
 		end
 	end
 
-	def before_save
-	end
-	
 	def notate
 		
 		this_board = match.board(:current)

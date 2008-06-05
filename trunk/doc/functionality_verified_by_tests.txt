@@ -28,6 +28,7 @@ match_controller should:
 move_controller should:
  - reject move made without coordinates
  - reject move made with one or more invalid coordinates
+ - accepts move with coordinates
  - errs if specified match not there or active
  - cant move when on match you dont own
  - cant move when not your turn
@@ -40,6 +41,9 @@ routes should:
  - generates relative url for match status
  - generates relative url for move notation
  - resignation url includes id
+
+gameplay should:
+ - navigates from match listing to match
 
 board should:
  - new match gets an initial board
@@ -73,12 +77,13 @@ match should:
 
 move should:
  - unstarted match has no moves
- - moves are returned in order created
  - notates simple move
  - notates pawn moves correctly
  - notates white kingside castle correctly
  - does not notate check if intervening piece blocks check
  - does notate check if no intervening piece blocks check
+ - allows move from notation only
+ - detects attempt to move from incorrect notation
 
 piece should:
  - recognize valid piece types
