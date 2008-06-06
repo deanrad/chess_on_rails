@@ -20,8 +20,7 @@
 						src="<%= "/images/chess_pieces/#{p.img_name}.gif" %>"
 					 />
 
-					<!-- new Draggable( p.client_id , {snap:[48,48],revert:true}); -->
-					<%= draggable_element( p.client_id, :revert => 'true', :snap => '[48,48]' ) if @match.turn_of?(@current_player) %> 
+					<%= draggable_element( p.client_id, :revert => 'true', :snap => '[49,47]' ) if @match.turn_of?(@current_player) %> 
 
 				<% else %>
 					&nbsp;
