@@ -7,8 +7,9 @@ Hi. Welcome, <%= @current_player.name %>.
 
 <%= render :partial => "match/ender" %>
 
-<%= render :partial => "move/create", :locals => {:match_id => @match.id} %>
-
+<span id="move_creator_parent">
+<%= render :partial => "move/create", :locals => {:match_id => @match.id, :your_turn => @your_turn} %>
+</span>
 
 <%= periodically_call_remote(:method => 'get', :frequency => 10, :url => {:id => @match.id, :action => 'status' })  %>
 

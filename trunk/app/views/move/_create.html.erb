@@ -5,7 +5,7 @@
     <%= f.hidden_field :match_id, :value => match_id %>
     <%= f.text_field :to_coord %>
     Move: <span id="new_move_notation"></span>
-    <%= submit_tag "Do it!" %>
+    <%= submit_tag "Submit Move", :id => 'move_submit_btn', :disabled => !your_turn %>
     <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
 
