@@ -1,11 +1,11 @@
 class Move < ActiveRecord::Base
 	belongs_to :match
 	NOTATION_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
+
 	def validate
 		errors.add(:match, "You have not specified which match.") and raise ArgumentError, "No match" if ! match
 		errors.add(:active, "You cannot make a move for an inactive match, silly !") if ! match.active
 
-puts "Notation was: #{notation}, #{from_coord==''}, #{!to_coord}"
 		if( notation && (!from_coord || !to_coord || from_coord.empty? || to_coord.empty? ))
 			self[:to_coord] =  notation.to_s[-2,2]
 			side = match.next_to_move == 1 ? :white : :black

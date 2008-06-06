@@ -66,6 +66,14 @@ class MoveTest < ActiveSupport::TestCase
 		assert_equal 'b5', match.moves.last.to_coord
 	end
 
+	def test_allows_move_from_notation_only_if_pawn
+		match = matches(:dean_vs_paul)
+		match.moves << Move.new( :notation => 'a4' )
+
+		assert_equal 'a2', match.moves.last.from_coord
+		assert_equal 'a4', match.moves.last.to_coord
+	end
+
 	def test_detects_attempt_to_move_from_incorrect_notation
 		match = matches(:dean_vs_paul)
 

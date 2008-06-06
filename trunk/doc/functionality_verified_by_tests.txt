@@ -83,6 +83,7 @@ move should:
  - does not notate check if intervening piece blocks check
  - does notate check if no intervening piece blocks check
  - allows move from notation only
+ - allows move from notation only if pawn
  - detects attempt to move from incorrect notation
 
 piece should:
