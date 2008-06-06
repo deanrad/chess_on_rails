@@ -17,3 +17,4 @@ function handle_release_of_piece(draggable, droparea){
    $('new_move_form').submit();
    
 }
+

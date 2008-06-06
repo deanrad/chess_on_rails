@@ -14,13 +14,14 @@
 				<% p = board.piece_at(position)
 				   if p                                       -%>
 
-					<img class="piece <%= (p.allowed_moves(board) << position) * ' ' %>"
+					<img class="piece <%= p.allowed_moves(board) * ' ' %>"
 						id="<%= p.client_id %>"
 						alt="<%= p.img_name %>"
-						src="<%= "/images/chess_pieces/#{p.img_name}.gif" %>"/>
+						src="<%= "/images/chess_pieces/#{p.img_name}.gif" %>"
+					 />
 
 					<!-- new Draggable( p.client_id , {snap:[48,48],revert:true}); -->
-					<%= draggable_element( p.client_id, :revert => 'true', :snap => '[48,48]'  ) if @match.turn_of?(@current_player) %> 
+					<%= draggable_element( p.client_id, :revert => 'true', :snap => '[48,48]' ) if @match.turn_of?(@current_player) %> 
 
 				<% else %>
 					&nbsp;

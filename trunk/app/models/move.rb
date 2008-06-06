@@ -1,19 +1,22 @@
 class Move < ActiveRecord::Base
 	belongs_to :match
-	
+	NOTATION_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
 	def validate
 		errors.add(:match, "You have not specified which match.") and raise ArgumentError, "No match" if ! match
 		errors.add(:active, "You cannot make a move for an inactive match, silly !") if ! match.active
 
-		if( notation && (!from_coord || !to_coord))
+puts "Notation was: #{notation}, #{from_coord==''}, #{!to_coord}"
+		if( notation && (!from_coord || !to_coord || from_coord.empty? || to_coord.empty? ))
 			self[:to_coord] =  notation.to_s[-2,2]
 			side = match.next_to_move == 1 ? :white : :black
-			case notation[0,1]
-			when "B"
-				type= "bishop"
+			if NOTATION_MAP[ notation[0,1] ]
+				type = NOTATION_MAP[ notation[0,1] ]
+			else
+				type = 'pawn'
 			end
+
 			p = match.board.pieces.find{ |p| p.side == side && p.piece_type == type && p.allowed_moves(match.board).include?( self[:to_coord] ) }
-			raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board" if !p 
+			raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board or ambigous move #{notation}" if !p 
 			self[:from_coord] = p.position
 		end
 
