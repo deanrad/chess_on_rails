@@ -1,4 +1,9 @@
 .label {background-color:gray; color:white; font-family:Arial; font-size:smaller}
+body {font-family: Arial; font-size: 10pt;}
+.instructions { font-size: 10pt;}
+#new_move_form { font-size: 10pt; }
+#match_ender { font-size: 10pt; }
+#move_indicator { font-family: Times New Roman, serif; font-size: 12pt; }
 
 #board_table { border-width: 1px; border-style:solid; border-color:black; }
 

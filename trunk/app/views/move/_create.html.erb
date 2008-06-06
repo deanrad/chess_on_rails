@@ -3,11 +3,10 @@
 	<%= check_box_tag :auto_submit_move_ck, 1, :id => 'auto_submit_move_ck', :title => 'Auto submit dropped moves' %> Auto submit dropped moves
 </form -->
 <% form_for :move,  :html => {:id => 'new_move_form'}, :url => {:controller => 'move', :action => 'create'}  do |f| %>
-    Enter Notation: <%= f.text_field :notation, :maxlength => '5' %> or... <br/>
+    Notation: <%= f.text_field :notation, :maxlength => '5' %> or... <br/>
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
-    <%= f.hidden_field :match_id, :value => match_id %>
-    <!-- Move: <span id="new_move_notation"></span -->
+    <%= f.hidden_field :match_id, :value => match_id %><br/>
     <%= submit_tag "Submit Move", :id => 'move_submit_btn', :disabled => !your_turn %>
     <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
