@@ -1,10 +1,11 @@
 
 function handle_release_of_piece(draggable, droparea){
+
+   var origSquare = draggable.parentNode;
+
    //for now release it in the DOM, moving it
    $('move_from_coord').value = draggable.parentNode.id;
    $('move_to_coord').value = droparea.id;
-
-   var origSquare = draggable.parentNode;
 
    origSquare.removeChild(draggable);
    origSquare.innerHTML = '&nbsp;';
@@ -12,7 +13,7 @@ function handle_release_of_piece(draggable, droparea){
    droparea.innerHTML = '';
    droparea.appendChild(draggable);
 
+   //this should perhaps be an option but for ease of playability...
+   $('new_move_form').submit();
    
-   //todo: request the server notate this move
-
 }

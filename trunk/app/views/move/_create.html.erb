@@ -1,5 +1,7 @@
 
-
+<!-- form> 
+	<%= check_box_tag :auto_submit_move_ck, 1, :id => 'auto_submit_move_ck', :title => 'Auto submit dropped moves' %> Auto submit dropped moves
+</form -->
 <% form_for :move,  :html => {:id => 'new_move_form'}, :url => {:controller => 'move', :action => 'create'}  do |f| %>
     <%= f.text_field :from_coord %>
     <%= f.hidden_field :match_id, :value => match_id %>
