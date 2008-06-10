@@ -54,9 +54,4 @@ class MatchControllerTest < ActionController::TestCase
 	assert_response 200
   end
 
-  def test_notates_basic_move
-	get :notate_move, { :move=>{ :match_id => matches(:dean_vs_maria), :from_coord => 'd2', :to_coord => 'd4' } }, {:player_id => players(:dean).id}
-	assert_response 200
-  end	
-
 end

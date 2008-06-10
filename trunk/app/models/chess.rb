@@ -1,23 +1,13 @@
 class Chess 	
 
-	@@files = "abcdefgh"
-	@@ranks = "12345678"
-
-	def self.files
-		@@files
-	end
-	def self.ranks
-		@@ranks
-	end
-	def self.maximum_move_length
-		8	
-	end
+	Files = "abcdefgh"
+	Ranks = "12345678"
 
 	def self.valid_position?(pos)
 		return false if !pos
 		return false if pos.length != 2
-		return false if ! @@files.include? pos[0]
-		return false if ! @@ranks.include? pos[1]
+		return false if ! Files.include? pos[0]
+		return false if ! Ranks.include? pos[1]
 		
 		true
 	end

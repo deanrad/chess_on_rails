@@ -23,7 +23,6 @@ match_controller should:
  - creates new match opponent as black
  - gets match status
  - gets list of active matches
- - notates basic move
 
 move_controller should:
  - reject move made without coordinates
@@ -52,7 +51,6 @@ board should:
  - pawn can advance one or two on first move
  - pawn can only advance one on successive moves
  - pawn diagonal captures possible accounting for ends
- - longest move in chess is 8 units
  - piece cannot move off edge of board
  - knight has more moves in the center
  - knows what side occupies a square

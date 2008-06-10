@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class BoardTest < ActiveSupport::TestCase
-	# Replace this with your real tests.
-	def test_truth
-		assert true
-	end
 	
 	def test_new_match_gets_an_initial_board
 		m1 = matches(:unstarted_match)
@@ -77,11 +73,7 @@ class BoardTest < ActiveSupport::TestCase
 		['f6','d6'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
 		assert_equal 4, moves.length
 	end
-	
-	def test_longest_move_in_chess_is_8_units
-		assert_equal 8, Chess::maximum_move_length
-	end
-	
+		
 	def test_piece_cannot_move_off_edge_of_board
 		edge_pawn = Piece.new(:white, :a_pawn)
 		edge_pawn.position='a2'

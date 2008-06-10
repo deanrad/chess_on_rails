@@ -24,8 +24,8 @@ class MatchController < ApplicationController
 	end
 
 	def set_view_variables
-		@files = Chess.files
-		@ranks = Chess.ranks.reverse
+		@files = Chess::Files
+		@ranks = Chess::Ranks.reverse
 
 		@viewed_from_side = (@current_player == @match.player1) ? :white : :black
 		@your_turn = @match.turn_of?( @current_player )
@@ -55,11 +55,6 @@ class MatchController < ApplicationController
 		@last_move = @match.moves.last
 	end
 
-	def notate_move
-		move = Move.new( params[:move] ) 
-		render :text => move.notate
-	end
-	
 	# GET /match/new
 	def new
 		#gets form for creating one with defaults
@@ -69,9 +64,7 @@ class MatchController < ApplicationController
 
 	def resign
 		@match = Match.find( params[:id] )
-
 		@match.resign( @current_player )
-
 		@match.save!
 
 		redirect_to :action => 'index'

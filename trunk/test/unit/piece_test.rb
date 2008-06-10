@@ -2,19 +2,16 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class PieceTest < ActiveSupport::TestCase
 
-	# Replace this with your real tests.
-	def test_truth
-		assert true
+	require 'Enumerable' 
+
+	def test_nodoc_does_cartesian_product
+		assert_equal [ [1,1], [1,2] ], [1].cartesian( [1,2] )
+		assert_equal [ [1,3], [1,4], [2,3], [2,4] ], [1,2].cartesian( [3,4] )
 	end
-	
+
 	def test_recognize_valid_piece_types
 		p = Piece.new(:white, :queens_knight)
-		
 		p = Piece.new(:black, :a_pawn)
-		
-		#assert_raises ArgumentError do
-		#	p = Piece.new(:black, :mamas_jamas)
-		#end
 	end
 	
 	def test_recognize_queen_vs_kings_bishop
@@ -39,7 +36,6 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 'a', p.file
 		assert_equal '2', p.rank
 		assert_equal 'a2', p.position
-		
 	end
 	
 	def test_has_a_notation_for_king_and_queen
@@ -50,11 +46,11 @@ class PieceTest < ActiveSupport::TestCase
 	def test_has_a_notation_for_minor_and_rook
 		p1 = Piece.new(:white, :queens_rook)
 		p1.position = 'a1'
-		assert_equal 'Ra', p1.notation
+		assert_equal 'R', p1.notation
 		
 		p1 = Piece.new(:white, :queens_knight)
 		p1.position = 'c3'
-		assert_equal 'Nc', p1.notation
+		assert_equal 'N', p1.notation
 		
 		#p1.file = nil
 		#assert_equal 'N', p1.notation
@@ -87,7 +83,7 @@ class PieceTest < ActiveSupport::TestCase
 		assert p.theoretical_moves.include?('d5')
 		assert p.theoretical_moves.include?('d6')
 		
-		assert_equal 14, p.theoretical_moves.length, "#{p.theoretical_moves.to_s}"
+		assert_equal 14, p.theoretical_moves.length, "Theoretical moves were #{p.theoretical_moves.to_s}"
 	end
 	
 	def test_rook_has_four_lines_of_attack
@@ -131,6 +127,7 @@ class PieceTest < ActiveSupport::TestCase
 	end
 
 	def test_queen_and_bishop_can_move_when_queens_pawn_moved
+		#rewinds board to move 2
 		b = matches(:dean_vs_paul).board(2)
 
 		#the bishop
