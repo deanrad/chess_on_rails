@@ -22,9 +22,9 @@ class Board
 		end
 		
 		@match.moves[0..@as_of_move-1].each do |m|
-	
-			#kill any existing piece we're moving onto
-			@pieces.reject!{ |p| p.position == m.to_coord }	
+
+			#kill any existing piece we're moving onto or capturing enpassant
+			@pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
 
 			#move to that square
 			@pieces.each{ |p| p.position = m.to_coord if p.position==m.from_coord }
@@ -58,11 +58,6 @@ class Board
 		return (p.side == side)
 	end
 
-	def num_active_pieces
-		return 0 if ! @pieces
-		@pieces.length
-	end
-
 	def sister_piece_of( piece )
 		p = @pieces.find { |p| (p.side == piece.side) && (p.piece_type == piece.piece_type ) && (p.type != piece.type) }
 	end
@@ -75,5 +70,23 @@ class Board
 			return true if attacker.allowed_moves( self ).include?( king_to_check.position )
 		end
 		return false
+	end
+
+	def is_en_passant_capture?( from_coord, to_coord ) 
+
+		to_rank, to_file = to_coord[1].chr, to_coord[0].chr
+		side = piece_at( from_coord ).side 
+
+		capture_rank, advanced_pawn_rank, original_pawn_rank = (side==:white) ? %w{ 6 5 7 } : %w{ 3 4 2 }
+		possible_advanced_pawn = piece_at( to_file + advanced_pawn_rank )
+
+		#if behind a pawn
+		if (to_rank == capture_rank) && possible_advanced_pawn && (possible_advanced_pawn.piece_type=='pawn') 
+			#and that pawn was doubly (not singly) advanced
+			@match.moves.find_by_from_coord_and_to_coord( ( to_file + original_pawn_rank ) , possible_advanced_pawn.position ) != nil
+		else
+			return false
+		end
+
 	end
 end

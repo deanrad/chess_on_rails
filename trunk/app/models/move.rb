@@ -23,6 +23,10 @@ class Move < ActiveRecord::Base
 		[from_coord, to_coord].each do |coord|
 			raise ArgumentError, "#{coord} is not a valid coordinate" if ! Chess.valid_position?( coord )
 		end
+
+		if match.board.is_en_passant_capture?( from_coord, to_coord )
+			self[:captured_piece_coord] = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
+		end
 	end
 
 	def notate
@@ -49,13 +53,13 @@ class Move < ActiveRecord::Base
 		
 		piece_moved_upon  = match.board(:current).piece_at( to_coord )
 		
-		if piece_moved_upon && (piece_moving.side != piece_moved_upon.side)
+		if piece_moved_upon && (piece_moving.side != piece_moved_upon.side) || this_board.is_en_passant_capture?( from_coord, to_coord )
 			mynotation += "x" 
 			captured = true
 		end
-		
+
 		#destination square
-		if( piece_moving.type.to_s.include?("pawn") && !captured )
+		if( (piece_moving.piece_type=='pawn') && !captured )
 			mynotation += to_coord[1].chr
 		else
 			mynotation += to_coord

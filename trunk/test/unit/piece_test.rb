@@ -141,9 +141,33 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 2, queen.allowed_moves(b).length
 
 	end
+
 	def test_image_names_abstract_away_irrelevant_details
 		assert_equal 'rook_b', Piece.new(:black, :queens_rook, 'a8').img_name
 		assert_equal 'pawn_w', Piece.new(:white, :b_pawn, 'b2').img_name
 	end	
-	
+
+	def test_pawn_can_capture_en_passant
+		m = matches(:unstarted_match)
+		m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'a5')
+		m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
+
+		b = m.board(:current)
+		assert b.is_en_passant_capture?( 'e5', 'd6' )
+		assert_equal ['e6','d6'], b.piece_at('e5').allowed_moves(b)
+
+		m.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
+		
+		assert_equal 'd5', m.moves.last.captured_piece_coord
+		assert_nil m.board(:current).piece_at('d5') 
+	end	
+
+	def test_pawn_en_passant_not_possible_for_single_stepped_opponent_pawn
+		m = matches(:unstarted_match)
+		m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'd6')
+		m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
+
+		b = m.board(:current)
+		assert_equal ['e6'], b.piece_at('e5').allowed_moves(b)
+	end	
 end

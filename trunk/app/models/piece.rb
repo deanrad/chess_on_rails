@@ -92,20 +92,20 @@ class Piece
 				file_unit, rank_unit = line_of_attack
 				
 				(1..8).each do |length|
-					if line_worth_following
-						pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
-						if( Chess.valid_position?( pos ) )
-							if( @side == board.side_occupying(pos) )
-								# ran into your own piece- disregard this line
-								line_worth_following = false
-							elsif ( board.side_occupying(pos) == nil )
-								m << pos
-							else
-								#ran into opponents piece -this is the last position you can occupy on this line
-								m << pos
-								line_worth_following = false
-							end
-						end
+					
+					pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+					next unless line_worth_following
+					next unless Chess.valid_position?( pos ) 
+
+					if( @side == board.side_occupying(pos) )
+						# ran into your own piece- disregard this line
+						line_worth_following = false
+					elsif ( board.side_occupying(pos) == nil )
+						m << pos
+					else
+						#ran into opponents piece -this is the last position you can occupy on this line
+						m << pos
+						line_worth_following = false
 					end
 				end
 				
@@ -118,11 +118,20 @@ class Piece
 			
 			#for pawns 
 			if( @type.to_s.include?(:pawn.to_s) )
-				# exclude non-forward moves unless captures
-				m.reject! { |pos| (pos[0] != @position[0]) && ( board.side_occupying(pos) == nil ) }
+
+				# exclude non-forward moves unless captures or en_passant (6th and 3rd rank captures behind doubly advanced pawn)
+				m.reject! do |pos| 
+					#diagonals are excluded if empty (unless en passant)
+					if (pos[0] != @position[0]) 
+						(board.side_occupying(pos) == nil) && ! board.is_en_passant_capture?( @position, pos )
+					else
+					#exclude the straight move if square occupied
+						board.side_occupying(pos) != nil 
+					end
+				end
 				
 				# exclude forward moves if blocked 
-				m.reject! { |pos| (pos[0] == @position[0]) && ( board.side_occupying(pos) != nil ) }
+				#m.reject! { |pos| (pos[0] == @position[0]) && ( board.side_occupying(pos) != nil ) }
 			end
 
 			if( piece_type=="king")

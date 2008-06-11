@@ -6,7 +6,7 @@ class BoardTest < ActiveSupport::TestCase
 		m1 = matches(:unstarted_match)
 		board = m1.initial_board
 		
-		assert_equal 32, board.num_active_pieces
+		assert_equal 32, board.pieces.length
 		
 		#havent enabled move replay just yet
 		#assert_equal :current, board.as_of_move
@@ -142,7 +142,6 @@ class BoardTest < ActiveSupport::TestCase
 	def test_detects_moved_piece
 		match = matches(:unstarted_match)
 		assert_not_nil match.initial_board
-		assert_equal 32, match.initial_board.num_active_pieces
 		
 		assert_nil match.initial_board.piece_at("d4")
 		match.moves << Move.new( :from_coord=>"d2", :to_coord=>"d4", :notation=>"d4", :moved_by=>1 )
