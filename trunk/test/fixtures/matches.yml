@@ -37,3 +37,8 @@ queenside_castled:
    id: 7
    player1: 5
    player2: 1
+
+scholars_mate:
+   id: 8
+   player1: 5
+   player2: 1

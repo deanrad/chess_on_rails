@@ -20,18 +20,25 @@ unstarted_match:
    player1: 2
    player2: 3
 
-endgame:
+castled:
    id: 5
    player1: 3
    player2: 1
 
-chris_vs_dean:
+resigned:
    id: 6
+   player1: 3
+   player2: 1
+   active: 0
+   result: Resigned
+   winning_player: 3
+
+queenside_castled:
+   id: 7
    player1: 5
    player2: 1
 
-jack_vs_dean:
-   id: 7
-   player1: 6
+scholars_mate:
+   id: 8
+   player1: 5
    player2: 1
-   

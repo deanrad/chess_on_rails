@@ -24,3 +24,9 @@ match_id, moved_by, from_coord, to_coord, notation, castled
 7, 2, d8, d6, Qd6
 7, 1, b1, d2, Nd2
 7, 2, b8, c6, Nc6
+8, 1, e2, e4, e4
+8, 2, b8, c6, Nc6
+8, 1, f1, c4, Bc4 
+8, 2, e7, e5, e5 
+8, 1, d1, f3, Qf3
+8, 2, f8, c5, Bc5

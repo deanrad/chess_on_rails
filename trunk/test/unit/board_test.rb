@@ -184,4 +184,40 @@ class BoardTest < ActiveSupport::TestCase
 		match.moves << ck
 		assert_equal true, match.board.in_check?( :white ) #nope
 	end
+
+	def test_scholars_mate_capture_with_queen_is_checkmate
+		match = matches(:scholars_mate)
+		assert_equal 1, match.next_to_move
+		assert_equal 'queen', match.board.piece_at('f3').piece_type
+
+		#make the killer move
+		match.moves << Move.new( :notation => 'Qf7' )
+		#match.moves << Move.new( :from_coord => 'f3', :to_coord => 'f7' )
+
+		#king is in check
+		assert match.board.in_check?(:black)
+
+		#try and move out of check 
+		assert match.board.piece_at('e8').allowed_moves(match.board).include?('e7')
+		match.moves << Move.new( :from_coord => 'e8', :to_coord => 'e7' )
+
+		#but still in check
+		assert match.board.in_check?(:black)
+
+		#rewind
+		match.moves.last.destroy
+
+		# and face facts that it's over !!
+		assert match.board.in_checkmate?(:black), "Not in checkmate as expected"
+	end
+
+	def test_scholars_mate_capture_with_bishop_not_checkmate
+		match = matches(:scholars_mate)
+		match.moves << Move.new( :notation => 'Bxf7' )
+		assert match.board.in_check?(:black)
+
+		assert match.board.piece_at('e8').allowed_moves(match.board).include?('e7')
+		
+		assert !match.board.in_checkmate?( :black ), "Black in checkmate unexpectedly"
+	end
 end

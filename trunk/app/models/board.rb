@@ -64,6 +64,7 @@ class Board
 	
 	def in_check?( side )
 		king_to_check = @pieces.find{ |p| p.type==:king && p.side == side }
+		raise ArgumentError, "There should never be an absent #{side} king in array of #{@pieces.length} pieces" if ! king_to_check 
 		side_to_check = (side==:white) ? :black : :white
 
 		@pieces.select { |p| p.side == side_to_check}.each do |attacker|
@@ -75,9 +76,9 @@ class Board
 	def is_en_passant_capture?( from_coord, to_coord ) 
 
 		to_rank, to_file = to_coord[1].chr, to_coord[0].chr
-		side = piece_at( from_coord ).side 
+		return false unless p = piece_at( from_coord )
 
-		capture_rank, advanced_pawn_rank, original_pawn_rank = (side==:white) ? %w{ 6 5 7 } : %w{ 3 4 2 }
+		capture_rank, advanced_pawn_rank, original_pawn_rank = (p.side==:white) ? %w{ 6 5 7 } : %w{ 3 4 2 }
 		possible_advanced_pawn = piece_at( to_file + advanced_pawn_rank )
 
 		#if behind a pawn
@@ -88,5 +89,34 @@ class Board
 			return false
 		end
 
+	end
+
+	#simplest logic here - if theres a move you're allowed which gets you out of check, you're not in checkmate
+	#contrast with more intelligent Capture/Block/Evade strategy
+	def in_checkmate?( side )
+		return false if ! in_check?( side )
+	
+		way_out = false
+		@pieces.each do |p|
+			next if p.side != side
+			return false if way_out
+
+			p.allowed_moves(self).each do |mv|
+				#todo - lighter weight evaluation of next move - not touching db ideally
+				#wrapping in a transaction seems to lessen time to execute
+				Match.transaction do 
+					@match.moves << Move.new( :from_coord => p.position, :to_coord => mv )
+
+					@match.reload #reload match
+
+					way_out = true if !@match.board.in_check?( side )
+
+					@match.moves.last.destroy
+					@match.reload
+				end
+
+			end
+		end
+		return !way_out
 	end
 end
