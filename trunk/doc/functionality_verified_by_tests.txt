@@ -78,6 +78,7 @@ move should:
  - notates simple move
  - notates pawn moves correctly
  - notates white kingside castle correctly
+ - notates white queenside castle correctly
  - does not notate check if intervening piece blocks check
  - does notate check if no intervening piece blocks check
  - allows move from notation only

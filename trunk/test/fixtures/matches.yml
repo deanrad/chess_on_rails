@@ -32,3 +32,8 @@ resigned:
    active: 0
    result: Resigned
    winning_player: 3
+
+queenside_castled:
+   id: 7
+   player1: 5
+   player2: 1

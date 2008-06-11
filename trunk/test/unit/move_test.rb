@@ -46,6 +46,12 @@ class MoveTest < ActiveSupport::TestCase
 		assert_equal 'O-O', wc.notate
 	end
 
+	def test_notates_white_queenside_castle_correctly
+		match = matches(:queenside_castled)
+		wc = Move.new( :match_id => match.id, :from_coord => 'e1', :to_coord => 'c1', :moved_by => 1 ) 
+		assert_equal 'O-O-O', wc.notate
+	end
+
 	def test_does_not_notate_check_if_intervening_piece_blocks_check
 		match = matches(:dean_vs_paul)
 		ck = Move.new( :match_id => match.id, :from_coord => 'f1', :to_coord => 'b5' ) 
