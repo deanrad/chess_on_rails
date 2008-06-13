@@ -44,6 +44,11 @@ class MoveTest < ActiveSupport::TestCase
 		match = matches(:dean_vs_maria)
 		wc = Move.new( :match_id => match.id, :from_coord => 'e1', :to_coord => 'g1', :moved_by => 1 ) 
 		assert_equal 'O-O', wc.notate
+
+		match.moves << wc #calls validate and updates move
+		
+		assert_equal 'O-O', wc.notation
+		assert_equal 1, wc.castled
 	end
 
 	def test_notates_white_queenside_castle_correctly
@@ -72,7 +77,7 @@ class MoveTest < ActiveSupport::TestCase
 		assert_equal 'b5', match.moves.last.to_coord
 	end
 
-	def test_allows_move_from_notation_only_if_pawn
+	def test_allows_move_from_notation_only_pawn_version
 		match = matches(:dean_vs_paul)
 		match.moves << Move.new( :notation => 'a4' )
 
@@ -83,6 +88,7 @@ class MoveTest < ActiveSupport::TestCase
 	def test_detects_attempt_to_move_from_incorrect_notation
 		match = matches(:dean_vs_paul)
 
+		#models can raise errors, controllers ultimately should not
 		assert_raises ArgumentError do
 			match.moves << Move.new( :notation => 'Bb3' )
 		end
