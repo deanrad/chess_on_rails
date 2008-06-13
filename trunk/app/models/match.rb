@@ -1,9 +1,6 @@
 class Match < ActiveRecord::Base
 
-	SIDES = [
-		['White', '1'],
-		['Black', '2']
-	]
+	SIDES = [  ['White', '1'], ['Black', '2']  ]
 	
 	belongs_to :player1,	:class_name => 'Player', :foreign_key => 'player1'
 	belongs_to :player2,	:class_name => 'Player', :foreign_key => 'player2'
@@ -19,18 +16,21 @@ class Match < ActiveRecord::Base
 		return Board.new( self, Chess.initial_pieces, as_of_move ) 		
 	end
 	
-	# returns 2 or 1
-	def next_to_move
-		(moves.count & 1) + 1 	
+	def turn_of?( plyr )	
+		self.next_to_move == side_of(plyr)
 	end
 
-	def turn_of?( plyr )	
-		((plyr == player1) && (next_to_move==1)) || (plyr == player2) && (next_to_move==2)
+	def next_to_move
+		(moves.count & 1 == 0) ? :white : :black
 	end
-	
+
 	def side_of( plyr ) 
-		return :white if plyr == @player1
-		return :black if plyr == @player2
+		return :white if plyr == player1
+		return :black if plyr == player2
+	end
+
+	def opposite_side_of( plyr )
+		side_of(plyr) == :white ? :black : :white
 	end
 
 	def lineup

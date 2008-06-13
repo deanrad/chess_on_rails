@@ -187,7 +187,7 @@ class BoardTest < ActiveSupport::TestCase
 
 	def test_scholars_mate_capture_with_queen_is_checkmate
 		match = matches(:scholars_mate)
-		assert_equal 1, match.next_to_move
+		assert_equal :white, match.next_to_move
 		assert_equal 'queen', match.board.piece_at('f3').piece_type
 
 		#make the killer move

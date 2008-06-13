@@ -12,8 +12,6 @@ class Piece
 		:e_pawn=>'e', :f_pawn=>'f', :g_pawn=>'g', :h_pawn=>'h'
 	}
 	
-	#the allowed sides for the side instance accessor (and their shorthand)
-	#@@sides = {:white=>"W", :black=>"B"}
 	
 	def self.types
 		return @@types.keys
@@ -179,8 +177,6 @@ class Piece
 			calc_theoretical_moves_bishop
 		end
 		
-		#puts "\nLines of attack for piece #{self.to_s}:\t" + (self.lines_of_attack.join(','))
-
 		@moves.reject! { |pos| ! Chess.valid_position?( pos ) }
 		return @moves
 	end

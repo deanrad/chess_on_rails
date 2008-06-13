@@ -70,7 +70,7 @@ fbuser should:
 
 match should:
  - 32 pieces on chess initial board
- - noone to move defaults to player1
+ - first player to move is player1
  - next to move alternates sides
  - knows what side player is on
  - knows whose turn it is

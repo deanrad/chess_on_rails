@@ -5,20 +5,23 @@ class MatchTest < ActiveSupport::TestCase
 	def test_32_pieces_on_chess_initial_board
 		assert_equal 32, matches(:unstarted_match).initial_board.pieces.length
 	end
-	def test_noone_to_move_defaults_to_player1
-		m1 = matches(:dean_vs_maria)
-		assert_equal 1, m1.next_to_move
+
+	def test_first_player_to_move_is_player1
+		m1 = matches(:unstarted_match)
+		assert_equal 0, m1.moves.length
+		assert m1.turn_of?( m1.player1)
 	end
 
 	#tests related to game play
 	def test_next_to_move_alternates_sides
 		m1 = matches(:unstarted_match)
 		assert_equal 0, m1.moves.count
-		assert_equal 1, m1.next_to_move
+		assert m1.turn_of?( m1.player1 )
 		
 		m1.moves << Move.new(:from_coord=>"b2", :to_coord=>"c3", :moved_by=>1)
 		
-		assert_equal 2, m1.next_to_move
+		assert m1.turn_of?( m1.player2 )
+
 	end
 			
 	def test_knows_what_side_player_is_on
@@ -34,7 +37,8 @@ class MatchTest < ActiveSupport::TestCase
 	def test_knows_whose_turn_it_is
 		m1 = matches(:paul_vs_dean)
 		assert_equal 0, m1.moves.count
-		assert m1.turn_of?( players(:paul) )		
+
+		assert m1.turn_of?( players(:paul) )
 	end
 
 	def test_shows_lineup
