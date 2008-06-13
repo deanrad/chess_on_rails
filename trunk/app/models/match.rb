@@ -9,7 +9,7 @@ class Match < ActiveRecord::Base
 	belongs_to :player2,	:class_name => 'Player', :foreign_key => 'player2'
 	belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 	
-	has_many :moves, :order=>"created_at ASC"
+	has_many :moves, :order=>"created_at ASC" 
 	
 	def initial_board
 		return Board.new( self, Chess.initial_pieces, 0 )
@@ -19,9 +19,9 @@ class Match < ActiveRecord::Base
 		return Board.new( self, Chess.initial_pieces, as_of_move ) 		
 	end
 	
+	# returns 2 or 1
 	def next_to_move
-		#todo may have to be revised - is castling actually two moves ?
-		(moves.count & 1) + 1
+		(moves.count & 1) + 1 	
 	end
 
 	def turn_of?( plyr )	
@@ -42,5 +42,5 @@ class Match < ActiveRecord::Base
 		write_attribute :active, 0
 		write_attribute :winning_player, (plyr==player1) ? player2.id : player1.id
 	end
-	
+
 end

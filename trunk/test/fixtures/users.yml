@@ -1,19 +1,28 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
  dean:
-   id: 1
-   email: chicagogrooves@gmail.com
+   id:      1
+   email:    chicagogrooves@gmail.com
    playing_as: 1
-   security_phrase_hint: Version of ChessMaster owned
    security_phrase: 9
-
  maria:
-   id: 2
-   email: maria_poulos@yahoo.com
+   id:      2
+   email:    maria_poulos@yahoo.com
    playing_as: 2
-   security_phrase:
-   
+   security_phrase: 3
  paul:
-   id: 3
-   email: paulfletter@gmail.com
+   id:      3
+   email:   paulfletter@gmail.com
    playing_as: 3
+   security_phrase: 4
+ rich:
+   id:      4
+   email:   bigns2000@comcast.net
+   playing_as: 4
+   security_phrase: 420
+ chris:
+   id:      5
+   email:   chrisg@compfriend.com
+   playing_as: 5
+   security_phrase: 1
+
