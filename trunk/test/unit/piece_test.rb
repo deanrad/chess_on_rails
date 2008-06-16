@@ -62,18 +62,6 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 'b', p1.notation
 	end
 		
-	def test_queen_moves_correctly
-		p = Piece.new(:white, :queen)
-		p.position= 'd4'
-		
-		assert p.theoretical_moves.include?('e5')
-		assert p.theoretical_moves.include?('a1')
-		assert p.theoretical_moves.include?('f2')
-		assert p.theoretical_moves.include?('g1')
-		assert p.theoretical_moves.include?('h8')
-		assert !p.theoretical_moves.include?('e6')
-	end
-	
 	def test_rook_moves_correctly
 		p = Piece.new(:white, :kings_rook)
 		p.position='d4'
@@ -104,6 +92,18 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 8, p.lines_of_attack.length
 	end
 
+	def test_queen_moves_correctly
+		p = Piece.new(:white, :queen)
+		p.position= 'd4'
+		
+		assert p.theoretical_moves.include?('e5')
+		assert p.theoretical_moves.include?('a1')
+		assert p.theoretical_moves.include?('f2')
+		assert p.theoretical_moves.include?('g1')
+		assert p.theoretical_moves.include?('h8')
+		assert !p.theoretical_moves.include?('e6')
+	end
+	
 	def test_kings_knights_pawns_have_no_lines_of_attack
 		k = Piece.new(:white, :king, 'h8')
 		n = Piece.new(:black, :knight, 'b2')
@@ -147,27 +147,4 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 'pawn_w', Piece.new(:white, :b_pawn, 'b2').img_name
 	end	
 
-	def test_pawn_can_capture_en_passant
-		m = matches(:unstarted_match)
-		m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'a5')
-		m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
-
-		b = m.board(:current)
-		assert b.is_en_passant_capture?( 'e5', 'd6' )
-		assert_equal ['e6','d6'], b.piece_at('e5').allowed_moves(b)
-
-		m.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
-		
-		assert_equal 'd5', m.moves.last.captured_piece_coord
-		assert_nil m.board(:current).piece_at('d5') 
-	end	
-
-	def test_pawn_en_passant_not_possible_for_single_stepped_opponent_pawn
-		m = matches(:unstarted_match)
-		m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'd6')
-		m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
-
-		b = m.board(:current)
-		assert_equal ['e6'], b.piece_at('e5').allowed_moves(b)
-	end	
 end

@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
+#The board has the 
 class BoardTest < ActiveSupport::TestCase
 	
 	def test_new_match_gets_an_initial_board
@@ -14,25 +15,20 @@ class BoardTest < ActiveSupport::TestCase
 	
 	def test_board_can_refer_to_move_number_or_refer_to_current_move
 		m1 = matches(:unstarted_match)
-		m1.moves << Move.new(:from_coord=>"d2", :to_coord=>"d4", :moved_by=>1, :notation=>"d4")
-		m1.moves << Move.new(:from_coord=>"e7", :to_coord=>"e5", :moved_by=>2, :notation=>"e5")
+		m1.moves << Move.new(:from_coord=>'d2', :to_coord=>'d4', :moved_by=>1, :notation=>'d4')
+		m1.moves << Move.new(:from_coord=>'e7', :to_coord=>'e5', :moved_by=>2, :notation=>'e5')
 		m1.save
 		
 		assert_not_nil m1.board(0)
 		assert_not_nil m1.board(1)
 		assert_not_nil m1.board(2)
-		
-		#doesnt yet - havent enabled replay ability yet
-		#assert_raises ArgumentError do
-		#	g = m1.board(3)
-		#end
 	end
 
 	def test_knows_a_valid_location_and_distinguishes_between_invalid_one
-		assert    Chess.valid_position?("a1")
-		assert  ! Chess.valid_position?("n9")
-		assert  ! Chess.valid_position?("a9")
-		assert  ! Chess.valid_position?("1a")
+		assert    Chess.valid_position?('a1')
+		assert  ! Chess.valid_position?('n9')
+		assert  ! Chess.valid_position?('a9')
+		assert  ! Chess.valid_position?('1a')
 	end
 	
 	def test_pawn_can_advance_one_or_two_on_first_move
@@ -111,8 +107,8 @@ class BoardTest < ActiveSupport::TestCase
 	end 
 	
 	def test_knows_what_piece_is_on_a_square
-		assert_nil matches(:unstarted_match).initial_board.piece_at("d4")
-		p1 = matches(:unstarted_match).initial_board.piece_at("b2")
+		assert_nil matches(:unstarted_match).initial_board.piece_at('d4')
+		p1 = matches(:unstarted_match).initial_board.piece_at('b2')
 		assert_not_nil p1
 		
 		assert_equal :b_pawn, p1.type
@@ -123,19 +119,8 @@ class BoardTest < ActiveSupport::TestCase
 		match = matches(:unstarted_match)
 		assert_not_nil match.initial_board
 		
-		#todo - get equality working at this level...
-		#assert_equal match.initial_board, match.board(0)
-		#assert_equal match.board(0), match.board #current board
-		
-		match.moves << Move.new( :from_coord=>"d2", :to_coord=>"d4", :notation=>"d4", :moved_by=>1 )
+		match.moves << Move.new( :from_coord=>'d2', :to_coord=>'d4', :notation=>'d4', :moved_by=>1 )
 		match.save!
-
-		#assert_not_equal match.board(0), match.board #current board
-		#assert_equal match.board(1), match.board
-				
-		#assert_raises ArgumentError do
-		#	b = match.board(2)	
-		#end
 		
 	end
 	
@@ -143,12 +128,11 @@ class BoardTest < ActiveSupport::TestCase
 		match = matches(:unstarted_match)
 		assert_not_nil match.initial_board
 		
-		assert_nil match.initial_board.piece_at("d4")
-		match.moves << Move.new( :from_coord=>"d2", :to_coord=>"d4", :notation=>"d4", :moved_by=>1 )
+		assert_nil match.initial_board.piece_at('d4')
+		match.moves << Move.new( :from_coord=>'d2', :to_coord=>'d4', :notation=>'d4', :moved_by=>1 )
 		match.save!
 		
-		assert_not_nil match.board.piece_at("d4")
-		
+		assert_not_nil match.board.piece_at('d4')
 	end
 
 	def test_castled_short_white_king_on_g1
@@ -178,8 +162,8 @@ class BoardTest < ActiveSupport::TestCase
 
 	def test_knows_if_side_is_in_check
 		match = matches(:dean_vs_paul)
-		ck = Move.new( :match_id => match.id, :from_coord => "f8", :to_coord => "b4" ) 
-		assert_equal "Bb4+", ck.notate
+		ck = Move.new( :match_id => match.id, :from_coord => 'f8', :to_coord => 'b4' ) 
+		assert_equal 'Bb4+', ck.notate
 		
 		match.moves << ck
 		assert_equal true, match.board.in_check?( :white ) #nope
@@ -192,7 +176,6 @@ class BoardTest < ActiveSupport::TestCase
 
 		#make the killer move
 		match.moves << Move.new( :notation => 'Qf7' )
-		#match.moves << Move.new( :from_coord => 'f3', :to_coord => 'f7' )
 
 		#king is in check
 		assert match.board.in_check?(:black)
@@ -220,4 +203,28 @@ class BoardTest < ActiveSupport::TestCase
 		
 		assert !match.board.in_checkmate?( :black ), "Black in checkmate unexpectedly"
 	end
+
+	def test_pawn_can_capture_en_passant
+		m = matches(:unstarted_match)
+		m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'a5')
+		m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
+
+		b = m.board(:current)
+		assert b.is_en_passant_capture?( 'e5', 'd6' )
+		assert_equal ['e6','d6'], b.piece_at('e5').allowed_moves(b)
+
+		m.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
+		
+		assert_equal 'd5', m.moves.last.captured_piece_coord
+		assert_nil m.board(:current).piece_at('d5') 
+	end	
+
+	def test_pawn_en_passant_not_possible_for_single_stepped_opponent_pawn
+		m = matches(:unstarted_match)
+		m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'd6')
+		m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
+
+		b = m.board(:current)
+		assert_equal ['e6'], b.piece_at('e5').allowed_moves(b)
+	end	
 end
