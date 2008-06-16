@@ -64,6 +64,8 @@ board should:
  - knows if side is in check
  - scholars mate capture with queen is checkmate
  - scholars mate capture with bishop not checkmate
+ - pawn can capture en passant
+ - pawn en passant not possible for single stepped opponent pawn
 
 fbuser should:
  - can install hitherto unknown user
@@ -79,12 +81,13 @@ match should:
 
 move should:
  - unstarted match has no moves
- - notates simple move
- - notates pawn moves correctly
+ - notates noncapturing knight move
+ - pawn cannot move two initially if blocked
+ - notates noncapturing pawn moves correctly
  - notates white kingside castle correctly
  - notates white queenside castle correctly
+ - notates check if no intervening piece blocks check
  - does not notate check if intervening piece blocks check
- - does notate check if no intervening piece blocks check
  - allows move from notation only
  - allows move from notation only pawn version
  - detects attempt to move from incorrect notation
@@ -96,17 +99,15 @@ piece should:
  - has a notation for king and queen
  - has a notation for minor and rook
  - has a notation for pawn
- - queen moves correctly
  - rook moves correctly
  - rook has four lines of attack
  - bishop has four lines of attack
  - queen has eight lines of attack
+ - queen moves correctly
  - kings knights pawns have no lines of attack
  - rook can move nowhere on initial board
  - queen and bishop can move when queens pawn moved
  - image names abstract away irrelevant details
- - pawn can capture en passant
- - pawn en passant not possible for single stepped opponent pawn
 
 player should:
  - can be created

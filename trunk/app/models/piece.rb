@@ -122,9 +122,10 @@ class Piece
 					#diagonals are excluded if empty (unless en passant)
 					if (pos[0] != @position[0]) 
 						(board.side_occupying(pos) == nil) && ! board.is_en_passant_capture?( @position, pos )
+					elsif (board.side_occupying(pos) != nil) 
+						true
 					else
-					#exclude the straight move if square occupied
-						board.side_occupying(pos) != nil 
+						((@position[1].chr=='2')&&(board.side_occupying(@position[0].chr+'3') != nil)) || ((@position[1].chr=='7')&&(board.side_occupying(@position[0].chr+'6') != nil))
 					end
 				end
 				

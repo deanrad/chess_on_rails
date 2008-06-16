@@ -1,11 +1,15 @@
 class Move < ActiveRecord::Base
 	belongs_to :match
 
+	attr_accessor :side
+
 	NOTATION_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
 
+	#stuff here depends on knowledge of the board's position prior to the move being committed
+	# this should be considered a before-save function and maybe validate is not exactly the best place
 	def validate
 		errors.add(:match, 'You have not specified which match.') and raise ArgumentError, 'No match' if ! match
-		errors.add(:active, 'You cannot make a move for an inactive match, silly !') if ! match.active
+		errors.add(:active, 'You cannot make a move for an inactive match, silly !') if match.active != 1
 
 		if( notation && (!from_coord || !to_coord || from_coord.empty? || to_coord.empty? ))
 			self[:to_coord] =  notation.to_s[-2,2]
@@ -45,11 +49,7 @@ class Move < ActiveRecord::Base
 			sister_piece = this_board.sister_piece_of(piece_moving)
 			if( sister_piece != nil && sister_piece.allowed_moves(this_board).include?(to_coord) )
 				#prefer using file to disambiguate but use rank if file insufficient
-				if ( piece_moving.file != sister_piece.file)
-					mynotation += piece_moving.file
-				else
-					mynotation += piece_moving.rank
-				end
+				mynotation += ( piece_moving.file != sister_piece.file) ? piece_moving.file : piece_moving.rank
 			end
 		end
 		
@@ -68,11 +68,10 @@ class Move < ActiveRecord::Base
 		end
 		
 		#castling
-		if ( piece_moving.piece_type=='king')
-			if( from_coord[0].chr=='e' && to_coord[0].chr=='g')
+		if ( piece_moving.piece_type=='king' && from_coord[0].chr=='e')
+			if(  to_coord[0].chr=='g')
 				mynotation='O-O'
-			end
-			if( from_coord[0].chr=='e' && to_coord[0].chr=='c')
+			elsif( to_coord[0].chr=='c' )
 				mynotation='O-O-O'
 			end
 		end

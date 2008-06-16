@@ -44,18 +44,15 @@ class Board
 	def piece_at(pos)
 		p = @pieces.find { |piece| piece.position == pos }
 	end
-	
+
+	def [] ( pos ) 
+		piece_at(pos)
+	end
+
 	def side_occupying(pos)
 		p = @pieces.find { |p|  p.position == pos }
 		return nil if !p 
 		return p.side
-	end
-
-	def position_occupied_by?(pos, side)
-		p = @pieces.find { |p|  p.position == pos }
-		
-		return false if ! p
-		return (p.side == side)
 	end
 
 	def sister_piece_of( piece )
@@ -64,7 +61,7 @@ class Board
 	
 	def in_check?( side )
 		king_to_check = @pieces.find{ |p| p.type==:king && p.side == side }
-		raise ArgumentError, "There should never be an absent #{side} king in array of #{@pieces.length} pieces" if ! king_to_check 
+
 		side_to_check = (side==:white) ? :black : :white
 
 		@pieces.select { |p| p.side == side_to_check}.each do |attacker|

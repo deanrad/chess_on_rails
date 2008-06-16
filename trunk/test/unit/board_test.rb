@@ -100,10 +100,8 @@ class BoardTest < ActiveSupport::TestCase
 		board = matches(:unstarted_match).initial_board
 				
 		assert_equal :white, board.side_occupying('a2')
-		assert !board.position_occupied_by?( 'a2', :black )
 		
-		assert board.position_occupied_by?( 'e7', :black )
-		assert !board.position_occupied_by?( 'e7', :white )
+		assert :black, board.side_occupying( 'e7' )
 	end 
 	
 	def test_knows_what_piece_is_on_a_square
