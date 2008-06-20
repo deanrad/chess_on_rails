@@ -10,6 +10,6 @@ if @status_has_changed
 
 	if @match.result.include?('Checkmate')
 		page.alert('It appears your opponent has gotten the best of you today. Checkmate !')
-		page.redirect_to :action => 'index'
+		page.redirect_to '../'
 	end
 end

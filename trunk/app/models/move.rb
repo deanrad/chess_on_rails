@@ -18,7 +18,7 @@ class Move < ActiveRecord::Base
 			type = NOTATION_MAP[ notation[0,1] ] ? NOTATION_MAP[ notation[0,1] ] : 'pawn'
 
 			p = match.board.pieces.find{ |p| p.side == side && p.piece_type == type && p.allowed_moves(match.board).include?( self[:to_coord] ) }
-			raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board or ambigous move #{notation}" if !p 
+			raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board or ambiguous move #{notation}" if !p 
 			self[:from_coord] = p.position
 		end
 

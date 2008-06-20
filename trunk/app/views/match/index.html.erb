@@ -16,7 +16,12 @@ Hi. Welcome, <%= @current_player.name %>.
 <% @current_player.completed_matches.each do |m| %>
 	<li>
 		<%= link_to m.lineup, "#{m.id}/show" %> 
-		(<%=  m.result %>)
+		(<%=  m.result %> 
+<% if m.winning_player %>
+<%= ", Winner: #{m.winning_player == @current_player ? 'You' : m.winning_player.name}" %> 
+<% end %>
+		)
+
 	</li>
 <% end%>
 </ul>	
