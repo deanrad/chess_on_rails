@@ -1,10 +1,11 @@
-Hello from facebooker <br/><br/>
+<h3>Welcome to En Passant !</h3>
 
-Me: <%= @userF %> <br/>
 
-My chess handle: <%= @current_player.name %> <br/>
+You are: <%= @userF %> <%= fb_profile_pic(@userF) %>
+<br/>
 
-<%= link_to 'My chess games', '../match/'  %> <br/>
+Your chess nickname will be: <%= @current_player.name %> (You will be able to change this later)<br/>
 
-<%= fb_profile_pic(@userF) %>
+<h3><%= link_to 'Go to my Chess games', '../match/'  %></h3>
+
 
