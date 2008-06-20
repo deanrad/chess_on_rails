@@ -4,7 +4,7 @@ body {font-family: Arial; font-size: 10pt;}
 #new_move_form { font-size: 10pt; }
 #match_ender { font-size: 10pt; }
 #move_indicator { font-family: Times New Roman, serif; font-size: 12pt; }
-
+#move_error { color: #ff4444 }
 #board_table { border-width: 1px; border-style:solid; border-color:black; }
 
 #board_table .rank {width:20px; }
