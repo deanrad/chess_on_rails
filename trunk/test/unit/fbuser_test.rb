@@ -12,4 +12,12 @@ class FbuserTest < ActiveSupport::TestCase
 		assert_equal "Facebook #{fb_user_id}", fb.playing_as.name
 	end
 
+	def test_can_update_name_after_signing_in
+		fb_user_id = 31415926
+		assert_nil Fbuser.find_by_facebook_user_id( fb_user_id )
+		fb = Fbuser.install( fb_user_id )
+		
+		fb.name = 'Deano'
+		assert_equal 'Deano', fb.reload.playing_as.name
+	end
 end

@@ -11,4 +11,12 @@ class Fbuser < ActiveRecord::Base
 		fb = Fbuser.create( :facebook_user_id => fb_user_id, :playing_as => p )
 
 	end
+
+	def name= ( name )
+		playing_as.name = name
+		playing_as.save!
+	end
+	def name
+		playing_as.name
+	end
 end
