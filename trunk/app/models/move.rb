@@ -11,20 +11,26 @@ class Move < ActiveRecord::Base
 		errors.add(:match, 'You have not specified which match.') and raise ArgumentError, 'No match' if ! match
 		errors.add(:active, 'You cannot make a move for an inactive match, silly !') if match.active != 1
 
+		side = match.next_to_move
+
 		if( notation && (!from_coord || !to_coord || from_coord.empty? || to_coord.empty? ))
 			self[:to_coord] =  notation.to_s[-2,2]
 
-			side = match.next_to_move
 			type = NOTATION_MAP[ notation[0,1] ] ? NOTATION_MAP[ notation[0,1] ] : 'pawn'
 
 			p = match.board.pieces.find{ |p| p.side == side && p.piece_type == type && p.allowed_moves(match.board).include?( self[:to_coord] ) }
 			raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board or ambiguous move #{notation}" if !p 
+
 			self[:from_coord] = p.position
 		end
+
 
 		[from_coord, to_coord].each do |coord|
 			raise ArgumentError, "#{coord} is not a valid coordinate" if ! Chess.valid_position?( coord )
 		end
+
+		p = match.board.pieces.find{ |p| (p.position == from_coord) && p.allowed_moves(match.board).include?( to_coord ) }
+		raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board or ambiguous move #{notation}" if !p 
 
 		if match.board.is_en_passant_capture?( from_coord, to_coord )
 			self[:captured_piece_coord] = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )

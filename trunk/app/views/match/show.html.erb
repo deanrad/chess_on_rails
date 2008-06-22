@@ -6,42 +6,37 @@
 Hi. Welcome, <%= @current_player.name %>.<br/>
 
 <div class="instructions">
-Instructions: 1) Use Firefox if possible. 2) Either move by drag and drop (Firefox only), or enter the from and to coordinates 
-in the boxes and then Submit Move. Or you can enter the chess notation of the move. To castle drag king two squares toward edge
-or enter Kg1 for example. As soon as you drop a piece, the move is submitted. Takebacks are not enabled yet - I wouldn't give them to you in a live game anyway !! :)
+Instructions: Either move by drag and drop (limited browser support), or enter the from and to coordinates 
+in the boxes and then Submit Move. You can also enter the chess notation of the move. To castle drag king two squares toward edge
+or enter Kg1 for example. As soon as you drop a piece, the move is submitted. Takebacks are not enabled yet -
+I wouldn't give them to you in a live game anyway !! :)
 </div>
 
 <br/>
 
-<%= periodically_call_remote(:method => 'get', :frequency => 10, :url => {:id => @match.id, :action => 'status' })  %>
+<%= periodically_call_remote(:method => 'get', :frequency => 5, :url => {:id => @match.id, :action => 'status' })  %>
 
 <span id="move_indicator_parent">
 <%= render :partial => "move_indicator", :locals => {:your_turn => @your_turn} %>
 </span>
 
-<!-- these dont work however render_component does -->
 
-<table width="100%" border="0">
-<tr>
-<td width="520">
-<span id="board_parent">
+
+<div id="board_parent" style="float:left">
 <%= render :partial => "board/physical", :locals => { :ranks => @ranks, :files => @files, :board => @board } %>
-</span>
-</td>
-<td valign="top" align="left">
+</div>
 
+<div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">
 <div id="move_creator_parent">
 <%= render :partial => "move/create", :locals => {:match_id => @match.id, :your_turn => @your_turn} %>
 <%= render :partial => "match/ender" %>
 </div>
 
-<div id="move_list" style="border:solid 1px black; width:180px; height:350px; font-family:Courier New, Courier; font-size:10pt">
+<div id="move_list" style="border:solid 1px black; width:180px; height:300px; overflow:auto; font-family:Courier New, Courier; font-size:10pt">
 <%= render :partial => 'move_list' %>
 </div>
 
-</td>
-</tr>
-</table>
+</div>
 
 
 

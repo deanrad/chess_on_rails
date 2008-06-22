@@ -3,6 +3,7 @@ class MoveController < ApplicationController
 	rescue_from ArgumentError, :with => :display_error
 	
 	before_filter :authorize
+	before_filter :move_params_check, :only => :create
 
 	#accessible via get or post but should be idempotent on 2x get
 	def create
@@ -28,6 +29,12 @@ class MoveController < ApplicationController
 		end
 
 		redirect_to(:back) # this is not yet ajaxian, and no template's been written yet
+	end
+
+	def move_params_check
+		if (!params[:move][:notation].blank?) && ( !params[:move][:from_coord].blank? || !params[:move][:to_coord].blank? )
+			raise ArgumentError, "Please enter either a notation, or a from/to coordinate pair."
+		end
 	end
 
 	def display_error(ex)
