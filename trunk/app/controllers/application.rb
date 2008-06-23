@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
 	helper :all # include all helpers, all the time
 
+	#only use layout if not a facebook request - todo - standardize the 'is_facebook' test
 	layout proc{ |c| c.params[:fb_sig] ? false : "application" }
 		
 	def authorize

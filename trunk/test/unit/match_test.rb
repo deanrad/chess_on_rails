@@ -31,7 +31,7 @@ class MatchTest < ActiveSupport::TestCase
 		
 		assert_equal :white, m1.side_of( players(:paul) )
 		assert_equal :black, m1.side_of( players(:dean) )
-		
+		assert_equal :white, m1.opposite_side_of( players(:dean) )		
 	end
 
 	def test_knows_whose_turn_it_is

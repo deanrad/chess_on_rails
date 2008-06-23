@@ -9,7 +9,7 @@ class MoveControllerTest < ActionController::TestCase
 	
 	#todo - this, like other gameplay methods should not raise exceptions out of the controller
 	def test_reject_move_made_with_one_or_more_invalid_coordinates
-		post :create, {:move=>{ :from_coord => "e2", :to_coord => "x9", :match_id => 3 } }, {:player_id => 1}
+		post :create, {:move=>{ :from_coord => 'e2', :to_coord => 'x9', :match_id => 3 } }, {:player_id => 1}
 		assert_not_nil flash[:move_error]
 	end
 	
@@ -17,7 +17,7 @@ class MoveControllerTest < ActionController::TestCase
 		m = matches(:paul_vs_dean)
 		assert_equal 0, m.moves.length
 	
-		post :create, { :move=>{:from_coord => "a2", :to_coord => "a4", :match_id => m.id } }, {:player_id => m.player1.id}
+		post :create, { :move=>{:from_coord => 'a2', :to_coord => 'a4', :match_id => m.id } }, {:player_id => m.player1.id}
 		assert_response 302
 
 		assert_not_nil m.reload.moves.last.notation
@@ -25,7 +25,7 @@ class MoveControllerTest < ActionController::TestCase
 	end
 	
 	def test_errs_if_specified_match_not_there_or_active
-		post :create, { :move=>{:match_id=>9, :from_coord=>"e2", :to_coord=>"e4"} }, {:player_id => 1}
+		post :create, { :move=>{:match_id=>9, :from_coord=>'e2', :to_coord=>'e4'} }, {:player_id => 1}
 		assert_not_nil flash[:move_error]
 	end
 
@@ -33,7 +33,12 @@ class MoveControllerTest < ActionController::TestCase
 		m = matches(:paul_vs_dean)
 		assert_equal 0, m.moves.length
 
-		post :create, { :move=>{:match_id=>m.id, :from_coord=>"e2", :to_coord=>"e4"} }, {:player_id => players(:maria).id }
+		post :create, { :move=>{:match_id=>m.id, :from_coord=>'e2', :to_coord=>'e4'} }, {:player_id => players(:maria).id }
+		assert_not_nil flash[:move_error]
+	end
+
+	def test_reject_move_made_with_notation_and_one_or_more_coordinates
+		post :create, {:move=>{ :from_coord => 'e2', :to_coord => 'e4', :notation => 'e4', :match_id => 3 } }, {:player_id => 1}
 		assert_not_nil flash[:move_error]
 	end
 
@@ -41,7 +46,7 @@ class MoveControllerTest < ActionController::TestCase
 		m = matches(:paul_vs_dean)
 		assert_equal 0, m.moves.length
 
-		post :create, { :move=>{:match_id=>m.id, :from_coord=>"e2", :to_coord=>"e4"} }, {:player_id => players(:dean).id }
+		post :create, { :move=>{:match_id=>m.id, :from_coord=>'e2', :to_coord=>'e4'} }, {:player_id => players(:dean).id }
 		assert_not_nil flash[:move_error]
 	end
 

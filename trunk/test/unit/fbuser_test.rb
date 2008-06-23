@@ -19,5 +19,6 @@ class FbuserTest < ActiveSupport::TestCase
 		
 		fb.name = 'Deano'
 		assert_equal 'Deano', fb.reload.playing_as.name
+		assert_equal 'Deano', fb.name
 	end
 end

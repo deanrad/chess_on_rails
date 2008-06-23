@@ -12,7 +12,6 @@ authentication_controller should:
  - reject incorrect login
 
 fbuser_controller should:
- - facebook request is good as authenticated for known and mapped player
 
 match_controller should:
  - redirected to match listing page when resigning match
@@ -25,11 +24,11 @@ match_controller should:
  - gets list of active matches
 
 move_controller should:
- - reject move made without coordinates
  - reject move made with one or more invalid coordinates
  - accepts and notates move via coordinates
  - errs if specified match not there or active
  - cant move when on match you dont own
+ - reject move made with notation and one or more coordinates
  - cant move when not your turn
  - game over when checkmating move posted
 
@@ -69,6 +68,7 @@ board should:
 
 fbuser should:
  - can install hitherto unknown user
+ - can update name after signing in
 
 match should:
  - 32 pieces on chess initial board
