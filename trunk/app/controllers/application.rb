@@ -16,14 +16,8 @@ class ApplicationController < ActionController::Base
 
 		return if params[:fb_sig_user].blank?
 
-
 		#set who it is
 		session[ :facebook_user_id ] = params[:fb_sig_user].to_i
-
-		if session[:player_id]
-			@current_player = Player.find( session[ :player_id ] ) if ! @current_player 
-			return
-		end
 
 		#if unknown set no more variables - let authorize kick them out
 		fb_user = Fbuser.find_by_facebook_user_id( params[:fb_sig_user] )
