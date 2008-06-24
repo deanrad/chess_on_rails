@@ -1,51 +1,36 @@
 #todo - haven't found a way to get this fully under test - actual facebook requests i can't simulate as far as i can tell
 
-class FbuserController < ApplicationController
+class FbuserController < ApplicationController	
 
-   #calling these conditionally allows for running this app under functional test environment
-   before_filter { |controller| controller.send(:ensure_authenticated_to_facebook) }
-   #before_filter { |controller| controller.send(:ensure_application_is_installed_by_facebook_user) }
+	before_filter :authenticate_to_facebook
 
-   # for testing only ! (hack otherwise) simulate facebook authentication with an fb_sig_user post as facebook does
-   # (the only reason its a hack is we are not checking the signautre is valid in this version)
-
-  #visiting this controller action will create a session from facebook request info
-  def index
-
-    #users 
-    if session[:facebook_session]
-	@userF = session[:facebook_session].user
-
-      @fb_user = Fbuser.find_by_facebook_user_id(@userF.id)
-
-	#if we dont have them, 'install them
-      if @fb_user == nil
-		@fb_user = Fbuser.install( @userF.id ) 
+	def index
 	end
 
-	session[:player_id] = @fb_user.playing_as.id
+	def register
+		@fb_user = Fbuser.find_by_facebook_user_id( params[:fb_sig_user] )
 
-    else
+		@fb_user.name = params[:name] and redirect_to( 'index' ) and return if @fb_user
 
-	#this branch taken only by test cases 
-      session[:player_id] = Fbuser.find_by_facebook_user_id( params[:fb_sig_user] ).playing_as.id
-    end
+		#else we don't know them - set them up 
+		p = Player.create( :name => params[:name] )
+		@fb_user = Fbuser.create( :facebook_user_id => params[:fb_sig_user], :playing_as => p )
 
-	#set up instance var as before
-	if session[:player_id] 
-		@current_player = Player.find( session[:player_id] )
+		#give them a match with me just to start
+		Match.create( :player1 => p, :player2 => Player.find(1) )
+
+		redirect_to( :controller => 'match', :action => 'index' )
 	end
 
-  end
+private
 
-  def update
-	@userF = session[:facebook_session].user
-      @fb_user = Fbuser.find_by_facebook_user_id(@userF.id)
-
-	return unless @fb_user && params[:name]
-	@fb_user.name = params[:name]
-	flash[:msg] = "Name updated"
-	redirect_to( 'index' )
-  end
+	def authenticate_to_facebook
+		if RAILS_ENV=='test'
+			params[:format]='fbml'
+			send(:ensure_authenticated_to_facebook) unless params[:fb_sig_user]
+		#else
+		#	send(:ensure_authenticated_to_facebook)
+		end
+	end
 end
 

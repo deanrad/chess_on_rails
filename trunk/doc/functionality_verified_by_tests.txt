@@ -12,6 +12,12 @@ authentication_controller should:
  - reject incorrect login
 
 fbuser_controller should:
+ - can sniff facebook request test or actual
+ - non facebook user still needs to authorize
+ - redirected to login to facebook when requested while unauthenticated
+ - known fbuser can invoke register to set new name
+ - unknown fbuser can invoke register to establish self with new name
+ - newly registered user gets a match with me
 
 match_controller should:
  - redirected to match listing page when resigning match
@@ -67,7 +73,6 @@ board should:
  - pawn en passant not possible for single stepped opponent pawn
 
 fbuser should:
- - can install hitherto unknown user
  - can update name after signing in
 
 match should:
