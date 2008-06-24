@@ -5,6 +5,7 @@ class FbuserController < ApplicationController
 	before_filter :authenticate_to_facebook
 
 	def index
+		detect_facebook
 	end
 
 	def register
@@ -19,6 +20,9 @@ class FbuserController < ApplicationController
 		#give them a match with me just to start
 		Match.create( :player1 => p, :player2 => Player.find(1) )
 
+		#sign them in 
+		session[:player_id] = p.id
+
 		redirect_to( :controller => 'match', :action => 'index' )
 	end
 
@@ -32,7 +36,7 @@ private
 		send(:ensure_authenticated_to_facebook) and return unless RAILS_ENV == 'test'
 
 		#code running only for the TEST environment
-		send(:ensure_authenticated_to_facebook) and return unless params[:fb_sig_user]
+		send(:ensure_authenticated_to_facebook) and return unless @current_player
 	end
 end
 

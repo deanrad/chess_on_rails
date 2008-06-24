@@ -11,6 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.auth    'authentication/:action', :controller => 'authentication'
   map.move	  'move/:action', :controller => 'move'
   map.match   'match/:action', :controller => 'match'
+  map.fbuser  'fbuser/:action', :controller => 'fbuser'
 
   # Install the default routes as the lowest priority.
   map.connect ':controller/:id/:action'

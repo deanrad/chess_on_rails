@@ -43,4 +43,8 @@ class RoutesTest < ActionController::TestCase
 	def test_resignation_url_includes_id
 		assert_equal( '/match/6/resign' , rs.generate( { :controller => 'match', :id => '6', :action => 'resign'} ) )
 	end
+
+	def test_recognizes_fbuser_register_url
+		assert_equal( {:controller => 'fbuser', :action => 'register'} , rs.recognize_path("/fbuser/register") )
+	end
 end

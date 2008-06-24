@@ -25,4 +25,9 @@
    email:   chrisg@compfriend.com
    playing_as: 5
    security_phrase: 1
+ ruth:
+   id:      6
+   email:   ruth@compfriend.com
+   playing_as: 13
+   security_phrase: 1
 
