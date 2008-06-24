@@ -39,6 +39,7 @@ class AuthenticationControllerTest < ActionController::TestCase
 	end
 
 	def test_user_can_logout
+
 		post :login, :email => 'maria_poulos@yahoo.com', :security_phrase => '3'
 
 		assert_equal 2, session[:player_id]

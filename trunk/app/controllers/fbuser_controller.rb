@@ -24,13 +24,15 @@ class FbuserController < ApplicationController
 
 private
 
+	#requires in all environments other than TEST we redirect to facebook authentication
+	# via the facebooker command ensure_authenticated_to_facebook
 	def authenticate_to_facebook
-		if RAILS_ENV=='test'
-			params[:format]='fbml'
-			send(:ensure_authenticated_to_facebook) unless params[:fb_sig_user]
-		#else
-		#	send(:ensure_authenticated_to_facebook)
-		end
+		params[:format]='fbml'
+
+		send(:ensure_authenticated_to_facebook) and return unless RAILS_ENV == 'test'
+
+		#code running only for the TEST environment
+		send(:ensure_authenticated_to_facebook) and return unless params[:fb_sig_user]
 	end
 end
 

@@ -1,4 +1,4 @@
-(in c:/ChessOnRails/trunk)
+(in C:/ChessOnRails/trunk)
 Note: this document should be regenerated periodically by running
 	rake test:doc
 
@@ -13,8 +13,7 @@ authentication_controller should:
 
 fbuser_controller should:
  - can sniff facebook request test or actual
- - non facebook user still needs to authorize
- - redirected to login to facebook when requested while unauthenticated
+ - redirected to login to facebook when requested in TEST environment and unauthenticated
  - known fbuser can invoke register to set new name
  - unknown fbuser can invoke register to establish self with new name
  - newly registered user gets a match with me

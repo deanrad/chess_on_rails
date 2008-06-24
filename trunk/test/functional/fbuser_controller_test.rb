@@ -7,16 +7,10 @@ class FbuserControllerTest < ActionController::TestCase
 		get :index, { :fb_sig_user => fbusers(:dean).facebook_user_id }
 		assert_equal fbusers(:dean).facebook_user_id, session[:facebook_user_id]
 		assert_equal players(:dean).id , session[:player_id]
-		assert @controller.facebook?
 		
 	end
 
-	def test_non_facebook_user_still_needs_to_authorize
-		get :index, { :fb_sig_user => '' }
-		assert ! @controller.facebook?
-	end
-
-	def test_redirected_to_login_to_facebook_when_requested_while_unauthenticated
+	def test_redirected_to_login_to_facebook_when_requested_in_TEST_environment_and_unauthenticated
 		get :index
 		assert_response 302
 		assert_equal true, @response.redirected_to.include?( 'facebook.com/login' )
@@ -34,7 +28,14 @@ class FbuserControllerTest < ActionController::TestCase
 		assert_nil Fbuser.find_by_facebook_user_id( unknown_id )
 
 		post :register, { :name => 'Newer name', :fb_sig_user => unknown_id }
-		assert_equal 'Newer name', Fbuser.find_by_facebook_user_id( unknown_id ).name
+
+		#now we have them
+		assert_not_nil fbuser = Fbuser.find_by_facebook_user_id( unknown_id )
+
+		#have recorded their name
+		assert_equal 'Newer name', fbuser.name
+
+		#and sent them on their way
 		assert_response 302
 	end
 
@@ -43,6 +44,7 @@ class FbuserControllerTest < ActionController::TestCase
 
 		assert_nil Fbuser.find_by_facebook_user_id( unknown_id )
 
+		get :index    , { :fb_sig_user => unknown_id }
 		post :register, { :name => 'Newer name', :fb_sig_user => unknown_id }
 		assert_equal 1, Fbuser.find_by_facebook_user_id( unknown_id ).playing_as.active_matches.count
 	end

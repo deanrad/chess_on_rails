@@ -1,20 +1,30 @@
-<div style="float:left; height:500px; margin-right: 25px;"> <%= fb_profile_pic(@userF) %> </div>
-<div style=""><h1>I feel fat, and sassy - let's play some Chess !</h1></div>
+<div style="float:left; height:500px; margin-right: 25px;"> <%= fb_profile_pic( session[:facebook_user_id] ) %> </div>
 
 <% if @current_player %>
 
-You have <strong><%= @current_player.active_matches.count %></strong> Active Matches.<br/>
+	<h1>I feel fat, and sassy - let's play some Chess !</h1>
 
-<div style="margin-top: 20px"><%= link_to 'Go to my Chess games', '/enpassant/match/'  %></div>
+	You have <strong><%= @current_player.active_matches.count %></strong> Active Matches.<br/>
+
+	<div style="margin-top: 20px"><%= link_to 'Go to my Chess games', '/enpassant/match/'  %></div>
 
 <% else %>
+
+	<h1>Tell us a bit about yourself first ...</h1>
+
+	<%= render :partial => 'first_time' %>
 
 <% end %>
 
 
-<div style="clear:left">
-<form action="/enpassant/fbuser/update" method="POST">
-	Set Name: <%= text_field_tag :name  %>
-	<%= submit_tag "Save", :id => 'name_save_btn' %>
-</form>
+<div style="color:white">
+Debug:
+<pre>
+  <% [ :facebook_user_id, :player_id ].each do |key| -%>
+<%= "session[:#{key}]= #{session[key]}" %>
+  <% end -%>
+  <% [ :fb_sig_user ].each do |key| -%>
+<%= "params[:#{key}]= #{params[key]}" %>
+  <% end -%>
+</pre>
 </div>
