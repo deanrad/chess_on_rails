@@ -9,11 +9,17 @@ class MoveController < ApplicationController
 	def create
 		@move = Move.new( params[:move] )
 
-		#@match = Match.find( params[:move][:match_id] )
-		#@match.moves << Move.new( params[:move] )
 
-		puts @move.errors and raise ArgumentError if ! @move.valid?
-		raise ArgumentError, "It's not your turn to move" if ! @move.match.turn_of?( @current_player )
+		#puts @move.errors and raise ArgumentError if ! @move.valid?
+		
+		#invoke validation
+		@move.valid?
+
+		@match = Match.find( params[:move][:match_id] )
+
+		unless @match && @match.turn_of?( @current_player )
+		  raise ArgumentError, "It's not your turn to move on match #{@move.match_id}, #{@current_player.name}" 
+		end
 
 		@move.save! #not implicit save like appending << to association
 
