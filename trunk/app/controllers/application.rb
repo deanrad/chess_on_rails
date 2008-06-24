@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 	before_filter :detect_facebook
 
 	#only use layout if not a facebook request - todo - standardize the 'is_facebook' test
-	layout proc{ |c| c.params[:fb_sig_user] ? false : 'application' }
+	layout proc{ |c| c.params[:fb_sig] ? false : 'application' }
 		
 	def authorize
 
