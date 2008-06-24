@@ -19,9 +19,10 @@ class MoveControllerTest < ActionController::TestCase
 	
 		post :create, { :move=>{:from_coord => 'a2', :to_coord => 'a4', :match_id => m.id } }, {:player_id => m.player1.id}
 		assert_response 302
+		assert_nil flash[:move_error]
 
-		assert_not_nil m.reload.moves.last.notation
 		assert_equal 1, m.reload.moves.length
+		assert_not_nil m.moves.last.notation
 	end
 	
 	def test_errs_if_specified_match_not_there_or_active

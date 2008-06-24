@@ -50,7 +50,7 @@ class Board
 	end
 
 	def side_occupying(pos)
-		p = @pieces.find { |p|  p.position == pos }
+		p = piece_at(pos)
 		return nil if !p 
 		return p.side
 	end

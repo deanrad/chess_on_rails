@@ -24,7 +24,6 @@ class Move < ActiveRecord::Base
 			self[:from_coord] = p.position
 		end
 
-
 		[from_coord, to_coord].each do |coord|
 			raise ArgumentError, "#{coord} is not a valid coordinate" if ! Chess.valid_position?( coord )
 		end
@@ -36,15 +35,20 @@ class Move < ActiveRecord::Base
 			self[:captured_piece_coord] = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
 		end
 
-		self[:notation] = self.notate if !@notation
+		self[:notation] = notate if !@notation
 		self[:castled] = self[:notation].include?( 'O-' )
 
 	end
 
 	def notate
 		
-		this_board = match.board(:current)
+
+		this_board = match.board
+		#raise ArgumentError, "Got here: from_coord is #{from_coord}, board is #{this_board}"
+
 		piece_moving = this_board.piece_at( from_coord )
+
+		#raise ArgumentError, "No piece present on coordinate #{from_coord} in match #{match.id}" if ! piece_moving
 		
 		# start off with the pieces own notation
 		mynotation = piece_moving.notation
