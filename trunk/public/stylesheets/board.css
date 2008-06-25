@@ -39,7 +39,7 @@ body {font-family: Arial; font-size: 10pt;}
 #f2, #f4, #f6, #f8,
 #g1, #g3, #g5, #g7,
 #h2, #h4, #h6, #h8
-{background-color:#ddd}
+{background-color:#dfdfdf}
 
 	.active_yours {background-color:black; color:white; font-weight:bold}
 	.active_theirs {background-color:eee; color:bbb; font-weight:bold}
