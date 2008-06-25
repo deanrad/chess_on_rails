@@ -15,7 +15,7 @@ class AuthenticationController < ApplicationController
 
 		#return them to original page requested
 		if session[:original_uri]
-			redirect_to session[:original_uri] and return
+			redirect_to session[:original_uri] and return unless params[:format]=='fbml'
 		else
 			redirect_to '/match/' and return
 		end
