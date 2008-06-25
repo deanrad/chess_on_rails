@@ -13,6 +13,7 @@ authentication_controller should:
 
 fbuser_controller should:
  - can sniff facebook request test or actual
+ - does not authenticate without facebook info
  - redirected to login to facebook when requested in TEST environment and unauthenticated
  - known fbuser can invoke register to set new name
  - unknown fbuser can invoke register to establish self with new name
@@ -45,6 +46,7 @@ routes should:
  - generates relative url for match status
  - generates relative url for move notation
  - resignation url includes id
+ - recognizes fbuser register url
 
 gameplay should:
  - navigates from match listing to match

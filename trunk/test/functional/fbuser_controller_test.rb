@@ -10,6 +10,13 @@ class FbuserControllerTest < ActionController::TestCase
 		
 	end
 
+	def test_does_not_authenticate_without_facebook_info
+		get :index, { :fb_sig_user => '' }
+
+		assert_nil session[:facebook_user_id]
+		assert_nil assigns[:current_player]
+	end
+
 	def test_redirected_to_login_to_facebook_when_requested_in_TEST_environment_and_unauthenticated
 		get :index
 		assert_response 302

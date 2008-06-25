@@ -10,13 +10,19 @@ class ApplicationController < ActionController::Base
 	#in advance of the call to authorize, detect_facebook infers authorization information
 	# from facebook request headers
 	def detect_facebook
+
 		return if @current_player
 
-		return unless session[:facebook_session]
+		
+		session[:facebook_user_id]= params[:fb_sig_user].to_i if RAILS_ENV == 'test' && !params[:fb_sig_user].blank?
 
-		session[:facebook_user_id]= session[:facebook_session].user.id
+		unless session[:facebook_user_id]
+			return unless session[:facebook_session]
+			session[:facebook_user_id]= session[:facebook_session].user.id
+		end
 
-		fb_user = Fbuser.find_by_facebook_user_id( session[:facebook_session].user.id )
+
+		fb_user = Fbuser.find_by_facebook_user_id( session[:facebook_user_id] )
 
 		return unless fb_user
 

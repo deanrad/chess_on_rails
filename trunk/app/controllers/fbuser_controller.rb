@@ -33,10 +33,10 @@ private
 	def authenticate_to_facebook
 		params[:format]='fbml'
 
-		send(:ensure_authenticated_to_facebook) and return unless RAILS_ENV == 'test'
+		send(:ensure_authenticated_to_facebook) and return unless RAILS_ENV == 'test' && params[:fb_sig_user]
 
 		#code running only for the TEST environment
-		send(:ensure_authenticated_to_facebook) and return unless @current_player
+		#send(:ensure_authenticated_to_facebook) and return unless @current_player
 	end
 end
 
