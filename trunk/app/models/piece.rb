@@ -3,22 +3,16 @@
 class Piece  
 	require 'Enumerable'
 
-	#the allowed types for the type instance accessor (and their shorthand)
-	@@types = {:kings_rook =>'R', :kings_knight =>'N',  :kings_bishop=>'B',  
+	#the allowed types and their shorthand
+	Types = {:kings_rook =>'R', :kings_knight =>'N',  :kings_bishop=>'B',  
 		:queens_rook=>'R', :queens_knight=>'N',  :queens_bishop=>'B', 
 		:king=>'K',  :queen=>'Q',
 		:a_pawn=>'a', :b_pawn=>'b', :c_pawn=>'c', :d_pawn=>'d',
 		:e_pawn=>'e', :f_pawn=>'f', :g_pawn=>'g', :h_pawn=>'h'
 	}
 	
-	
-	def self.types
-		return @@types.keys
-	end
-	
-	attr_accessor :type
 	attr_accessor :side
-
+	attr_accessor :type
 	attr_accessor :position # has a custom method to detect promotion situations
 	
 	def initialize(side, type, pos=nil)
@@ -67,7 +61,7 @@ class Piece
 	#The part of the notation - with a piece disambiguator for pawns minors and rooks
 	# It will be removed later if deemed unnecessary
 	def notation
-		return @@types[@type] if piece_type != 'pawn'
+		return Types[@type] if piece_type != 'pawn'
 		return file
 		#return eval( %Q{ "#{type_text}" } )
 	end
