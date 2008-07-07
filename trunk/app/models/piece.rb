@@ -157,21 +157,9 @@ class Piece
 		#raise ArgumentError, "Cannot determine theoretical moves of piece #{self.to_s} if position unspecified" if ! position
 		@moves = []
 		
-		if @type.to_s.include?(:pawn.to_s)
-			calc_theoretical_moves_pawn
-		elsif @type == :queen
-			calc_theoretical_moves_queen
-		elsif @type == :king
-			calc_theoretical_moves_king
-		elsif @type == :queens_knight || @type == :kings_knight
-			calc_theoretical_moves_knight
-		elsif @type == :queens_rook || @type == :kings_rook
-			calc_theoretical_moves_rook
-		elsif @type == :queens_bishop || @type == :kings_bishop
-			calc_theoretical_moves_bishop
-		end
-		
-		@moves.reject! { |pos| ! Chess.valid_position?( pos ) }
+		#call the method named for the role of the piece
+		self.send( "calc_theoretical_moves_#{role}" )
+
 		return @moves
 	end
 		
@@ -245,6 +233,8 @@ class Piece
 			end
 			
 		end
+
+		@moves.reject! { |mv| ! Chess.valid_position?( mv ) }
 	end
 
 	def img_name
@@ -260,7 +250,7 @@ class Piece
 
 		#promote
 		@type = new_type
-		@id = "#{@side}_#{@type}_promoted"
+		@id = "#{@side}_promoted_#{@type}"
 	end
 
 	#the set of criteria and error messages to display unless criteria met

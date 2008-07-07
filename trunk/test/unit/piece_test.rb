@@ -179,6 +179,11 @@ class PieceTest < ActiveSupport::TestCase
 		assert ! p.promotable?
 		assert Piece.new(:black, :f_pawn, 'a1').promotable?
 	end
+	def test_nodoc_board_id_indicates_promoted_piece
+		p = Piece.new(:white, :a_pawn, 'b8')
+		p.promote!
+		assert_equal 'white_promoted_queen', p.board_id
+	end
 
 	def test_promotes_automatically_on_reaching_opposing_back_rank
 		p = Piece.new(:black, :c_pawn, 'e2')
