@@ -72,6 +72,7 @@ board should:
  - scholars mate capture with bishop not checkmate
  - pawn can capture en passant
  - pawn en passant not possible for single stepped opponent pawn
+ - promotes automatically to queen on reaching opposing back rank
 
 fbuser should:
  - can update name after signing in
@@ -116,7 +117,6 @@ piece should:
  - image names abstract away irrelevant details
  - pawn may not promote to king
  - pawn may not promote unless on back rank
- - promotes automatically on reaching opposing back rank
  - no piece other than pawn may promote
 
 player should:
