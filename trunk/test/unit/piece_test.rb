@@ -147,4 +147,50 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 'pawn_w', Piece.new(:white, :b_pawn, 'b2').img_name
 	end	
 
+	def test_nodoc_piece_is_promotable_to_queen_by_default
+		p = Piece.new(:white, :b_pawn, 'c8')
+		p.promote!
+
+		assert_equal 'queen', p.piece_type
+	end
+
+	def test_pawn_may_not_promote_to_king
+		p = Piece.new(:black, :c_pawn, 'c8')
+		assert_raises ArgumentError do
+			p.promote!( :king )
+		end
+	end
+
+	def test_pawn_may_not_promote_unless_on_back_rank
+		#black pawn must be on 1
+		p = Piece.new(:black, :c_pawn, 'c8')
+		assert_raises ArgumentError do
+			p.promote!( :knight )
+		end
+
+		p.side, p.position = [:white, 'd7']
+		assert_raises ArgumentError do
+			p.promote!
+		end
+	end
+
+	def test_nodoc_ascertains_promotability
+		p = Piece.new(:black, :c_pawn, 'a8')
+		assert ! p.promotable?
+		assert Piece.new(:black, :f_pawn, 'a1').promotable?
+	end
+
+	def test_promotes_automatically_on_reaching_opposing_back_rank
+		p = Piece.new(:black, :c_pawn, 'e2')
+		p.position = 'd1'
+
+		assert_equal :queen, p.type
+	end
+
+	def test_no_piece_other_than_pawn_may_promote
+		p = Piece.new(:black, :queens_bishop, 'c8')
+		assert_raises ArgumentError do
+			p.promote!
+		end
+	end
 end

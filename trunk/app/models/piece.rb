@@ -1,6 +1,5 @@
 
 #An instance of a piece bound to a particular match
-# (Currently not aware of matches in any tests)
 class Piece  
 	require 'Enumerable'
 
@@ -19,9 +18,8 @@ class Piece
 	
 	attr_accessor :type
 	attr_accessor :side
-	attr_accessor :position
-	
-	attr_accessor :match_id, :int
+
+	attr_accessor :position # has a custom method to detect promotion situations
 	
 	def initialize(side, type, pos=nil)
 		@side = side
@@ -258,4 +256,36 @@ class Piece
 		( (type.to_s.split('_').length==2) ? type.to_s.split('_')[1] : type.to_s) + '_' + side.to_s.slice(0,1)
 	end
 
+	def promote!( new_type = :queen )
+		raise ArgumentError, 'You may only promote to queen (default), knight, bishop or rook' if (new_type == :king) || new_type.to_s.include?('pawn')
+
+		Promotion_Criteria.each do | criteria, message |
+			raise ArgumentError, message unless criteria.call(self)
+		end
+
+		@type = new_type
+	end
+
+	#the set of criteria and error messages to display unless criteria met
+	Promotion_Criteria = [
+		[ Proc.new{ |p| (p.side == :white && p.rank == '8')  || (p.side == :black && p.rank == '1') },
+		  'May only promote upon reaching the opposing back rank' ],
+
+		[ Proc.new{ |p| p.type.to_s.include?('pawn') },
+		  'No piece other than pawn may promote' ]
+	]
+
+	def promotable?
+		all_true = Promotion_Criteria.inject(true){ |result, crit| result &= crit[0].call(self) }
+	end
+
+	def position= (pos)
+		#do what our attr_writer method was doing
+		@position = pos 
+
+		if promotable?
+			@type = :queen
+		end
+	end
 end
+
