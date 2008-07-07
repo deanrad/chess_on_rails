@@ -151,7 +151,7 @@ class PieceTest < ActiveSupport::TestCase
 		p = Piece.new(:white, :b_pawn, 'c8')
 		p.promote!
 
-		assert_equal 'queen', p.piece_type
+		assert_equal :queen.to_s, p.role
 	end
 
 	def test_pawn_may_not_promote_to_king
@@ -184,7 +184,7 @@ class PieceTest < ActiveSupport::TestCase
 		p = Piece.new(:black, :c_pawn, 'e2')
 		p.position = 'd1'
 
-		assert_equal :queen, p.type
+		assert_equal :queen.to_s, p.role
 	end
 
 	def test_no_piece_other_than_pawn_may_promote

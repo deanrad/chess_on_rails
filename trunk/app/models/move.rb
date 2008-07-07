@@ -3,7 +3,7 @@ class Move < ActiveRecord::Base
 
 	attr_accessor :side
 
-	NOTATION_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
+	NOTATION_TO_ROLE_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
 
 	#stuff here depends on knowledge of the board's position prior to the move being committed
 	# this should be considered a before-save function and maybe validate is not exactly the best place
@@ -16,9 +16,9 @@ class Move < ActiveRecord::Base
 		if( notation && (!from_coord || !to_coord || from_coord.empty? || to_coord.empty? ))
 			self[:to_coord] =  notation.to_s[-2,2]
 
-			type = NOTATION_MAP[ notation[0,1] ] ? NOTATION_MAP[ notation[0,1] ] : 'pawn'
+			role = NOTATION_TO_ROLE_MAP[ notation[0,1] ] ? NOTATION_TO_ROLE_MAP[ notation[0,1] ] : 'pawn'
 
-			p = match.board.pieces.find{ |p| p.side == side && p.piece_type == type && p.allowed_moves(match.board).include?( self[:to_coord] ) }
+			p = match.board.pieces.find{ |p| p.side == side && p.role == role && p.allowed_moves(match.board).include?( self[:to_coord] ) }
 			raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board or ambiguous move #{notation}" if !p 
 
 			self[:from_coord] = p.position
@@ -54,7 +54,7 @@ class Move < ActiveRecord::Base
 		mynotation = piece_moving.notation
 		
 		# disambiguate which piece moved if a 'sister_piece' could have moved there as well
-		if( piece_moving.piece_type=='rook') || (piece_moving.piece_type=='knight')
+		if( piece_moving.role=='rook') || (piece_moving.role=='knight')
 			mynotation = mynotation[0].chr
 			sister_piece = this_board.sister_piece_of(piece_moving)
 			if( sister_piece != nil && sister_piece.allowed_moves(this_board).include?(to_coord) )
@@ -71,14 +71,14 @@ class Move < ActiveRecord::Base
 		end
 
 		#destination square
-		if( (piece_moving.piece_type=='pawn') && !captured )
+		if( (piece_moving.role=='pawn') && !captured )
 			mynotation += to_coord[1].chr
 		else
 			mynotation += to_coord
 		end
 		
 		#castling
-		if ( piece_moving.piece_type=='king' && from_coord[0].chr=='e')
+		if ( piece_moving.role=='king' && from_coord[0].chr=='e')
 			if(  to_coord[0].chr=='g')
 				mynotation='O-O'
 			elsif( to_coord[0].chr=='c' )

@@ -15,12 +15,12 @@
 				   if p                                       -%>
 
 					<img class="piece <%= p.allowed_moves(board) * ' ' %>"
-						id="<%= p.client_id %>"
+						id="<%= p.board_id %>"
 						alt="<%= p.img_name %>"
 						src="<%= "http://www.insightfultraining.com/images/chess_pieces/#{p.img_name}.gif" %>"
 					 />
 
-					<%= draggable_element( p.client_id, :revert => 'true', :snap => '[49,47]' ) if @match.turn_of?(@current_player) %> 
+					<%= draggable_element( p.board_id, :revert => 'true', :snap => '[49,47]' ) if @match.turn_of?(@current_player) %> 
 
 				<% else %>
 					&nbsp;

@@ -11,9 +11,10 @@ class Piece
 		:e_pawn=>'e', :f_pawn=>'f', :g_pawn=>'g', :h_pawn=>'h'
 	}
 	
-	attr_accessor :side
-	attr_accessor :type
-	attr_accessor :position # has a custom method to detect promotion situations
+	attr_accessor :id        #uniquely identifies a piece throughout a match, generally a combination of side and type
+	attr_accessor :side      #black or white
+	attr_accessor :type      #ex. queens_bishop
+	attr_accessor :position 
 	
 	def initialize(side, type, pos=nil)
 		@side = side
@@ -23,8 +24,8 @@ class Piece
 	
 	#when rendered the client id uniquely specifies an individual piece within a board
 	#example: white_f_pawn
-	def client_id
-		"#{@side}_#{@type}"
+	def board_id
+		@id || "#{@side}_#{@type}"
 	end
 	
 	def file
@@ -38,9 +39,10 @@ class Piece
 		return "Side: #{@side} type:#{@type} at #{position}"
 	end
 	
-	def piece_type
-		if @type.to_s.include?('_')
-			return @type.to_s.split('_')[1];
+	def role
+		return 'pawn' if @type.to_s.include?('pawn')
+		if @type.to_s.include?('kings') || @type.to_s.include?('queens')
+			return @type.to_s.split('_')[1] 
 		else
 			return @type.to_s
 		end
@@ -51,7 +53,7 @@ class Piece
 		return -1 if @side == :black
 	end
 	
-	#bishops and rooks (and the queen) have 'lines of attack', or directions which can be stopped by ones own piece
+	#bishops and rooks (and the queen) have 'lines of attack', or directions which can be stopped by an intervening piece
 	def lines_of_attack
 		return [] if ! @lines_of_attack
 		
@@ -61,9 +63,8 @@ class Piece
 	#The part of the notation - with a piece disambiguator for pawns minors and rooks
 	# It will be removed later if deemed unnecessary
 	def notation
-		return Types[@type] if piece_type != 'pawn'
-		return file
-		#return eval( %Q{ "#{type_text}" } )
+		#Types contains the notation bases as values of the Hash
+		return (role == 'pawn') ? file : Types[@type]
 	end
 	
 	#eliminates theoretical moves that would not be applicable on a certain board
@@ -125,24 +126,24 @@ class Piece
 				#m.reject! { |pos| (pos[0] == @position[0]) && ( board.side_occupying(pos) != nil ) }
 			end
 
-			if( piece_type=="king")
+			if( role=='king')
 				#castling
-				castle_rank = (side==:white) ? "1" : "8"
+				castle_rank = (side==:white) ? '1' : '8'
 				
 				#not accounting for previous moves, yes, or castling across check, but this to be remedied with test coverage
-				king_on_initial_square = (position == ("e"+castle_rank) )
-				kings_rook_on_initial_square = (board.piece_at( "h"+castle_rank) != nil) && (board.piece_at( "h"+castle_rank).piece_type=="rook")
-				intervening_kingside_squares_empty = (board.piece_at( "g"+castle_rank) == nil) && (board.piece_at( "f"+castle_rank) == nil)
+				king_on_initial_square = (position == ('e'+castle_rank) )
+				kings_rook_on_initial_square = (board.piece_at( 'h'+castle_rank) != nil) && (board.piece_at( 'h'+castle_rank).role=='rook')
+				intervening_kingside_squares_empty = (board.piece_at( "g"+castle_rank) == nil) && (board.piece_at( 'f'+castle_rank) == nil)
 				
 				if(king_on_initial_square && kings_rook_on_initial_square && intervening_kingside_squares_empty  )
-					m << "g"+castle_rank
+					m << 'g'+castle_rank
 				end
 				
-				queens_rook_on_initial_square = (board.piece_at( "a"+castle_rank) != nil) && (board.piece_at( "a"+castle_rank).piece_type=="rook")
-				intervening_queenside_squares_empty = (board.piece_at( "d"+castle_rank) == nil) && (board.piece_at( "c"+castle_rank) == nil) && (board.piece_at( "b"+castle_rank) == nil)
+				queens_rook_on_initial_square = (board.piece_at( 'a'+castle_rank) != nil) && (board.piece_at( 'a'+castle_rank).role=='rook')
+				intervening_queenside_squares_empty = (board.piece_at( 'd'+castle_rank) == nil) && (board.piece_at( 'c'+castle_rank) == nil) && (board.piece_at( 'b'+castle_rank) == nil)
 
 				if(king_on_initial_square && queens_rook_on_initial_square && intervening_queenside_squares_empty  )
-					m << "c"+castle_rank
+					m << 'c'+castle_rank
 				end
 
 			end
@@ -257,7 +258,9 @@ class Piece
 			raise ArgumentError, message unless criteria.call(self)
 		end
 
+		#promote
 		@type = new_type
+		@id = "#{@side}_#{@type}_promoted"
 	end
 
 	#the set of criteria and error messages to display unless criteria met

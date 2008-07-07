@@ -109,7 +109,7 @@ class BoardTest < ActiveSupport::TestCase
 		p1 = matches(:unstarted_match).initial_board.piece_at('b2')
 		assert_not_nil p1
 		
-		assert_equal :b_pawn, p1.type
+		assert_equal 'pawn', p1.role
 		assert_equal :white, p1.side
 	end
 	
@@ -170,7 +170,7 @@ class BoardTest < ActiveSupport::TestCase
 	def test_scholars_mate_capture_with_queen_is_checkmate
 		match = matches(:scholars_mate)
 		assert_equal :white, match.next_to_move
-		assert_equal 'queen', match.board.piece_at('f3').piece_type
+		assert_equal 'queen', match.board.piece_at('f3').role
 
 		#make the killer move
 		match.moves << Move.new( :notation => 'Qf7' )

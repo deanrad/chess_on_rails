@@ -56,7 +56,7 @@ class Board
 	end
 
 	def sister_piece_of( piece )
-		p = @pieces.find { |p| (p.side == piece.side) && (p.piece_type == piece.piece_type ) && (p.type != piece.type) }
+		p = @pieces.find { |p| (p.side == piece.side) && (p.role == piece.role ) && (p.type != piece.type) }
 	end
 	
 	def in_check?( side )
@@ -79,7 +79,7 @@ class Board
 		possible_advanced_pawn = piece_at( to_file + advanced_pawn_rank )
 
 		#if behind a pawn
-		if (to_rank == capture_rank) && possible_advanced_pawn && (possible_advanced_pawn.piece_type=='pawn') 
+		if (to_rank == capture_rank) && possible_advanced_pawn && (possible_advanced_pawn.role=='pawn') 
 			#and that pawn was doubly (not singly) advanced
 			@match.moves.find_by_from_coord_and_to_coord( ( to_file + original_pawn_rank ) , possible_advanced_pawn.position ) != nil
 		else
