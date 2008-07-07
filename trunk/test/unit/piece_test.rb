@@ -185,13 +185,6 @@ class PieceTest < ActiveSupport::TestCase
 		assert_equal 'white_promoted_queen', p.board_id
 	end
 
-	def test_promotes_automatically_on_reaching_opposing_back_rank
-		p = Piece.new(:black, :c_pawn, 'e2')
-		p.position = 'd1'
-
-		assert_equal :queen.to_s, p.role
-	end
-
 	def test_no_piece_other_than_pawn_may_promote
 		p = Piece.new(:black, :queens_bishop, 'c8')
 		assert_raises ArgumentError do

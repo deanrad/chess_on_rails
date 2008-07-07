@@ -27,13 +27,22 @@ class Board
 			@pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
 
 			#move to that square
-			@pieces.each{ |p| p.position = m.to_coord if p.position==m.from_coord }
-				
+			piece_moved = nil
+			@pieces.each{ |p| p.position = m.to_coord and piece_moved = p if p.position==m.from_coord }
+
 			#reflect castling
 			if m.castled==1
 				castling_rank = m.to_coord[1].chr
 				[['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, rook_file, orig_rook_file|
 					@pieces.each { |p| p.position = "#{rook_file}#{castling_rank}" if m.to_coord[0].chr==king_file && p.position=="#{orig_rook_file}#{castling_rank}"}
+				end
+			end
+
+			#reflect promotion
+			if piece_moved.promotable? 
+				if ! m.promotion_choice
+					piece_moved.promote!
+					m.notation += 'Q' unless m.notation[-1].chr == 'Q'
 				end
 			end
 		end

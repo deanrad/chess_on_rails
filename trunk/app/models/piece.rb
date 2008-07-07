@@ -266,13 +266,5 @@ class Piece
 		all_true = Promotion_Criteria.inject(true){ |result, crit| result &= crit[0].call(self) }
 	end
 
-	def position= (pos)
-		#do what our attr_writer method was doing
-		@position = pos 
-
-		if promotable?
-			@type = :queen
-		end
-	end
 end
 

@@ -42,3 +42,8 @@ scholars_mate:
    id: 8
    player1: 5
    player2: 1
+
+promote_crazy:
+   id: 9
+   player1: 3
+   player2: 1

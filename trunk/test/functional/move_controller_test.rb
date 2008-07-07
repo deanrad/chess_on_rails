@@ -57,6 +57,6 @@ class MoveControllerTest < ActionController::TestCase
 		m.reload
 	
 		#doesn't work yet but shows you can play the move
-		#assert_equal players(:chris), m.winning_player
+		assert_equal players(:chris), m.winning_player
 	end
 end

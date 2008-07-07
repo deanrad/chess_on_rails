@@ -98,4 +98,5 @@ class MoveTest < ActiveSupport::TestCase
 			match.moves << Move.new( :notation => 'Bb3' )
 		end
 	end
+
 end

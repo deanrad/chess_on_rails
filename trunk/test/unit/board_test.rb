@@ -178,17 +178,7 @@ class BoardTest < ActiveSupport::TestCase
 		#king is in check
 		assert match.board.in_check?(:black)
 
-		#try and move out of check 
-		assert match.board.piece_at('e8').allowed_moves(match.board).include?('e7')
-		match.moves << Move.new( :from_coord => 'e8', :to_coord => 'e7' )
-
-		#but still in check
-		assert match.board.in_check?(:black)
-
-		#rewind
-		match.moves.last.destroy
-
-		# and face facts that it's over !!
+		# and it's over !!
 		assert match.board.in_checkmate?(:black), "Not in checkmate as expected"
 	end
 
@@ -225,4 +215,20 @@ class BoardTest < ActiveSupport::TestCase
 		b = m.board(:current)
 		assert_equal ['e6'], b.piece_at('e5').allowed_moves(b)
 	end	
+
+	def test_promotes_automatically_to_queen_on_reaching_opposing_back_rank
+		m = matches(:promote_crazy)
+		m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8' )
+
+		assert_equal 'queen', m.board.piece_at('a8').role
+
+		assert_equal 'bxa8Q', m.moves.last.notation
+	end
+
+	#def test_may_promote_to_knight_on_reaching_opposing_back_rank
+	#	m = matches(:promote_crazy)
+	#	m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8', :promotion_choice => 'N' )
+	#	assert_equal 'bxa8N', m.moves.last.notation
+	#end
+
 end
