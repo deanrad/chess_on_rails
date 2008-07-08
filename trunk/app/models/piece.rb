@@ -88,16 +88,10 @@ class Piece
 					next unless line_worth_following
 					next unless Chess.valid_position?( pos ) 
 
-					if( @side == board.side_occupying(pos) )
-						# ran into your own piece- disregard this line
-						line_worth_following = false
-					elsif ( board.side_occupying(pos) == nil )
-						m << pos
-					else
-						#ran into opponents piece -this is the last position you can occupy on this line
-						m << pos
-						line_worth_following = false
-					end
+					side_occupying = board.side_occupying(pos)
+					m << pos unless side_occupying == @side
+					line_worth_following = false unless side_occupying == nil
+
 				end
 				
 			end
