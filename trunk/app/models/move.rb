@@ -36,12 +36,18 @@ class Move < ActiveRecord::Base
 		p = match.board.pieces.find{ |p| (p.position == from_coord) && p.allowed_moves(match.board).include?( to_coord ) }
 		raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board or ambiguous move #{notation}" if !p 
 
+		#fill in supplemental fields for enpassant
 		if match.board.is_en_passant_capture?( from_coord, to_coord )
 			self[:captured_piece_coord] = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
 		end
 
+		#promotion
+		where_p_will_be = p.clone
+		where_p_will_be.position = to_coord
+		self[:promotion_choice] ||= 'Q' if where_p_will_be.promotable?
+
+		self[:castled] = 1 if (p.type==:king && from_coord[0].chr=='e' && ['c','g'].include?( to_coord[0].chr ) )
 		self[:notation] = notate if !@notation
-		self[:castled] = self[:notation].include?( 'O-' )
 
 	end
 
@@ -49,8 +55,8 @@ class Move < ActiveRecord::Base
 		
 
 		this_board = match.board
-
 		piece_moving = this_board.piece_at( from_coord )
+		piece_moved_upon  = this_board.piece_at( to_coord )
 
 		# start off with the pieces own notation
 		mynotation = piece_moving.notation
@@ -64,34 +70,32 @@ class Move < ActiveRecord::Base
 				mynotation += ( piece_moving.file != sister_piece.file) ? piece_moving.file : piece_moving.rank
 			end
 		end
-		
-		piece_moved_upon  = match.board(:current).piece_at( to_coord )
-		
+				
 		if piece_moved_upon && (piece_moving.side != piece_moved_upon.side) || this_board.is_en_passant_capture?( from_coord, to_coord )
 			mynotation += 'x' 
 			captured = true
 		end
 
-		#destination square
-		if( (piece_moving.role=='pawn') && !captured )
-			mynotation += to_coord[1].chr
-		else
-			mynotation += to_coord
+		#notate the destination square - a straight append except for noncapturing pawns
+		mynotation = '' if( (piece_moving.role=='pawn') && !captured )
+		mynotation += to_coord
+				
+		#castling 3 O's if queenside otherwise 2 O's
+		if castled
+			mynotation = 'O-O' + ((to_coord[0].chr=='c') ? '-O' : '' ) 
 		end
-		
-		#castling
-		if ( piece_moving.role=='king' && from_coord[0].chr=='e')
-			if(  to_coord[0].chr=='g')
-				mynotation='O-O'
-			elsif( to_coord[0].chr=='c' )
-				mynotation='O-O-O'
-			end
-		end
-		
+
+		#relocate the piece now and notate a few more things
 		piece_moving.position = to_coord
-		mynotation += '+' if this_board.in_check?(  piece_moving.side==:white ? :black : :white  )
-		piece_moving.position = from_coord #move back
+
+		#promotion
+		if piece_moving.promotable?
+			mynotation += promotion_choice
+		end
 		
+		#check/mate
+		mynotation += '+' if this_board.in_check?(  piece_moving.side==:white ? :black : :white  )
+
 		return mynotation
 	end
 end

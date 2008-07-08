@@ -243,7 +243,7 @@ class Piece
 		end
 
 		#promote
-		@type = new_type
+		@type = new_type ? new_type : :queen
 		@id = "#{@side}_promoted_#{@type}"
 	end
 

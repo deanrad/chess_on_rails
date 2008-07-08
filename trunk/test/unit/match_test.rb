@@ -50,18 +50,9 @@ class MatchTest < ActiveSupport::TestCase
 		#player1
 		m1 = matches(:paul_vs_dean)
 		m1.resign( players(:paul) )
-		m1.save!
 		assert_not_nil m1.winning_player
 		assert_equal players(:dean), m1.winning_player
-
-		#player2
-		m2 = matches(:dean_vs_maria)
-		m2.resign( m2.player2 )
-		m2.save!
-
-		m3 = matches(:dean_vs_maria)
-		assert_not_nil m3.winning_player
-		assert_equal players(:dean), m3.winning_player
 	end
 
 end
+	

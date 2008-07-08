@@ -6,12 +6,12 @@ class MoveController < ApplicationController
 
 	#accessible via get or post but should be idempotent on 2x get
 	def create
-		@move = Move.new( params[:move] )
+		@match = Match.find( params[:move][:match_id] )
+		@move  = @match.moves.new( params[:move] )
 
 		#invoke validation - todo fit this into AR life cycle better
 		@move.valid?
 
-		@match = Match.find( params[:move][:match_id] )
 
 		#todo - move into models, based on side of piece being moved
 		unless @match && @match.turn_of?( @current_player )

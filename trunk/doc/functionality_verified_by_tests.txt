@@ -73,6 +73,7 @@ board should:
  - pawn can capture en passant
  - pawn en passant not possible for single stepped opponent pawn
  - promotes automatically to queen on reaching opposing back rank
+ - may promote to knight on reaching opposing back rank
 
 fbuser should:
  - can update name after signing in

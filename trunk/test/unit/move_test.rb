@@ -59,6 +59,7 @@ class MoveTest < ActiveSupport::TestCase
 	def test_notates_white_queenside_castle_correctly
 		match = matches(:queenside_castled)
 		match.moves << Move.new( :from_coord => 'e1', :to_coord => 'c1' ) 
+		assert_equal 1, match.moves.last.castled
 		assert_equal 'O-O-O', match.moves.last.notation
 	end
 

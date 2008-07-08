@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.string   "from_coord",           :limit => 10
     t.string   "to_coord",             :limit => 10
     t.string   "notation",             :limit => 10
-    t.integer  "castled",                            :default => 0
+    t.integer  "castled"
     t.string   "captured_piece_coord", :limit => 10
     t.string   "promotion_choice",     :limit => 1
     t.datetime "created_at"

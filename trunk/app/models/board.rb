@@ -22,33 +22,38 @@ class Board
 		end
 		
 		#replay the board to that position
-		@match.moves[0..@as_of_move-1].each do |m|
+		@match.moves[0..@as_of_move-1].each{ |m| play_move!(m) }
+			
+	end
 
-			#kill any existing piece we're moving onto or capturing enpassant
-			@pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
+	# updates internals with a given move played
+	def play_move!( m )
+		#kill any existing piece we're moving onto or capturing enpassant
+		@pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
 
-			#move to that square
-			piece_moved = nil
-			@pieces.each{ |p| p.position = m.to_coord and piece_moved = p if p.position==m.from_coord }
+		#move to that square
+		piece_moved = nil
+		@pieces.each{ |p| p.position = m.to_coord and piece_moved = p if p.position==m.from_coord }
 
-			#reflect castling
-			if m.castled==1
-				castling_rank = m.to_coord[1].chr
-				[['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, rook_file, orig_rook_file|
-					#update the position of the rook if we landed on the kings castling square
-					@pieces.each { |p| p.position = "#{rook_file}#{castling_rank}" if m.to_coord[0].chr==king_file && p.position=="#{orig_rook_file}#{castling_rank}"}
-				end
-			end
-
-			#reflect promotion
-			if piece_moved.promotable? 
-				if ! m.promotion_choice
-					piece_moved.promote!
-					m.notation += 'Q' unless m.notation[-1].chr == 'Q'
-				end
+		#reflect castling
+		if m.castled==1
+			castling_rank = m.to_coord[1].chr
+			[['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, rook_file, orig_rook_file|
+				#update the position of the rook if we landed on the kings castling square
+				@pieces.each { |p| p.position = "#{rook_file}#{castling_rank}" if m.to_coord[0].chr==king_file && p.position=="#{orig_rook_file}#{castling_rank}"}
 			end
 		end
-			
+
+		#reflect promotion
+		piece_moved.promote!( Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) if piece_moved.promotable? 
+
+		self
+	end
+
+	#returns a copy of self with move played
+	def consider_move(m)
+		considered_board = self.clone
+		considered_board.play_move!(m)
 	end
 
 	#todo - can dry up these methods 
@@ -108,19 +113,8 @@ class Board
 			return false if way_out
 
 			p.allowed_moves(self).each do |mv|
-				#todo - lighter weight evaluation of next move - not touching db ideally
-				#wrapping in a transaction seems to lessen time to execute
-				Match.transaction do 
-					@match.moves << Move.new( :from_coord => p.position, :to_coord => mv )
-
-					@match.reload #reload match
-
-					way_out = true if !@match.board.in_check?( side )
-
-					@match.moves.last.destroy
-					@match.reload
-				end
-
+				hypothetical_board = @match.board.consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) )
+				way_out = true if !hypothetical_board.in_check?( side )
 			end
 		end
 		return !way_out
