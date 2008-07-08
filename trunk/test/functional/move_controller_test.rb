@@ -58,5 +58,6 @@ class MoveControllerTest < ActionController::TestCase
 	
 		#doesn't work yet but shows you can play the move
 		assert_equal players(:chris), m.winning_player
+		assert_not_equal 1, m.active
 	end
 end

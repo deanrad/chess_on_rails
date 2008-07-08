@@ -3,20 +3,17 @@ class MoveController < ApplicationController
 	rescue_from ArgumentError, :with => :display_error
 	
 	before_filter :authorize
-	before_filter :move_params_check, :only => :create
 
 	#accessible via get or post but should be idempotent on 2x get
 	def create
 		@move = Move.new( params[:move] )
 
-
-		#puts @move.errors and raise ArgumentError if ! @move.valid?
-		
-		#invoke validation
+		#invoke validation - todo fit this into AR life cycle better
 		@move.valid?
 
 		@match = Match.find( params[:move][:match_id] )
 
+		#todo - move into models, based on side of piece being moved
 		unless @match && @match.turn_of?( @current_player )
 		  raise ArgumentError, "It's not your turn to move on match #{@move.match_id}, #{@current_player.name}" 
 		end
@@ -25,7 +22,7 @@ class MoveController < ApplicationController
 
 		#if they got the other guy on this move 
 		#todo - more model-esque - possibly decommissioning this controller and working just with match
-		if @move.match.reload.board.in_checkmate?( @current_player == @move.match.player1 ? :black : :white )
+		if @match.reload.board.in_checkmate?( @current_player == @match.player1 ? :black : :white )
 			@move.match.winning_player = @current_player
 			@move.match.result = 'Checkmate'
 			@move.match.active = 0
@@ -35,12 +32,6 @@ class MoveController < ApplicationController
 		end
 
 		redirect_to(:back) # this is not yet ajaxian, and no template's been written yet
-	end
-
-	def move_params_check
-		if (!params[:move][:notation].blank?) && ( !params[:move][:from_coord].blank? || !params[:move][:to_coord].blank? )
-			raise ArgumentError, "Please enter either a notation, or a from/to coordinate pair."
-		end
 	end
 
 	def display_error(ex)

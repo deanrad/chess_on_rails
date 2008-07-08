@@ -11,6 +11,11 @@ class Move < ActiveRecord::Base
 		errors.add(:match, 'You have not specified which match.') and raise ArgumentError, 'No match' if ! match
 		errors.add(:active, 'You cannot make a move for an inactive match, silly !') if match.active != 1
 
+		if self[:notation].blank? && ( self[:from_coord].blank? || self[:to_coord].blank? )
+			errors.add(:coordinates, 'Please enter either a notation, or a from/to coordinate pair.') and raise ArgumentError
+		end
+
+
 		side = match.next_to_move
 
 		if( notation && (!from_coord || !to_coord || from_coord.empty? || to_coord.empty? ))
@@ -44,12 +49,9 @@ class Move < ActiveRecord::Base
 		
 
 		this_board = match.board
-		#raise ArgumentError, "Got here: from_coord is #{from_coord}, board is #{this_board}"
 
 		piece_moving = this_board.piece_at( from_coord )
 
-		#raise ArgumentError, "No piece present on coordinate #{from_coord} in match #{match.id}" if ! piece_moving
-		
 		# start off with the pieces own notation
 		mynotation = piece_moving.notation
 		
