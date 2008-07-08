@@ -99,5 +99,28 @@ class MoveTest < ActiveSupport::TestCase
 			match.moves << Move.new( :notation => 'Bb3' )
 		end
 	end
+	
+	def test_notates_which_knight_moved_to_a_square_if_ambiguous
+		match = matches(:queenside_castled)
 
+		#there are two knights which could have moved here - did we show which one
+		match.moves << Move.new( :from_coord => 'g1', :to_coord => 'f3' )
+		assert_equal 'Ngf3', match.moves.last.notation
+	end
+
+	#def test_disambiguates_knight_move_in_coordinates_when_moved_by_notation
+	#	match = matches(:queenside_castled)
+	#
+	#	match.moves << Move.new( :notation => 'Ngf3' )
+	#	assert_equal 'g1', match.moves.last.from_coord
+	#end
+
+	def test_errs_if_ambiguous_move_made_by_notation
+
+		match = matches(:queenside_castled)
+		assert_raises ArgumentError do
+			match.moves << Move.new( :notation => 'Nf3' )
+		end
+	end
+	
 end

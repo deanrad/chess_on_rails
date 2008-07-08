@@ -43,6 +43,11 @@ class MoveControllerTest < ActionController::TestCase
 		assert_not_nil flash[:move_error]
 	end
 
+	def test_reject_move_made_without_notation_or_coordinates
+		post :create, {:move=>{ :match_id => 3 } }, {:player_id => 1}
+		assert_not_nil flash[:move_error]
+	end
+
 	def test_cant_move_when_not_your_turn
 		m = matches(:paul_vs_dean)
 		assert_equal 0, m.moves.length

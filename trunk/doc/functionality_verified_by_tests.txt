@@ -35,6 +35,7 @@ move_controller should:
  - errs if specified match not there or active
  - cant move when on match you dont own
  - reject move made with notation and one or more coordinates
+ - reject move made without notation or coordinates
  - cant move when not your turn
  - game over when checkmating move posted
 
@@ -99,6 +100,8 @@ move should:
  - allows move from notation only
  - allows move from notation only pawn version
  - detects attempt to move from incorrect notation
+ - notates which knight moved to a square if ambiguous
+ - errs if ambiguous move made by notation
 
 piece should:
  - recognize valid piece types
