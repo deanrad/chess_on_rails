@@ -6,7 +6,7 @@ class Match < ActiveRecord::Base
 	belongs_to :player2,	:class_name => 'Player', :foreign_key => 'player2'
 	belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 	
-	has_many :moves, :order => 'created_at ASC', :before_add => :evaluate_last_move
+	has_many :moves, :order => 'created_at ASC'  #, :before_add => :evaluate_last_move
 	
 	def initial_board
 		return Board.new( self, Chess.initial_pieces, 0 )
@@ -38,14 +38,19 @@ class Match < ActiveRecord::Base
 	end
 
 	def resign( plyr )
-		result = 'Resigned'
-		active = 0
+		self.result, self.active = ['Resigned', 0]
 		self.winning_player = (plyr == player1) ? player2 : player1
 		save!
 	end
 
-private
-	# todo - callback called on new move to evaluate checkmate situation, etc 
-	def evaluate_last_move( move )
+	def checkmate_by( plyr )
+		self.result, self.active = ['Checkmate', 0]
+		self.winning_player = plyr
+		save!
 	end
+
+#private
+	# todo - callback called on new move to evaluate checkmate situation, etc 
+	#def evaluate_last_move( move )
+	#end
 end
