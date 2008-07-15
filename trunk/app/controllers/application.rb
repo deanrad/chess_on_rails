@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
 			@ranks.reverse!
 		end
 
-		@last_move = @match.moves.last
+		@last_move = @match.reload.moves.last
 
 		# too small to refactor away - but indicates whether the status has changed since last requested
 		session[:move_count] ||= @match.moves.length 
