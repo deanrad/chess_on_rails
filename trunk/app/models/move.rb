@@ -88,7 +88,7 @@ class Move < ActiveRecord::Base
 		mynotation += to_coord
 				
 		#castling 3 O's if queenside otherwise 2 O's
-		if castled
+		if castled == 1
 			mynotation = 'O-O' + ((to_coord[0].chr=='c') ? '-O' : '' ) 
 		end
 
