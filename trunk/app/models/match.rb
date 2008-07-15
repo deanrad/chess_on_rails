@@ -7,6 +7,11 @@ class Match < ActiveRecord::Base
 	belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 	
 	has_many :moves, :order => 'created_at ASC'
+
+	def self.new_for( plyr1, plyr2, plyr2_side )
+		plyr1, plyr2 = [plyr2, plyr1] if plyr2_side == '1'
+		Match.new( :player1 => plyr1, :player2 => plyr2 )
+	end
 	
 	def initial_board
 		return Board.new( self, Chess.initial_pieces, 0 )

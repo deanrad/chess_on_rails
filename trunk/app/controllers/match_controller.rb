@@ -48,16 +48,9 @@ class MatchController < ApplicationController
 
 	# POST /match/create
 	def create
-	    if request.post?
+		return unless request.post?
 
-		    player1_id = params[:opponent_side] == '1' ? params[:opponent_id] : @current_player.id
-		    player2_id = params[:opponent_side] == '2' ? params[:opponent_id] : @current_player.id
-
-		    @match = Match.create( :player1 => Player.find(player1_id), :player2 => Player.find(player2_id) )
-
-		    if @match
-			redirect_to :action => 'show', :id=>@match.id
-		    end
-	    end
+		@match = Match.new_for( @current_player, Player.find( params[:opponent_id] ), params[:opponent_side] )
+		redirect_to :action => 'show', :id=>@match.id if @match
 	end
 end
