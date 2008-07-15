@@ -19,7 +19,12 @@ class MoveController < ApplicationController
 			redirect_to( :controller => 'match', :action => 'index' ) and return
 		end
 
-		redirect_to(:back) # this is not yet ajaxian, and no template's been written yet
+		#back to the match if non-ajax
+		redirect_to(:back) and return unless request.xhr? 
+
+		#otherwise do a normal status update to refresh UI
+		set_match_status_instance_variables
+		render :template => 'match/status' and return
 	end
 
 	def get_match
@@ -30,6 +35,11 @@ class MoveController < ApplicationController
 
 	def display_error(ex)
 		flash[:move_error] = ex.to_s
-		redirect_to(:back)
+		redirect_to(:back) and return unless request.xhr?
+
+		#xhr
+		set_match_status_instance_variables
+		render :template => 'match/status' and return
+		
 	end
 end

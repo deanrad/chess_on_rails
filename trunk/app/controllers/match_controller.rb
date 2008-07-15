@@ -12,29 +12,14 @@ class MatchController < ApplicationController
 		# shows whose move it is 
 		@match = Match.find( params[:id] )
 		
-		@board = @match.board( @match.moves.count )
+		set_match_status_instance_variables
 		@pieces = @board.pieces
-		
-		set_view_variables
 
 		if @match.active == 0
 			render :template => 'match/result' and return
 		end
 
 	end
-
-	def set_view_variables
-		@files = Chess::Files
-		@ranks = Chess::Ranks.reverse
-
-		@viewed_from_side = (@current_player == @match.player1) ? :white : :black
-		@your_turn = @match.turn_of?( @current_player )
-
-		if @viewed_from_side == :black
-			@files.reverse!
-			@ranks.reverse!
-		end
-	end	
 
 	# GET /match/ 
 	def index
@@ -44,15 +29,8 @@ class MatchController < ApplicationController
 
 	def status 
 		@match = Match.find( params[:id] )
-		@board = @match.board(:current)
 
-		# too small to refactor away - but indicates whether the status has changed since last requested
-		session[:move_count] = @match.moves.length if session[:move_count] == nil 
-		@status_has_changed  = ( session[:move_count] != @match.moves.length )
-		session[:move_count] = @match.moves.length
-
-		set_view_variables
-		@last_move = @match.moves.last
+		set_match_status_instance_variables
 	end
 
 	# GET /match/new

@@ -15,6 +15,7 @@ class MoveControllerTest < ActionController::TestCase
 	
       def test_accepts_and_notates_move_via_coordinates
 		m = matches(:paul_vs_dean)
+		
 		assert_equal 0, m.moves.length
 	
 		post :create, { :move=>{:from_coord => 'a2', :to_coord => 'a4', :match_id => m.id } }, {:player_id => m.player1.id}
@@ -26,7 +27,7 @@ class MoveControllerTest < ActionController::TestCase
 	end
 	
 	def test_errs_if_specified_match_not_there_or_active
-		post :create, { :move=>{:match_id=>9, :from_coord=>'e2', :to_coord=>'e4'} }, {:player_id => 1}
+		post :create, { :move=>{:match_id => 9, :from_coord => 'e2', :to_coord => 'e4'} }, {:player_id => 1}
 		assert_not_nil flash[:move_error]
 	end
 
@@ -34,7 +35,7 @@ class MoveControllerTest < ActionController::TestCase
 		m = matches(:paul_vs_dean)
 		assert_equal 0, m.moves.length
 
-		post :create, { :move=>{:match_id=>m.id, :from_coord=>'e2', :to_coord=>'e4'} }, {:player_id => players(:maria).id }
+		post :create, { :move=>{:match_id => m.id, :from_coord => 'e2', :to_coord => 'e4'} }, {:player_id => players(:maria).id }
 		assert_not_nil flash[:move_error]
 	end
 
@@ -58,11 +59,24 @@ class MoveControllerTest < ActionController::TestCase
 
 	def test_game_over_when_checkmating_move_posted
 		m = matches(:scholars_mate)	
-		post :create, { :move=>{:match_id=>m.id, :notation => 'Qf7' } }, {:player_id => players(:chris).id }		
+		post :create, { :move=>{:match_id => m.id, :notation => 'Qf7' } }, {:player_id => players(:chris).id }		
 		m.reload
 	
 		#doesn't work yet but shows you can play the move
 		assert_equal players(:chris), m.winning_player
 		assert_not_equal 1, m.active
+	end
+
+	def test_non_ajax_move_posting_redirects_to_match_page
+		m = matches(:paul_vs_dean)
+		post :create, { :move=>{:match_id => m.id, :from_coord => 'e2', :to_coord => 'e4'} }, {:player_id => players(:paul).id }
+		assert_response :redirect		
+	end
+
+	def test_ajax_move_responds_with_rjs_template_to_update_status
+		m = matches(:paul_vs_dean)
+		xhr :post, :create, { :move=>{:match_id => m.id, :from_coord => 'e2', :to_coord => 'e4'} }, {:player_id => players(:paul).id }
+		assert_template 'match/status'
+		assert_response :success
 	end
 end

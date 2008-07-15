@@ -2,7 +2,7 @@
 <!-- form> 
 	<%= check_box_tag :auto_submit_move_ck, 1, :id => 'auto_submit_move_ck', :title => 'Auto submit dropped moves' %> Auto submit dropped moves
 </form -->
-<% form_for :move,  :html => {:id => 'new_move_form'}, :url => {:controller => 'move', :action => 'create'}  do |f| %>
+<% remote_form_for :move,  :html => {:id => 'new_move_form'}, :url => {:controller => 'move', :action => 'create'}  do |f| %>
     Notation: <%= f.text_field :notation, :maxlength => '5' %> or... <br/>
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>

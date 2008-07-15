@@ -45,6 +45,29 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	#given a @match and @current_player, sets up other instance variables 
+	def set_match_status_instance_variables
+		@files = Chess::Files
+		@ranks = Chess::Ranks.reverse
+
+		@board = @match.board
+
+		@viewed_from_side = (@current_player == @match.player1) ? :white : :black
+		@your_turn = @match.turn_of?( @current_player )
+
+		if @viewed_from_side == :black
+			@files.reverse!
+			@ranks.reverse!
+		end
+
+		@last_move = @match.moves.last
+
+		# too small to refactor away - but indicates whether the status has changed since last requested
+		session[:move_count] ||= @match.moves.length 
+		@status_has_changed  = ( session[:move_count] != @match.moves.length )
+		session[:move_count] = @match.moves.length
+	end	
+
 	# See ActionController::RequestForgeryProtection for details
 	# Uncomment the :secret if you're not using the cookie session store
 	protect_from_forgery :secret => '81ef9321d36cc23a2671126d90eed60f'

@@ -38,6 +38,8 @@ move_controller should:
  - reject move made without notation or coordinates
  - cant move when not your turn
  - game over when checkmating move posted
+ - non ajax move posting redirects to match page
+ - ajax move responds with rjs template to update status
 
 routes should:
  - authentication url is authentication slash login
