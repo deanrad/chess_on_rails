@@ -37,13 +37,11 @@ class MatchController < ApplicationController
 	def new
 		#gets form for creating one with defaults
 		@match = Match.new
-		#render :template => "match/new"
 	end
 
 	def resign
 		@match = Match.find( params[:id] )
 		@match.resign( @current_player )
-		@match.save!
 
 		redirect_to :action => 'index'
 	end

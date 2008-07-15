@@ -2,22 +2,18 @@
 class MoveController < ApplicationController
 
 	rescue_from ArgumentError, :with => :display_error
+	rescue_from ActiveRecord::RecordInvalid, :with => :display_error
 	
 	before_filter :authorize, :get_match
 
 	#accessible via get or post but should be idempotent on 2x get
 	def create
-		@move = @match.moves.new( params[:move] )
+		@move = @match.moves.build( params[:move] )
 
-		@move.save! #not implicit save like appending << to association
+		@move.save!
 
-		#if they got the other guy on this move 
-		#todo - more model-esque - possibly decommissioning this controller and working just with match
-		if @match.reload.board.in_checkmate?( @current_player == @match.player1 ? :black : :white )
-			@match.checkmate_by( @current_player )
-
-			redirect_to( :controller => 'match', :action => 'index' ) and return
-		end
+		#unceremonious way of saying you just ended the game 
+		redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
 
 		#back to the match if non-ajax
 		redirect_to(:back) and return unless request.xhr? 

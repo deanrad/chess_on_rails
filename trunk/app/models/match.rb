@@ -6,7 +6,7 @@ class Match < ActiveRecord::Base
 	belongs_to :player2,	:class_name => 'Player', :foreign_key => 'player2'
 	belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 	
-	has_many :moves, :order => 'created_at ASC'  #, :before_add => :evaluate_last_move
+	has_many :moves, :order => 'created_at ASC'
 	
 	def initial_board
 		return Board.new( self, Chess.initial_pieces, 0 )
@@ -29,6 +29,11 @@ class Match < ActiveRecord::Base
 		return :black if plyr == player2
 	end
 
+	def player_on_side( side )
+		return player1 if side == :white
+		return player2 if side == :black
+	end
+
 	def opposite_side_of( plyr )
 		side_of(plyr) == :white ? :black : :white
 	end
@@ -43,14 +48,10 @@ class Match < ActiveRecord::Base
 		save!
 	end
 
-	def checkmate_by( plyr )
+	def checkmate_by( side )
 		self.result, self.active = ['Checkmate', 0]
-		self.winning_player = plyr
+		self.winning_player = player_on_side( side )
 		save!
 	end
 
-#private
-	# todo - callback called on new move to evaluate checkmate situation, etc 
-	#def evaluate_last_move( move )
-	#end
 end
