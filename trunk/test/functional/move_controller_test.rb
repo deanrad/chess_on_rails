@@ -79,4 +79,12 @@ class MoveControllerTest < ActionController::TestCase
 		assert_template 'match/status'
 		assert_response :success
 	end
+
+	def test_invalid_ajax_move_responds_with_error
+		m = matches(:paul_vs_dean)
+		xhr :post, :create, { :move=>{:match_id => m.id, :from_coord => 'e4', :to_coord => 'e6'} }, {:player_id => players(:paul).id }
+		assert_template 'match/status'
+		assert_not_nil flash[:move_error]
+	end
+
 end

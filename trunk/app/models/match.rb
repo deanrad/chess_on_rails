@@ -34,11 +34,6 @@ class Match < ActiveRecord::Base
 		return :black if plyr == player2
 	end
 
-	def player_on_side( side )
-		return player1 if side == :white
-		return player2 if side == :black
-	end
-
 	def opposite_side_of( plyr )
 		side_of(plyr) == :white ? :black : :white
 	end
@@ -55,7 +50,7 @@ class Match < ActiveRecord::Base
 
 	def checkmate_by( side )
 		self.result, self.active = ['Checkmate', 0]
-		self.winning_player = player_on_side( side )
+		self.winning_player = (side == :white ? player1 : player2 )
 		save!
 	end
 

@@ -45,7 +45,7 @@ class Board
 		end
 
 		#reflect promotion
-		piece_moved.promote!( Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) if piece_moved.promotable? 
+		piece_moved.promote!( Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) if piece_moved && piece_moved.promotable? 
 
 		self
 	end
