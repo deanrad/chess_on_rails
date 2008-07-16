@@ -13,12 +13,8 @@ class MatchController < ApplicationController
 		@match = Match.find( params[:id] )
 		
 		set_match_status_instance_variables
-		@pieces = @board.pieces
 
-		if @match.active == 0
-			render :template => 'match/result' and return
-		end
-
+		render :template => 'match/result' and return if @match.active == 0
 	end
 
 	# GET /match/ 
@@ -29,20 +25,17 @@ class MatchController < ApplicationController
 
 	def status 
 		@match = Match.find( params[:id] )
-
 		set_match_status_instance_variables
 	end
 
 	# GET /match/new
 	def new
-		#gets form for creating one with defaults
 		@match = Match.new
 	end
 
 	def resign
 		@match = Match.find( params[:id] )
 		@match.resign( @current_player )
-
 		redirect_to :action => 'index'
 	end
 

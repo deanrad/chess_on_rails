@@ -11,7 +11,7 @@ class MoveTest < ActiveSupport::TestCase
 		match = matches(:unstarted_match)	  
 		
 
-		match.moves << Move.new( :from_coord => 'e2', :to_coord => 'e4', :notation => 'e4' )
+		match.moves << Move.new( :from_coord => 'e2', :to_coord => 'e4' )
 		match.moves << Move.new( :from_coord => 'd7', :to_coord => 'd5', :notation => 'd5' )
 		
 		assert match.valid?
@@ -95,8 +95,8 @@ class MoveTest < ActiveSupport::TestCase
 		match = matches(:dean_vs_paul)
 
 		#models can raise errors, controllers ultimately should not
-		assert_raises ArgumentError do
-			match.moves << Move.new( :notation => 'Bb3' )
+		assert_raises ActiveRecord::RecordInvalid do
+			match.moves.build( :notation => 'Bb3' ).save!
 		end
 	end
 	
@@ -111,15 +111,17 @@ class MoveTest < ActiveSupport::TestCase
 	#def test_disambiguates_knight_move_in_coordinates_when_moved_by_notation
 	#	match = matches(:queenside_castled)
 	#
-	#	match.moves << Move.new( :notation => 'Ngf3' )
+	#	move = match.moves.build( :notation => 'Ngf3' )
+	#	move.save!
 	#	assert_equal 'g1', match.moves.last.from_coord
 	#end
 
 	def test_errs_if_ambiguous_move_made_by_notation
 
 		match = matches(:queenside_castled)
-		assert_raises ArgumentError do
-			match.moves << Move.new( :notation => 'Nf3' )
+		assert_raises ActiveRecord::RecordInvalid do
+			move = match.moves.build( :notation => 'Nf3' )
+			move.save!
 		end
 	end
 	

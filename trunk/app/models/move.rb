@@ -34,7 +34,7 @@ class Move < ActiveRecord::Base
 		self[:castled] = 1 if (@piece_moving.type==:king && from_coord[0].chr=='e' && ['c','g'].include?( to_coord[0].chr ) )
 
 		#finally ensure move is notated
-		self[:notation] ||= notate
+		self[:notation] = notate
 	end
 
 	#stuff here depends on knowledge of the board's position prior to the move being committed
@@ -44,6 +44,9 @@ class Move < ActiveRecord::Base
 		if self[:notation].blank? && ( self[:from_coord].blank? || self[:to_coord].blank? )
 			errors.add_to_base 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
 		end
+
+		errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return if @possible_movers && @possible_movers.length==0
+		errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length>1
 
 		#ensure the validity of the coordinates we have whether specified or inferred
 		[from_coord, to_coord].each do |coord|
@@ -61,11 +64,9 @@ class Move < ActiveRecord::Base
 		self[:to_coord] =  notation.to_s[-2,2]
 		role = NOTATION_TO_ROLE_MAP[ notation[0,1] ] ? NOTATION_TO_ROLE_MAP[ notation[0,1] ] : 'pawn'
 
-		possible_movers = @board.pieces.select{ |p| p.side == match.next_to_move && p.role == role && p.allowed_moves(@board).include?( self[:to_coord] ) }
-		raise ArgumentError, "No #{side} piece capable of moving to #{self[:to_coord]} on this board" if possible_movers.length==0
-		raise ArgumentError, "Ambiguous move #{notation}." if possible_movers.length>1
+		@possible_movers = @board.pieces.select{ |p| p.side == match.next_to_move && p.role == role && p.allowed_moves(@board).include?( self[:to_coord] ) }
 
-		self[:from_coord] = possible_movers[0].position
+		self[:from_coord] = @possible_movers[0].position if @possible_movers.length == 1
 	end
 
 	#returns the notation for a given move - depends on alot of things - whether check was given, a capture made, etc..
