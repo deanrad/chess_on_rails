@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   #place these higher to keep a nil :id from creeping in when caught by lower ones
   # (this only happens due to my preference for having :id earlier in the URL than convention
   map.auth    'authentication/:action', :controller => 'authentication'
-  map.move	  'move/:action', :controller => 'move'
+  map.move    'move/:action', :controller => 'move'
   map.match   'match/:action', :controller => 'match'
   map.fbuser  'fbuser/:action', :controller => 'fbuser'
 
