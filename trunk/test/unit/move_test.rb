@@ -124,5 +124,18 @@ class MoveTest < ActiveSupport::TestCase
 			move.save!
 		end
 	end
+
+	def test_errs_if_move_leaves_ones_own_king_in_check
+
+		match = matches(:scholars_mate)
+
+		#this is not a mating move but king is in check and must move
+		match.moves << Move.new( :notation => 'Bxf7' )
+
+		assert_raises ActiveRecord::RecordInvalid do
+			move = match.moves.build( :notation => 'Nf6' )
+			move.save!
+		end
+	end
 	
 end

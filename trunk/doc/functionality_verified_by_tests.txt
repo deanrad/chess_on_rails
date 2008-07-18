@@ -40,6 +40,7 @@ move_controller should:
  - game over when checkmating move posted
  - non ajax move posting redirects to match page
  - ajax move responds with rjs template to update status
+ - invalid ajax move responds with error
 
 routes should:
  - authentication url is authentication slash login
@@ -104,6 +105,7 @@ move should:
  - detects attempt to move from incorrect notation
  - notates which knight moved to a square if ambiguous
  - errs if ambiguous move made by notation
+ - errs if move leaves ones own king in check
 
 piece should:
  - recognize valid piece types

@@ -222,13 +222,13 @@ class BoardTest < ActiveSupport::TestCase
 
 		assert_equal 'queen', m.board.piece_at('a8').role
 
-		assert_equal 'bxa8Q', m.moves.last.notation
+		assert_equal 'bxa8=Q', m.moves.last.notation
 	end
 
 	def test_may_promote_to_knight_on_reaching_opposing_back_rank
 		m = matches(:promote_crazy)
 		m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8', :promotion_choice => 'N' )
-		assert_equal 'bxa8N', m.moves.last.notation
+		assert_equal 'bxa8=N', m.moves.last.notation
 		assert_equal 'knight', m.board['a8'].role
 	end
 

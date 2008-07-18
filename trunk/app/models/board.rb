@@ -52,7 +52,7 @@ class Board
 
 	#returns a copy of self with move played
 	def consider_move(m)
-		considered_board = self.clone
+		considered_board = Marshal::load(Marshal.dump(self)) #deep copy to decouple pieces array
 		considered_board.play_move!(m)
 	end
 
