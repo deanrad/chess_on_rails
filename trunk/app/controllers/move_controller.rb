@@ -16,7 +16,7 @@ class MoveController < ApplicationController
     redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
 
     #back to the match if non-ajax
-    redirect_to(:back, :default => match_url(@match) ) and return unless request.xhr? 
+    redirect_to(:back) and return unless request.xhr? 
 
     #otherwise do a normal status update to refresh UI
     set_match_status_instance_variables

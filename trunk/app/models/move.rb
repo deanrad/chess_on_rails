@@ -46,8 +46,13 @@ class Move < ActiveRecord::Base
     end
 
     errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return if @possible_movers && @possible_movers.length==0
+    
     errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length>1
-
+    
+    if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
+      errors.add :notation, "Failed to infer move coordinates from #{notation}" and return 
+    end
+    
     #ensure the validity of the coordinates we have whether specified or inferred
     [from_coord, to_coord].each do |coord|
       errors.add_to_base "#{coord} is not a valid coordinate" unless Chess.valid_position?( coord )
@@ -64,6 +69,14 @@ class Move < ActiveRecord::Base
   end
 
   def infer_coordinates_from_notation
+    
+    #expand the castling notation
+    if notation.include?('O-O')
+      notation = 'K' 
+      notation += notation.include?('O-O-O') ? 'c' : 'g'
+      notation += match.next_to_move == :white ? '1' : '8'
+    end
+    
     self[:to_coord] =  notation.to_s[-2,2]
     role = NOTATION_TO_ROLE_MAP[ notation[0,1] ] ? NOTATION_TO_ROLE_MAP[ notation[0,1] ] : 'pawn'
 

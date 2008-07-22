@@ -7,16 +7,6 @@ class MoveTest < ActiveSupport::TestCase
     assert_equal 0, match.moves.count
   end
         
-  def test_nodoc_can_play_first_two_moves_correctly
-    match = matches(:unstarted_match)	  
-    
-
-    match.moves << Move.new( :from_coord => 'e2', :to_coord => 'e4' )
-    match.moves << Move.new( :from_coord => 'd7', :to_coord => 'd5', :notation => 'd5' )
-    
-    assert match.valid?
-  end
-
   def test_notates_noncapturing_knight_move
     match = matches(:unstarted_match)
     match.moves << Move.new( :from_coord => 'b1', :to_coord => 'c3' ) 
@@ -116,6 +106,13 @@ class MoveTest < ActiveSupport::TestCase
   #	assert_equal 'g1', match.moves.last.from_coord
   #end
 
+  def test_can_castle_via_notation
+    match = matches(:dean_vs_maria)
+    move = match.moves << Move.new( :notation => 'O-O' )
+    assert_equal 1, match.moves.last.castled
+    assert_equal 'g1', match.moves.last.to_coord
+  end
+  
   def test_errs_if_ambiguous_move_made_by_notation
 
     match = matches(:queenside_castled)
