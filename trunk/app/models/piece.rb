@@ -1,7 +1,6 @@
 
 #An instance of a piece bound to a particular match
 class Piece  
-  require 'Enumerable'
 
   #the allowed types and their shorthand
   Types = {:kings_rook =>'R', :kings_knight =>'N',  :kings_bishop=>'B',  
@@ -53,7 +52,12 @@ class Piece
   end
   
   #bishops and rooks (and the queen) have 'lines of attack', or directions which can be stopped by an intervening piece
+  BISHOP_LINES = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+  ROOK_LINES = [[1,0], [-1,0], [0,1], [0,-1] ]  
   def lines_of_attack
+    return  BISHOP_LINES               if role=='bishop'
+    return  ROOK_LINES                 if role=='rook'
+    return  BISHOP_LINES + ROOK_LINES  if role=='queen'
     @lines_of_attack || []
   end
   
@@ -68,40 +72,38 @@ class Piece
   # for reasons of: 1) would be on your own sides square
   # 2) would place your king in check
   def allowed_moves(board)
-    m = []
+    moves = []
     
     #bishops queens and rooks have 'lines of attack' rules
-    if lines_of_attack.length > 0 
-      lines_of_attack.each do |line_of_attack|
+    lines_of_attack.each do |line_of_attack|
+      line_worth_following = true
+      file_unit, rank_unit = line_of_attack
+      
+      (1..8).each do |length|
+        pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
+        next unless line_worth_following
+        next unless Chess.valid_position?( pos ) 
+        
+        side_occupying = board.side_occupying(pos)
+        moves << pos unless side_occupying == @side
+        
         # if a line of attack is blocked, remove it from the list
-        line_worth_following = true
-        
-        file_unit, rank_unit = line_of_attack
-        
-        (1..8).each do |length|
-          
-          pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
-          next unless line_worth_following
-          next unless Chess.valid_position?( pos ) 
-
-          side_occupying = board.side_occupying(pos)
-          m << pos unless side_occupying == @side
-          line_worth_following = false unless side_occupying == nil
-
-        end
-        
+        line_worth_following = false unless side_occupying == nil
       end
-    else
-      #knights pawns and kings
+      
+    end
+    return moves if lines_of_attack.length > 0 #thats it for this piece type
+      
+      #for knights pawns and kings..
       
       #start by excluding squares you occupy 
-      m = theoretical_moves.reject { |pos| @side == board.side_occupying(pos) }
+      moves = theoretical_moves.reject { |pos| @side == board.side_occupying(pos) }
       
-      #for pawns 
-      if( @type.to_s.include?(:pawn.to_s) )
+      #pawns have some exclusions (cannot move diagonally unless capture or enpassant)
+      if( role=='pawn' )
 
         # exclude non-forward moves unless captures or en_passant (6th and 3rd rank captures behind doubly advanced pawn)
-        m.reject! do |pos| 
+        moves.reject! do |pos| 
           #diagonals are excluded if empty (unless en passant)
           if (pos[0] != @position[0]) 
             (board.side_occupying(pos) == nil) && ! board.is_en_passant_capture?( @position, pos )
@@ -112,39 +114,32 @@ class Piece
           end
         end
         
-        # exclude forward moves if blocked 
-        #m.reject! { |pos| (pos[0] == @position[0]) && ( board.side_occupying(pos) != nil ) }
-      end
-
-      if( role=='king')
+      #kings may have additional moves for castling
+      elsif ( role=='king')
         #castling
         castle_rank = (side==:white) ? '1' : '8'
         
-        #not accounting for previous moves, yes, or castling across check, but this to be remedied with test coverage
-        king_on_initial_square = (position == ('e'+castle_rank) )
-        kings_rook_on_initial_square = (board.piece_at( 'h'+castle_rank) != nil) && (board.piece_at( 'h'+castle_rank).role=='rook')
-        intervening_kingside_squares_empty = (board.piece_at( "g"+castle_rank) == nil) && (board.piece_at( 'f'+castle_rank) == nil)
+        #TODO castling logic does not account for previous moves, or castling across check
+        king_on_initial_square    = (position == ('e'+castle_rank) )
         
-        if(king_on_initial_square && kings_rook_on_initial_square && intervening_kingside_squares_empty  )
-          m << 'g'+castle_rank
+        [ ['h', ('f'..'g'), 'g'], ['a', ('b'..'d'), 'c'] ].each do |rook_file, intervening_files, castle_to_file|
+          rook_on_initial_square  = board[rook_file + castle_rank] and board[rook_file + castle_rank].role=='rook'
+          intervening_files_empty = intervening_files.inject(true){ |empty, file| empty and board[file+castle_rank] == nil}
+          
+          if king_on_initial_square and rook_on_initial_square and intervening_files_empty
+            moves << castle_to_file + castle_rank
+          end
         end
         
-        queens_rook_on_initial_square = (board.piece_at( 'a'+castle_rank) != nil) && (board.piece_at( 'a'+castle_rank).role=='rook')
-        intervening_queenside_squares_empty = (board.piece_at( 'd'+castle_rank) == nil) && (board.piece_at( 'c'+castle_rank) == nil) && (board.piece_at( 'b'+castle_rank) == nil)
-
-        if(king_on_initial_square && queens_rook_on_initial_square && intervening_queenside_squares_empty  )
-          m << 'c'+castle_rank
-        end
-
       end
-    end
+      
+      #knights have no additional special moves
     
-    return m
+    return moves
   end
   
   #the moves a piece could move to on an empty board
   def theoretical_moves
-    #raise ArgumentError, "Cannot determine theoretical moves of piece #{self.to_s} if position unspecified" if ! position
     @moves = []
     
     #call the method named for the role of the piece
@@ -155,47 +150,12 @@ class Piece
     
   def calc_theoretical_moves_king
     
-    lines_of_attack = [1,0,-1].cartesian( [1,0,-1] ).reject! { |x| x==[0,0] }
-    lines_of_attack.each do |file_unit, rank_unit|
+    (BISHOP_LINES + ROOK_LINES).each do |file_unit, rank_unit|
       pos = (file[0] + (file_unit) ).chr + (rank.to_i + (rank_unit)).to_s
       @moves << pos if Chess.valid_position?( pos )
     end
   end
   
-  def calc_theoretical_moves_queen
-    
-    @lines_of_attack = [1,0,-1].cartesian( [1,0,-1] ).reject! { |x| x==[0,0] }
-    @lines_of_attack.each do |file_unit, rank_unit|
-      (1..8).each do |length|
-        pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
-        @moves << pos if Chess.valid_position?( pos )
-      end
-    end
-  end
-  
-  def calc_theoretical_moves_rook
-    
-    @lines_of_attack = [ [1,0], [-1,0], [0,1], [0,-1] ]
-    @lines_of_attack.each do |file_unit, rank_unit|
-      (1..8).each do |length|
-        pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
-        @moves << pos if Chess.valid_position?( pos )
-      end
-    end
-  end
-  
-  def calc_theoretical_moves_bishop
-    
-    @lines_of_attack = [ [1,1], [-1,1], [1,-1], [-1,-1] ]
-    @lines_of_attack.each do |file_unit, rank_unit|
-      (1..8).each do |length|
-        pos = (file[0] + (file_unit*length) ).chr + (rank.to_i + (rank_unit*length)).to_s
-        @moves << pos if Chess.valid_position?( pos )
-      end
-    end
-  end
-  
-
   # a knight has no lines of attack	
   def calc_theoretical_moves_knight
     

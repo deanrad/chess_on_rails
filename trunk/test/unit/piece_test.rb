@@ -2,13 +2,6 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class PieceTest < ActiveSupport::TestCase
 
-  require 'Enumerable' 
-
-  def test_nodoc_does_cartesian_product
-    assert_equal [ [1,1], [1,2] ], [1].cartesian( [1,2] )
-    assert_equal [ [1,3], [1,4], [2,3], [2,4] ], [1,2].cartesian( [3,4] )
-  end
-
   def test_recognize_valid_piece_types
     p = Piece.new(:white, :queens_knight)
     p = Piece.new(:black, :a_pawn)
@@ -62,46 +55,20 @@ class PieceTest < ActiveSupport::TestCase
     assert_equal 'b', p1.notation
   end
     
-  def test_rook_moves_correctly
-    p = Piece.new(:white, :kings_rook)
-    p.position='d4'
-    
-    assert p.theoretical_moves.include?('e4')
-    assert p.theoretical_moves.include?('c4')
-    assert p.theoretical_moves.include?('d5')
-    assert p.theoretical_moves.include?('d6')
-    
-    assert_equal 14, p.theoretical_moves.length, "Theoretical moves were #{p.theoretical_moves.to_s}"
-  end
   
   def test_rook_has_four_lines_of_attack
     p = Piece.new(:black, :queens_rook, 'a8')
-    assert_equal 14, p.theoretical_moves.length
     assert_equal 4, p.lines_of_attack.length
   end
 
   def test_bishop_has_four_lines_of_attack
     p = Piece.new(:white, :queens_bishop, 'c1')
-    assert_equal 7, p.theoretical_moves.length
     assert_equal 4, p.lines_of_attack.length
   end
 
   def test_queen_has_eight_lines_of_attack
     p = Piece.new(:white, :queen, 'h8')
-    assert_equal 21, p.theoretical_moves.length
     assert_equal 8, p.lines_of_attack.length
-  end
-
-  def test_queen_moves_correctly
-    p = Piece.new(:white, :queen)
-    p.position= 'd4'
-    
-    assert p.theoretical_moves.include?('e5')
-    assert p.theoretical_moves.include?('a1')
-    assert p.theoretical_moves.include?('f2')
-    assert p.theoretical_moves.include?('g1')
-    assert p.theoretical_moves.include?('h8')
-    assert !p.theoretical_moves.include?('e6')
   end
   
   def test_kings_knights_pawns_have_no_lines_of_attack
@@ -122,7 +89,6 @@ class PieceTest < ActiveSupport::TestCase
     r = Piece.new(:black, :queens_rook, 'a8')
     b = matches(:unstarted_match).initial_board
     
-    assert_equal 14, r.theoretical_moves.length
     assert_equal 0,  r.allowed_moves( b ).length
   end
 
