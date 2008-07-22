@@ -45,8 +45,6 @@ class Move < ActiveRecord::Base
       errors.add_to_base 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
     end
 
-    errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return if @possible_movers && @possible_movers.length==0
-    
     errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length>1
     
     if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
@@ -57,6 +55,8 @@ class Move < ActiveRecord::Base
     [from_coord, to_coord].each do |coord|
       errors.add_to_base "#{coord} is not a valid coordinate" unless Chess.valid_position?( coord )
     end
+
+    errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return if @possible_movers && @possible_movers.length==0
 
     #verify allowability of the move
     
@@ -71,10 +71,10 @@ class Move < ActiveRecord::Base
   def infer_coordinates_from_notation
     
     #expand the castling notation
-    if notation.include?('O-O')
-      notation = 'K' 
-      notation += notation.include?('O-O-O') ? 'c' : 'g'
-      notation += match.next_to_move == :white ? '1' : '8'
+    if self[:notation].include?('O-O')
+      new_notation = 'K' + (self[:notation].include?('O-O-O') ? 'c' : 'g')
+      new_notation += (match.next_to_move == :white) ? '1' : '8'
+      self[:notation] = new_notation
     end
     
     self[:to_coord] =  notation.to_s[-2,2]

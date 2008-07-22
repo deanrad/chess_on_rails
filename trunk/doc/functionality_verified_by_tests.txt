@@ -107,6 +107,7 @@ move should:
  - detects attempt to move from incorrect notation
  - notates which knight moved to a square if ambiguous
  - can castle via notation
+ - errs if unrecognized notation
  - errs if ambiguous move made by notation
  - errs if move leaves ones own king in check
 

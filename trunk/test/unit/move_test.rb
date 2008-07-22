@@ -112,6 +112,14 @@ class MoveTest < ActiveSupport::TestCase
     assert_equal 1, match.moves.last.castled
     assert_equal 'g1', match.moves.last.to_coord
   end
+
+  def test_errs_if_unrecognized_notation
+    match = matches(:dean_vs_maria)
+    move = match.moves.build( :notation => 'move it baby' )
+    assert_raises ActiveRecord::RecordInvalid do
+      move.save!
+    end
+  end
   
   def test_errs_if_ambiguous_move_made_by_notation
 
