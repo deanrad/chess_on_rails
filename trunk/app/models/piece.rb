@@ -205,10 +205,10 @@ class Piece
 
   #the set of criteria and error messages to display unless criteria met
   Promotion_Criteria = [
-    [ Proc.new{ |p| (p.side == :white && p.rank == '8')  || (p.side == :black && p.rank == '1') },
+    [ lambda{ |p| (p.side == :white && p.rank == '8')  || (p.side == :black && p.rank == '1') },
       'May only promote upon reaching the opposing back rank' ],
 
-    [ Proc.new{ |p| p.type.to_s.include?('pawn') },
+    [ lambda{ |p| p.type.to_s.include?('pawn') },
       'No piece other than pawn may promote' ]
   ]
 
