@@ -87,7 +87,7 @@ class PieceTest < ActiveSupport::TestCase
 
   def test_rook_can_move_nowhere_on_initial_board
     r = Piece.new(:black, :queens_rook, 'a8')
-    b = matches(:unstarted_match).initial_board
+    b = matches(:unstarted_match).board
     
     assert_equal 0,  r.allowed_moves( b ).length
   end

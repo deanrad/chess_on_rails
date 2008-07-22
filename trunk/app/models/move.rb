@@ -140,4 +140,9 @@ class Move < ActiveRecord::Base
     end
         
   end
+  
+  def to_s
+    s  = "from #{from_coord} to #{to_coord}"
+    s += ", also capturing at #{captured_piece_coord}" if captured_piece_coord
+  end
 end

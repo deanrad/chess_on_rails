@@ -60,7 +60,7 @@ gameplay should:
 
 board should:
  - new match gets an initial board
- - board can refer to move number or refer to current move
+ - after one move board reflects move
  - knows a valid location and distinguishes between invalid one
  - pawn can advance one or two on first move
  - pawn can only advance one on successive moves
@@ -69,10 +69,8 @@ board should:
  - knight has more moves in the center
  - knows what side occupies a square
  - knows what piece is on a square
- - can refer to as many boards as there are moves
  - detects moved piece
  - castled short white king on g1
- - can refer to previous board with negative index
  - knows if side is in check
  - scholars mate capture with queen is checkmate
  - scholars mate capture with bishop not checkmate
@@ -118,14 +116,11 @@ piece should:
  - has a notation for king and queen
  - has a notation for minor and rook
  - has a notation for pawn
- - rook moves correctly
  - rook has four lines of attack
  - bishop has four lines of attack
  - queen has eight lines of attack
- - queen moves correctly
  - kings knights pawns have no lines of attack
  - rook can move nowhere on initial board
- - queen and bishop can move when queens pawn moved
  - image names abstract away irrelevant details
  - pawn may not promote to king
  - pawn may not promote unless on back rank

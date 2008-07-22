@@ -5,24 +5,29 @@ class BoardTest < ActiveSupport::TestCase
   
   def test_new_match_gets_an_initial_board
     m1 = matches(:unstarted_match)
-    board = m1.initial_board
-    
-    assert_equal 32, board.pieces.length
-    
-    #havent enabled move replay just yet
-    #assert_equal :current, board.as_of_move
+    assert_equal 32, m1.board.pieces.length
   end
   
-  def test_board_can_refer_to_move_number_or_refer_to_current_move
+  def test_after_one_move_board_reflects_move
     m1 = matches(:unstarted_match)
-    m1.moves << Move.new(:from_coord=>'d2', :to_coord=>'d4', :moved_by=>1, :notation=>'d4')
-    m1.moves << Move.new(:from_coord=>'e7', :to_coord=>'e5', :moved_by=>2, :notation=>'e5')
-    m1.save
     
-    assert_not_nil m1.board(0)
-    assert_not_nil m1.board(1)
-    assert_not_nil m1.board(2)
+    m1.moves << Move.new(:notation => 'e4')
+    assert_not_nil m1.board['e4']
+    
+    #assert_not_equal b1, b2
+    
   end
+  
+  #def test_board_can_refer_to_move_number_or_refer_to_current_move
+  #  m1 = matches(:unstarted_match)
+  #  m1.moves << Move.new(:from_coord=>'d2', :to_coord=>'d4', :moved_by=>1, :notation=>'d4')
+  #  m1.moves << Move.new(:from_coord=>'e7', :to_coord=>'e5', :moved_by=>2, :notation=>'e5')
+  #  m1.save
+  #  
+  #  assert_not_nil m1.board(0)
+  #  assert_not_nil m1.board(1)
+  #  assert_not_nil m1.board(2)
+  #end
 
   def test_knows_a_valid_location_and_distinguishes_between_invalid_one
     assert    Chess.valid_position?('a1')
@@ -97,38 +102,34 @@ class BoardTest < ActiveSupport::TestCase
   end
   
   def test_knows_what_side_occupies_a_square
-    board = matches(:unstarted_match).initial_board
+    board = matches(:unstarted_match).board
         
-    assert_equal :white, board.side_occupying('a2')
-    
-    assert :black, board.side_occupying( 'e7' )
+    assert_equal :white, board['a2'].side
+    assert_equal :black, board['e7'].side
   end 
   
   def test_knows_what_piece_is_on_a_square
-    assert_nil matches(:unstarted_match).initial_board.piece_at('d4')
-    p1 = matches(:unstarted_match).initial_board.piece_at('b2')
+    assert_nil matches(:unstarted_match).board.piece_at('d4')
+    p1 = matches(:unstarted_match).board.piece_at('b2')
     assert_not_nil p1
     
     assert_equal 'pawn', p1.role
     assert_equal :white, p1.side
   end
   
-  def test_can_refer_to_as_many_boards_as_there_are_moves
-    match = matches(:unstarted_match)
-    assert_not_nil match.initial_board
-    
-    match.moves << Move.new( :from_coord=>'d2', :to_coord=>'d4', :notation=>'d4', :moved_by=>1 )
-    match.save!
-    
-  end
+  #def test_can_refer_to_as_many_boards_as_there_are_moves
+  #  match = matches(:unstarted_match)
+  #  assert_not_nil match.board
+  #  
+  #  match.moves << Move.new( :from_coord=>'d2', :to_coord=>'d4', :notation=>'d4' )
+  #end
   
   def test_detects_moved_piece
     match = matches(:unstarted_match)
-    assert_not_nil match.initial_board
+    assert_not_nil match.board
     
-    assert_nil match.initial_board.piece_at('d4')
-    match.moves << Move.new( :from_coord=>'d2', :to_coord=>'d4', :notation=>'d4', :moved_by=>1 )
-    match.save!
+    assert_nil match.board.piece_at('d4')
+    match.moves << Move.new( :from_coord=>'d2', :to_coord=>'d4', :notation=>'d4' )
     
     assert_not_nil match.board.piece_at('d4')
   end
@@ -140,23 +141,23 @@ class BoardTest < ActiveSupport::TestCase
     assert_not_nil piece
     assert_equal :king, piece.type
 
-    piece = match.board(:current).piece_at('f1')
+    piece = match.board['f1']
     assert_not_nil piece
     assert_equal :kings_rook, piece.type
 
   end
 
-  def test_can_refer_to_previous_board_with_negative_index
-    match = matches(:castled)
-
+  #def test_can_refer_to_previous_board_with_negative_index
+  #  match = matches(:castled)
+  #
     #the king is on the square he started on
-    piece = match.board(-1).piece_at('e1')
-    assert_not_nil piece
-    assert_equal :king, piece.type
+  #  piece = match.board(-1).piece_at('e1')
+  #  assert_not_nil piece
+  #  assert_equal :king, piece.type
 
     #other pieces are moved
-    assert_nil match.board(-1).piece_at('f1')
-  end
+  #  assert_nil match.board(-1).piece_at('f1')
+  #end
 
   def test_knows_if_side_is_in_check
     match = matches(:dean_vs_paul)
@@ -201,14 +202,14 @@ class BoardTest < ActiveSupport::TestCase
     m.moves << Move.new(:notation => 'e5')
     m.moves << Move.new(:notation => 'd5')
 
-    b = m.board(:current)
+    b = m.board
     assert b.is_en_passant_capture?( 'e5', 'd6' )
     assert_equal ['e6','d6'], b.piece_at('e5').allowed_moves(b)
 
     m.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
     
     assert_equal 'd5', m.moves.last.captured_piece_coord
-    assert_nil m.board(:current).piece_at('d5') 
+    assert_nil m.board.piece_at('d5') 
   end	
 
   def test_pawn_en_passant_not_possible_for_single_stepped_opponent_pawn
@@ -216,7 +217,7 @@ class BoardTest < ActiveSupport::TestCase
     m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'd6')
     m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
 
-    b = m.board(:current)
+    b = m.board
     assert_equal ['e6'], b.piece_at('e5').allowed_moves(b)
   end	
 

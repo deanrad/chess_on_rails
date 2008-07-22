@@ -6,19 +6,19 @@ class Match < ActiveRecord::Base
   belongs_to :player2,	:class_name => 'Player', :foreign_key => 'player2'
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
   
-  has_many :moves, :order => 'created_at ASC'
-
+  has_many :moves, :order => 'created_at ASC', :after_add => :play_move
+  
   def self.new_for( plyr1, plyr2, plyr2_side )
     plyr1, plyr2 = [plyr2, plyr1] if plyr2_side == '1'
     Match.new( :player1 => plyr1, :player2 => plyr2 )
   end
   
-  def initial_board
-    return Board.new( self, Chess.initial_pieces, 0 )
+  def board
+    Board.new( self, Chess.initial_pieces )
   end
   
-  def board(as_of_move = :current)
-    return Board.new( self, Chess.initial_pieces, as_of_move ) 		
+  def play_move(move)
+    #TODO - cached access to boards
   end
   
   def turn_of?( plyr )	

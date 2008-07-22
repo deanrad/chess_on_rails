@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class MatchTest < ActiveSupport::TestCase
 
   def test_32_pieces_on_chess_initial_board
-    assert_equal 32, matches(:unstarted_match).initial_board.pieces.length
+    assert_equal 32, matches(:unstarted_match).board.pieces.length
   end
 
   def test_first_player_to_move_is_player1
