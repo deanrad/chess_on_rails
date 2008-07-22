@@ -49,15 +49,12 @@ class Piece
   end
   
   def advance_direction
-    return 1 if @side == :white
-    return -1 if @side == :black
+    @side == :white ? 1 : -1
   end
   
   #bishops and rooks (and the queen) have 'lines of attack', or directions which can be stopped by an intervening piece
   def lines_of_attack
-    return [] if ! @lines_of_attack
-    
-    @lines_of_attack
+    @lines_of_attack || []
   end
   
   #The part of the notation - with a piece disambiguator for pawns minors and rooks
@@ -72,7 +69,6 @@ class Piece
   # 2) would place your king in check
   def allowed_moves(board)
     m = []
-    tm = theoretical_moves # fetch these, only return if needed
     
     #bishops queens and rooks have 'lines of attack' rules
     if lines_of_attack.length > 0 
@@ -99,7 +95,7 @@ class Piece
       #knights pawns and kings
       
       #start by excluding squares you occupy 
-      m = tm.reject { |pos| @side == board.side_occupying(pos) }
+      m = theoretical_moves.reject { |pos| @side == board.side_occupying(pos) }
       
       #for pawns 
       if( @type.to_s.include?(:pawn.to_s) )

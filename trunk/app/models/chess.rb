@@ -4,11 +4,10 @@ class Chess
   Ranks = "12345678"
 
   def self.valid_position?(pos)
-    return false if !pos || pos.length != 2
-    return false if ! Files.include? pos[0]
-    return false if ! Ranks.include? pos[1]
+    return false unless pos and pos.length == 2
+    return false unless Files.include? pos[0] and Ranks.include? pos[1]
     
-    true
+    return true
   end
 
   def self.initial_pieces
@@ -18,7 +17,7 @@ class Chess
     [ [:white, '1', '2'], [:black, '8', '7'] ].each do |side, back_rank, front_rank|
 
       ('a'..'h').each do |file|
-        @@pieces << Piece.new( side, (file + '_pawn').to_s, file + front_rank )
+        @@pieces << Piece.new( side, "#{file}_pawn", file + front_rank )
       end
 
       @@pieces << Piece.new( side, :queens_rook, 'a'+back_rank )

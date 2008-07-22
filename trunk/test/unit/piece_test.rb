@@ -126,22 +126,6 @@ class PieceTest < ActiveSupport::TestCase
     assert_equal 0,  r.allowed_moves( b ).length
   end
 
-  def test_queen_and_bishop_can_move_when_queens_pawn_moved
-    #rewinds board to move 2
-    b = matches(:dean_vs_paul).board(2)
-
-    #the bishop
-    bishop = b.piece_at('c1')
-    assert_equal :queens_bishop, bishop.type
-    assert_equal 5, bishop.allowed_moves(b).length
-
-    #the queen
-    queen = b.piece_at('d1')
-    assert_equal :queen, queen.type
-    assert_equal 2, queen.allowed_moves(b).length
-
-  end
-
   def test_image_names_abstract_away_irrelevant_details
     assert_equal 'rook_b', Piece.new(:black, :queens_rook, 'a8').img_name
     assert_equal 'pawn_w', Piece.new(:white, :b_pawn, 'b2').img_name

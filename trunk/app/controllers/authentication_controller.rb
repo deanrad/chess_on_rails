@@ -1,8 +1,5 @@
 class AuthenticationController < ApplicationController
-  
-  #no harm in seeing your options, logging in, or 'logging out', if you're not logged in
-  before_filter :authorize, :except => [:index,:login,:logout]
-  
+
   #when posting
   def login
     return unless request.post?

@@ -10,9 +10,6 @@ class ApplicationController < ActionController::Base
   #in advance of the call to authorize, detect_facebook infers authorization information
   # from facebook request headers
   def detect_facebook
-
-    return if @current_player
-    
     session[:facebook_user_id]= params[:fb_sig_user].to_i if RAILS_ENV == 'test' && !params[:fb_sig_user].blank?
 
     unless session[:facebook_user_id]
@@ -20,28 +17,22 @@ class ApplicationController < ActionController::Base
       session[:facebook_user_id]= session[:facebook_session].user.id
     end
 
-
     fb_user = Fbuser.find_by_facebook_user_id( session[:facebook_user_id] )
-
     return unless fb_user
 
     session[:player_id] = fb_user.playing_as.id
-    @current_player = Player.find(session[:player_id]) if session[:player_id] 
-
   end	
 
 
   # allow descendant controllers to protect their methods against unauthorized access		
   def authorize
-    detect_facebook
+    detect_facebook unless session[:player_id] 
 
-    @current_player = Player.find(session[:player_id]) if session[:player_id] 
+    @current_player = Player.find(session[:player_id]) and return if session[:player_id] 
     
-    unless @current_player
-      flash[:notice] = "Login is required in order to take this action."
-      session[:original_uri] = request.request_uri
-      redirect_to :controller=>"authentication", :action=>"login" unless params[:format]=='fbml'
-    end
+    flash[:notice] = "Login is required in order to take this action."
+    session[:original_uri] = request.request_uri
+    redirect_to login_url unless params[:format]=='fbml'
   end
 
   #given a @match and @current_player, sets up other instance variables 
