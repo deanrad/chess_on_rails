@@ -3,7 +3,6 @@ Note: this document should be regenerated periodically by running
 	rake test:doc
 
 authentication_controller should:
- - only logged in can change security question
  - login security question only
  - test user dean can login
  - user can login
@@ -41,6 +40,7 @@ move_controller should:
  - non ajax move posting redirects to match page
  - ajax move responds with rjs template to update status
  - invalid ajax move responds with error
+ - can request move list for match
 
 routes should:
  - authentication url is authentication slash login
@@ -48,9 +48,11 @@ routes should:
  - routes match display without format
  - routes match display with format
  - generates relative url for match status
- - generates relative url for move notation
  - resignation url includes id
  - recognizes fbuser register url
+ - moves for match exposed resource style
+ - can post move to match moves with specifying side
+ - can post move to match moves omitting side
 
 gameplay should:
  - navigates from match listing to match

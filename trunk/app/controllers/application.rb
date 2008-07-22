@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
   def detect_facebook
 
     return if @current_player
-
     
     session[:facebook_user_id]= params[:fb_sig_user].to_i if RAILS_ENV == 'test' && !params[:fb_sig_user].blank?
 
@@ -67,7 +66,12 @@ class ApplicationController < ActionController::Base
     @status_has_changed  = ( session[:move_count] != @match.moves.length )
     session[:move_count] = @match.moves.length
   end	
-
+  
+  def redirect_to_back_or( url )
+    redirect_to(:back) and return if request.env['HTTP_REFERER']
+    redirect_to( url )
+  end
+  
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery :secret => '81ef9321d36cc23a2671126d90eed60f'

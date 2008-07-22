@@ -10,15 +10,15 @@ class AuthenticationController < ApplicationController
     flash[:notice] = "Your credentials do not check out." and return if !user && params[:email] 
 
     if user
-    @player = user.playing_as
-    session[:player_id] = @player.id
-
-    #return them to original page requested
-    if session[:original_uri]
-      redirect_to session[:original_uri] and return unless params[:format]=='fbml'
-    else
-      redirect_to '/match/' and return
-    end
+      @player = user.playing_as
+      session[:player_id] = @player.id
+  
+      #return them to original page requested
+      if session[:original_uri]
+        redirect_to session[:original_uri] and return unless params[:format]=='fbml'
+      else
+        redirect_to '/match/' and return
+      end
     end
   end
   

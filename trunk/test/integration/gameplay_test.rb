@@ -6,7 +6,7 @@ class GameplayTest < ActionController::IntegrationTest
   def test_navigates_from_match_listing_to_match
     login( :dean )
     assert_template 'match/index'
-    get '/match/3/show'
+    get '/match/3/show.html'
   
     assert_response :success
     assert_template 'match/show'

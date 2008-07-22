@@ -10,7 +10,7 @@
   <a href="http://apps.facebook.com/enpassant/">Login through Facebook</a>.
 </div>
 
-<% form_tag  :action => 'login' do %>
+<% form_tag  :url => login_path do %>
   <p>
     <label for="email">Email:</label>
     <%= text_field_tag :email, params[:email] %>	

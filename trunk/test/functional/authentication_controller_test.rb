@@ -2,15 +2,6 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class AuthenticationControllerTest < ActionController::TestCase
   
-  def test_only_logged_in_can_change_security_question
-    get :change_security_question
-    assert_response 302
-    
-    #in first hash are http params, in second hash are session params
-    get :change_security_question, {}, {:player_id => 2}
-    assert_response 200
-  end
-  
   #not technically a controller test
   def test_login_security_question_only
     dean = User.find_by_email_and_security_phrase( 'chicagogrooves@gmail.com', '9' )
