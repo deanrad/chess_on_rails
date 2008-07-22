@@ -1,1 +1,1 @@
-<% @match.moves.each_with_index do |m, i| -%><%=  (i%2)==0 ? "#{((i+2)/2)}." + m.notation : "\t#{m.notation}</br>" -%><% end %>
+<% @match.moves.each_with_index do |m, i| -%><%=  (i%2)==0 ? "#{((i+2)/2)}." + m.notation.ljust(5) : "\t#{m.notation}<br/>" -%><% end %>

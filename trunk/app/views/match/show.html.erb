@@ -6,7 +6,7 @@
 Hi. Welcome, <%= @current_player.name %>.<br/>
 
 <div class="instructions">
-Instructions: Either move by drag and drop (limited browser support), or enter the from and to coordinates 
+Instructions: Either move by drag and drop (if it seems broken, reload the page), or enter the from and to coordinates 
 in the boxes and then Submit Move. You can also enter the chess notation of the move. To castle drag king two squares toward edge
 or enter Kg1 for example. As soon as you drop a piece, the move is submitted. Takebacks are not enabled yet -
 I wouldn't give them to you in a live game anyway !! :)
@@ -33,7 +33,7 @@ I wouldn't give them to you in a live game anyway !! :)
 </div>
 
 <div id="move_list" style="border:solid 1px black; width:180px; height:300px; overflow:auto; font-family:Courier New, Courier; font-size:10pt">
-<%= render :partial => 'move_list' %>
+  <pre><%= render :partial => 'move_list' %></pre>
 </div>
 
 </div>
