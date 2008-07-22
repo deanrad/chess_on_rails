@@ -8,6 +8,9 @@ development:
   password: ch3550nrails
 
 test:
+  #cant do this yet - but want to !
+  #adapter: sqlite3
+  #database: ":memory:"
   adapter: mysql
   host: localhost
   database: ChessOnRails_test

@@ -194,8 +194,12 @@ class BoardTest < ActiveSupport::TestCase
 
   def test_pawn_can_capture_en_passant
     m = matches(:unstarted_match)
-    m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'a5')
-    m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
+    move = m.moves.build(:notation => 'e4') 
+    move.save!
+    
+    m.moves << Move.new(:notation => 'a5')
+    m.moves << Move.new(:notation => 'e5')
+    m.moves << Move.new(:notation => 'd5')
 
     b = m.board(:current)
     assert b.is_en_passant_capture?( 'e5', 'd6' )

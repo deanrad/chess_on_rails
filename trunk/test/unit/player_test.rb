@@ -4,11 +4,6 @@ class PlayerTest < ActiveSupport::TestCase
   
   fixtures :players
   
-  #region Basic Tests
-  def test_truth
-    assert true
-  end
-  
   def test_can_be_created
     p = Player.new
     assert true
