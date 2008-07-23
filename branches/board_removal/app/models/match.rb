@@ -11,19 +11,25 @@ class Match < ActiveRecord::Base
   
   serialize :pieces
 
-  #attr_reader :board
-    def board
-    unless pieces
-      #in test mode we dont store pieces in fixtures (yet) so we allow the repopulation as a convenience
-      raise StandardError, "Recalculating board - why were your pieces not initialized ?" unless RAILS_ENV == 'test'
-      self[:pieces] = Chess.initial_pieces
-      moves.each{ |m| play_move!(m) } #brings pieces up to date
-    end
+  def board
+    init_pieces unless pieces
+
     self
   end
   
   def before_create
     self[:pieces] = Chess.initial_pieces  
+  end
+  
+  def init_pieces
+    #in test mode we dont store pieces in fixtures (yet) so we allow the repopulation as a convenience
+    raise StandardError, "Recalculating board - why were your pieces not initialized ?" unless RAILS_ENV == 'test'
+    self[:pieces] = Chess.initial_pieces
+    moves.each{ |m| play_move!(m) } #brings pieces up to date
+  end
+
+  def after_find
+    init_pieces unless pieces
   end
   
   def self.new_for( plyr1, plyr2, plyr2_side )
@@ -32,6 +38,7 @@ class Match < ActiveRecord::Base
   end
   
   def recalc_board_and_check_for_checkmate(last_move)
+    
     #update internal representation of the board
     board.play_move! last_move
     
@@ -42,6 +49,7 @@ class Match < ActiveRecord::Base
     
   def play_move!( m )
     #kill any existing piece we're moving onto or capturing enpassant
+        
     pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
     
     #move to that square
@@ -98,9 +106,29 @@ class Match < ActiveRecord::Base
     return false unless in_check?( side )
     
     way_out = false
+    pieces.each do |p|
+        next if p.side != side
+        return false if way_out
+
+        p.allowed_moves(self).each do |mv|
+            consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) ) do
+                #way_out = true
+            end
+        end
+    end
     return false
     
+    return !way_out
+    
     #TODO reimplement this using new board functionality
+  end
+  
+  #non-destructively alters the pieces array
+  def consider_move(m)
+    backup_of_pieces = pieces.clone
+    board.play_move! m
+    yield
+    pieces = backup_of_pieces
   end
 
   def is_en_passant_capture?( from_coord, to_coord ) 

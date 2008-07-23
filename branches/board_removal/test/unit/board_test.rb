@@ -7,16 +7,15 @@ class BoardTest < ActiveSupport::TestCase
     m1 = matches(:unstarted_match)
     assert_equal 32, m1.board.pieces.length
   end
-=begin  
+  
   def test_after_one_move_board_reflects_move
     m1 = matches(:unstarted_match)
-    
+
     m1.moves << Move.new(:notation => 'e4')
-    assert_not_nil m1.board['e4']
-    
-    #assert_not_equal b1, b2
-    
+    assert_not_nil m1.board.piece_at('e4')
   end
+
+  
   
   #def test_board_can_refer_to_move_number_or_refer_to_current_move
   #  m1 = matches(:unstarted_match)
@@ -48,7 +47,7 @@ class BoardTest < ActiveSupport::TestCase
     moves = p.theoretical_moves
     ['e6','e5'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
   end
-  
+
   def test_pawn_can_only_advance_one_on_successive_moves
     p = Piece.new(:white, :d_pawn)
     p.position='d4'
@@ -85,27 +84,11 @@ class BoardTest < ActiveSupport::TestCase
     assert_operator edge_pawn.theoretical_moves.length, :<, center_pawn.theoretical_moves.length
   end
   
-  def test_knight_has_more_moves_in_the_center
-    center_knight = Piece.new(:white, :queens_knight)
-    center_knight.position ='d4'
-    
-    assert_equal 8, center_knight.theoretical_moves.length, "In #{center_knight.theoretical_moves} #{center_knight.position}"
-    assert center_knight.theoretical_moves.include?( 'e6' )
-    
-    corner_knight = Piece.new(:white, :kings_knight)
-    corner_knight.position = 'h8'
-    
-    
-    assert_equal 2, corner_knight.theoretical_moves.length
-    assert corner_knight.theoretical_moves.include?('g6')
-    assert corner_knight.theoretical_moves.include?('f7')
-  end
-  
   def test_knows_what_side_occupies_a_square
     board = matches(:unstarted_match).board
         
-    assert_equal :white, board['a2'].side
-    assert_equal :black, board['e7'].side
+    assert_equal :white,board.piece_at('a2').side
+    assert_equal :black,board.piece_at('e7').side
   end 
   
   def test_knows_what_piece_is_on_a_square
@@ -141,11 +124,13 @@ class BoardTest < ActiveSupport::TestCase
     assert_not_nil piece
     assert_equal :king, piece.type
 
-    piece = match.board['f1']
+    piece = match.board.piece_at('f1')
     assert_not_nil piece
     assert_equal :kings_rook, piece.type
 
   end
+
+  
 
   #def test_can_refer_to_previous_board_with_negative_index
   #  match = matches(:castled)
@@ -168,6 +153,7 @@ class BoardTest < ActiveSupport::TestCase
     assert_equal true, match.board.in_check?( :white ) #nope
   end
 
+
   def test_scholars_mate_capture_with_queen_is_checkmate
     match = matches(:scholars_mate)
     assert_equal :white, match.next_to_move
@@ -182,6 +168,8 @@ class BoardTest < ActiveSupport::TestCase
     # and it's over !!
     assert match.board.in_checkmate?(:black), "Not in checkmate as expected"
   end
+
+=begin  
 
   def test_scholars_mate_capture_with_bishop_not_checkmate
     match = matches(:scholars_mate)
