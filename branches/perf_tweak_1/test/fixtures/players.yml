@@ -3,15 +3,12 @@
  dean:
    id:      1
    name:    Dean
-   current_match: 2
  maria:
    id:      2
    name:    Maria
-   current_match: 1
  paul:
    id:      3
    name:    Paul
-   current_match: 2
  rich:
    id:      4
    name:    Bignz

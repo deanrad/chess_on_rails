@@ -42,8 +42,7 @@ ActiveRecord::Schema.define(:version => 6) do
   end
 
   create_table "players", :force => true do |t|
-    t.string  "name",          :limit => 20
-    t.integer "current_match"
+    t.string "name", :limit => 20
   end
 
   add_index "players", ["name"], :name => "index_players_on_name", :unique => true
