@@ -34,10 +34,13 @@ class MatchTest < ActiveSupport::TestCase
     m1 = matches(:unstarted_match)
 
     #debugger
-    #puts m1.attributes
+    assert_equal 2, m1.attributes['player1_id']
+    
+    assert_not_nil Player.find( m1.attributes['player1_id'] )
+    
+    assert_not_nil m1.player1
     
     assert_equal 0, m1.moves.length
-    assert_not_nil m1.player1
     
     assert m1.turn_of?( m1.player1)
   end

@@ -1,11 +1,10 @@
 class Match < ActiveRecord::Base
 
-  require 'ruby-debug'
-  
   SIDES = [  ['White', '1'], ['Black', '2']  ]
   
-  belongs_to :player1,	:class_name => 'Player', :foreign_key => 'player1'
-  belongs_to :player2,	:class_name => 'Player', :foreign_key => 'player2'
+  belongs_to :player1,	:class_name => 'Player'
+  belongs_to :player2,	:class_name => 'Player'
+  
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
   
   has_many :moves, :order => 'created_at ASC', :after_add => :recalc_board_and_check_for_checkmate

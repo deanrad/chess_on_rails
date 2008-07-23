@@ -2,48 +2,48 @@
 
 dean_vs_maria:
    id: 1
-   player1: 1
-   player2: 2
+   player1_id: 1
+   player2_id: 2
 
 paul_vs_dean:
    id: 2
-   player1: 3
-   player2: 1
+   player1_id: 3
+   player2_id: 1
    
 dean_vs_paul:
    id: 3
-   player1: 1
-   player2: 3
+   player1_id: 1
+   player2_id: 3
    
 unstarted_match:
    id: 4
-   player1: 2
-   player2: 3
+   player1_id: 2
+   player2_id: 3
 
 castled:
    id: 5
-   player1: 3
-   player2: 1
+   player1_id: 3
+   player2_id: 1
 
 resigned:
    id: 6
-   player1: 3
-   player2: 1
+   player1_id: 3
+   player2_id: 1
    active: 0
    result: Resigned
    winning_player: 3
 
 queenside_castled:
    id: 7
-   player1: 5
-   player2: 1
+   player1_id: 5
+   player2_id: 1
 
 scholars_mate:
    id: 8
-   player1: 5
-   player2: 1
+   player1_id: 5
+   player2_id: 1
 
 promote_crazy:
    id: 9
-   player1: 3
-   player2: 1
+   player1_id: 3
+   player2_id: 1
