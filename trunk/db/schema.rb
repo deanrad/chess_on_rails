@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(:version => 6) do
   end
 
   create_table "matches", :force => true do |t|
-    t.integer  "player1",                       :null => false
-    t.integer  "player2",                       :null => false
+    t.integer  "player1_id",                    :null => false
+    t.integer  "player2_id",                    :null => false
     t.integer  "active",         :default => 1
     t.text     "result"
     t.integer  "winning_player"

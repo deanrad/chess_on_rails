@@ -6,12 +6,12 @@ class Player < ActiveRecord::Base
   belongs_to :user
 
   has_many  :matches, :class_name=>"Match",
-    :finder_sql=>'SELECT matches.* FROM matches WHERE ( player1 = #{id} OR player2= #{id} )'
+    :finder_sql=>'SELECT matches.* FROM matches WHERE ( player1_id = #{id} OR player2_id= #{id} )'
 
   has_many :active_matches, :class_name=>"Match",
-    :finder_sql=>'SELECT matches.* FROM matches WHERE ( player1 = #{id} OR player2= #{id} ) AND active=1'
+    :finder_sql=>'SELECT matches.* FROM matches WHERE ( player1_id = #{id} OR player2_id= #{id} ) AND active=1'
 
   has_many :completed_matches, :class_name=>"Match",
-    :finder_sql=>'SELECT matches.* FROM matches WHERE ( player1 = #{id} OR player2= #{id} ) AND active=0'
+    :finder_sql=>'SELECT matches.* FROM matches WHERE ( player1_id = #{id} OR player2_id= #{id} ) AND active=0'
 
 end
