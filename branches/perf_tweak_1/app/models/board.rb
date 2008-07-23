@@ -15,19 +15,14 @@ class Board
         
         #this is the only supported option right now
         @as_of_move = @match.moves.count
-        
-        #figure out the number of moves we're replaying to
-        #if (as_of_move==:current)
-        #    @as_of_move = @match.moves.count
-        #elsif  as_of_move.to_i < 0
-        #    @as_of_move = @match.moves.count + as_of_move.to_i
-        #else
-        #    @as_of_move = as_of_move.to_i
-        #end
-        
-        #replay the board to that position
-        @match.moves[0..@as_of_move-1].each{ |m| play_move!(m) }
-            
+                
+        #replay_moves
+    end
+    
+    #replay the board into the current position
+    def replay_moves
+      @match.moves[0..@as_of_move-1].each{ |m| play_move!(m) }
+      self
     end
 
     # updates internals with a given move played

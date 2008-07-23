@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.integer  "player1",                       :null => false
     t.integer  "player2",                       :null => false
     t.integer  "active",         :default => 1
+    t.text     "pieces"
     t.text     "result"
     t.integer  "winning_player"
     t.datetime "created_at"
