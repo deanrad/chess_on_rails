@@ -7,6 +7,7 @@ class Board
     
     #todo remove need for pieces
     def initialize(match, pieces)
+        #puts "initializing board"
         
         #initialize from the game's initial board, but replay moves...
         @pieces = pieces
@@ -49,7 +50,7 @@ class Board
 
         #reflect promotion
         piece_moved.promote!( Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) if piece_moved && piece_moved.promotable? 
-
+                
         self
     end
 
@@ -75,13 +76,14 @@ class Board
     end
 
     def sister_piece_of( piece )
-        p = @pieces.find { |p| (p.side == piece.side) && (p.role == piece.role ) && (p.type != piece.type) }
+        p = @pieces.find { |p| (p.side == piece.side) && (p.role == piece.role ) && (p.position != piece.position) }
     end
     
     def in_check?( side )
-        king_to_check = @pieces.find{ |p| p.type==:king && p.side == side }
+        king_to_check = @pieces.find{ |p| p.role=='king' && p.side == side }
 
         @pieces.select { |p| p.side != side }.each do |attacker|
+            #puts "Queen at #{attacker.position} with allowed moves #{attacker.allowed_moves(self) * ','} and king at #{king_to_check.position}" if attacker.role=='queen'
             return true if attacker.allowed_moves( self ).include?( king_to_check.position )
         end
         return false
@@ -108,16 +110,17 @@ class Board
     #simplest logic here - if theres a move you're allowed which gets you out of check, you're not in checkmate
     #contrast with more intelligent Capture/Block/Evade strategy
     def in_checkmate?( side )
-        return false if ! in_check?( side )
-    
+
+        return false unless in_check?( side )
+            
         way_out = false
         @pieces.each do |p|
             next if p.side != side
             return false if way_out
 
             p.allowed_moves(self).each do |mv|
-                hypothetical_board = @match.board.consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) )
-                way_out = true if !hypothetical_board.in_check?( side )
+                hypothetical_board = self.consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) )
+                way_out = true unless hypothetical_board.in_check?( side )
             end
         end
         return !way_out

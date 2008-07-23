@@ -1,24 +1,38 @@
 class Match < ActiveRecord::Base
 
+  require 'ruby-debug'
+  
   SIDES = [  ['White', '1'], ['Black', '2']  ]
   
   belongs_to :player1,	:class_name => 'Player', :foreign_key => 'player1'
   belongs_to :player2,	:class_name => 'Player', :foreign_key => 'player2'
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
   
-  has_many :moves, :order => 'created_at ASC', :after_add => :play_move
+  has_many :moves, :order => 'created_at ASC', :after_add => :recalc_board_and_check_for_checkmate
+  
+  attr_reader :board
+  
+  #AR callback - ensures a match object has a replayed board
+  def after_find
+    replay_board
+  end
   
   def self.new_for( plyr1, plyr2, plyr2_side )
     plyr1, plyr2 = [plyr2, plyr1] if plyr2_side == '1'
     Match.new( :player1 => plyr1, :player2 => plyr2 )
   end
   
-  def board
-    Board.new( self, Chess.initial_pieces )
+  def recalc_board_and_check_for_checkmate(last_move)
+    #update internal representation of the board
+    @board.play_move! last_move
+    
+    other_guy = (last_move.side == :black ? :white : :black)
+
+    checkmate_by( last_move.side ) if @board.in_checkmate?( other_guy )
   end
-  
-  def play_move(move)
-    #TODO - cached access to boards
+    
+  def replay_board
+    @board = Board.new( self, Chess.initial_pieces )
   end
   
   def turn_of?( plyr )	

@@ -59,11 +59,10 @@ class MoveControllerTest < ActionController::TestCase
 
   def test_game_over_when_checkmating_move_posted
     m = matches(:scholars_mate)	
+
     post :create, { :match_id => m.id, :move => { :notation => 'Qf7' } }, {:player_id => players(:chris).id }		
-    m.reload
-  
-    #doesn't work yet but shows you can play the move
-    assert_equal players(:chris), m.winning_player
+
+    assert_not_nil   m.reload.winning_player
     assert_not_equal 1, m.active
   end
 

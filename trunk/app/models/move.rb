@@ -4,7 +4,6 @@ class Move < ActiveRecord::Base
   attr_accessor :side
   before_validation :analyze_board_position
   before_save :update_computed_fields
-  after_save  :handle_checkmate
 
   NOTATION_TO_ROLE_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
 
@@ -130,19 +129,5 @@ class Move < ActiveRecord::Base
 
     return mynotation
   end
-
-  def handle_checkmate
-    #if they got the other guy on this move 
-    #todo - more model-esque - possibly decommissioning this controller and working just with match
-    this_guy = @match.next_to_move
-    if @match.reload.board.in_checkmate?( this_guy )
-      @match.checkmate_by( this_guy == :black ? :white : :black  )
-    end
-        
-  end
   
-  def to_s
-    s  = "from #{from_coord} to #{to_coord}"
-    s += ", also capturing at #{captured_piece_coord}" if captured_piece_coord
-  end
 end

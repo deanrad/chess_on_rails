@@ -8,10 +8,10 @@ class MoveController < ApplicationController
 
   #accessible via get or post but should be idempotent on 2x get
   def create
-    @move = @match.moves.build( params[:move] )
-
-    @move.save!
-
+    @match.moves << Move.new( params[:move] )
+    
+    @match.save! #only here to trigger validation
+    
     #unceremonious way of saying you just ended the game 
     redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
 

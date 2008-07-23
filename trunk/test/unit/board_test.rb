@@ -195,21 +195,22 @@ class BoardTest < ActiveSupport::TestCase
 
   def test_pawn_can_capture_en_passant
     m = matches(:unstarted_match)
-    move = m.moves.build(:notation => 'e4') 
-    move.save!
+    b = m.board
     
+    m.moves << Move.new(:notation => 'e4') 
     m.moves << Move.new(:notation => 'a5')
     m.moves << Move.new(:notation => 'e5')
     m.moves << Move.new(:notation => 'd5')
-
-    b = m.board
-    assert b.is_en_passant_capture?( 'e5', 'd6' )
+    
+    assert_not_nil b['e5'] #just moved there
+    
     assert_equal ['e6','d6'], b.piece_at('e5').allowed_moves(b)
+    assert b.is_en_passant_capture?( 'e5', 'd6' )
 
     m.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
     
     assert_equal 'd5', m.moves.last.captured_piece_coord
-    assert_nil m.board.piece_at('d5') 
+    assert_nil b.piece_at('d5') 
   end	
 
   def test_pawn_en_passant_not_possible_for_single_stepped_opponent_pawn
@@ -232,9 +233,10 @@ class BoardTest < ActiveSupport::TestCase
 
   def test_may_promote_to_knight_on_reaching_opposing_back_rank
     m = matches(:promote_crazy)
+    b = m.board
     m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8', :promotion_choice => 'N' )
     assert_equal 'bxa8=N', m.moves.last.notation
-    assert_equal 'knight', m.board['a8'].role
+    assert_equal 'knight', b['a8'].role
   end
 
 end
