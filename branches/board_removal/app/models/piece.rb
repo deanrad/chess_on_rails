@@ -21,6 +21,10 @@ class Piece
     @position = pos
   end
   
+  def equals( other )
+    other.side == @side and other.type == @type and other.position == @position
+  end
+  
   #when rendered the client id uniquely specifies an individual piece within a board
   #example: white_f_pawn
   def board_id

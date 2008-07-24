@@ -49,12 +49,13 @@ class Match < ActiveRecord::Base
     
   def play_move!( m )
     #kill any existing piece we're moving onto or capturing enpassant
-        
     pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
     
     #move to that square
     piece_moved = nil
     pieces.each{ |p| p.position = m.to_coord and piece_moved = p if p.position==m.from_coord }
+    
+    raise StandardError, "No piece movable on #{m.from_coord}" unless piece_moved
     
     #reflect castling
     if m.castled==1
@@ -106,13 +107,21 @@ class Match < ActiveRecord::Base
     return false unless in_check?( side )
     
     way_out = false
+    white_queen = pieces.find{ |p| p.role=='queen' and p.side == :white}
+    white_bishop = pieces.find{ |p| p.type==:kings_bishop and p.side == :white}
+
+    puts "White bishop has moves #{white_bishop.allowed_moves(self) * ','} because piece on f7 is #{piece_at('f7').role}"
+    
     pieces.each do |p|
         next if p.side != side
         return false if way_out
 
         p.allowed_moves(self).each do |mv|
             consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) ) do
-                #way_out = true
+                way_out = true unless in_check?( side )
+                if way_out
+                raise ArgumentError, "#{p.role} to #{mv} gets you out of the way of Queen on #{white_queen.position} and bishop on #{white_bishop.position} who has moves #{white_bishop.allowed_moves(self) * ','} because of piece on e6 which is #{piece_at('e6')} and piece on f7 whic is #{piece_at('f7')}"
+                end
             end
         end
     end
@@ -125,7 +134,7 @@ class Match < ActiveRecord::Base
   
   #non-destructively alters the pieces array
   def consider_move(m)
-    backup_of_pieces = pieces.clone
+    backup_of_pieces = Marshal.load( Marshal.dump(pieces) )
     board.play_move! m
     yield
     pieces = backup_of_pieces
