@@ -24,7 +24,7 @@ class Match < ActiveRecord::Base
   def init_pieces
     #in test mode we dont store pieces in fixtures (yet) so we allow the repopulation as a convenience
     raise StandardError, "Recalculating board - why were your pieces not initialized ?" unless RAILS_ENV == 'test'
-    self[:pieces] = Chess.initial_pieces
+    self[:pieces] = Marshal.load( Marshal.dump( Chess.initial_pieces ) )
     moves.each{ |m| play_move!(m) } #brings pieces up to date
   end
 
@@ -55,7 +55,7 @@ class Match < ActiveRecord::Base
     piece_moved = nil
     pieces.each{ |p| p.position = m.to_coord and piece_moved = p if p.position==m.from_coord }
     
-    raise StandardError, "No piece movable on #{m.from_coord}" unless piece_moved
+    #raise StandardError, "No piece movable on #{m.from_coord}" unless piece_moved
     
     #reflect castling
     if m.castled==1
@@ -137,7 +137,9 @@ class Match < ActiveRecord::Base
     backup_of_pieces = Marshal.load( Marshal.dump(pieces) )
     board.play_move! m
     yield
-    pieces = backup_of_pieces
+    #another marshal seems unnecessary
+    #board.pieces = Marshal.load( Marshal.dump( backup_of_pieces ) )
+    board.pieces = backup_of_pieces
   end
 
   def is_en_passant_capture?( from_coord, to_coord ) 

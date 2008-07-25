@@ -140,10 +140,9 @@ class MatchTest < ActiveSupport::TestCase
     match.board.pieces[0].position = 'a4'
     assert_equal 'a4', match.board.pieces[0].position
     assert_equal 'a4', match.board.pieces[0].position
-    assert_equal 'a2', reload_of_pieces[0].position
 
     # Now we've 'undone' the move of the pawn to a4
-    match.pieces = reload_of_pieces
+    match.pieces = Marshal.load( Marshal.dump(reload_of_pieces ) )
     assert_equal 'a2', match.board.pieces[0].position
     assert_equal 'a2', match.pieces[0].position
     assert_equal 'a2', match.board.pieces[0].position
@@ -152,18 +151,24 @@ class MatchTest < ActiveSupport::TestCase
 
     
     #now start over by making a move 
+    reload_of_pieces = Marshal.load( Marshal.dump(match.board.pieces) )
+    assert_equal 'a2', reload_of_pieces[0].position
     match.board.play_move!( Move.new(:from_coord => 'a2', :to_coord => 'a4' ) )  
     assert_equal 'a2', reload_of_pieces[0].position, "Uhoh, moving piece on match.board affected variable reload_of_pieces as unintended side effect"
     
     assert_not_equal 'a2', match.board.pieces[0].position
     assert_not_nil match.board.piece_at('a4')
     
-    debugger
     match.pieces = reload_of_pieces
     assert_equal 'a2', match.board.pieces[0].position, "Doing a reload_of_pieces does not help in the play_move! case"
     #and we dont care what happened to reload_of_pieces, we just made a copy of the 
     # entire piece array (relatively cheap)
 
+    assert_nil match.board.piece_at('d4')
+    match.consider_move( Move.new(:from_coord => 'd2', :to_coord => 'd4') ) do
+        assert_not_nil match.board.piece_at('d4')
+    end
+    assert_nil match.board.piece_at('d4')
   end
   
   private
