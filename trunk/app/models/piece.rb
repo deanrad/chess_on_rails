@@ -119,7 +119,6 @@ class Piece
         #castling
         castle_rank = (side==:white) ? '1' : '8'
         
-        #TODO castling logic does not account for previous moves, or castling across check
         king_on_initial_square    = (position == ('e'+castle_rank) )
         
         [ ['h', ('f'..'g'), 'g'], ['a', ('b'..'d'), 'c'] ].each do |rook_file, intervening_files, castle_to_file|
