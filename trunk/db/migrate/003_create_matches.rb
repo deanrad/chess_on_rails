@@ -6,7 +6,8 @@ class CreateMatches < ActiveRecord::Migration
       
       t.column :active, :int, :default=>1
 
-      t.column :result, :text, :limit => 10
+	t.column :pieces, :text
+      t.column :result, :text
       t.column :winning_player, :int
 
       t.timestamps
