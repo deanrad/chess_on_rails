@@ -5,21 +5,7 @@ class PieceTest < ActiveSupport::TestCase
   def test_recognize_valid_piece_types
     p = Piece.new(:white, :queens_knight)
     p = Piece.new(:black, :a_pawn)
-  end
-  
-  def test_recognize_queen_vs_kings_bishop
-    #three places in memory - are they the same under the == operator ?
-    p1 = Piece.new(:white, :queens_knight)
-    p2 = Piece.new(:black, :queens_knight)
-    
-    assert_not_nil p1
-    assert_not_nil p2
-    assert_not_equal p1.side, p2.side
-    
-    p3 = Piece.new(:white, :queens_bishop)
-    p4 = Piece.new(:white, :kings_bishop)
-    
-    assert_not_equal p3.type, p4.type
+    #completes without error
   end
   
   def test_position_composed_of_rank_and_file
@@ -45,8 +31,6 @@ class PieceTest < ActiveSupport::TestCase
     p1.position = 'c3'
     assert_equal 'N', p1.notation
     
-    #p1.file = nil
-    #assert_equal 'N', p1.notation
   end
   
   def test_has_a_notation_for_pawn
@@ -54,7 +38,6 @@ class PieceTest < ActiveSupport::TestCase
     p1.position = 'b2'
     assert_equal 'b', p1.notation
   end
-    
   
   def test_rook_has_four_lines_of_attack
     p = Piece.new(:black, :queens_rook, 'a8')
@@ -129,6 +112,7 @@ class PieceTest < ActiveSupport::TestCase
     assert ! p.promotable?
     assert Piece.new(:black, :f_pawn, 'a1').promotable?
   end
+  
   def test_nodoc_board_id_indicates_promoted_piece
     p = Piece.new(:white, :a_pawn, 'b8')
     p.promote!
@@ -141,4 +125,5 @@ class PieceTest < ActiveSupport::TestCase
       p.promote!
     end
   end
+    
 end
