@@ -20,7 +20,7 @@ class Match < ActiveRecord::Base
     self[:pieces] = Marshal.load( Marshal.dump( Chess.initial_pieces ) )
   end
   
-  #TODO remove this after_find
+  #TODO remove this after_find if unnecessary
   def after_find
     init_pieces unless pieces
   end
@@ -31,7 +31,6 @@ class Match < ActiveRecord::Base
     
     other_guy = (last_move.side == :black ? :white : :black)
 
-    #TODO remove commented out checkmate_by in move after_add handler
     checkmate_by( last_move.side ) if board.in_checkmate?( other_guy )
   end
   

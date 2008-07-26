@@ -35,8 +35,6 @@ class Board
           piece_moved.promote!( Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) 
         end
 
-        #TODO - delete this return of self from play_move!
-        self
     end
 
     #executes the block passed in a context where the move was played, then reverts

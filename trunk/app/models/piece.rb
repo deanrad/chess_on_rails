@@ -69,6 +69,9 @@ class Piece
   # for reasons of: 1) would be on your own sides square
   # 2) would place your king in check
   def allowed_moves(board)
+    #NOTE The manner in which this array is declared, filled, and returned, for the purposes 
+    # of iterating over in the caller, would better be served by an iterator and moves << pos
+    # would become yield pos
     moves = []
     
     #bishops queens and rooks have 'lines of attack' rules

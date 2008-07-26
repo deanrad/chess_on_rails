@@ -168,7 +168,6 @@ class BoardTest < ActiveSupport::TestCase
     assert_equal true, match.board.in_check?( :white ) #nope
   end
 
-#TODO uncomment these performance profiling comments
   def test_scholars_mate_capture_with_queen_is_checkmate
     match = matches(:scholars_mate)
     assert_equal :white, match.next_to_move
@@ -178,10 +177,10 @@ class BoardTest < ActiveSupport::TestCase
     match.moves << Move.new( :notation => 'Qf7' )
 
     #king is in check
-    #assert match.board.in_check?(:black)
+    assert match.board.in_check?(:black)
 
     # and it's over !!
-    #assert match.board.in_checkmate?(:black), "Not in checkmate as expected"
+    assert match.board.in_checkmate?(:black), "Not in checkmate as expected"
   end
 
   def test_scholars_mate_capture_with_bishop_not_checkmate
