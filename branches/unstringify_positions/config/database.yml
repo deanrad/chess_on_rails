@@ -1,0 +1,20 @@
+# SQL Server
+
+development:
+  adapter: mysql
+  host: localhost
+  database: ChessOnRails_development
+  username: chessonrails
+  password: ch3550nrails
+
+test:
+  #use either sqllite section or mysql 
+  #adapter: sqlite3
+  #database: ":memory:"
+  #verbosity: quiet
+  
+  adapter: mysql
+  host: localhost
+  database: ChessOnRails_test
+  username: chessonrails
+  password: ch3550nrails
