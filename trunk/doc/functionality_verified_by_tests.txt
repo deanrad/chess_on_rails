@@ -27,6 +27,8 @@ match_controller should:
  - creates new match opponent as black
  - gets match status
  - gets list of active matches
+ - verifies showing a match renders the board
+ - can undo last move if you made it
 
 move_controller should:
  - reject move made with one or more invalid coordinates
@@ -41,18 +43,6 @@ move_controller should:
  - ajax move responds with rjs template to update status
  - invalid ajax move responds with error
  - can request move list for match
-
-routes should:
- - authentication url is authentication slash login
- - redirection to login is autentication controller login action
- - routes match display without format
- - routes match display with format
- - generates relative url for match status
- - resignation url includes id
- - recognizes fbuser register url
- - moves for match exposed resource style
- - can post move to match moves with specifying side
- - can post move to match moves omitting side
 
 gameplay should:
  - navigates from match listing to match
@@ -78,6 +68,7 @@ board should:
  - pawn en passant not possible for single stepped opponent pawn
  - promotes automatically to queen on reaching opposing back rank
  - may promote to knight on reaching opposing back rank
+ - considering a move is temporary
 
 fbuser should:
  - can update name after signing in
@@ -111,7 +102,6 @@ move should:
 
 piece should:
  - recognize valid piece types
- - recognize queen vs kings bishop
  - position composed of rank and file
  - has a notation for king and queen
  - has a notation for minor and rook
