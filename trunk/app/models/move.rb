@@ -8,7 +8,6 @@ class Move < ActiveRecord::Base
   NOTATION_TO_ROLE_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
 
   def analyze_board_position
-    #puts "analyzing board position"
     @board = match.board
 
     #determine coordinates from notation
@@ -45,9 +44,7 @@ class Move < ActiveRecord::Base
       errors.add_to_base 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
     end
 
-    if @possible_movers && @possible_movers.length>1
-      errors.add :notation, "Ambiguous move #{notation}" and return 
-    end
+    errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length>1
     
     if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
       errors.add :notation, "Failed to infer move coordinates from #{notation}" and return 
@@ -58,24 +55,16 @@ class Move < ActiveRecord::Base
       errors.add_to_base "#{coord} is not a valid coordinate" unless Chess.valid_position?( coord )
     end
 
-    if @possible_movers && @possible_movers.length==0
-      errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return 
-    end
+    errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return if @possible_movers && @possible_movers.length==0
 
     #verify allowability of the move
-    if !@piece_moving
-      errors.add_to_base "No piece present at #{from_coord} on this board" and return 
-    end
-    unless @piece_moving.allowed_moves(@board).include?( to_coord )
-      errors.add_to_base "#{@piece_moving.role} not allowed to move to #{to_coord}" 
-    end
+    
+    errors.add_to_base "No piece present at #{from_coord} on this board" and return if !@piece_moving
+    errors.add_to_base "#{@piece_moving.role} not allowed to move to #{to_coord}" unless @piece_moving.allowed_moves(@board).include?( to_coord ) 
 
-    #TODO can not leave your king in check at end of a move - temporarily disabled
-    #@board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) ) do
-    #  if @board.in_check?( @piece_moving.side )
-    #    errors.add_to_base "Can not place or leave one's own king in check." 
-    #  end
-    #end
+    #can not leave your king in check at end of a move
+    new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
+    errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" if new_board.in_check?( @piece_moving.side )
   end
 
   def infer_coordinates_from_notation

@@ -57,7 +57,7 @@ class MatchControllerTest < ActionController::TestCase
   def test_verifies_showing_a_match_renders_the_board
     get :show, { :id => 9 }, {:player_id => players(:dean).id }
     assert_response 200
-    assert_select 'div#board_table'
+    assert_select 'table#board_table'
   end
 
 end

@@ -3,16 +3,34 @@ class Board
 
     attr_accessor :match	
     attr_accessor :pieces
+    attr_accessor :as_of_move
     
+    #todo remove need for pieces
     def initialize(match, pieces)
+        #puts "initializing board"
         
-        @match = match
+        #initialize from the game's initial board, but replay moves...
         @pieces = pieces
+        @match = match
+        
+        #this is the only supported option right now
+        @as_of_move = @match.moves.count
+        
+        #figure out the number of moves we're replaying to
+        #if (as_of_move==:current)
+        #    @as_of_move = @match.moves.count
+        #elsif  as_of_move.to_i < 0
+        #    @as_of_move = @match.moves.count + as_of_move.to_i
+        #else
+        #    @as_of_move = as_of_move.to_i
+        #end
+        
+        #replay the board to that position
+        @match.moves[0..@as_of_move-1].each{ |m| play_move!(m) }
             
     end
 
     # updates internals with a given move played
-    #TODO consolidate with play_move in match.rb
     def play_move!( m )
         #kill any existing piece we're moving onto or capturing enpassant
         @pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
@@ -31,21 +49,15 @@ class Board
         end
 
         #reflect promotion
-        if piece_moved && piece_moved.promotable? 
-          piece_moved.promote!( Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) 
-        end
-
+        piece_moved.promote!( Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) if piece_moved && piece_moved.promotable? 
+                
+        self
     end
 
-    #executes the block passed in a context where the move was played, then reverts
+    #returns a copy of self with move played
     def consider_move(m)
-      #we're about to alter 'pieces', so copy to new location
-      orig_pieces = Marshal.load( Marshal.dump( @pieces ) )
-      play_move! m
-      yield self
-      #another marshal may be unnecessary
-      #pieces = Marshal.load( Marshal.dump( orig_pieces ) )
-      @pieces = orig_pieces
+        considered_board = Marshal::load(Marshal.dump(self)) #deep copy to decouple pieces array
+        considered_board.play_move!(m)
     end
 
     #todo - can dry up these methods 
@@ -102,14 +114,13 @@ class Board
         return false unless in_check?( side )
             
         way_out = false
-        my_defenders = @pieces.select{ |p| p.side==side }
-        my_defenders.each do |p|
+        @pieces.each do |p|
+            next if p.side != side
             return false if way_out
 
             p.allowed_moves(self).each do |mv|
-                self.consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) ) do
-                  way_out = true unless in_check?( side )
-                end
+                hypothetical_board = self.consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) )
+                way_out = true unless hypothetical_board.in_check?( side )
             end
         end
         return !way_out

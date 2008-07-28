@@ -1,10 +1,16 @@
 
 #An instance of a piece bound to a particular match
 class Piece  
-  #define 'lines of attack', or directions of motion which can be stopped by an intervening piece
-  BISHOP_LINES = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
-  ROOK_LINES = [[1,0], [-1,0], [0,1], [0,-1] ]  
+
+  #the allowed types and their shorthand
+  Types = {:kings_rook =>'R', :kings_knight =>'N',  :kings_bishop=>'B',  
+    :queens_rook=>'R', :queens_knight=>'N',  :queens_bishop=>'B', 
+    :king=>'K',  :queen=>'Q',
+    :a_pawn=>'a', :b_pawn=>'b', :c_pawn=>'c', :d_pawn=>'d',
+    :e_pawn=>'e', :f_pawn=>'f', :g_pawn=>'g', :h_pawn=>'h'
+  }
   
+  attr_accessor :id        #uniquely identifies a piece throughout a match, generally a combination of side and type
   attr_accessor :side      #black or white
   attr_accessor :type      #ex. queens_bishop
   attr_accessor :position 
@@ -20,9 +26,6 @@ class Piece
   def board_id
     @id || "#{@side}_#{@type}"
   end
-  def img_name
-    ( (type.to_s.split('_').length==2) ? type.to_s.split('_')[1] : type.to_s) + '_' + side.to_s.slice(0,1)
-  end
   
   def file
     return @position[0].chr
@@ -30,7 +33,6 @@ class Piece
   def rank
     return @position[1].chr
   end
-
   
   def to_s
     return "Side: #{@side} type:#{@type} at #{position}"
@@ -49,6 +51,9 @@ class Piece
     @side == :white ? 1 : -1
   end
   
+  #bishops and rooks (and the queen) have 'lines of attack', or directions which can be stopped by an intervening piece
+  BISHOP_LINES = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+  ROOK_LINES = [[1,0], [-1,0], [0,1], [0,-1] ]  
   def lines_of_attack
     return  BISHOP_LINES               if role=='bishop'
     return  ROOK_LINES                 if role=='rook'
@@ -60,18 +65,13 @@ class Piece
   # It will be removed later if deemed unnecessary
   def notation
     #Types contains the notation bases as values of the Hash
-    return file if role == 'pawn'
-    return 'N'  if role == 'knight'
-    return role[0,1].upcase
+    return (role == 'pawn') ? file : Types[@type]
   end
   
   #eliminates theoretical moves that would not be applicable on a certain board
   # for reasons of: 1) would be on your own sides square
   # 2) would place your king in check
   def allowed_moves(board)
-    #NOTE The manner in which this array is declared, filled, and returned, for the purposes 
-    # of iterating over in the caller, would better be served by an iterator and moves << pos
-    # would become yield pos
     moves = []
     
     #bishops queens and rooks have 'lines of attack' rules
@@ -119,6 +119,7 @@ class Piece
         #castling
         castle_rank = (side==:white) ? '1' : '8'
         
+        #TODO castling logic does not account for previous moves, or castling across check
         king_on_initial_square    = (position == ('e'+castle_rank) )
         
         [ ['h', ('f'..'g'), 'g'], ['a', ('b'..'d'), 'c'] ].each do |rook_file, intervening_files, castle_to_file|
@@ -184,6 +185,10 @@ class Piece
     end
 
     @moves.reject! { |mv| ! Chess.valid_position?( mv ) }
+  end
+
+  def img_name
+    ( (type.to_s.split('_').length==2) ? type.to_s.split('_')[1] : type.to_s) + '_' + side.to_s.slice(0,1)
   end
 
   def promote!( new_type = :queen )
