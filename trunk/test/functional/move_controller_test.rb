@@ -91,4 +91,5 @@ class MoveControllerTest < ActionController::TestCase
     assert_response :success
     assert_nil flash[:move_error]
   end
+  
 end

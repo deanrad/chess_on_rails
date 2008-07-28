@@ -27,7 +27,8 @@ class MoveController < ApplicationController
   def index
     render :partial => 'match/move_list', :layout => false
   end
-
+  
+protected
   def get_match
     @match = @current_player.active_matches.find( params[:match_id] || params[:move][:match_id] )
 

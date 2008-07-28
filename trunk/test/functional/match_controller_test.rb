@@ -60,4 +60,10 @@ class MatchControllerTest < ActionController::TestCase
     assert_select 'table#board_table'
   end
 
+  def test_can_undo_last_move_if_you_made_it
+    assert_equal true, matches(:paul_vs_dean).turn_of?( players(:paul) )
+    get :undo_last, { :match_id => matches(:paul_vs_dean).id } , {:player_id => players(:dean).id}
+    assert_response :redirect #back to match
+  end
+
 end
