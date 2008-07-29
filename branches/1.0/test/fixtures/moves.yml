@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  match_id: 1
+  move_number: 1
+  from_coord: MyString
+  to_coord: MyString
+  notation: MyString
+  castled: false
+  promotion_piece: MyString
+  en_passant_capture_coord: MyString
+
+two:
+  match_id: 1
+  move_number: 1
+  from_coord: MyString
+  to_coord: MyString
+  notation: MyString
+  castled: false
+  promotion_piece: MyString
+  en_passant_capture_coord: MyString

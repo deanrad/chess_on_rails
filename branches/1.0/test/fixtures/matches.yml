@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  player1_id: 1
+  player2_id: 1
+  active: 1
+  winner: 1
+  outcome: MyString
+
+two:
+  player1_id: 1
+  player2_id: 1
+  active: 1
+  winner: 1
+  outcome: MyString
