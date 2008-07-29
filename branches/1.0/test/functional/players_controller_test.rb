@@ -11,7 +11,6 @@ class PlayersControllerTest < Test::Unit::TestCase
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
-=begin
   def test_should_allow_signup
     assert_difference 'Player.count' do
       create_player
@@ -27,6 +26,7 @@ class PlayersControllerTest < Test::Unit::TestCase
     end
   end
 
+=begin
   def test_should_require_password_on_signup
     assert_no_difference 'Player.count' do
       create_player(:password => nil)
