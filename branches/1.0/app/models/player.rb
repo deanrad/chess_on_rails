@@ -1,12 +1,22 @@
 require 'digest/sha1'
 
+# A Player is a participant in any Chess match, or simply a known account of someone.
+# It was used as the Restful Authentication user model so @current_player is used instead
+# of @current_user.
+# Other authentication types like facebook, or OpenID, when implemented will simply map
+# their identities onto instances of +Player+ in this application
 class Player < ActiveRecord::Base
 
   has_many  :matches, :class_name=>"Match",
     :finder_sql=>'SELECT matches.* FROM matches WHERE ( player1_id = #{id} OR player2_id = #{id} )'
 
+  def name
+    login
+  end
+  
   # Default Restful Authentication properties follow 
-  # Virtual attribute for the unencrypted password
+  
+  # :nodoc: Virtual attribute for the unencrypted password
   attr_accessor :password
 
   validates_presence_of     :login, :email

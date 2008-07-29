@@ -11,4 +11,11 @@ class MatchTest < ActiveSupport::TestCase
     assert_equal players(:maria), match.black
   end
 
+  def test_can_create_match
+    assert_difference 'Match.count' do
+      match = Match.new( :player1 => players(:dean), :player2 => players(:anders) )
+      match.save!
+      assert_equal 'dean vs. anders', match.lineup
+    end
+  end
 end

@@ -3,12 +3,12 @@ class CreateMoves < ActiveRecord::Migration
     create_table :moves do |t|
       t.integer :match_id
       t.integer :move_number
-      t.string :from_coord
-      t.string :to_coord
-      t.string :notation
+      t.string  :from_coord
+      t.string  :to_coord
+      t.string  :capture_coord
+      t.string  :notation
       t.boolean :castled
-      t.string :promotion_piece
-      t.string :en_passant_capture_coord
+      t.string  :promotion_piece
 
       t.timestamps
     end
