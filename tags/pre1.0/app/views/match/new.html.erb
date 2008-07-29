@@ -1,0 +1,12 @@
+<h2>New match !</h2>
+
+<% form_for(:match, :url => 'create' ) do |f| %>
+<div>
+Opponent: [Dean]<input type="hidden" name="opponent_id" value="1" /> <!-- hard-coded till ajax/facebook opponent-chooser ready -->
+</div>
+<div>
+They can play: <%= select_tag 'opponent_side', options_for_select(Match::SIDES)  %>
+</div>
+<%= submit_tag "Start" %>
+	
+<% end %>
