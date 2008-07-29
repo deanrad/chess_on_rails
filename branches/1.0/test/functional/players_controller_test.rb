@@ -5,11 +5,6 @@ require 'players_controller'
 class PlayersController; def rescue_action(e) raise e end; end
 
 class PlayersControllerTest < Test::Unit::TestCase
-  # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead
-  # Then, you can remove it from this and the units test.
-  include AuthenticatedTestHelper
-
-  fixtures :players
 
   def setup
     @controller = PlayersController.new
