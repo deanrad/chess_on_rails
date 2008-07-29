@@ -15,3 +15,8 @@ unstarted_match:
   player2: dean
   active: 1
   
+immortal:
+  player1: anders
+  player2: kieser
+  created_at: 1901-07-07 #actually 1851 but many dbs wont support that
+  

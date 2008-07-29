@@ -11,7 +11,7 @@ class PlayersControllerTest < Test::Unit::TestCase
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
-
+=begin
   def test_should_allow_signup
     assert_difference 'Player.count' do
       create_player
@@ -51,7 +51,7 @@ class PlayersControllerTest < Test::Unit::TestCase
     end
   end
   
-
+=end
   
 
   protected
