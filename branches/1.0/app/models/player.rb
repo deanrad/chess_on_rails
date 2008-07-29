@@ -1,5 +1,15 @@
 require 'digest/sha1'
+
 class Player < ActiveRecord::Base
+
+  has_many  :matches, :class_name=>"Match",
+    :finder_sql=>'SELECT matches.* FROM matches WHERE ( player1_id = #{id} OR player2_id = #{id} )'
+
+  def name
+    return login
+  end
+
+  # Default Restful Authentication properties follow 
   # Virtual attribute for the unencrypted password
   attr_accessor :password
 
@@ -65,6 +75,11 @@ class Player < ActiveRecord::Base
   # Returns true if the user has just been activated.
   def recently_activated?
     @activated
+  end
+
+  #default_salt used by fixtures
+  def self.fixtures_salt
+    '7e3041ebc2fc05a40c60028e2c4901a81035d3cd'
   end
 
   protected

@@ -34,7 +34,7 @@ class Test::Unit::TestCase
   # -- they do not yet inherit this setting
   
   #TODO possible performance gain by disabling fixtures :all in test_helper
-  fixtures :all
+  fixtures :players, :moves, :matches
 
   # Add more helper methods to be used by all tests here...
 end

@@ -1,10 +1,10 @@
 class CreateMatches < ActiveRecord::Migration
   def self.up
     create_table :matches do |t|
-      t.integer :player1_id
-      t.integer :player2_id
+      t.integer :player1_id, :null => false
+      t.integer :player2_id, :null => false
       t.boolean :active
-      t.integer :winner
+      t.integer :winner_id
       t.string  :outcome
 
       t.timestamps
