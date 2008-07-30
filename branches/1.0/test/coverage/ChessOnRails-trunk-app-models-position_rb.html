@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><title>C:/ChessOnRails/trunk/app/models/move.rb - C0 code coverage information</title>
+<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><title>C:/ChessOnRails/trunk/app/models/position.rb - C0 code coverage information</title>
     <style type='text/css'>body { background-color: rgb(240, 240, 245); }</style>
     <style type='text/css'>span.cross-ref-title {
  font-size: 140%;
@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Jul 30 14:04:12 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Wed Jul 30 14:04:13 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -569,11 +569,11 @@ span.run100 {
       <td class='heading'>Code coverage</td>
       </tr>
     </thead>
-  <tbody><tr class='light'><td><a href='ChessOnRails-trunk-app-models-move_rb.html'>C:/ChessOnRails/trunk/app/models/move.rb</a>
+  <tbody><tr class='light'><td><a href='ChessOnRails-trunk-app-models-position_rb.html'>C:/ChessOnRails/trunk/app/models/position.rb</a>
         </td>
-      <td class='lines_total'><tt>12</tt>
+      <td class='lines_total'><tt>65</tt>
         </td>
-      <td class='lines_code'><tt>3</tt>
+      <td class='lines_code'><tt>47</tt>
         </td>
       <td><table cellspacing='0' cellpadding='0' align='right'><tr><td><tt class='coverage_total'>100.0%</tt>
               &nbsp;</td>
@@ -598,18 +598,71 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="inferred0"><a name="line1"></a> 1 # A Move represents what a player did with respect to the pieces on the board in their turn.
-</span><span class="inferred1"><a name="line2"></a> 2 # They may have:
-</span><span class="inferred0"><a name="line3"></a> 3 # * moved a piece from +from_coord+ to +to_coord+
-</span><span class="inferred1"><a name="line4"></a> 4 # * captured a piece at +capture_coord+ (usually but not always equal to +to_coord)
-</span><span class="inferred0"><a name="line5"></a> 5 # * castled 
-</span><span class="inferred1"><a name="line6"></a> 6 # * promoted a pawn to another piece 
-</span><span class="inferred0"><a name="line7"></a> 7 #
-</span><span class="inferred1"><a name="line8"></a> 8 # Also stored is the canonical notation for the move, in standard short algebraic form.
-</span><span class="inferred0"><a name="line9"></a> 9 # See: http://en.wikipedia.org/wiki/Chess_notation for information on notation and coordinates
-</span><span class="marked1"><a name="line10"></a>10 class Move &lt; ActiveRecord::Base
-</span><span class="marked0"><a name="line11"></a>11   belongs_to :match
-</span><span class="marked1"><a name="line12"></a>12 end
+<pre><span class="inferred1"><a name="line1"></a> 1 # Position represents one of the squares of the board
+</span><span class="marked0"><a name="line2"></a> 2 class Position
+</span><span class="inferred1"><a name="line3"></a> 3   # The string based array of all allowed positions. These are interned at load time for :a4 style access
+</span><span class="marked0"><a name="line4"></a> 4   POSITIONS = %w( a8 b8 c8 d8 e8 f8 g8 h8  
+</span><span class="inferred1"><a name="line5"></a> 5                   a7 b7 c7 d7 e7 f7 g7 h7
+</span><span class="inferred0"><a name="line6"></a> 6                   a6 b6 c6 d6 e6 f6 g6 h6
+</span><span class="inferred1"><a name="line7"></a> 7                   a5 b5 c5 d5 e5 f5 g5 h5
+</span><span class="inferred0"><a name="line8"></a> 8                   a4 b4 c4 d4 e4 f4 g4 h4
+</span><span class="inferred1"><a name="line9"></a> 9                   a3 b3 c3 d3 e3 f3 g3 h3 
+</span><span class="inferred0"><a name="line10"></a>10                   a2 b2 c2 d2 e2 f2 g2 h2 
+</span><span class="inferred1"><a name="line11"></a>11                   a1 b1 c1 d1 e1 f1 g1 h1 )
+</span><span class="inferred0"><a name="line12"></a>12                   
+</span><span class="inferred1"><a name="line13"></a>13 
+</span><span class="inferred0"><a name="line14"></a>14   # The file, aka column, labeled a-h, and stored as the ordinal of the letter
+</span><span class="marked1"><a name="line15"></a>15   attr_accessor :file 
+</span><span class="inferred0"><a name="line16"></a>16 
+</span><span class="inferred1"><a name="line17"></a>17   # The rank,  aka row ,  labeled 1-8, and stored as the ordinal of the rank
+</span><span class="marked0"><a name="line18"></a>18   attr_accessor :rank
+</span><span class="inferred1"><a name="line19"></a>19   
+</span><span class="inferred0"><a name="line20"></a>20   # Can be initialized with a symbol or a string representing a position such as d4
+</span><span class="marked1"><a name="line21"></a>21   def initialize(*args)
+</span><span class="marked0"><a name="line22"></a>22     if( args.length == 2)
+</span><span class="marked1"><a name="line23"></a>23       @file = args[0].to_s[0] - 96 # ascii a
+</span><span class="marked0"><a name="line24"></a>24       @rank = args[1].to_i 
+</span><span class="marked1"><a name="line25"></a>25     elsif( args.length == 1 )
+</span><span class="marked0"><a name="line26"></a>26       @file = args[0].to_s[0] - 96 # ascii a
+</span><span class="marked1"><a name="line27"></a>27       @rank = args[0].to_s[1].chr.to_i 
+</span><span class="inferred0"><a name="line28"></a>28     end
+</span><span class="marked1"><a name="line29"></a>29     raise InvalidPositionError unless valid?
+</span><span class="inferred0"><a name="line30"></a>30   end
+</span><span class="inferred1"><a name="line31"></a>31   
+</span><span class="marked0"><a name="line32"></a>32   def to_s
+</span><span class="marked1"><a name="line33"></a>33     &quot;#{(@file + 96).chr}#{rank}&quot;
+</span><span class="marked0"><a name="line34"></a>34   end
+</span><span class="inferred1"><a name="line35"></a>35   
+</span><span class="marked0"><a name="line36"></a>36   def to_sym
+</span><span class="marked1"><a name="line37"></a>37     raise InvalidPositionError unless valid?
+</span><span class="marked0"><a name="line38"></a>38     self.to_s.to_sym 
+</span><span class="inferred1"><a name="line39"></a>39   end
+</span><span class="inferred0"><a name="line40"></a>40   
+</span><span class="marked1"><a name="line41"></a>41   def valid?
+</span><span class="marked0"><a name="line42"></a>42     POSITIONS.include?( self.to_s )
+</span><span class="marked1"><a name="line43"></a>43   end
+</span><span class="inferred0"><a name="line44"></a>44   
+</span><span class="inferred1"><a name="line45"></a>45   # Allows adding to rank and file ala  +@a5 += [1,0]+
+</span><span class="marked0"><a name="line46"></a>46   def +(vector)
+</span><span class="marked1"><a name="line47"></a>47     if vector.kind_of?(Array) and vector.length == 2 and vector[0].kind_of?(Fixnum) and vector[1].kind_of?(Fixnum)
+</span><span class="marked0"><a name="line48"></a>48       @file += vector[0]
+</span><span class="marked1"><a name="line49"></a>49       @rank += vector[1]
+</span><span class="inferred0"><a name="line50"></a>50     else
+</span><span class="marked1"><a name="line51"></a>51       invalidate!
+</span><span class="inferred0"><a name="line52"></a>52     end
+</span><span class="inferred1"><a name="line53"></a>53     
+</span><span class="marked0"><a name="line54"></a>54     self #return
+</span><span class="inferred1"><a name="line55"></a>55     
+</span><span class="inferred0"><a name="line56"></a>56   end
+</span><span class="inferred1"><a name="line57"></a>57   
+</span><span class="marked0"><a name="line58"></a>58 private
+</span><span class="marked1"><a name="line59"></a>59   def invalidate!
+</span><span class="marked0"><a name="line60"></a>60     @file, @rank = [0,0]
+</span><span class="marked1"><a name="line61"></a>61   end
+</span><span class="inferred0"><a name="line62"></a>62 end
+</span><span class="inferred1"><a name="line63"></a>63 
+</span><span class="marked0"><a name="line64"></a>64 class InvalidPositionError &lt; Exception
+</span><span class="inferred1"><a name="line65"></a>65 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>
