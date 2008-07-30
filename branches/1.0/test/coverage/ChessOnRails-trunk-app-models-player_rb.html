@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Tue Jul 29 23:39:20 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Wed Jul 30 01:17:47 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -598,110 +598,110 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="marked0"><a name="line1"></a>  1 require 'digest/sha1'
-</span><span class="inferred1"><a name="line2"></a>  2 
-</span><span class="inferred0"><a name="line3"></a>  3 # A Player is a participant in any Chess match, or simply a known account of someone.
-</span><span class="inferred1"><a name="line4"></a>  4 # It was used as the Restful Authentication user model so @current_player is used instead
-</span><span class="inferred0"><a name="line5"></a>  5 # of @current_user.
-</span><span class="inferred1"><a name="line6"></a>  6 # Other authentication types like facebook, or OpenID, when implemented will simply map
-</span><span class="inferred0"><a name="line7"></a>  7 # their identities onto instances of +Player+ in this application
-</span><span class="marked1"><a name="line8"></a>  8 class Player &lt; ActiveRecord::Base
-</span><span class="inferred0"><a name="line9"></a>  9 
-</span><span class="marked1"><a name="line10"></a> 10   has_many  :matches, :class_name=&gt;&quot;Match&quot;,
-</span><span class="inferred0"><a name="line11"></a> 11     :finder_sql=&gt;'SELECT matches.* FROM matches WHERE ( player1_id = #{id} OR player2_id = #{id} )'
-</span><span class="inferred1"><a name="line12"></a> 12 
-</span><span class="marked0"><a name="line13"></a> 13   def name
-</span><span class="marked1"><a name="line14"></a> 14     login
-</span><span class="marked0"><a name="line15"></a> 15   end
-</span><span class="inferred1"><a name="line16"></a> 16   
-</span><span class="inferred0"><a name="line17"></a> 17   # Default Restful Authentication properties follow 
-</span><span class="inferred1"><a name="line18"></a> 18   
-</span><span class="inferred0"><a name="line19"></a> 19   # Virtual attribute for the unencrypted password
-</span><span class="marked1"><a name="line20"></a> 20   attr_accessor :password
-</span><span class="inferred0"><a name="line21"></a> 21 
-</span><span class="marked1"><a name="line22"></a> 22   validates_presence_of     :login, :email
-</span><span class="marked0"><a name="line23"></a> 23   validates_presence_of     :password,                   :if =&gt; :password_required?
-</span><span class="marked1"><a name="line24"></a> 24   validates_presence_of     :password_confirmation,      :if =&gt; :password_required?
-</span><span class="marked0"><a name="line25"></a> 25   validates_length_of       :password, :within =&gt; 4..40, :if =&gt; :password_required?
-</span><span class="marked1"><a name="line26"></a> 26   validates_confirmation_of :password,                   :if =&gt; :password_required?
-</span><span class="marked0"><a name="line27"></a> 27   validates_length_of       :login,    :within =&gt; 3..40
-</span><span class="marked1"><a name="line28"></a> 28   validates_length_of       :email,    :within =&gt; 3..100
-</span><span class="marked0"><a name="line29"></a> 29   validates_uniqueness_of   :login, :email, :case_sensitive =&gt; false
-</span><span class="marked1"><a name="line30"></a> 30   before_save :encrypt_password
-</span><span class="inferred0"><a name="line31"></a> 31   
-</span><span class="inferred1"><a name="line32"></a> 32   # prevents a user from submitting a crafted form that bypasses activation
-</span><span class="inferred0"><a name="line33"></a> 33   # anything else you want your user to change should be added here.
-</span><span class="marked1"><a name="line34"></a> 34   attr_accessible :login, :email, :password, :password_confirmation
-</span><span class="inferred0"><a name="line35"></a> 35 
-</span><span class="inferred1"><a name="line36"></a> 36   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
-</span><span class="marked0"><a name="line37"></a> 37   def self.authenticate(login, password)
-</span><span class="marked1"><a name="line38"></a> 38     u = find_by_login(login) # need to get the salt
-</span><span class="marked0"><a name="line39"></a> 39     u &amp;&amp; u.authenticated?(password) ? u : nil
-</span><span class="inferred1"><a name="line40"></a> 40   end
-</span><span class="inferred0"><a name="line41"></a> 41 
-</span><span class="inferred1"><a name="line42"></a> 42   # Encrypts some data with the salt.
-</span><span class="marked0"><a name="line43"></a> 43   def self.encrypt(password, salt)
-</span><span class="marked1"><a name="line44"></a> 44     Digest::SHA1.hexdigest(&quot;--#{salt}--#{password}--&quot;)
-</span><span class="marked0"><a name="line45"></a> 45   end
-</span><span class="inferred1"><a name="line46"></a> 46 
-</span><span class="inferred0"><a name="line47"></a> 47   # Encrypts the password with the user salt
-</span><span class="marked1"><a name="line48"></a> 48   def encrypt(password)
-</span><span class="marked0"><a name="line49"></a> 49     self.class.encrypt(password, salt)
-</span><span class="marked1"><a name="line50"></a> 50   end
-</span><span class="inferred0"><a name="line51"></a> 51 
-</span><span class="marked1"><a name="line52"></a> 52   def authenticated?(password)
-</span><span class="marked0"><a name="line53"></a> 53     crypted_password == encrypt(password)
-</span><span class="marked1"><a name="line54"></a> 54   end
-</span><span class="inferred0"><a name="line55"></a> 55 
-</span><span class="marked1"><a name="line56"></a> 56   def remember_token?
-</span><span class="marked0"><a name="line57"></a> 57     remember_token_expires_at &amp;&amp; Time.now.utc &lt; remember_token_expires_at 
-</span><span class="marked1"><a name="line58"></a> 58   end
-</span><span class="inferred0"><a name="line59"></a> 59 
-</span><span class="inferred1"><a name="line60"></a> 60   # These create and unset the fields required for remembering users between browser closes
-</span><span class="marked0"><a name="line61"></a> 61   def remember_me
-</span><span class="marked1"><a name="line62"></a> 62     remember_me_for 2.weeks
-</span><span class="marked0"><a name="line63"></a> 63   end
-</span><span class="inferred1"><a name="line64"></a> 64 
-</span><span class="marked0"><a name="line65"></a> 65   def remember_me_for(time)
-</span><span class="marked1"><a name="line66"></a> 66     remember_me_until time.from_now.utc
-</span><span class="marked0"><a name="line67"></a> 67   end
-</span><span class="inferred1"><a name="line68"></a> 68 
-</span><span class="marked0"><a name="line69"></a> 69   def remember_me_until(time)
-</span><span class="marked1"><a name="line70"></a> 70     self.remember_token_expires_at = time
-</span><span class="marked0"><a name="line71"></a> 71     self.remember_token            = encrypt(&quot;#{email}--#{remember_token_expires_at}&quot;)
-</span><span class="marked1"><a name="line72"></a> 72     save(false)
-</span><span class="inferred0"><a name="line73"></a> 73   end
-</span><span class="inferred1"><a name="line74"></a> 74 
-</span><span class="marked0"><a name="line75"></a> 75   def forget_me
-</span><span class="marked1"><a name="line76"></a> 76     self.remember_token_expires_at = nil
-</span><span class="marked0"><a name="line77"></a> 77     self.remember_token            = nil
-</span><span class="marked1"><a name="line78"></a> 78     save(false)
-</span><span class="inferred0"><a name="line79"></a> 79   end
-</span><span class="inferred1"><a name="line80"></a> 80 
-</span><span class="inferred0"><a name="line81"></a> 81   # Returns true if the user has just been activated.
-</span><span class="inferred1"><a name="line82"></a> 82   #def recently_activated?
-</span><span class="inferred0"><a name="line83"></a> 83   #  @activated
-</span><span class="inferred1"><a name="line84"></a> 84   #end
-</span><span class="inferred0"><a name="line85"></a> 85 
-</span><span class="inferred1"><a name="line86"></a> 86   #default_salt used by fixtures
-</span><span class="marked0"><a name="line87"></a> 87   def self.fixtures_salt
-</span><span class="marked1"><a name="line88"></a> 88     '7e3041ebc2fc05a40c60028e2c4901a81035d3cd'
-</span><span class="marked0"><a name="line89"></a> 89   end
-</span><span class="inferred1"><a name="line90"></a> 90 
-</span><span class="marked0"><a name="line91"></a> 91   protected
-</span><span class="inferred1"><a name="line92"></a> 92     # before filter 
-</span><span class="marked0"><a name="line93"></a> 93     def encrypt_password
-</span><span class="marked1"><a name="line94"></a> 94       return if password.blank?
-</span><span class="marked0"><a name="line95"></a> 95       self.salt = Digest::SHA1.hexdigest(&quot;--#{Time.now.to_s}--#{login}--&quot;) if new_record?
-</span><span class="marked1"><a name="line96"></a> 96       self.crypted_password = encrypt(password)
-</span><span class="inferred0"><a name="line97"></a> 97     end
-</span><span class="inferred1"><a name="line98"></a> 98       
-</span><span class="marked0"><a name="line99"></a> 99     def password_required?
-</span><span class="marked1"><a name="line100"></a>100       crypted_password.blank? || !password.blank?
-</span><span class="marked0"><a name="line101"></a>101     end
-</span><span class="inferred1"><a name="line102"></a>102     
-</span><span class="inferred0"><a name="line103"></a>103     
-</span><span class="inferred1"><a name="line104"></a>104 end
+<pre><span class="marked1"><a name="line1"></a>  1 require 'digest/sha1'
+</span><span class="inferred0"><a name="line2"></a>  2 
+</span><span class="inferred1"><a name="line3"></a>  3 # A Player is a participant in any Chess match, or simply a known account of someone.
+</span><span class="inferred0"><a name="line4"></a>  4 # It was used as the Restful Authentication user model so @current_player is used instead
+</span><span class="inferred1"><a name="line5"></a>  5 # of @current_user.
+</span><span class="inferred0"><a name="line6"></a>  6 # Other authentication types like facebook, or OpenID, when implemented will simply map
+</span><span class="inferred1"><a name="line7"></a>  7 # their identities onto instances of +Player+ in this application
+</span><span class="marked0"><a name="line8"></a>  8 class Player &lt; ActiveRecord::Base
+</span><span class="inferred1"><a name="line9"></a>  9 
+</span><span class="marked0"><a name="line10"></a> 10   has_many  :matches, :class_name=&gt;&quot;Match&quot;,
+</span><span class="inferred1"><a name="line11"></a> 11     :finder_sql=&gt;'SELECT matches.* FROM matches WHERE ( player1_id = #{id} OR player2_id = #{id} )'
+</span><span class="inferred0"><a name="line12"></a> 12 
+</span><span class="marked1"><a name="line13"></a> 13   def name
+</span><span class="marked0"><a name="line14"></a> 14     login
+</span><span class="marked1"><a name="line15"></a> 15   end
+</span><span class="inferred0"><a name="line16"></a> 16   
+</span><span class="inferred1"><a name="line17"></a> 17   # Default Restful Authentication properties follow 
+</span><span class="inferred0"><a name="line18"></a> 18   
+</span><span class="inferred1"><a name="line19"></a> 19   # Virtual attribute for the unencrypted password
+</span><span class="marked0"><a name="line20"></a> 20   attr_accessor :password
+</span><span class="inferred1"><a name="line21"></a> 21 
+</span><span class="marked0"><a name="line22"></a> 22   validates_presence_of     :login, :email
+</span><span class="marked1"><a name="line23"></a> 23   validates_presence_of     :password,                   :if =&gt; :password_required?
+</span><span class="marked0"><a name="line24"></a> 24   validates_presence_of     :password_confirmation,      :if =&gt; :password_required?
+</span><span class="marked1"><a name="line25"></a> 25   validates_length_of       :password, :within =&gt; 4..40, :if =&gt; :password_required?
+</span><span class="marked0"><a name="line26"></a> 26   validates_confirmation_of :password,                   :if =&gt; :password_required?
+</span><span class="marked1"><a name="line27"></a> 27   validates_length_of       :login,    :within =&gt; 3..40
+</span><span class="marked0"><a name="line28"></a> 28   validates_length_of       :email,    :within =&gt; 3..100
+</span><span class="marked1"><a name="line29"></a> 29   validates_uniqueness_of   :login, :email, :case_sensitive =&gt; false
+</span><span class="marked0"><a name="line30"></a> 30   before_save :encrypt_password
+</span><span class="inferred1"><a name="line31"></a> 31   
+</span><span class="inferred0"><a name="line32"></a> 32   # prevents a user from submitting a crafted form that bypasses activation
+</span><span class="inferred1"><a name="line33"></a> 33   # anything else you want your user to change should be added here.
+</span><span class="marked0"><a name="line34"></a> 34   attr_accessible :login, :email, :password, :password_confirmation
+</span><span class="inferred1"><a name="line35"></a> 35 
+</span><span class="inferred0"><a name="line36"></a> 36   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
+</span><span class="marked1"><a name="line37"></a> 37   def self.authenticate(login, password)
+</span><span class="marked0"><a name="line38"></a> 38     u = find_by_login(login) # need to get the salt
+</span><span class="marked1"><a name="line39"></a> 39     u &amp;&amp; u.authenticated?(password) ? u : nil
+</span><span class="inferred0"><a name="line40"></a> 40   end
+</span><span class="inferred1"><a name="line41"></a> 41 
+</span><span class="inferred0"><a name="line42"></a> 42   # Encrypts some data with the salt.
+</span><span class="marked1"><a name="line43"></a> 43   def self.encrypt(password, salt)
+</span><span class="marked0"><a name="line44"></a> 44     Digest::SHA1.hexdigest(&quot;--#{salt}--#{password}--&quot;)
+</span><span class="marked1"><a name="line45"></a> 45   end
+</span><span class="inferred0"><a name="line46"></a> 46 
+</span><span class="inferred1"><a name="line47"></a> 47   # Encrypts the password with the user salt
+</span><span class="marked0"><a name="line48"></a> 48   def encrypt(password)
+</span><span class="marked1"><a name="line49"></a> 49     self.class.encrypt(password, salt)
+</span><span class="marked0"><a name="line50"></a> 50   end
+</span><span class="inferred1"><a name="line51"></a> 51 
+</span><span class="marked0"><a name="line52"></a> 52   def authenticated?(password)
+</span><span class="marked1"><a name="line53"></a> 53     crypted_password == encrypt(password)
+</span><span class="marked0"><a name="line54"></a> 54   end
+</span><span class="inferred1"><a name="line55"></a> 55 
+</span><span class="marked0"><a name="line56"></a> 56   def remember_token?
+</span><span class="marked1"><a name="line57"></a> 57     remember_token_expires_at &amp;&amp; Time.now.utc &lt; remember_token_expires_at 
+</span><span class="marked0"><a name="line58"></a> 58   end
+</span><span class="inferred1"><a name="line59"></a> 59 
+</span><span class="inferred0"><a name="line60"></a> 60   # These create and unset the fields required for remembering users between browser closes
+</span><span class="marked1"><a name="line61"></a> 61   def remember_me
+</span><span class="marked0"><a name="line62"></a> 62     remember_me_for 2.weeks
+</span><span class="marked1"><a name="line63"></a> 63   end
+</span><span class="inferred0"><a name="line64"></a> 64 
+</span><span class="marked1"><a name="line65"></a> 65   def remember_me_for(time)
+</span><span class="marked0"><a name="line66"></a> 66     remember_me_until time.from_now.utc
+</span><span class="marked1"><a name="line67"></a> 67   end
+</span><span class="inferred0"><a name="line68"></a> 68 
+</span><span class="marked1"><a name="line69"></a> 69   def remember_me_until(time)
+</span><span class="marked0"><a name="line70"></a> 70     self.remember_token_expires_at = time
+</span><span class="marked1"><a name="line71"></a> 71     self.remember_token            = encrypt(&quot;#{email}--#{remember_token_expires_at}&quot;)
+</span><span class="marked0"><a name="line72"></a> 72     save(false)
+</span><span class="inferred1"><a name="line73"></a> 73   end
+</span><span class="inferred0"><a name="line74"></a> 74 
+</span><span class="marked1"><a name="line75"></a> 75   def forget_me
+</span><span class="marked0"><a name="line76"></a> 76     self.remember_token_expires_at = nil
+</span><span class="marked1"><a name="line77"></a> 77     self.remember_token            = nil
+</span><span class="marked0"><a name="line78"></a> 78     save(false)
+</span><span class="inferred1"><a name="line79"></a> 79   end
+</span><span class="inferred0"><a name="line80"></a> 80 
+</span><span class="inferred1"><a name="line81"></a> 81   # Returns true if the user has just been activated.
+</span><span class="inferred0"><a name="line82"></a> 82   #def recently_activated?
+</span><span class="inferred1"><a name="line83"></a> 83   #  @activated
+</span><span class="inferred0"><a name="line84"></a> 84   #end
+</span><span class="inferred1"><a name="line85"></a> 85 
+</span><span class="inferred0"><a name="line86"></a> 86   #default_salt used by fixtures
+</span><span class="marked1"><a name="line87"></a> 87   def self.fixtures_salt
+</span><span class="marked0"><a name="line88"></a> 88     '7e3041ebc2fc05a40c60028e2c4901a81035d3cd'
+</span><span class="marked1"><a name="line89"></a> 89   end
+</span><span class="inferred0"><a name="line90"></a> 90 
+</span><span class="marked1"><a name="line91"></a> 91   protected
+</span><span class="inferred0"><a name="line92"></a> 92     # before filter 
+</span><span class="marked1"><a name="line93"></a> 93     def encrypt_password
+</span><span class="marked0"><a name="line94"></a> 94       return if password.blank?
+</span><span class="marked1"><a name="line95"></a> 95       self.salt = Digest::SHA1.hexdigest(&quot;--#{Time.now.to_s}--#{login}--&quot;) if new_record?
+</span><span class="marked0"><a name="line96"></a> 96       self.crypted_password = encrypt(password)
+</span><span class="inferred1"><a name="line97"></a> 97     end
+</span><span class="inferred0"><a name="line98"></a> 98       
+</span><span class="marked1"><a name="line99"></a> 99     def password_required?
+</span><span class="marked0"><a name="line100"></a>100       crypted_password.blank? || !password.blank?
+</span><span class="marked1"><a name="line101"></a>101     end
+</span><span class="inferred0"><a name="line102"></a>102     
+</span><span class="inferred1"><a name="line103"></a>103     
+</span><span class="inferred0"><a name="line104"></a>104 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>
