@@ -8,6 +8,8 @@ class Match < ActiveRecord::Base
   #This match has a list of moves, played by each player in turn
   has_many :moves, :order => 'created_at ASC'
 
+  SIDES = [:white, :black]
+
   # The player on the side of white- aka player1
   def white
     player1
