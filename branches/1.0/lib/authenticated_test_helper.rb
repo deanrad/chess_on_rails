@@ -1,4 +1,4 @@
-module AuthenticatedTestHelper
+module AuthenticatedTestHelper # :nodoc:
   # Sets the current player in the session from the player fixtures.
   def login_as(player)
     @request.session[:player_id] = player ? players(player).id : nil

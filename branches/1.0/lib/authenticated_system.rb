@@ -1,4 +1,4 @@
-module AuthenticatedSystem
+module AuthenticatedSystem # :nodoc:
   protected
     # Returns true or false if the player is logged in.
     # Preloads @current_player with the player model if they're logged in.

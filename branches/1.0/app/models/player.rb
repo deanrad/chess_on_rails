@@ -16,7 +16,7 @@ class Player < ActiveRecord::Base
   
   # Default Restful Authentication properties follow 
   
-  # :nodoc: Virtual attribute for the unencrypted password
+  # Virtual attribute for the unencrypted password
   attr_accessor :password
 
   validates_presence_of     :login, :email
