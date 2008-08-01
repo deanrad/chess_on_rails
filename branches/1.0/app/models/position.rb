@@ -23,10 +23,11 @@ class Position
       @file = args[0].to_s[0] - 96 # ascii a
       @rank = args[1].to_i 
     elsif( args.length == 1 )
+      invalidate! and return unless args[0].to_s.length >= 2
       @file = args[0].to_s[0] - 96 # ascii a
       @rank = args[0].to_s[1].chr.to_i 
     end
-    raise InvalidPositionError, "#{args.join(',')} did not specify a valid position" unless valid?
+    #raise InvalidPositionError, "#{args.join(',')} did not specify a valid position" unless valid?
   end
   
   #convenience for creating and calling to_sym on an instance of Position

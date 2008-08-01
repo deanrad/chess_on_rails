@@ -20,8 +20,8 @@ when you drop the piece or hit enter.
   
      var origSquare = draggable.parentNode;
      
-     //$('move_from_coord').value = draggable.parentNode.id;
-     //$('move_to_coord').value = droparea.id;
+     $('move_from_coord').value = draggable.parentNode.id;
+     $('move_to_coord').value = droparea.id;
   
      //for now release it in the DOM, moving it
      origSquare.removeChild(draggable);
@@ -31,13 +31,17 @@ when you drop the piece or hit enter.
      droparea.appendChild(draggable);
   
      //this should perhaps be an option but for ease of playability...
-     //$('new_move_form').submit();
+     $('new_move_form').submit();
      
   }
 
 </script>
+<div id="board_div" style="float:left">
 <%= render :partial => 'board', :locals => { :board => @match.board } %>
+</div>
 
-
+<div id="new_move_div" style="margin-left: 25px;">
+<%= render :partial => 'moves/create', :locals => {:match => @match, :move_in_error => flash[:move_in_error] } %>
+</div>
 
 

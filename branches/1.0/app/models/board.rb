@@ -97,7 +97,7 @@ class Board < Hash
               yield new_position.to_sym  #allow the move
             else
               if new_position.file == pos.file
-                if (new_position.rank - pos.rank == 1) or pos.rank==Sides[piece_moving].front_rank
+                if (new_position.rank - pos.rank == 1) or pos.rank==Sides[piece_moving.side].front_rank
                   yield new_position.to_sym
                 end
               else
