@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class MatchTest < ActiveSupport::TestCase
-  
+
   # Replace this with your real tests.
   def test_player1_in_match_is_white_and_player2_is_black
     match = matches(:dean_vs_maria)
@@ -17,4 +17,5 @@ class MatchTest < ActiveSupport::TestCase
       assert_equal 'dean vs. anders', match.lineup
     end
   end
+  
 end

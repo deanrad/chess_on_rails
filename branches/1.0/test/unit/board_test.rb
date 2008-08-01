@@ -5,7 +5,8 @@ class BoardTest < ActiveSupport::TestCase
     @rook = Piece.new(:rook )
     @white_king, @white_queen = [ Piece.new(:king, :white), Piece.new(:queen, :white) ]
     @black_king, @black_queen = [ Piece.new(:king, :black), Piece.new(:queen, :black) ]
-    
+
+    @initial_board = Board.initial_board    
     @lone_rook_board = Board[ :a1 => @rook ]
     @kings_and_queens= Board[ :d1 => @white_queen, :e1 => @white_king, :d8 => @black_queen, :e8 => @black_king ]
   end
@@ -39,13 +40,32 @@ class BoardTest < ActiveSupport::TestCase
   end
 
   def test_capture_is_undone_when_only_considering # :nodoc:
-    @kings_and_queens.consider_move( Move.new( :from_coord => :d8, :to_coord => :d1) )  do
+    @kings_and_queens.consider_move( Move.new( :from_coord => :d8, :to_coord => :d1 ) )  do
       assert_equal 3, @kings_and_queens.squares_occupied.length
       assert_equal :black, @kings_and_queens[:d1].side
     end
     assert_equal 4, @kings_and_queens.squares_occupied.length
     assert_equal :white, @kings_and_queens[:d1].side
         
+  end
+  
+  def test_32_pieces_on_initial_board
+    assert_equal 32, @initial_board.pieces.length
+  end
+  
+  def test_white_king_is_on_e1
+    assert_equal :king, @initial_board[:e1].role
+    assert_equal :white, @initial_board[:e1].side
+  end
+
+  def test_white_queen_is_on_d1
+    assert_equal :queen, @initial_board[:d1].role
+    assert_equal :white, @initial_board[:d1].side
+  end
+  
+  def test_black_king_is_on_e8
+    assert_equal :king, @initial_board[:e8].role
+    assert_equal :black, @initial_board[:e8].side
   end
   
 end

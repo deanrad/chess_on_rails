@@ -25,4 +25,9 @@ class Match < ActiveRecord::Base
     "#{player1.name} vs. #{player2.name}"
   end
 
+  def board() # as_of_move = nil
+    #for now just return the initial board, played back to as many moves as we have
+    Board.initial_board
+  end
+  
 end

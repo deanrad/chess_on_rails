@@ -14,7 +14,7 @@ you can enter the Algebraic Notation ( Nbxc4 ). To castle drag king to its castl
 when you drop the piece or hit enter.
 </div>
 
-<%= render :partial => 'board'%>
+<%= render :partial => 'board', :locals => { :board => @match.board } %>
 
 
 

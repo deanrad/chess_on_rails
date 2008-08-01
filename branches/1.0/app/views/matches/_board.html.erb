@@ -11,9 +11,9 @@
       <%= row[0][1,1]  %>
     </td>
     <% row.each do |position| -%>
-      <% content_tag( 'td', :id => position, :class => ['square', position, square_color(position)].join(' ') ) do -%>
-          <%= render_piece( board[position] ) %>
-      <% end -%>
+      <% content_tag( 'td', :id => position, :class => ['square', position, square_color(position)].join(' ') ) do %>
+         <%= render_piece( board[position.to_sym] ) %>
+      <% end %>
     <% end -%>
   </tr>
   <% end -%>

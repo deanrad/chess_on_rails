@@ -16,14 +16,12 @@ class Piece
   FLANKS = [:kings, :queens]
   WHICH = [:a, :b, :c, :d, :e, :f, :g, :h, :promoted] + FLANKS
   ROLES_WITH_MANY = [:bishop, :knight, :rook, :pawn]
+  MINOR_PIECES = [:bishop, :knight, :rook]
   
   SIDE_PIECES = [:a_pawn, :b_pawn, :c_pawn, :d_pawn, :e_pawn, :f_pawn, :g_pawn, :h_pawn,
                  :queens_rook, :queens_knight, :queens_bishop, :queen, 
                  :king, :kings_bishop, :kings_knight, :kings_rook ]
-  
-  #intern these symbols at class load time
-#  symbolize_each_combo_of Match::SIDES, Piece::SIDE_PIECES
-  
+    
   attr_accessor :role, :side, :which
 
   # A unique one of white's pieces, for instance

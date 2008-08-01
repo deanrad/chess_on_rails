@@ -1,7 +1,11 @@
 # +Board+ like +Piece+, is a transient object, not stored in the database, but inferred, and
 # used and disposed as needed for the purpose of implementing gameplay, and specifically tracking
 # the location of +Piece+ s on the board and answering queries about the relationship of +Piece+ s
+#
+# It keys on symbolized positions such as :a4
 class Board < Hash
+  
+  FILES = [:a, :b, :c, :d, :e, :f, :g, :h]
   
   # changes the key (position symbol) under which this piece is stored
   def move!( move )
@@ -18,6 +22,39 @@ class Board < Hash
 
   def squares_occupied
     return keys
+  end
+  
+  def pieces
+    return values
+  end
+  
+  def store(key, value)
+    super if key.kind_of?(Symbol)
+    super( key.to_sym, value )
+  end
+  
+  #return chess pieces as they appear at the start of a match
+  #TODO replace verbose Position.as_symbol(:e, back_rank) with :e + back_rank
+  def self.initial_board
+    b = Board.new 
+    Sides.each do | side, back_rank, front_rank |
+      b.store( :e + back_rank, Piece.new(:king,    side) )
+      b.store( :d + back_rank, Piece.new(:queen,   side) )
+
+      b.store( :a + back_rank, Piece.new(:rook,    side, :queen) )
+      b.store( :b + back_rank, Piece.new(:knight,  side, :queen) )
+      b.store( :c + back_rank, Piece.new(:bishop,  side, :queen) )
+
+      b.store( :h + back_rank, Piece.new(:rook,    side, :king) )
+      b.store( :g + back_rank, Piece.new(:knight,  side, :king) )
+      b.store( :f + back_rank, Piece.new(:bishop,  side, :king) )
+      
+      FILES.each do |file|
+        b.store( file + front_rank, Piece.new(:pawn, side, :file) )
+      end
+      
+    end
+    return b
   end
   
   private
@@ -52,3 +89,12 @@ class Board < Hash
   end
   
 end
+
+#Extension to symbol for more expressive position manipulation
+class Symbol
+  #allows :a + rank etc..
+  def +(other)
+    (self.to_s + other.to_s).to_sym
+  end
+end
+

@@ -29,6 +29,12 @@ class Position
     raise InvalidPositionError unless valid?
   end
   
+  #convenience for creating and calling to_sym on an instance of Position
+  def self.as_symbol(*args)
+    p = Position.new(args)
+    p.to_sym
+  end
+  
   def to_s
     "#{(@file + 96).chr}#{rank}"
   end
