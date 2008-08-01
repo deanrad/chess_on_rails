@@ -27,8 +27,10 @@ class PositionTest < ActiveSupport::TestCase
   end
   
   def test_can_add_via_vector_if_stays_on_board
-    p = @a5 + [1,0]
-    assert_equal :b5, p.to_sym  
+    #a move toward black one unit from a5
+    p = @a5 + [1,0] 
+    assert_equal :a6, p.to_sym  
+    assert_equal :a5, @a5.to_sym #original remains unaltered
   end
 
   def test_can_detect_if_add_via_vector_falls_off_board
@@ -40,5 +42,8 @@ class PositionTest < ActiveSupport::TestCase
     p = @a5 + 'ten'
     assert ! p.valid?
   end
-      
+
+  def test_concise_way_to_call_constructor
+    assert_equal :d4, Position.as_symbol('d', 4)
+  end      
 end

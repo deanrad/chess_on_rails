@@ -7,12 +7,8 @@ module MatchesHelper
   #iterates over the rows and yields columns in the correct order for rendering the board for white or black
   def positions_by_row_as( side )
     
-    rows_in_order = []
-    if side==:white
-      0.upto(7){ |i| rows_in_order << i }
-    else
-      7.downto(0){ |i| rows_in_order << i } 
-    end
+
+    rows_in_order = (side == :white) ? (0..7) : (0..7).to_a.reverse
     
     rows_in_order.each do |row_offset|
         from, to = [row_offset*8, row_offset*8 + 7]
@@ -43,8 +39,10 @@ module MatchesHelper
 
   #Shows a piece  
   #REFACTOR this may be best as a partial
-  def render_piece( piece )
+  def render_piece( position, board )
+    piece = board[position.to_sym]
     return "&nbsp;" unless piece
-    "<img src='#{IMG_ROOT_PATH}#{piece.role}_#{piece.side.to_s[0,1]}.gif' alt='' class='piece'/>"
+    moves = board.allowed_moves(position.to_sym) * ' '
+    "<img src='#{IMG_ROOT_PATH}#{piece.role}_#{piece.side.to_s[0,1]}.gif' alt='' class='piece #{moves}'/>"
   end
 end

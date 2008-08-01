@@ -12,7 +12,7 @@
     </td>
     <% row.each do |position| -%>
       <% content_tag( 'td', :id => position, :class => ['square', position, square_color(position)].join(' ') ) do %>
-         <%= render_piece( board[position.to_sym] ) %>
+         <%= render_piece( position, board ) %>
       <% end %>
     <% end -%>
   </tr>

@@ -4,7 +4,7 @@
 #
 # It keys on symbolized positions such as :a4
 class Board < Hash
-  
+
   FILES = [:a, :b, :c, :d, :e, :f, :g, :h]
   
   # changes the key (position symbol) under which this piece is stored
@@ -34,7 +34,6 @@ class Board < Hash
   end
   
   #return chess pieces as they appear at the start of a match
-  #TODO replace verbose Position.as_symbol(:e, back_rank) with :e + back_rank
   def self.initial_board
     b = Board.new 
     Sides.each do | side, back_rank, front_rank |
@@ -57,7 +56,72 @@ class Board < Hash
     return b
   end
   
+  def allowed_moves( position )
+    #TODO a hash by position would be helpful - right now dynamic only
+    moves = []
+    allowed_moves_of_piece_at(position) { |move| moves << move }
+    moves
+  end
+  
   private
+
+  #on this board, interprets the piece's own allowed moves according to the state of the other pieces
+  def allowed_moves_of_piece_at( position )
+    return unless piece_moving = self[position]
+    
+    pos = Position.new(position)
+    
+    #for each line along which this piece can move
+    piece_moving.lines_of_attack.each do |line|
+      line_still_valid = true 
+      
+      
+      #and for each step along that line
+      line.each do |vector|
+        new_position = pos + vector
+    
+        #if they're still on the board and still allowed to move this way
+        if new_position.valid? and line_still_valid
+          
+          piece_at_new_position = self[new_position.to_sym]
+
+          #they can move here unless there's a piece here
+          unless piece_at_new_position
+            yield new_position.to_sym unless piece_moving.role == :pawn and new_position.file != pos.file
+          else
+            #they'll go no further
+            line_still_valid = false
+            
+            #if its the opponents piece they may move here, but no further
+            if piece_at_new_position.side != piece_moving.side
+              yield new_position.to_sym
+            end
+          end
+        else
+          line_still_valid = false
+        end
+      end
+    end
+    
+    #and for each direct move to which this piece can move
+    #TODO dry this copy of above logic up
+    piece_moving.direct_moves.each do |vector| 
+        new_position = pos + vector
+        if new_position.valid?
+          piece_at_new_position = self[new_position.to_sym]
+          unless piece_at_new_position
+            yield new_position.to_sym
+          else
+            if piece_at_new_position.side != piece_moving.side
+              yield new_position.to_sym
+            end
+          end
+          
+        end
+    end
+  
+  end
+  
   
   #These variables help us track what's happened and allow us to undo
   attr_accessor :piece_last_moved, :piece_last_moved_from_coord

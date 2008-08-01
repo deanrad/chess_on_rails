@@ -26,7 +26,7 @@ class Position
       @file = args[0].to_s[0] - 96 # ascii a
       @rank = args[0].to_s[1].chr.to_i 
     end
-    raise InvalidPositionError unless valid?
+    raise InvalidPositionError, "#{args.join(',')} did not specify a valid position" unless valid?
   end
   
   #convenience for creating and calling to_sym on an instance of Position
@@ -48,16 +48,21 @@ class Position
     POSITIONS.include?( self.to_s )
   end
   
+  def self.valid?(*args)
+    Position.new(*args).valid?
+  end
+  
   # Allows adding to rank and file ala  +@a5 += [1,0]+
   def +(vector)
+    newpos = Position.new( self.to_s )
     if vector.kind_of?(Array) and vector.length == 2 and vector[0].kind_of?(Fixnum) and vector[1].kind_of?(Fixnum)
-      @file += vector[0]
-      @rank += vector[1]
+      newpos.file += vector[1] #note reversal
+      newpos.rank += vector[0]
     else
-      invalidate!
+      newpos.send('invalidate!')
     end
     
-    self #return
+    newpos #return
     
   end
   

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class BoardTest < ActiveSupport::TestCase
   def setup
-    @rook = Piece.new(:rook )
+    @rook = Piece.new(:rook, :white )
     @white_king, @white_queen = [ Piece.new(:king, :white), Piece.new(:queen, :white) ]
     @black_king, @black_queen = [ Piece.new(:king, :black), Piece.new(:queen, :black) ]
 
@@ -54,7 +54,7 @@ class BoardTest < ActiveSupport::TestCase
   end
   
   def test_white_king_is_on_e1
-    assert_equal :king, @initial_board[:e1].role
+    assert_equal :king,  @initial_board[:e1].role
     assert_equal :white, @initial_board[:e1].side
   end
 
@@ -64,8 +64,26 @@ class BoardTest < ActiveSupport::TestCase
   end
   
   def test_black_king_is_on_e8
-    assert_equal :king, @initial_board[:e8].role
+    assert_equal :king,  @initial_board[:e8].role
     assert_equal :black, @initial_board[:e8].side
   end
+  
+  def test_king_has_no_moves_on_initial_board
+    white_king = @initial_board[:e1]
+    assert_equal 0, @initial_board.allowed_moves(:e1).length
+  end
+  
+  def test_knight_has_two_moves_on_initial_board
+    k = @initial_board[:b8]
+    moves = @initial_board.allowed_moves(:b8)
+    assert_equal 2, moves.length
+  end
+  
+  def test_pawn_may_move_two_squares_on_initial_board
+    p = @initial_board[:c7]
+    moves = @initial_board.allowed_moves(:c7)
+    assert_equal 2, moves.length
+  end
+  
   
 end
