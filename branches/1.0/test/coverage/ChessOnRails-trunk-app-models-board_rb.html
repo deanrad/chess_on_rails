@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Jul 30 14:04:10 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Fri Aug 01 15:36:53 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -571,9 +571,9 @@ span.run100 {
     </thead>
   <tbody><tr class='light'><td><a href='ChessOnRails-trunk-app-models-board_rb.html'>C:/ChessOnRails/trunk/app/models/board.rb</a>
         </td>
-      <td class='lines_total'><tt>54</tt>
+      <td class='lines_total'><tt>183</tt>
         </td>
-      <td class='lines_code'><tt>29</tt>
+      <td class='lines_code'><tt>114</tt>
         </td>
       <td><table cellspacing='0' cellpadding='0' align='right'><tr><td><tt class='coverage_total'>100.0%</tt>
               &nbsp;</td>
@@ -598,60 +598,189 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="inferred1"><a name="line1"></a> 1 # +Board+ like +Piece+, is a transient object, not stored in the database, but inferred, and
-</span><span class="inferred0"><a name="line2"></a> 2 # used and disposed as needed for the purpose of implementing gameplay, and specifically tracking
-</span><span class="inferred1"><a name="line3"></a> 3 # the location of +Piece+ s on the board and answering queries about the relationship of +Piece+ s
-</span><span class="marked0"><a name="line4"></a> 4 class Board &lt; Hash
-</span><span class="inferred1"><a name="line5"></a> 5   
-</span><span class="inferred0"><a name="line6"></a> 6   # changes the key (position symbol) under which this piece is stored
-</span><span class="marked1"><a name="line7"></a> 7   def move!( move )
-</span><span class="marked0"><a name="line8"></a> 8     move_and_record(move)
-</span><span class="marked1"><a name="line9"></a> 9   end
-</span><span class="inferred0"><a name="line10"></a>10   
-</span><span class="inferred1"><a name="line11"></a>11   # Allows you to pass in a block to query what this board would be like had a move been played
-</span><span class="inferred0"><a name="line12"></a>12   # after which the effect of having considered the move is undone
-</span><span class="marked1"><a name="line13"></a>13   def consider_move( move )
-</span><span class="marked0"><a name="line14"></a>14     move_and_record(move)
-</span><span class="marked1"><a name="line15"></a>15     yield
-</span><span class="marked0"><a name="line16"></a>16     undo_move(move)    
-</span><span class="inferred1"><a name="line17"></a>17   end
-</span><span class="inferred0"><a name="line18"></a>18 
-</span><span class="marked1"><a name="line19"></a>19   def squares_occupied
-</span><span class="marked0"><a name="line20"></a>20     return keys
-</span><span class="marked1"><a name="line21"></a>21   end
-</span><span class="inferred0"><a name="line22"></a>22   
-</span><span class="marked1"><a name="line23"></a>23   private
-</span><span class="inferred0"><a name="line24"></a>24   
-</span><span class="inferred1"><a name="line25"></a>25   #These variables help us track what's happened and allow us to undo
-</span><span class="marked0"><a name="line26"></a>26   attr_accessor :piece_last_moved, :piece_last_moved_from_coord
-</span><span class="marked1"><a name="line27"></a>27   attr_accessor :piece_captured, :piece_captured_from_coord
-</span><span class="marked0"><a name="line28"></a>28   attr_accessor :promoted_piece_last_side_id
-</span><span class="inferred1"><a name="line29"></a>29   
-</span><span class="marked0"><a name="line30"></a>30   def move_and_record( move )
-</span><span class="inferred1"><a name="line31"></a>31     #lift your piece off the square
-</span><span class="marked0"><a name="line32"></a>32     @piece_last_moved_from_coord = move.from_coord
-</span><span class="marked1"><a name="line33"></a>33     @piece_last_moved = delete(move.from_coord)
-</span><span class="inferred0"><a name="line34"></a>34     
-</span><span class="inferred1"><a name="line35"></a>35     #place any captured piece aside
-</span><span class="marked0"><a name="line36"></a>36     @piece_captured = delete(move.to_coord)
-</span><span class="marked1"><a name="line37"></a>37     @piece_captured_from_coord = move.to_coord if @piece_captured
-</span><span class="inferred0"><a name="line38"></a>38     
-</span><span class="inferred1"><a name="line39"></a>39     #and move your guy there
-</span><span class="marked0"><a name="line40"></a>40     store( move.to_coord, @piece_last_moved )
-</span><span class="inferred1"><a name="line41"></a>41   end
-</span><span class="inferred0"><a name="line42"></a>42   
-</span><span class="marked1"><a name="line43"></a>43   def undo_move( move )
-</span><span class="inferred0"><a name="line44"></a>44     #lift your piece off the destination square
-</span><span class="marked1"><a name="line45"></a>45     delete(move.to_coord)
-</span><span class="inferred0"><a name="line46"></a>46     
-</span><span class="inferred1"><a name="line47"></a>47     #restore any captured piece
-</span><span class="marked0"><a name="line48"></a>48     store( @piece_captured_from_coord, @piece_captured) if @piece_captured
-</span><span class="inferred1"><a name="line49"></a>49     
-</span><span class="inferred0"><a name="line50"></a>50     #replace your piece back on the original square
-</span><span class="marked1"><a name="line51"></a>51     store( @piece_last_moved_from_coord, @piece_last_moved )
-</span><span class="inferred0"><a name="line52"></a>52   end
-</span><span class="inferred1"><a name="line53"></a>53   
-</span><span class="inferred0"><a name="line54"></a>54 end
+<pre><span class="inferred0"><a name="line1"></a>  1 # +Board+ like +Piece+, is a transient object, not stored in the database, but inferred, and
+</span><span class="inferred1"><a name="line2"></a>  2 # used and disposed as needed for the purpose of implementing gameplay, and specifically tracking
+</span><span class="inferred0"><a name="line3"></a>  3 # the location of +Piece+ s on the board and answering queries about the relationship of +Piece+ s
+</span><span class="inferred1"><a name="line4"></a>  4 #
+</span><span class="inferred0"><a name="line5"></a>  5 # It keys on symbolized positions such as :a4
+</span><span class="marked1"><a name="line6"></a>  6 class Board &lt; Hash
+</span><span class="inferred0"><a name="line7"></a>  7 
+</span><span class="marked1"><a name="line8"></a>  8   FILES = [:a, :b, :c, :d, :e, :f, :g, :h]
+</span><span class="inferred0"><a name="line9"></a>  9   
+</span><span class="inferred1"><a name="line10"></a> 10   # changes the key (position symbol) under which this piece is stored
+</span><span class="marked0"><a name="line11"></a> 11   def move!( move )
+</span><span class="marked1"><a name="line12"></a> 12     move_and_record(move)
+</span><span class="marked0"><a name="line13"></a> 13   end
+</span><span class="inferred1"><a name="line14"></a> 14   
+</span><span class="inferred0"><a name="line15"></a> 15   # Allows you to pass in a block to query what this board would be like had a move been played
+</span><span class="inferred1"><a name="line16"></a> 16   # after which the effect of having considered the move is undone
+</span><span class="marked0"><a name="line17"></a> 17   def consider_move( move )
+</span><span class="marked1"><a name="line18"></a> 18     move_and_record(move)
+</span><span class="marked0"><a name="line19"></a> 19     yield
+</span><span class="marked1"><a name="line20"></a> 20     undo_move(move)    
+</span><span class="inferred0"><a name="line21"></a> 21   end
+</span><span class="inferred1"><a name="line22"></a> 22 
+</span><span class="marked0"><a name="line23"></a> 23   def squares_occupied
+</span><span class="marked1"><a name="line24"></a> 24     return keys
+</span><span class="marked0"><a name="line25"></a> 25   end
+</span><span class="inferred1"><a name="line26"></a> 26   
+</span><span class="marked0"><a name="line27"></a> 27   def pieces
+</span><span class="marked1"><a name="line28"></a> 28     return values
+</span><span class="marked0"><a name="line29"></a> 29   end
+</span><span class="inferred1"><a name="line30"></a> 30   
+</span><span class="marked0"><a name="line31"></a> 31   def store(key, value)
+</span><span class="marked1"><a name="line32"></a> 32     super if key.kind_of?(Symbol)
+</span><span class="marked0"><a name="line33"></a> 33     super( key.to_sym, value )
+</span><span class="inferred1"><a name="line34"></a> 34   end
+</span><span class="inferred0"><a name="line35"></a> 35   
+</span><span class="inferred1"><a name="line36"></a> 36   #return chess pieces as they appear at the start of a match
+</span><span class="marked0"><a name="line37"></a> 37   def self.initial_board
+</span><span class="marked1"><a name="line38"></a> 38     b = Board.new 
+</span><span class="marked0"><a name="line39"></a> 39     Sides.each do | side, back_rank, front_rank |
+</span><span class="marked1"><a name="line40"></a> 40       b.store( :e + back_rank, Piece.new(:king,    side) )
+</span><span class="marked0"><a name="line41"></a> 41       b.store( :d + back_rank, Piece.new(:queen,   side) )
+</span><span class="inferred1"><a name="line42"></a> 42 
+</span><span class="marked0"><a name="line43"></a> 43       b.store( :a + back_rank, Piece.new(:rook,    side, :queens) )
+</span><span class="marked1"><a name="line44"></a> 44       b.store( :b + back_rank, Piece.new(:knight,  side, :queens) )
+</span><span class="marked0"><a name="line45"></a> 45       b.store( :c + back_rank, Piece.new(:bishop,  side, :queens) )
+</span><span class="inferred1"><a name="line46"></a> 46 
+</span><span class="marked0"><a name="line47"></a> 47       b.store( :h + back_rank, Piece.new(:rook,    side, :kings) )
+</span><span class="marked1"><a name="line48"></a> 48       b.store( :g + back_rank, Piece.new(:knight,  side, :kings) )
+</span><span class="marked0"><a name="line49"></a> 49       b.store( :f + back_rank, Piece.new(:bishop,  side, :kings) )
+</span><span class="inferred1"><a name="line50"></a> 50       
+</span><span class="marked0"><a name="line51"></a> 51       FILES.each do |file|
+</span><span class="marked1"><a name="line52"></a> 52         b.store( file + front_rank, Piece.new(:pawn, side, file) )
+</span><span class="inferred0"><a name="line53"></a> 53       end
+</span><span class="inferred1"><a name="line54"></a> 54       
+</span><span class="inferred0"><a name="line55"></a> 55     end
+</span><span class="marked1"><a name="line56"></a> 56     return b
+</span><span class="inferred0"><a name="line57"></a> 57   end
+</span><span class="inferred1"><a name="line58"></a> 58   
+</span><span class="marked0"><a name="line59"></a> 59   def allowed_moves( position )
+</span><span class="inferred1"><a name="line60"></a> 60     #TODO a hash by position would be helpful - right now dynamic only
+</span><span class="marked0"><a name="line61"></a> 61     moves = []
+</span><span class="marked1"><a name="line62"></a> 62     allowed_moves_of_piece_at(position) { |move| moves &lt;&lt; move }
+</span><span class="marked0"><a name="line63"></a> 63     moves
+</span><span class="inferred1"><a name="line64"></a> 64   end
+</span><span class="inferred0"><a name="line65"></a> 65   
+</span><span class="inferred1"><a name="line66"></a> 66   #returns true if the enpassant exception applies to this piece moving as specified
+</span><span class="marked0"><a name="line67"></a> 67   def en_passant?( piece_moving, from, to)
+</span><span class="marked1"><a name="line68"></a> 68     return false unless piece_moving.role == :pawn
+</span><span class="marked0"><a name="line69"></a> 69     return false #TODO flush this out - need more parameters, like the piece 'in-front-of' the EP square
+</span><span class="inferred1"><a name="line70"></a> 70   end
+</span><span class="inferred0"><a name="line71"></a> 71   
+</span><span class="marked1"><a name="line72"></a> 72   private
+</span><span class="inferred0"><a name="line73"></a> 73 
+</span><span class="inferred1"><a name="line74"></a> 74   #on this board, interprets the piece's own allowed moves according to the state of the other pieces
+</span><span class="marked0"><a name="line75"></a> 75   def allowed_moves_of_piece_at( position )
+</span><span class="marked1"><a name="line76"></a> 76     return unless piece_moving = self[position]
+</span><span class="inferred0"><a name="line77"></a> 77     
+</span><span class="marked1"><a name="line78"></a> 78     pos = Position.new(position)
+</span><span class="inferred0"><a name="line79"></a> 79     
+</span><span class="inferred1"><a name="line80"></a> 80     #for each line along which this piece can move
+</span><span class="marked0"><a name="line81"></a> 81     piece_moving.lines_of_attack.each do |line|
+</span><span class="marked1"><a name="line82"></a> 82       line_still_valid = true 
+</span><span class="inferred0"><a name="line83"></a> 83       
+</span><span class="inferred1"><a name="line84"></a> 84       
+</span><span class="inferred0"><a name="line85"></a> 85       #and for each step along that line
+</span><span class="marked1"><a name="line86"></a> 86       line.each do |vector|
+</span><span class="marked0"><a name="line87"></a> 87         new_position = pos + vector
+</span><span class="inferred1"><a name="line88"></a> 88     
+</span><span class="inferred0"><a name="line89"></a> 89         #if they're still on the board and still allowed to move this way
+</span><span class="marked1"><a name="line90"></a> 90         if new_position.valid? and line_still_valid
+</span><span class="inferred0"><a name="line91"></a> 91           
+</span><span class="marked1"><a name="line92"></a> 92           piece_at_new_position = self[new_position.to_sym]
+</span><span class="inferred0"><a name="line93"></a> 93 
+</span><span class="inferred1"><a name="line94"></a> 94           #they can move to empty squares - except pawns on diagonals without the enpassant exception
+</span><span class="marked0"><a name="line95"></a> 95           if not piece_at_new_position
+</span><span class="marked1"><a name="line96"></a> 96             unless piece_moving.role == :pawn
+</span><span class="marked0"><a name="line97"></a> 97               yield new_position.to_sym  #allow the move
+</span><span class="inferred1"><a name="line98"></a> 98             else
+</span><span class="marked0"><a name="line99"></a> 99               if new_position.file == pos.file
+</span><span class="marked1"><a name="line100"></a>100                 if (new_position.rank - pos.rank == 1) or pos.rank==Sides[piece_moving].front_rank
+</span><span class="marked0"><a name="line101"></a>101                   yield new_position.to_sym
+</span><span class="inferred1"><a name="line102"></a>102                 end
+</span><span class="inferred0"><a name="line103"></a>103               else
+</span><span class="marked1"><a name="line104"></a>104                 yield new_position.to_sym if en_passant?( piece_moving, pos, new_position)
+</span><span class="inferred0"><a name="line105"></a>105               end
+</span><span class="inferred1"><a name="line106"></a>106             end
+</span><span class="inferred0"><a name="line107"></a>107           else
+</span><span class="inferred1"><a name="line108"></a>108             #they'll go no further
+</span><span class="marked0"><a name="line109"></a>109             line_still_valid = false
+</span><span class="inferred1"><a name="line110"></a>110             
+</span><span class="inferred0"><a name="line111"></a>111             #if its the opponents piece they may move here, but no further (not pawns)
+</span><span class="marked1"><a name="line112"></a>112             if piece_at_new_position.side != piece_moving.side
+</span><span class="marked0"><a name="line113"></a>113               yield new_position.to_sym if  piece_moving.role != :pawn || new_position.file != pos.file
+</span><span class="inferred1"><a name="line114"></a>114             end
+</span><span class="inferred0"><a name="line115"></a>115           end
+</span><span class="inferred1"><a name="line116"></a>116         else
+</span><span class="marked0"><a name="line117"></a>117           line_still_valid = false
+</span><span class="inferred1"><a name="line118"></a>118         end
+</span><span class="inferred0"><a name="line119"></a>119       end
+</span><span class="inferred1"><a name="line120"></a>120     end
+</span><span class="inferred0"><a name="line121"></a>121     
+</span><span class="inferred1"><a name="line122"></a>122     #and for each direct move to which this piece can move
+</span><span class="inferred0"><a name="line123"></a>123     #TODO dry this copy of above logic up
+</span><span class="marked1"><a name="line124"></a>124     piece_moving.direct_moves.each do |vector| 
+</span><span class="marked0"><a name="line125"></a>125         new_position = pos + vector
+</span><span class="marked1"><a name="line126"></a>126         if new_position.valid?
+</span><span class="marked0"><a name="line127"></a>127           piece_at_new_position = self[new_position.to_sym]
+</span><span class="marked1"><a name="line128"></a>128           unless piece_at_new_position
+</span><span class="marked0"><a name="line129"></a>129             yield new_position.to_sym
+</span><span class="inferred1"><a name="line130"></a>130           else
+</span><span class="marked0"><a name="line131"></a>131             if piece_at_new_position.side != piece_moving.side
+</span><span class="marked1"><a name="line132"></a>132               yield new_position.to_sym
+</span><span class="inferred0"><a name="line133"></a>133             end
+</span><span class="inferred1"><a name="line134"></a>134           end
+</span><span class="inferred0"><a name="line135"></a>135           
+</span><span class="inferred1"><a name="line136"></a>136         end
+</span><span class="inferred0"><a name="line137"></a>137     end
+</span><span class="inferred1"><a name="line138"></a>138   
+</span><span class="inferred0"><a name="line139"></a>139   end
+</span><span class="inferred1"><a name="line140"></a>140   
+</span><span class="inferred0"><a name="line141"></a>141   
+</span><span class="inferred1"><a name="line142"></a>142   #These variables help us track what's happened and allow us to undo
+</span><span class="marked0"><a name="line143"></a>143   attr_accessor :piece_last_moved, :piece_last_moved_from_coord
+</span><span class="marked1"><a name="line144"></a>144   attr_accessor :piece_captured, :piece_captured_from_coord
+</span><span class="marked0"><a name="line145"></a>145   attr_accessor :promoted_piece_last_side_id
+</span><span class="inferred1"><a name="line146"></a>146   
+</span><span class="marked0"><a name="line147"></a>147   def move_and_record( move )
+</span><span class="inferred1"><a name="line148"></a>148     #lift your piece off the square
+</span><span class="marked0"><a name="line149"></a>149     @piece_last_moved_from_coord = move.from_coord
+</span><span class="inferred1"><a name="line150"></a>150     
+</span><span class="inferred0"><a name="line151"></a>151     #if a capture is notated such as for enpassant, delete at that coordinate
+</span><span class="inferred1"><a name="line152"></a>152     # otherwise delete whats moved upon. If nothing deleted, no worries
+</span><span class="marked0"><a name="line153"></a>153     @piece_last_moved = move.capture_coord ? delete(move.capture_coord) : delete(move.from_coord) 
+</span><span class="inferred1"><a name="line154"></a>154     
+</span><span class="inferred0"><a name="line155"></a>155     #place any captured piece aside
+</span><span class="marked1"><a name="line156"></a>156     @piece_captured = delete(move.to_coord)
+</span><span class="marked0"><a name="line157"></a>157     @piece_captured_from_coord = move.to_coord if @piece_captured
+</span><span class="inferred1"><a name="line158"></a>158     
+</span><span class="inferred0"><a name="line159"></a>159     #and move your guy there
+</span><span class="marked1"><a name="line160"></a>160     store( move.to_coord, @piece_last_moved )
+</span><span class="inferred0"><a name="line161"></a>161   end
+</span><span class="inferred1"><a name="line162"></a>162   
+</span><span class="marked0"><a name="line163"></a>163   def undo_move( move )
+</span><span class="inferred1"><a name="line164"></a>164     #lift your piece off the destination square
+</span><span class="marked0"><a name="line165"></a>165     delete(move.to_coord)
+</span><span class="inferred1"><a name="line166"></a>166     
+</span><span class="inferred0"><a name="line167"></a>167     #restore any captured piece
+</span><span class="marked1"><a name="line168"></a>168     store( @piece_captured_from_coord, @piece_captured) if @piece_captured
+</span><span class="inferred0"><a name="line169"></a>169     
+</span><span class="inferred1"><a name="line170"></a>170     #replace your piece back on the original square
+</span><span class="marked0"><a name="line171"></a>171     store( @piece_last_moved_from_coord, @piece_last_moved )
+</span><span class="inferred1"><a name="line172"></a>172   end
+</span><span class="inferred0"><a name="line173"></a>173   
+</span><span class="inferred1"><a name="line174"></a>174 end
+</span><span class="inferred0"><a name="line175"></a>175 
+</span><span class="inferred1"><a name="line176"></a>176 #Extension to symbol for more expressive position manipulation
+</span><span class="marked0"><a name="line177"></a>177 class Symbol
+</span><span class="inferred1"><a name="line178"></a>178   #allows :a + rank etc..
+</span><span class="marked0"><a name="line179"></a>179   def +(other)
+</span><span class="marked1"><a name="line180"></a>180     (self.to_s + other.to_s).to_sym
+</span><span class="marked0"><a name="line181"></a>181   end
+</span><span class="inferred1"><a name="line182"></a>182 end
+</span><span class="inferred0"><a name="line183"></a>183 
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

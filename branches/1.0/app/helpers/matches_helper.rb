@@ -1,9 +1,6 @@
 #Contains functions for laying out the chess board
 module MatchesHelper
   
-  #TODO allow swapping of sets by changing this up, and hiding extension - basically making image controller
-  IMG_ROOT_PATH = '/images/sets/default/'
-  
   #iterates over the rows and yields columns in the correct order for rendering the board for white or black
   def positions_by_row_as( side )
     
@@ -37,12 +34,7 @@ module MatchesHelper
     (pos[0] + pos[1]) % 2 == 1 ? :white : :black
   end
 
-  #Shows a piece  
-  #REFACTOR this may be best as a partial
-  def render_piece( position, board )
-    piece = board[position.to_sym]
-    return "&nbsp;" unless piece
-    moves = board.allowed_moves(position.to_sym) * ' '
-    "<img src='#{IMG_ROOT_PATH}#{piece.role}_#{piece.side.to_s[0,1]}.gif' alt='' class='piece #{moves}'/>"
+  def image_source_of( piece )
+    "/images/sets/default/#{piece.role.to_s}_#{piece.side.to_s[0,1]}.gif"
   end
 end

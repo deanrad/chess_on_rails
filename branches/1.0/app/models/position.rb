@@ -48,10 +48,6 @@ class Position
     POSITIONS.include?( self.to_s )
   end
   
-  def self.valid?(*args)
-    Position.new(*args).valid?
-  end
-  
   # Allows adding to rank and file ala  +@a5 += [1,0]+
   def +(vector)
     newpos = Position.new( self.to_s )

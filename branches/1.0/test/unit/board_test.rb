@@ -85,5 +85,37 @@ class BoardTest < ActiveSupport::TestCase
     assert_equal 2, moves.length
   end
   
+  def test_piece_can_capture_by_landing_on_opposing_square
+    board = Board[ :c6 => Piece.new(:knight, :black, :kings), :d4 => Piece.new(:pawn, :white, :d) ]
+    
+    moves = board.allowed_moves(:c6)
+    assert moves.include?(:d4)
+    board.move!( Move.new( :from_coord => :c6, :to_coord => :d4 ) )
+    assert_equal :knight, board[:d4].role
+  end
+  
+  def test_pawn_may_move_diagonally_only_if_capturing
+    board = Board[ :d4 => Piece.new(:pawn, :white, :d), :e5 => Piece.new(:pawn, :black, :e) ]
+    moves = board.allowed_moves(:d4)
+    assert moves.include?(:e5)
+    board.move!( Move.new( :from_coord => :d4, :to_coord => :e5) )  
+    assert_equal :white, board[:e5].side
+    
+    #now there is not another piece to capture - he should only have one move
+    assert_equal 1, board.allowed_moves(:e5).length
+  end
+
+  def test_if_capture_coordinate_included_that_piece_will_be_deleted_upon_replay
+    board = Board[ :d5 => Piece.new(:pawn, :white, :d), :c5 => Piece.new(:pawn, :black, :c) ]
+    board.move!( Move.new( :from_coord => :d5, :to_coord => :c6, :capture_coord => :e5) )  
+    assert_nil board[:e5]
+  end
+
+  def test_pawn_can_capture_en_passant
+    #TODO technically if the pawn being captured has not been moved exactly once this should be forbidden but im ignoring that for now since it requires knowledge of the move list-  ditto for castling as well
+    board = Board[ :d5 => Piece.new(:pawn, :white, :d), :c5 => Piece.new(:pawn, :black, :c) ]
+    moves = board.allowed_moves(:d5)
+    assert ! moves.include?(:c6)
+  end
   
 end

@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Jul 30 14:04:12 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Fri Aug 01 15:36:53 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -571,9 +571,9 @@ span.run100 {
     </thead>
   <tbody><tr class='light'><td><a href='ChessOnRails-trunk-app-models-piece_rb.html'>C:/ChessOnRails/trunk/app/models/piece.rb</a>
         </td>
-      <td class='lines_total'><tt>55</tt>
+      <td class='lines_total'><tt>102</tt>
         </td>
-      <td class='lines_code'><tt>29</tt>
+      <td class='lines_code'><tt>54</tt>
         </td>
       <td><table cellspacing='0' cellpadding='0' align='right'><tr><td><tt class='coverage_total'>100.0%</tt>
               &nbsp;</td>
@@ -598,61 +598,108 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="inferred0"><a name="line1"></a> 1 # A Piece is a transient object, not stored in the database, but inferred, queried, used
-</span><span class="inferred1"><a name="line2"></a> 2 # and disposed as needed for the purpose of validating +moves+ and implementing gameplay
-</span><span class="inferred0"><a name="line3"></a> 3 #
-</span><span class="inferred1"><a name="line4"></a> 4 # All piece types are instance of the same class +Piece+, and include types described at:
-</span><span class="inferred0"><a name="line5"></a> 5 # http://en.wikipedia.org/wiki/Chess
-</span><span class="inferred1"><a name="line6"></a> 6 #
-</span><span class="inferred0"><a name="line7"></a> 7 # There are varying levels of specificity when describing a +Piece+
-</span><span class="inferred1"><a name="line8"></a> 8 # board_id::  unique to any piece on board - +white_kings_rook+, +black_a_pawn+, +black_queen+
-</span><span class="inferred0"><a name="line9"></a> 9 # side_id::   unique to any piece on one side - +kings_rook+, +queen+
-</span><span class="inferred1"><a name="line10"></a>10 # role::      which set of rules apply to this piece - +rook+, +bishop+, +pawn+
-</span><span class="inferred0"><a name="line11"></a>11 # side::     +white+, +black+
-</span><span class="inferred1"><a name="line12"></a>12 # flank::     +kings+, +queens+
-</span><span class="inferred0"><a name="line13"></a>13 # which::     +a+, +kings+  (in other words, the +flank+ for minor pieces, the file for pawns)
-</span><span class="marked1"><a name="line14"></a>14 class Piece 
-</span><span class="marked0"><a name="line15"></a>15   ROLES = [:king, :queen, :bishop, :knight, :rook, :pawn ]
-</span><span class="marked1"><a name="line16"></a>16   FLANKS = [:kings, :queens]
-</span><span class="marked0"><a name="line17"></a>17   WHICH = [:a, :b, :c, :d, :e, :f, :g, :h, :promoted] + FLANKS
-</span><span class="marked1"><a name="line18"></a>18   ROLES_WITH_MANY = [:bishop, :knight, :rook, :pawn]
-</span><span class="inferred0"><a name="line19"></a>19   
-</span><span class="marked1"><a name="line20"></a>20   SIDE_PIECES = [:a_pawn, :b_pawn, :c_pawn, :d_pawn, :e_pawn, :f_pawn, :g_pawn, :h_pawn,
-</span><span class="inferred0"><a name="line21"></a>21                  :queens_rook, :queens_knight, :queens_bishop, :queen, 
-</span><span class="inferred1"><a name="line22"></a>22                  :king, :kings_bishop, :kings_knight, :kings_rook ]
-</span><span class="inferred0"><a name="line23"></a>23   
-</span><span class="inferred1"><a name="line24"></a>24   #intern these symbols at class load time
-</span><span class="inferred0"><a name="line25"></a>25 #  symbolize_each_combo_of Match::SIDES, Piece::SIDE_PIECES
-</span><span class="inferred1"><a name="line26"></a>26   
-</span><span class="marked0"><a name="line27"></a>27   attr_accessor :role, :side, :which
-</span><span class="inferred1"><a name="line28"></a>28 
-</span><span class="inferred0"><a name="line29"></a>29   # A unique one of white's pieces, for instance
-</span><span class="marked1"><a name="line30"></a>30   def side_id
-</span><span class="marked0"><a name="line31"></a>31     if ROLES_WITH_MANY.include?(@role)
-</span><span class="marked1"><a name="line32"></a>32       raise AmbiguousPieceError unless @which
-</span><span class="marked0"><a name="line33"></a>33       &quot;#{@which}_#{@role}&quot;.to_sym 
-</span><span class="inferred1"><a name="line34"></a>34     else
-</span><span class="marked0"><a name="line35"></a>35       &quot;#{@role}&quot;.to_sym
-</span><span class="inferred1"><a name="line36"></a>36     end
-</span><span class="marked0"><a name="line37"></a>37   end
-</span><span class="inferred1"><a name="line38"></a>38 
-</span><span class="inferred0"><a name="line39"></a>39   # A unique piece across the whole board
-</span><span class="marked1"><a name="line40"></a>40   def board_id
-</span><span class="marked0"><a name="line41"></a>41     raise AmbiguousPieceError unless @side
-</span><span class="marked1"><a name="line42"></a>42     &quot;#{@side}_#{side_id}&quot;.to_sym
-</span><span class="inferred0"><a name="line43"></a>43   end      
-</span><span class="inferred1"><a name="line44"></a>44   
-</span><span class="inferred0"><a name="line45"></a>45   # Creates a piece knowing at least its role
-</span><span class="marked1"><a name="line46"></a>46   def initialize(role, side=nil, which=nil)
-</span><span class="marked0"><a name="line47"></a>47     @role = role 
-</span><span class="marked1"><a name="line48"></a>48     @side = side
-</span><span class="marked0"><a name="line49"></a>49     @which = which 
-</span><span class="inferred1"><a name="line50"></a>50   end
-</span><span class="inferred0"><a name="line51"></a>51 
-</span><span class="inferred1"><a name="line52"></a>52 end
-</span><span class="inferred0"><a name="line53"></a>53 
-</span><span class="marked1"><a name="line54"></a>54 class AmbiguousPieceError &lt; Exception
-</span><span class="inferred0"><a name="line55"></a>55 end
+<pre><span class="inferred1"><a name="line1"></a>  1 # A Piece is a transient object, not stored in the database, but inferred, queried, used
+</span><span class="inferred0"><a name="line2"></a>  2 # and disposed as needed for the purpose of validating +moves+ and implementing gameplay
+</span><span class="inferred1"><a name="line3"></a>  3 #
+</span><span class="inferred0"><a name="line4"></a>  4 # All piece types are instance of the same class +Piece+, and include types described at:
+</span><span class="inferred1"><a name="line5"></a>  5 # http://en.wikipedia.org/wiki/Chess
+</span><span class="inferred0"><a name="line6"></a>  6 #
+</span><span class="inferred1"><a name="line7"></a>  7 # There are varying levels of specificity when describing a +Piece+
+</span><span class="inferred0"><a name="line8"></a>  8 # board_id::  unique to any piece on board - +white_kings_rook+, +black_a_pawn+, +black_queen+
+</span><span class="inferred1"><a name="line9"></a>  9 # side_id::   unique to any piece on one side - +kings_rook+, +queen+
+</span><span class="inferred0"><a name="line10"></a> 10 # role::      which set of rules apply to this piece - +rook+, +bishop+, +pawn+
+</span><span class="inferred1"><a name="line11"></a> 11 # side::     +white+, +black+
+</span><span class="inferred0"><a name="line12"></a> 12 # flank::     +kings+, +queens+
+</span><span class="inferred1"><a name="line13"></a> 13 # which::     +a+, +kings+  (in other words, the +flank+ for minor pieces, the file for pawns)
+</span><span class="inferred0"><a name="line14"></a> 14 #
+</span><span class="inferred1"><a name="line15"></a> 15 # A piece will know its theoretical moves - where it could move on an empty board- but this 
+</span><span class="inferred0"><a name="line16"></a> 16 # will be filtered by the board in order to preclude certain things like moving on to a piece
+</span><span class="inferred1"><a name="line17"></a> 17 # of your own color, or leaving or placing your king in check
+</span><span class="marked0"><a name="line18"></a> 18 class Piece 
+</span><span class="marked1"><a name="line19"></a> 19   ROLES = [:king, :queen, :bishop, :knight, :rook, :pawn ]
+</span><span class="marked0"><a name="line20"></a> 20   FLANKS = [:kings, :queens]
+</span><span class="marked1"><a name="line21"></a> 21   WHICH = [:a, :b, :c, :d, :e, :f, :g, :h, :promoted] + FLANKS
+</span><span class="marked0"><a name="line22"></a> 22   ROLES_WITH_MANY = [:bishop, :knight, :rook, :pawn]
+</span><span class="marked1"><a name="line23"></a> 23   MINOR_PIECES = [:bishop, :knight, :rook]
+</span><span class="inferred0"><a name="line24"></a> 24   
+</span><span class="marked1"><a name="line25"></a> 25   SIDE_PIECES = [:a_pawn, :b_pawn, :c_pawn, :d_pawn, :e_pawn, :f_pawn, :g_pawn, :h_pawn,
+</span><span class="inferred0"><a name="line26"></a> 26                  :queens_rook, :queens_knight, :queens_bishop, :queen, 
+</span><span class="inferred1"><a name="line27"></a> 27                  :king, :kings_bishop, :kings_knight, :kings_rook ]
+</span><span class="inferred0"><a name="line28"></a> 28     
+</span><span class="marked1"><a name="line29"></a> 29   DIAGONAL_MOTIONS =  [[1,1], [1,-1], [-1,1], [-1,-1]]
+</span><span class="marked0"><a name="line30"></a> 30   STRAIGHT_MOTIONS =  [[1,0], [-1,0], [ 0,1],  [0,-1]]
+</span><span class="marked1"><a name="line31"></a> 31   KNIGHT_MOVES     =  [[1,2], [1,-2], [-1,2], [-1,-2], [2,1], [2,-1], [-2,1], [-2,-1] ]
+</span><span class="inferred0"><a name="line32"></a> 32   
+</span><span class="marked1"><a name="line33"></a> 33   attr_reader :role, :side, :which
+</span><span class="marked0"><a name="line34"></a> 34   attr_reader :lines_of_attack
+</span><span class="marked1"><a name="line35"></a> 35   attr_reader :direct_moves
+</span><span class="inferred0"><a name="line36"></a> 36 
+</span><span class="inferred1"><a name="line37"></a> 37   # A unique one of white's pieces, for instance
+</span><span class="marked0"><a name="line38"></a> 38   def side_id
+</span><span class="marked1"><a name="line39"></a> 39     if ROLES_WITH_MANY.include?(@role)
+</span><span class="marked0"><a name="line40"></a> 40       raise AmbiguousPieceError unless @which
+</span><span class="marked1"><a name="line41"></a> 41       &quot;#{@which}_#{@role}&quot;.to_sym 
+</span><span class="inferred0"><a name="line42"></a> 42     else
+</span><span class="marked1"><a name="line43"></a> 43       &quot;#{@role}&quot;.to_sym
+</span><span class="inferred0"><a name="line44"></a> 44     end
+</span><span class="marked1"><a name="line45"></a> 45   end
+</span><span class="inferred0"><a name="line46"></a> 46 
+</span><span class="inferred1"><a name="line47"></a> 47   # A unique piece across the whole board
+</span><span class="marked0"><a name="line48"></a> 48   def board_id
+</span><span class="marked1"><a name="line49"></a> 49     raise AmbiguousPieceError unless @side
+</span><span class="marked0"><a name="line50"></a> 50     &quot;#{@side}_#{side_id}&quot;.to_sym
+</span><span class="inferred1"><a name="line51"></a> 51   end      
+</span><span class="inferred0"><a name="line52"></a> 52   
+</span><span class="inferred1"><a name="line53"></a> 53   # Creates a piece knowing at least its role and side, and program its possible moves
+</span><span class="marked0"><a name="line54"></a> 54   def initialize(role, side, which=nil)
+</span><span class="marked1"><a name="line55"></a> 55     @role = role 
+</span><span class="marked0"><a name="line56"></a> 56     @side = side
+</span><span class="marked1"><a name="line57"></a> 57     @which = which 
+</span><span class="inferred0"><a name="line58"></a> 58     
+</span><span class="inferred1"><a name="line59"></a> 59     #setup lines of attack
+</span><span class="marked0"><a name="line60"></a> 60     @lines_of_attack ||= []
+</span><span class="inferred1"><a name="line61"></a> 61     
+</span><span class="inferred0"><a name="line62"></a> 62     #bishops and queens can move in diagonals with no limits
+</span><span class="marked1"><a name="line63"></a> 63     if (@role == :bishop or @role==:queen)
+</span><span class="marked0"><a name="line64"></a> 64       DIAGONAL_MOTIONS.each{ |move| @lines_of_attack &lt;&lt; LineOfAttack.new(move) }
+</span><span class="inferred1"><a name="line65"></a> 65     end
+</span><span class="inferred0"><a name="line66"></a> 66     
+</span><span class="inferred1"><a name="line67"></a> 67     #rooks move straight, and queens get these lines of attack as well
+</span><span class="marked0"><a name="line68"></a> 68     if (@role == :rook or @role==:queen)
+</span><span class="marked1"><a name="line69"></a> 69       STRAIGHT_MOTIONS.each{ |move| @lines_of_attack &lt;&lt; LineOfAttack.new(move) }
+</span><span class="inferred0"><a name="line70"></a> 70     end
+</span><span class="inferred1"><a name="line71"></a> 71     
+</span><span class="inferred0"><a name="line72"></a> 72     #the superset of possible pawn moves include forward 1 and 2, and diagonal single-steps
+</span><span class="marked1"><a name="line73"></a> 73     if (@role==:pawn)
+</span><span class="inferred0"><a name="line74"></a> 74       #figure out which way is forward
+</span><span class="marked1"><a name="line75"></a> 75       forward = Sides[@side].advance_direction
+</span><span class="inferred0"><a name="line76"></a> 76       
+</span><span class="inferred1"><a name="line77"></a> 77       #a short line-of-attack in the forward direction
+</span><span class="marked0"><a name="line78"></a> 78       @lines_of_attack &lt;&lt; LineOfAttack.new( [forward, 0] , 2 ) 
+</span><span class="inferred1"><a name="line79"></a> 79       
+</span><span class="inferred0"><a name="line80"></a> 80       #and the diagonal forward moves
+</span><span class="marked1"><a name="line81"></a> 81       [1,-1].each{ |diag| @lines_of_attack &lt;&lt; LineOfAttack.new( [forward, diag], 1 ) }
+</span><span class="inferred0"><a name="line82"></a> 82     end
+</span><span class="inferred1"><a name="line83"></a> 83     
+</span><span class="marked0"><a name="line84"></a> 84     if (@role == :king)
+</span><span class="marked1"><a name="line85"></a> 85       DIAGONAL_MOTIONS.each{ |move| @lines_of_attack &lt;&lt; LineOfAttack.new(move, 1) }      
+</span><span class="marked0"><a name="line86"></a> 86       STRAIGHT_MOTIONS.each{ |move| @lines_of_attack &lt;&lt; LineOfAttack.new(move, 1) }      
+</span><span class="inferred1"><a name="line87"></a> 87       
+</span><span class="inferred0"><a name="line88"></a> 88       #castling, king and queenside respectively works like a line of attack
+</span><span class="inferred1"><a name="line89"></a> 89       # in that no piece may lie between you and that square
+</span><span class="marked0"><a name="line90"></a> 90       @lines_of_attack &lt;&lt; LineOfAttack.new( [0, 2], 1) 
+</span><span class="marked1"><a name="line91"></a> 91       @lines_of_attack &lt;&lt; LineOfAttack.new( [0,-3], 1) 
+</span><span class="inferred0"><a name="line92"></a> 92     end 
+</span><span class="inferred1"><a name="line93"></a> 93     
+</span><span class="inferred0"><a name="line94"></a> 94     #knights have no lines of attack - but they have direct moves
+</span><span class="marked1"><a name="line95"></a> 95     @direct_moves = (@role == :knight) ? KNIGHT_MOVES : []
+</span><span class="inferred0"><a name="line96"></a> 96   end
+</span><span class="inferred1"><a name="line97"></a> 97 
+</span><span class="inferred0"><a name="line98"></a> 98   
+</span><span class="inferred1"><a name="line99"></a> 99 end
+</span><span class="inferred0"><a name="line100"></a>100 
+</span><span class="marked1"><a name="line101"></a>101 class AmbiguousPieceError &lt; Exception
+</span><span class="inferred0"><a name="line102"></a>102 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

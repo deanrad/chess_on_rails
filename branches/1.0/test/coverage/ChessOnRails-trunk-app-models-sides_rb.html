@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><title>C:/ChessOnRails/trunk/app/controllers/matches_controller.rb - C0 code coverage information</title>
+<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><title>C:/ChessOnRails/trunk/app/models/sides.rb - C0 code coverage information</title>
     <style type='text/css'>body { background-color: rgb(240, 240, 245); }</style>
     <style type='text/css'>span.cross-ref-title {
  font-size: 140%;
@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Fri Aug 01 15:36:52 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Fri Aug 01 15:36:54 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -569,11 +569,11 @@ span.run100 {
       <td class='heading'>Code coverage</td>
       </tr>
     </thead>
-  <tbody><tr class='light'><td><a href='ChessOnRails-trunk-app-controllers-matches_controller_rb.html'>C:/ChessOnRails/trunk/app/controllers/matches_controller.rb</a>
+  <tbody><tr class='light'><td><a href='ChessOnRails-trunk-app-models-sides_rb.html'>C:/ChessOnRails/trunk/app/models/sides.rb</a>
         </td>
-      <td class='lines_total'><tt>14</tt>
+      <td class='lines_total'><tt>18</tt>
         </td>
-      <td class='lines_code'><tt>8</tt>
+      <td class='lines_code'><tt>12</tt>
         </td>
       <td><table cellspacing='0' cellpadding='0' align='right'><tr><td><tt class='coverage_total'>100.0%</tt>
               &nbsp;</td>
@@ -598,20 +598,24 @@ span.run100 {
       </tr>
     </tbody>
   </table>
-<pre><span class="inferred0"><a name="line1"></a> 1 # Deals with the creation and updating of matches, such as creation, resignation
-</span><span class="marked1"><a name="line2"></a> 2 class MatchesController &lt; ApplicationController
-</span><span class="inferred0"><a name="line3"></a> 3 
-</span><span class="inferred1"><a name="line4"></a> 4   # GET /matches/N
-</span><span class="marked0"><a name="line5"></a> 5   def show
-</span><span class="marked1"><a name="line6"></a> 6     @match = Match.find( params[:id] )
-</span><span class="marked0"><a name="line7"></a> 7   end
-</span><span class="inferred1"><a name="line8"></a> 8 
-</span><span class="inferred0"><a name="line9"></a> 9   # GET /matches
-</span><span class="marked1"><a name="line10"></a>10   def index
-</span><span class="marked0"><a name="line11"></a>11     @matches = current_player.matches if current_player
-</span><span class="marked1"><a name="line12"></a>12   end
-</span><span class="inferred0"><a name="line13"></a>13       
-</span><span class="inferred1"><a name="line14"></a>14 end
+<pre><span class="inferred1"><a name="line1"></a> 1 #Contains data on each side in Chess
+</span><span class="marked0"><a name="line2"></a> 2 class Sides
+</span><span class="marked1"><a name="line3"></a> 3   Side = Struct.new(&quot;Side&quot;, :color, :back_rank, :front_rank, :advance_direction)
+</span><span class="inferred0"><a name="line4"></a> 4 
+</span><span class="marked1"><a name="line5"></a> 5   White = Side.new(         :white, 1,          2,          1)
+</span><span class="marked0"><a name="line6"></a> 6   Black = Side.new(         :black, 8,          7,          -1)
+</span><span class="inferred1"><a name="line7"></a> 7   
+</span><span class="marked0"><a name="line8"></a> 8   def self.[](side)
+</span><span class="marked1"><a name="line9"></a> 9     side==:white ? White : Black
+</span><span class="marked0"><a name="line10"></a>10   end
+</span><span class="inferred1"><a name="line11"></a>11   
+</span><span class="inferred0"><a name="line12"></a>12   #Used in at least one place - board initialization - to set up each side
+</span><span class="marked1"><a name="line13"></a>13   def self.each() # :yields: color, back_rank, front_rank, advance_direction
+</span><span class="marked0"><a name="line14"></a>14     yield White.values
+</span><span class="marked1"><a name="line15"></a>15     yield Black.values
+</span><span class="inferred0"><a name="line16"></a>16   end
+</span><span class="inferred1"><a name="line17"></a>17   
+</span><span class="inferred0"><a name="line18"></a>18 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

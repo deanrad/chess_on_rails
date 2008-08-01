@@ -7,4 +7,8 @@ class MoveTest < ActiveSupport::TestCase
     assert_equal :a2, m.from_coord 
     assert_equal :a4, m.to_coord 
   end
+  
+  def test_move_comes_back_from_database_as_symbols
+    assert_equal :d4, matches(:dean_vs_maria).moves.first.to_coord
+  end
 end

@@ -25,7 +25,11 @@ class Match < ActiveRecord::Base
 
   def board() # as_of_move = nil
     #for now just return the initial board, played back to as many moves as we have
-    Board.initial_board
+    board = Board.initial_board
+    moves.each do |move|
+      board.move!( move )
+    end
+    board
   end
   
 end

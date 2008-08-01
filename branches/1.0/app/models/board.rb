@@ -40,16 +40,16 @@ class Board < Hash
       b.store( :e + back_rank, Piece.new(:king,    side) )
       b.store( :d + back_rank, Piece.new(:queen,   side) )
 
-      b.store( :a + back_rank, Piece.new(:rook,    side, :queen) )
-      b.store( :b + back_rank, Piece.new(:knight,  side, :queen) )
-      b.store( :c + back_rank, Piece.new(:bishop,  side, :queen) )
+      b.store( :a + back_rank, Piece.new(:rook,    side, :queens) )
+      b.store( :b + back_rank, Piece.new(:knight,  side, :queens) )
+      b.store( :c + back_rank, Piece.new(:bishop,  side, :queens) )
 
-      b.store( :h + back_rank, Piece.new(:rook,    side, :king) )
-      b.store( :g + back_rank, Piece.new(:knight,  side, :king) )
-      b.store( :f + back_rank, Piece.new(:bishop,  side, :king) )
+      b.store( :h + back_rank, Piece.new(:rook,    side, :kings) )
+      b.store( :g + back_rank, Piece.new(:knight,  side, :kings) )
+      b.store( :f + back_rank, Piece.new(:bishop,  side, :kings) )
       
       FILES.each do |file|
-        b.store( file + front_rank, Piece.new(:pawn, side, :file) )
+        b.store( file + front_rank, Piece.new(:pawn, side, file) )
       end
       
     end
@@ -61,6 +61,12 @@ class Board < Hash
     moves = []
     allowed_moves_of_piece_at(position) { |move| moves << move }
     moves
+  end
+  
+  #returns true if the enpassant exception applies to this piece moving as specified
+  def en_passant?( piece_moving, from, to)
+    return false unless piece_moving.role == :pawn
+    return false #TODO flush this out - need more parameters, like the piece 'in-front-of' the EP square
   end
   
   private
@@ -85,16 +91,26 @@ class Board < Hash
           
           piece_at_new_position = self[new_position.to_sym]
 
-          #they can move here unless there's a piece here
-          unless piece_at_new_position
-            yield new_position.to_sym unless piece_moving.role == :pawn and new_position.file != pos.file
+          #they can move to empty squares - except pawns on diagonals without the enpassant exception
+          if not piece_at_new_position
+            unless piece_moving.role == :pawn
+              yield new_position.to_sym  #allow the move
+            else
+              if new_position.file == pos.file
+                if (new_position.rank - pos.rank == 1) or pos.rank==Sides[piece_moving].front_rank
+                  yield new_position.to_sym
+                end
+              else
+                yield new_position.to_sym if en_passant?( piece_moving, pos, new_position)
+              end
+            end
           else
             #they'll go no further
             line_still_valid = false
             
-            #if its the opponents piece they may move here, but no further
+            #if its the opponents piece they may move here, but no further (not pawns)
             if piece_at_new_position.side != piece_moving.side
-              yield new_position.to_sym
+              yield new_position.to_sym if  piece_moving.role != :pawn || new_position.file != pos.file
             end
           end
         else
@@ -131,7 +147,10 @@ class Board < Hash
   def move_and_record( move )
     #lift your piece off the square
     @piece_last_moved_from_coord = move.from_coord
-    @piece_last_moved = delete(move.from_coord)
+    
+    #if a capture is notated such as for enpassant, delete at that coordinate
+    # otherwise delete whats moved upon. If nothing deleted, no worries
+    @piece_last_moved = move.capture_coord ? delete(move.capture_coord) : delete(move.from_coord) 
     
     #place any captured piece aside
     @piece_captured = delete(move.to_coord)

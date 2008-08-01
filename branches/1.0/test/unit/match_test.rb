@@ -18,4 +18,9 @@ class MatchTest < ActiveSupport::TestCase
     end
   end
   
+  def test_replays_board_to_current_position
+    match = matches(:dean_vs_maria)
+    board = match.board
+    assert_nil board[:d2] #this is the piece that was moved
+  end
 end

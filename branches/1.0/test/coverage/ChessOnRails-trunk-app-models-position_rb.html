@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Jul 30 14:04:13 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Fri Aug 01 15:36:54 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -571,9 +571,9 @@ span.run100 {
     </thead>
   <tbody><tr class='light'><td><a href='ChessOnRails-trunk-app-models-position_rb.html'>C:/ChessOnRails/trunk/app/models/position.rb</a>
         </td>
-      <td class='lines_total'><tt>65</tt>
+      <td class='lines_total'><tt>72</tt>
         </td>
-      <td class='lines_code'><tt>47</tt>
+      <td class='lines_code'><tt>52</tt>
         </td>
       <td><table cellspacing='0' cellpadding='0' align='right'><tr><td><tt class='coverage_total'>100.0%</tt>
               &nbsp;</td>
@@ -626,43 +626,50 @@ span.run100 {
 </span><span class="marked0"><a name="line26"></a>26       @file = args[0].to_s[0] - 96 # ascii a
 </span><span class="marked1"><a name="line27"></a>27       @rank = args[0].to_s[1].chr.to_i 
 </span><span class="inferred0"><a name="line28"></a>28     end
-</span><span class="marked1"><a name="line29"></a>29     raise InvalidPositionError unless valid?
+</span><span class="marked1"><a name="line29"></a>29     raise InvalidPositionError, &quot;#{args.join(',')} did not specify a valid position&quot; unless valid?
 </span><span class="inferred0"><a name="line30"></a>30   end
 </span><span class="inferred1"><a name="line31"></a>31   
-</span><span class="marked0"><a name="line32"></a>32   def to_s
-</span><span class="marked1"><a name="line33"></a>33     &quot;#{(@file + 96).chr}#{rank}&quot;
-</span><span class="marked0"><a name="line34"></a>34   end
-</span><span class="inferred1"><a name="line35"></a>35   
-</span><span class="marked0"><a name="line36"></a>36   def to_sym
-</span><span class="marked1"><a name="line37"></a>37     raise InvalidPositionError unless valid?
-</span><span class="marked0"><a name="line38"></a>38     self.to_s.to_sym 
-</span><span class="inferred1"><a name="line39"></a>39   end
-</span><span class="inferred0"><a name="line40"></a>40   
-</span><span class="marked1"><a name="line41"></a>41   def valid?
-</span><span class="marked0"><a name="line42"></a>42     POSITIONS.include?( self.to_s )
-</span><span class="marked1"><a name="line43"></a>43   end
-</span><span class="inferred0"><a name="line44"></a>44   
-</span><span class="inferred1"><a name="line45"></a>45   # Allows adding to rank and file ala  +@a5 += [1,0]+
-</span><span class="marked0"><a name="line46"></a>46   def +(vector)
-</span><span class="marked1"><a name="line47"></a>47     if vector.kind_of?(Array) and vector.length == 2 and vector[0].kind_of?(Fixnum) and vector[1].kind_of?(Fixnum)
-</span><span class="marked0"><a name="line48"></a>48       @file += vector[0]
-</span><span class="marked1"><a name="line49"></a>49       @rank += vector[1]
-</span><span class="inferred0"><a name="line50"></a>50     else
-</span><span class="marked1"><a name="line51"></a>51       invalidate!
-</span><span class="inferred0"><a name="line52"></a>52     end
-</span><span class="inferred1"><a name="line53"></a>53     
-</span><span class="marked0"><a name="line54"></a>54     self #return
-</span><span class="inferred1"><a name="line55"></a>55     
-</span><span class="inferred0"><a name="line56"></a>56   end
-</span><span class="inferred1"><a name="line57"></a>57   
-</span><span class="marked0"><a name="line58"></a>58 private
-</span><span class="marked1"><a name="line59"></a>59   def invalidate!
-</span><span class="marked0"><a name="line60"></a>60     @file, @rank = [0,0]
-</span><span class="marked1"><a name="line61"></a>61   end
-</span><span class="inferred0"><a name="line62"></a>62 end
-</span><span class="inferred1"><a name="line63"></a>63 
-</span><span class="marked0"><a name="line64"></a>64 class InvalidPositionError &lt; Exception
-</span><span class="inferred1"><a name="line65"></a>65 end
+</span><span class="inferred0"><a name="line32"></a>32   #convenience for creating and calling to_sym on an instance of Position
+</span><span class="marked1"><a name="line33"></a>33   def self.as_symbol(*args)
+</span><span class="marked0"><a name="line34"></a>34     p = Position.new(args)
+</span><span class="marked1"><a name="line35"></a>35     p.to_sym
+</span><span class="inferred0"><a name="line36"></a>36   end
+</span><span class="inferred1"><a name="line37"></a>37   
+</span><span class="marked0"><a name="line38"></a>38   def to_s
+</span><span class="marked1"><a name="line39"></a>39     &quot;#{(@file + 96).chr}#{rank}&quot;
+</span><span class="marked0"><a name="line40"></a>40   end
+</span><span class="inferred1"><a name="line41"></a>41   
+</span><span class="marked0"><a name="line42"></a>42   def to_sym
+</span><span class="marked1"><a name="line43"></a>43     raise InvalidPositionError unless valid?
+</span><span class="marked0"><a name="line44"></a>44     self.to_s.to_sym 
+</span><span class="inferred1"><a name="line45"></a>45   end
+</span><span class="inferred0"><a name="line46"></a>46   
+</span><span class="marked1"><a name="line47"></a>47   def valid?
+</span><span class="marked0"><a name="line48"></a>48     POSITIONS.include?( self.to_s )
+</span><span class="marked1"><a name="line49"></a>49   end
+</span><span class="inferred0"><a name="line50"></a>50   
+</span><span class="inferred1"><a name="line51"></a>51   # Allows adding to rank and file ala  +@a5 += [1,0]+
+</span><span class="marked0"><a name="line52"></a>52   def +(vector)
+</span><span class="marked1"><a name="line53"></a>53     newpos = Position.new( self.to_s )
+</span><span class="marked0"><a name="line54"></a>54     if vector.kind_of?(Array) and vector.length == 2 and vector[0].kind_of?(Fixnum) and vector[1].kind_of?(Fixnum)
+</span><span class="marked1"><a name="line55"></a>55       newpos.file += vector[1] #note reversal
+</span><span class="marked0"><a name="line56"></a>56       newpos.rank += vector[0]
+</span><span class="inferred1"><a name="line57"></a>57     else
+</span><span class="marked0"><a name="line58"></a>58       newpos.send('invalidate!')
+</span><span class="inferred1"><a name="line59"></a>59     end
+</span><span class="inferred0"><a name="line60"></a>60     
+</span><span class="marked1"><a name="line61"></a>61     newpos #return
+</span><span class="inferred0"><a name="line62"></a>62     
+</span><span class="inferred1"><a name="line63"></a>63   end
+</span><span class="inferred0"><a name="line64"></a>64   
+</span><span class="marked1"><a name="line65"></a>65 private
+</span><span class="marked0"><a name="line66"></a>66   def invalidate!
+</span><span class="marked1"><a name="line67"></a>67     @file, @rank = [0,0]
+</span><span class="marked0"><a name="line68"></a>68   end
+</span><span class="inferred1"><a name="line69"></a>69 end
+</span><span class="inferred0"><a name="line70"></a>70 
+</span><span class="marked1"><a name="line71"></a>71 class InvalidPositionError &lt; Exception
+</span><span class="inferred0"><a name="line72"></a>72 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>

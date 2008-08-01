@@ -553,7 +553,7 @@ span.run100 {
 </style>
     </head>
   <body><h3>C0 code coverage information</h3>
-    <p>Generated on Wed Jul 30 14:04:10 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
+    <p>Generated on Fri Aug 01 15:36:53 -0500 2008 with <a href='http://eigenclass.org/hiki/rcov'>rcov 0.8.1.2</a>
       </p>
     <hr/>
     <pre><span class='marked0'>Code reported as executed by Ruby looks like this...
@@ -571,9 +571,9 @@ span.run100 {
     </thead>
   <tbody><tr class='light'><td><a href='ChessOnRails-trunk-app-helpers-matches_helper_rb.html'>C:/ChessOnRails/trunk/app/helpers/matches_helper.rb</a>
         </td>
-      <td class='lines_total'><tt>41</tt>
+      <td class='lines_total'><tt>40</tt>
         </td>
-      <td class='lines_code'><tt>30</tt>
+      <td class='lines_code'><tt>25</tt>
         </td>
       <td><table cellspacing='0' cellpadding='0' align='right'><tr><td><tt class='coverage_total'>100.0%</tt>
               &nbsp;</td>
@@ -604,41 +604,40 @@ span.run100 {
 </span><span class="inferred1"><a name="line4"></a> 4   #iterates over the rows and yields columns in the correct order for rendering the board for white or black
 </span><span class="marked0"><a name="line5"></a> 5   def positions_by_row_as( side )
 </span><span class="inferred1"><a name="line6"></a> 6     
-</span><span class="marked0"><a name="line7"></a> 7     rows_in_order = []
-</span><span class="marked1"><a name="line8"></a> 8     if side==:white
-</span><span class="marked0"><a name="line9"></a> 9       0.upto(7){ |i| rows_in_order &lt;&lt; i }
-</span><span class="inferred1"><a name="line10"></a>10     else
-</span><span class="marked0"><a name="line11"></a>11       7.downto(0){ |i| rows_in_order &lt;&lt; i } 
-</span><span class="inferred1"><a name="line12"></a>12     end
-</span><span class="inferred0"><a name="line13"></a>13     
-</span><span class="marked1"><a name="line14"></a>14     rows_in_order.each do |row_offset|
-</span><span class="marked0"><a name="line15"></a>15         from, to = [row_offset*8, row_offset*8 + 7]
-</span><span class="marked1"><a name="line16"></a>16         row_pieces = Position::POSITIONS[ (from..to) ]
-</span><span class="marked0"><a name="line17"></a>17         yield side==:white ? row_pieces : row_pieces.reverse
-</span><span class="inferred1"><a name="line18"></a>18     end
-</span><span class="inferred0"><a name="line19"></a>19     
-</span><span class="inferred1"><a name="line20"></a>20   end
-</span><span class="inferred0"><a name="line21"></a>21   
-</span><span class="marked1"><a name="line22"></a>22   def files_as( side )
-</span><span class="marked0"><a name="line23"></a>23     files = side==:white ? &quot;abcdefgh&quot; : &quot;hgfedcba&quot;
-</span><span class="marked1"><a name="line24"></a>24     files.each_byte{ |f| yield f.chr }
-</span><span class="inferred0"><a name="line25"></a>25   end
-</span><span class="inferred1"><a name="line26"></a>26   
-</span><span class="marked0"><a name="line27"></a>27   def side_of(match, player)
-</span><span class="marked1"><a name="line28"></a>28     return :white unless match and player
-</span><span class="marked0"><a name="line29"></a>29     match.player1 == player ? :white : :black
-</span><span class="inferred1"><a name="line30"></a>30   end
-</span><span class="inferred0"><a name="line31"></a>31   
-</span><span class="inferred1"><a name="line32"></a>32   #returns the color of a square given a symbol or a string representing a position
-</span><span class="marked0"><a name="line33"></a>33   def square_color( pos )
-</span><span class="marked1"><a name="line34"></a>34     pos = pos.to_s
-</span><span class="marked0"><a name="line35"></a>35     (pos[0]+pos[1]) % 2 == 1 ? :white : :black
-</span><span class="inferred1"><a name="line36"></a>36   end
-</span><span class="inferred0"><a name="line37"></a>37   
-</span><span class="marked1"><a name="line38"></a>38   def render_piece( piece )
-</span><span class="marked0"><a name="line39"></a>39     return &quot;&amp;nbsp;&quot; unless piece
-</span><span class="marked1"><a name="line40"></a>40   end
-</span><span class="inferred0"><a name="line41"></a>41 end
+</span><span class="inferred0"><a name="line7"></a> 7 
+</span><span class="marked1"><a name="line8"></a> 8     rows_in_order = (side == :white) ? (0..7) : (0..7).to_a.reverse
+</span><span class="inferred0"><a name="line9"></a> 9     
+</span><span class="marked1"><a name="line10"></a>10     rows_in_order.each do |row_offset|
+</span><span class="marked0"><a name="line11"></a>11         from, to = [row_offset*8, row_offset*8 + 7]
+</span><span class="marked1"><a name="line12"></a>12         row_pieces = Position::POSITIONS[ (from..to) ]
+</span><span class="marked0"><a name="line13"></a>13         yield side==:white ? row_pieces : row_pieces.reverse
+</span><span class="inferred1"><a name="line14"></a>14     end
+</span><span class="inferred0"><a name="line15"></a>15     
+</span><span class="inferred1"><a name="line16"></a>16   end
+</span><span class="inferred0"><a name="line17"></a>17   
+</span><span class="inferred1"><a name="line18"></a>18   #an iterator over files that goes in the correct order for the side viewing
+</span><span class="marked0"><a name="line19"></a>19   def files_as( side )
+</span><span class="marked1"><a name="line20"></a>20     files = side==:white ? &quot;abcdefgh&quot; : &quot;hgfedcba&quot;
+</span><span class="marked0"><a name="line21"></a>21     files.each_byte{ |f| yield f.chr }
+</span><span class="inferred1"><a name="line22"></a>22   end
+</span><span class="inferred0"><a name="line23"></a>23   
+</span><span class="inferred1"><a name="line24"></a>24   #lets the view query which side the current player is on
+</span><span class="inferred0"><a name="line25"></a>25   #TODO allow the user to turn the board around
+</span><span class="marked1"><a name="line26"></a>26   def side_of(match, player)
+</span><span class="marked0"><a name="line27"></a>27     return :white unless match and player
+</span><span class="marked1"><a name="line28"></a>28     match.player1 == player ? :white : :black
+</span><span class="inferred0"><a name="line29"></a>29   end
+</span><span class="inferred1"><a name="line30"></a>30   
+</span><span class="inferred0"><a name="line31"></a>31   #returns the color of a square given a symbol or a string representing a position
+</span><span class="marked1"><a name="line32"></a>32   def square_color( pos )
+</span><span class="marked0"><a name="line33"></a>33     pos = pos.to_s
+</span><span class="marked1"><a name="line34"></a>34     (pos[0] + pos[1]) % 2 == 1 ? :white : :black
+</span><span class="inferred0"><a name="line35"></a>35   end
+</span><span class="inferred1"><a name="line36"></a>36 
+</span><span class="marked0"><a name="line37"></a>37   def image_source_of( piece )
+</span><span class="marked1"><a name="line38"></a>38     &quot;/images/sets/default/#{piece.role.to_s}_#{piece.side.to_s[0,1]}.gif&quot;
+</span><span class="marked0"><a name="line39"></a>39   end
+</span><span class="inferred1"><a name="line40"></a>40 end
 </span></pre><hr/>
     <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a>
    version 0.8.1.2.</p>
