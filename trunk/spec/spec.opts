@@ -1,4 +1,6 @@
 --colour
---format progress
---loadby mtime
+--format
+progress
+--loadby
+mtime
 --reverse
