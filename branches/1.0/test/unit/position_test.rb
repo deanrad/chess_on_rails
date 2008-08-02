@@ -13,15 +13,6 @@ class PositionTest < ActiveSupport::TestCase
     assert Symbol.all_symbols.any? { |sym| sym.to_s == Position::POSITIONS[0] }
   end
   
-  def test_cannot_have_instance_of_invalid_position
-    assert_raises InvalidPositionError do
-      p = Position.new( 'a9' )
-    end
-    assert_raises InvalidPositionError do
-      p = Position.new( 'to_long' )
-    end
-  end
-  
   def test_can_be_displayed_as_string
     assert_equal 'd3', @d3.to_s
   end

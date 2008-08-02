@@ -14,7 +14,7 @@ class Move < ActiveRecord::Base
   validate :ensure_coords_present_and_valid, :piece_must_be_present_on_from_coord, :piece_must_move_to_allowed_square
   
   def infer_coordinates_from_notation
-    @board ||= match.board
+    @board ||= match.board if match
     #TODO fill out infer_coordinates_from_notation
   end
 
@@ -32,12 +32,12 @@ class Move < ActiveRecord::Base
   
   def piece_must_be_present_on_from_coord
     #TODO fill out piece_must_be_present_on_from_coord
-    @piece_moving ||= @board[ from_coord.to_sym ]
+    @piece_moving ||= @board[ from_coord.to_sym ] if @board
     errors.add :from_coord, "No piece present at #{self[:from_coord]}" unless @piece_moving
   end
       
   def piece_must_move_to_allowed_square
-    unless @board.allowed_moves(from_coord).include?(to_coord)
+    unless @piece_moving and @board.allowed_moves(from_coord).include?(to_coord)
       errors.add :to_coord, "#{self[:to_coord]} is not an allowed move for the piece at #{self[:from_coord]}" 
     end
   end

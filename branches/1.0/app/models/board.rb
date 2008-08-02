@@ -72,6 +72,7 @@ class Board < Hash
   private
 
   #on this board, interprets the piece's own allowed moves according to the state of the other pieces
+  #TODO use this method as an example of refactoring to reduce cyclometric complexity
   def allowed_moves_of_piece_at( position )
     return unless piece_moving = self[position]
     
