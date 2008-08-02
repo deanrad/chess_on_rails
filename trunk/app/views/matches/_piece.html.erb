@@ -1,0 +1,24 @@
+<% #locals
+  #position ||= ''
+  #board ||= {}
+  #piece
+  moves = board.allowed_moves(position.to_sym)
+  
+    #TODO allow swapping of sets by changing this up, and hiding extension - basically making image controller
+
+%>
+
+<img src="<%= image_source_of(piece) %>"
+     id="<%= piece.board_id %>"
+    alt="<%= piece.board_id %>"
+  class="<%= 'piece ' + moves.join(' ') %>"
+/>
+
+<!-- scriptaculous draggable has a jitter when you drop it - doesnt look great -->
+<%= draggable_element( piece.board_id, :revert => 'true', :snap => '[49,47]' ) %> 
+<script>
+  //scriptaculous
+  new Draggable( <%= piece.board_id %>, {revert:true, snap:[49,47]});
+  //jquery 
+  //$('<%= piece.board_id %>').draggable();
+</script>
