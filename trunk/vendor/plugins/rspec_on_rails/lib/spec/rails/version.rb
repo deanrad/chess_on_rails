@@ -7,7 +7,7 @@ module Spec
 end
 
 # Verify that the plugin has the same revision as RSpec
-if Spec::Rails::VERSION::BUILD_TIME_UTC != Spec::VERSION::BUILD_TIME_UTC
+if false and Spec::Rails::VERSION::BUILD_TIME_UTC != Spec::VERSION::BUILD_TIME_UTC
   raise <<-EOF
 
 ############################################################################
