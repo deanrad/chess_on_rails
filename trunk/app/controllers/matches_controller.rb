@@ -12,10 +12,3 @@ class MatchesController < ApplicationController
   end
       
 end
-
-#TODO - remove this hack that prevents specs from failing on missing metaclass method
-class Object
-  def metaclass
-    (class << self; self; end)
-  end
-end
