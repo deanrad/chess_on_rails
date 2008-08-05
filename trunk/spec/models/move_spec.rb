@@ -7,7 +7,7 @@ describe Move, 'A move' do
     m.valid?.should == false
   end
   
-  it 'be creatable with valid from and to coordinates as symbols' do
+  it 'should be creatable with valid from and to coordinates as symbols' do
     m = Move.new(:from_coord => :a2, :to_coord => :a4)
     m.from_coord.should == :a2
     m.to_coord.should == :a4
@@ -21,4 +21,5 @@ describe Move, 'A move' do
     move = Move.new(:from_coord => :a2, :to_coord => 'broken')
     move.valid?.should == false
   end
+  
 end
