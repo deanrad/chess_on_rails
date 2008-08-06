@@ -18,19 +18,18 @@ describe PlayersController do
     end
   end
 
-=begin
   it 'should require login on signup' do
     assert_no_difference 'Player.count' do
       create_player(:login => nil)
-      assigns(:player).errors.on(:login).should be_true
-      assert_response :success
+      assigns(:player).errors.on(:login).should_not be_empty
+      response.should be_success #template rendering
     end
   end
 
   it 'should require password on signup' do
     assert_no_difference 'Player.count' do
       create_player(:password => nil)
-      assigns(:player).errors.on(:password).should be_true
+      assigns(:player).errors.on(:password).should_not be_empty
       assert_response :success
     end
   end
@@ -38,21 +37,18 @@ describe PlayersController do
   it 'should require password confirmation on signup' do
     assert_no_difference 'Player.count' do
       create_player(:password_confirmation => nil)
-      assigns(:player).errors.on(:password_confirmation).should be_true
+      assigns(:player).errors.on(:password_confirmation).should_not be_empty
       assert_response :success
     end
   end
-
+  
   it 'should require email on signup' do
     assert_no_difference 'Player.count' do
       create_player(:email => nil)
-      assigns(:player).errors.on(:email).should be_true
+      assigns(:player).errors.on(:email).should_not be_empty
       assert_response :success
     end
   end
-  
-=end
-  
 
   protected
     def create_player(options = {})

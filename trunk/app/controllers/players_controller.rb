@@ -17,8 +17,6 @@ class PlayersController < ApplicationController
       self.current_player = @player
       redirect_back_or_default('/')
       flash[:notice] = "Thanks for signing up!"
-    else
-      render :action => 'new'
     end
   end
 
