@@ -11,7 +11,9 @@ class Move < ActiveRecord::Base
   belongs_to :match
   
   before_validation :infer_coordinates_from_notation
-  validate :ensure_coords_present_and_valid, :piece_must_be_present_on_from_coord, :piece_must_move_to_allowed_square
+  validate  :ensure_coords_present_and_valid,
+            :piece_must_be_present_on_from_coord,
+            :piece_must_move_to_allowed_square
   
   def infer_coordinates_from_notation
     @board ||= match.board if match
@@ -31,7 +33,6 @@ class Move < ActiveRecord::Base
   end
   
   def piece_must_be_present_on_from_coord
-    #TODO fill out piece_must_be_present_on_from_coord
     @piece_moving ||= @board[ from_coord.to_sym ] if @board
     errors.add :from_coord, "No piece present at #{self[:from_coord]}" unless @piece_moving
   end

@@ -13,8 +13,7 @@ Spec::Runner.configure do |config|
   config.use_instantiated_fixtures  = false
   
   
-  #config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
-  config.fixture_path = RAILS_ROOT + '/test/fixtures/'
+  config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
   include AuthenticatedTestHelper
 
