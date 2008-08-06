@@ -12,7 +12,7 @@
 # flank::     +kings+, +queens+
 # which::     +a+, +kings+  (in other words, the +flank+ for minor pieces, the file for pawns)
 #
-# A piece will know its theoretical moves - where it could move on an empty board- but this 
+# A piece will know its desired moves - where it could move on an empty board- but this 
 # will be filtered by the board in order to preclude certain things like moving on to a piece
 # of your own color, or leaving or placing your king in check
 class Piece 
@@ -43,13 +43,72 @@ class Piece
       "#{@role}".to_sym
     end
   end
-
+  
   # A unique piece across the whole board
   def board_id
     raise AmbiguousPieceError unless @side
     "#{@side}_#{side_id}".to_sym
   end      
   
+  #Desired_moves_from_here is what you see in a guide to playing chess- the way you first instruct
+  # somebody how a piece moves, in other words, what is possible with no special circumstances considered
+  # It is customized by overriding vector_allowed_from in specific piece's class to, for example, instruct
+  # that a pawn may only move 2 from a given position. It is also filtered by the board later, but this 
+  # is just how the piece WANTS to move, if it were not impeded by outside rules :)
+  def desired_moves_from(here)
+    move_vectors = []
+    @lines_of_attack.each do |line|
+      line.each  { |vector| move_vectors << vector if vector_allowed_from(here, vector) }
+    end
+    @direct_moves.each { |vector| move_vectors << vector }
+    return move_vectors.select { |move| (Position.new(here) + move).valid? }
+  end
+  
+  #a pawn or king overrides this to veto certain moves depending on where it is
+  def vector_allowed_from(from_position, vector)
+    true
+  end
+  
+  #on a given board returns those moves not impeded by other pieces
+  def unblocked_moves(from_position, board)
+    move_vectors = []
+    @lines_of_attack.each do |line|
+      has_encountered_piece = false
+      break unless line.vector==[1,1]
+      
+      line.each do |move_vector| 
+        break if has_encountered_piece
+        
+        new_position = Position.new(from_position) + move_vector
+        break unless new_position.valid?
+        
+        piece_moved_upon = board[new_position.to_sym]
+        if( piece_moved_upon )
+          has_encountered_piece = true
+          if vector_allowed_from(from_position, move_vector) and piece_moved_upon.side != self.side
+            move_vectors << move_vector 
+          end
+        else
+          move_vectors << move_vector if vector_allowed_from(from_position, move_vector) 
+        end
+      end
+    end
+    
+    @direct_moves.each do |move_vector| 
+      new_position = Position.new(from_position) + move_vector
+      next unless new_position.valid?
+      
+      piece_moved_upon = board[new_position.to_sym]
+      if piece_moved_upon == nil or piece_moved_upon.side != self.side
+        move_vectors << move_vector 
+      end
+    end
+    move_vectors
+  end
+  
+  def to_s
+    "#{@side} #{@role}"
+  end
   # Creates a piece knowing at least its role and side, and program its possible moves
   def initialize(role, side, which=nil)
     @role = role 
@@ -57,42 +116,8 @@ class Piece
     @which = which 
     
     #setup lines of attack
-    @lines_of_attack ||= []
-    
-    #bishops and queens can move in diagonals with no limits
-    if (@role == :bishop or @role==:queen)
-      DIAGONAL_MOTIONS.each{ |move| @lines_of_attack << LineOfAttack.new(move) }
-    end
-    
-    #rooks move straight, and queens get these lines of attack as well
-    if (@role == :rook or @role==:queen)
-      STRAIGHT_MOTIONS.each{ |move| @lines_of_attack << LineOfAttack.new(move) }
-    end
-    
-    #the superset of possible pawn moves include forward 1 and 2, and diagonal single-steps
-    if (@role==:pawn)
-      #figure out which way is forward
-      forward = Sides[@side].advance_direction
-      
-      #a short line-of-attack in the forward direction
-      @lines_of_attack << LineOfAttack.new( [forward, 0] , 2 ) 
-      
-      #and the diagonal forward moves
-      [1,-1].each{ |diag| @lines_of_attack << LineOfAttack.new( [forward, diag], 1 ) }
-    end
-    
-    if (@role == :king)
-      DIAGONAL_MOTIONS.each{ |move| @lines_of_attack << LineOfAttack.new(move, 1) }      
-      STRAIGHT_MOTIONS.each{ |move| @lines_of_attack << LineOfAttack.new(move, 1) }      
-      
-      #castling, king and queenside respectively works like a line of attack
-      # in that no piece may lie between you and that square
-      @lines_of_attack << LineOfAttack.new( [0, 2], 1) 
-      @lines_of_attack << LineOfAttack.new( [0,-3], 1) 
-    end 
-    
-    #knights have no lines of attack - but they have direct moves
-    @direct_moves = (@role == :knight) ? KNIGHT_MOVES : []
+    @lines_of_attack = []
+    @direct_moves = []
   end
 
   

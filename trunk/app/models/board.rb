@@ -37,19 +37,19 @@ class Board < Hash
   def self.initial_board
     b = Board.new 
     Sides.each do | side, back_rank, front_rank |
-      b.store( :e + back_rank, Piece.new(:king,    side) )
-      b.store( :d + back_rank, Piece.new(:queen,   side) )
+      b.store( :e + back_rank, King.new(side) )
+      b.store( :d + back_rank, Queen.new(side) )
 
-      b.store( :a + back_rank, Piece.new(:rook,    side, :queens) )
-      b.store( :b + back_rank, Piece.new(:knight,  side, :queens) )
-      b.store( :c + back_rank, Piece.new(:bishop,  side, :queens) )
+      b.store( :a + back_rank, Rook.new(side, :queens ) )
+      b.store( :b + back_rank, Knight.new(side, :queens ) )
+      b.store( :c + back_rank, Bishop.new(side, :queens ) )
 
-      b.store( :h + back_rank, Piece.new(:rook,    side, :kings) )
-      b.store( :g + back_rank, Piece.new(:knight,  side, :kings) )
-      b.store( :f + back_rank, Piece.new(:bishop,  side, :kings) )
+      b.store( :h + back_rank, Rook.new(side, :kings ) )
+      b.store( :g + back_rank, Knight.new(side, :kings ) )
+      b.store( :f + back_rank, Bishop.new(side, :kings ) )
       
       FILES.each do |file|
-        b.store( file + front_rank, Piece.new(:pawn, side, file) )
+        b.store( file + front_rank, Pawn.new(side, file) )
       end
       
     end
@@ -63,82 +63,20 @@ class Board < Hash
     moves
   end
   
-  #returns true if the enpassant exception applies to this piece moving as specified
-  def en_passant?( piece_moving, from, to)
-    return false unless piece_moving.role == :pawn
-    return false #TODO flush this out - need more parameters, like the piece 'in-front-of' the EP square
-  end
-  
-  private
+    private
 
   #on this board, interprets the piece's own allowed moves according to the state of the other pieces
-  #TODO use this method as an example of refactoring to reduce cyclometric complexity
   def allowed_moves_of_piece_at( position )
     return unless piece_moving = self[position]
     
-    pos = Position.new(position)
-    
-    #for each line along which this piece can move
-    piece_moving.lines_of_attack.each do |line|
-      line_still_valid = true 
-      
-      
-      #and for each step along that line
-      line.each do |vector|
-        new_position = pos + vector
-    
-        #if they're still on the board and still allowed to move this way
-        if new_position.valid? and line_still_valid
-          
-          piece_at_new_position = self[new_position.to_sym]
-
-          #they can move to empty squares - except pawns on diagonals without the enpassant exception
-          if not piece_at_new_position
-            unless piece_moving.role == :pawn
-              yield new_position.to_sym  #allow the move
-            else
-              if new_position.file == pos.file
-                if (new_position.rank - pos.rank == 1) or pos.rank==Sides[piece_moving.side].front_rank
-                  yield new_position.to_sym
-                end
-              else
-                yield new_position.to_sym if en_passant?( piece_moving, pos, new_position)
-              end
-            end
-          else
-            #they'll go no further
-            line_still_valid = false
-            
-            #if its the opponents piece they may move here, but no further (not pawns)
-            if piece_at_new_position.side != piece_moving.side
-              yield new_position.to_sym if  piece_moving.role != :pawn || new_position.file != pos.file
-            end
-          end
-        else
-          line_still_valid = false
-        end
-      end
+    #for each line along which this piece can move (we dont use desired moves for perf reasons)
+    unblocked_moves = piece_moving.unblocked_moves(position, self)
+    unblocked_moves.each do |move_vector|
+      new_position = Position.new(position) + move_vector
+      yield new_position.to_sym if new_position.valid?
     end
-    
-    #and for each direct move to which this piece can move
-    #TODO dry this copy of above logic up
-    piece_moving.direct_moves.each do |vector| 
-        new_position = pos + vector
-        if new_position.valid?
-          piece_at_new_position = self[new_position.to_sym]
-          unless piece_at_new_position
-            yield new_position.to_sym
-          else
-            if piece_at_new_position.side != piece_moving.side
-              yield new_position.to_sym
-            end
-          end
-          
-        end
-    end
-  
   end
-  
+    
   
   #These variables help us track what's happened and allow us to undo
   attr_accessor :piece_last_moved, :piece_last_moved_from_coord

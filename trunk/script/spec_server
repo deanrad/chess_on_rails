@@ -27,7 +27,7 @@ module Spec
 
         if ActionController.const_defined?(:Dispatcher)
           dispatcher = ::ActionController::Dispatcher.new($stdout)
-          dispatcher.cleanup_application(true)
+          dispatcher.cleanup_application() #(true)
         elsif ::Dispatcher.respond_to?(:reset_application!)
           ::Dispatcher.reset_application!
         else

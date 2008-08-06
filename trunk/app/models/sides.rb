@@ -6,7 +6,8 @@ class Sides
   Black = Side.new(         :black, 8,          7,          -1)
   
   def self.[](side)
-    side==:white ? White : Black
+    return White if side==:white
+    return Black if side==:black
   end
   
   #Used in at least one place - board initialization - to set up each side

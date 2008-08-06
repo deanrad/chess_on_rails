@@ -9,7 +9,7 @@ namespace :metrics do
   task :all_with_migrate => [:prepare, "db:migrate", :all]
   
   desc "Generate coverage, cyclomatic complexity, flog, stats, and churn reports"
-  task :all => [:coverage, :cyclomatic_complexity, :flog, :stats, :churn]
+  task :all => [:coverage, :cyclomatic_complexity, :flog, :stats, :churn, :spec_doc]
   
   desc "A coverage report using rcov"
   task :coverage do
@@ -83,6 +83,11 @@ namespace :metrics do
   desc "A stats report"
   task :stats do
     sh "rake stats > #{File.join(base_directory, 'stats.log')}"
+  end
+
+  desc "The Spec Doc report"
+  task :spec_doc do
+    sh "rake spec:doc > #{File.join(base_directory, 'spec_doc.log')}"
   end
   
   desc "Which files change the most"
