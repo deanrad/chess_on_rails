@@ -20,17 +20,14 @@ class Board < Hash
     undo_move(move)    
   end
 
-  def squares_occupied
-    return keys
-  end
-  
-  def pieces
-    return values
-  end
-  
   def store(key, value)
     super if key.kind_of?(Symbol)
     super( key.to_sym, value )
+  end
+  
+  def [](key)
+    super if key.kind_of?(Symbol)
+    super( key.to_sym  )
   end
   
   #return chess pieces as they appear at the start of a match
@@ -56,16 +53,19 @@ class Board < Hash
     return b
   end
   
+  #The board looks at all of a pieces unblocked moves, and then may take away certain moves
+  # depending on whether they leave you in check, etc..
   def allowed_moves( position )
-    #TODO a hash by position would be helpful - right now dynamic only
+    #TODO a hash by position may improve performance- right now dynamic only
     moves = []
-    allowed_moves_of_piece_at(position) { |move| moves << move }
+    allowed_moves_of_piece_at(position) { |move| moves << move.to_sym }
     moves
   end
   
     private
 
   #on this board, interprets the piece's own allowed moves according to the state of the other pieces
+  #allowed_moves_of_piece_at is the iterator version called by allowed_moves(position)
   def allowed_moves_of_piece_at( position )
     return unless piece_moving = self[position]
     
@@ -73,7 +73,7 @@ class Board < Hash
     unblocked_moves = piece_moving.unblocked_moves(position, self)
     unblocked_moves.each do |move_vector|
       new_position = Position.new(position) + move_vector
-      yield new_position.to_sym if new_position.valid?
+      yield new_position if new_position.valid?
     end
   end
     

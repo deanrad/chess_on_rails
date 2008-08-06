@@ -65,7 +65,7 @@ class Piece
   end
   
   #a pawn or king overrides this to veto certain moves depending on where it is
-  def vector_allowed_from(from_position, vector)
+  def vector_allowed_from(from_position, vector, board = nil)
     true
   end
   
@@ -74,7 +74,6 @@ class Piece
     move_vectors = []
     @lines_of_attack.each do |line|
       has_encountered_piece = false
-      break unless line.vector==[1,1]
       
       line.each do |move_vector| 
         break if has_encountered_piece
@@ -82,14 +81,14 @@ class Piece
         new_position = Position.new(from_position) + move_vector
         break unless new_position.valid?
         
-        piece_moved_upon = board[new_position.to_sym]
+        piece_moved_upon = board[new_position]
         if( piece_moved_upon )
           has_encountered_piece = true
-          if vector_allowed_from(from_position, move_vector) and piece_moved_upon.side != self.side
+          if vector_allowed_from(from_position, move_vector, board) and piece_moved_upon.side != self.side
             move_vectors << move_vector 
           end
         else
-          move_vectors << move_vector if vector_allowed_from(from_position, move_vector) 
+          move_vectors << move_vector if vector_allowed_from(from_position, move_vector, board) 
         end
       end
     end
@@ -98,7 +97,7 @@ class Piece
       new_position = Position.new(from_position) + move_vector
       next unless new_position.valid?
       
-      piece_moved_upon = board[new_position.to_sym]
+      piece_moved_upon = board[new_position]
       if piece_moved_upon == nil or piece_moved_upon.side != self.side
         move_vectors << move_vector 
       end
@@ -106,9 +105,6 @@ class Piece
     move_vectors
   end
   
-  def to_s
-    "#{@side} #{@role}"
-  end
   # Creates a piece knowing at least its role and side, and program its possible moves
   def initialize(role, side, which=nil)
     @role = role 

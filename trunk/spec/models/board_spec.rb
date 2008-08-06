@@ -40,4 +40,5 @@ describe Board do
     #queen
     @kings_and_queens.allowed_moves(:d1).should_not include(:h1) #blocked by king
   end
+  
 end
