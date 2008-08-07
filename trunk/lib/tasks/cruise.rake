@@ -1,6 +1,7 @@
 namespace :metrics do
   TEST_PATHS_FOR_RCOV = ['spec/**/*_spec.rb']
-  RCOV_OPTIONS = {"--exclude" => "lib/auth*" }
+  RCOV_OPTIONS = {'--exclude' => 'spec/*,gems/*,lib/auth*',  '--rails' => '' }
+  
 end
 
 desc "Task for CruiseControl.rb"
