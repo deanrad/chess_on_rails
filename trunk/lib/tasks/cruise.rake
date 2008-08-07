@@ -23,5 +23,5 @@ end
 
 desc "The Application Documentation"
 task :doc_app do
-  sh "rake doc:app"
+  sh "rdoc -x -i app/* --op #{File.join(base_directory, 'doc')}""
 end
