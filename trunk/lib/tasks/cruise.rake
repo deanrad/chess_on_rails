@@ -23,5 +23,5 @@ end
 
 desc "The Application Documentation"
 task :doc_app do
-  sh "rdoc -x -i app/* --op #{File.join(base_directory, 'doc')}""
+  sh "rdoc -x -i app/* --op #{File.join(base_directory, 'doc')}"
 end
