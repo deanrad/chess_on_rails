@@ -25,4 +25,10 @@ describe Move, 'A move' do
     move.valid?.should == false
   end
   
+  it 'should know which side is moving (during validation)' do
+    match = matches(:unstarted_match)
+    move = match.moves.build(:from_coord => :g1, :to_coord => :f3)
+    match.moves << move
+    move.side_moving.should == :white
+  end
 end

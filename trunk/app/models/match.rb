@@ -18,6 +18,10 @@ class Match < ActiveRecord::Base
     player2
   end
   
+  def next_to_move
+    moves.count % 2 == 0 ? :white : :black
+  end
+  
   # A formatted display of the players involved, white listed first
   def lineup
     "#{player1.name} vs. #{player2.name}"

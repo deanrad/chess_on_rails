@@ -12,10 +12,11 @@
 ActiveRecord::Schema.define(:version => 20080729005133) do
 
   create_table "matches", :force => true do |t|
-    t.integer  "player1_id", :limit => 11, :null => false
-    t.integer  "player2_id", :limit => 11, :null => false
-    t.boolean  "active"
-    t.integer  "winner_id",  :limit => 11
+    t.integer  "player1_id",  :limit => 11,                    :null => false
+    t.integer  "player2_id",  :limit => 11,                    :null => false
+    t.boolean  "active",                    :default => true
+    t.boolean  "moves_count",               :default => false
+    t.integer  "winner_id",   :limit => 11
     t.string   "outcome"
     t.datetime "created_at"
     t.datetime "updated_at"

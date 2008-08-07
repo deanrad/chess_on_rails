@@ -8,12 +8,13 @@
 # Also stored is the canonical notation for the move, in standard short algebraic form.
 # See: http://en.wikipedia.org/wiki/Chess_notation for information on notation and coordinates
 class Move < ActiveRecord::Base
-  belongs_to :match
+  belongs_to :match, :counter_cache => true
   
   before_validation :infer_coordinates_from_notation
   validate  :ensure_coords_present_and_valid,
             :piece_must_be_present_on_from_coord,
-            :piece_must_move_to_allowed_square
+            :piece_must_move_to_allowed_square,
+            :piece_must_belong_to_that_player_who_is_next_to_move
   
   def infer_coordinates_from_notation
     @board ||= match.board if match
@@ -41,6 +42,18 @@ class Move < ActiveRecord::Base
     unless @piece_moving and @board.allowed_moves(from_coord).include?(to_coord)
       errors.add :to_coord, "#{self[:to_coord]} is not an allowed move for the piece at #{self[:from_coord]}" 
     end
+  end
+  
+  def piece_must_belong_to_that_player_who_is_next_to_move
+    if @piece_moving and @piece_moving.side != match.next_to_move
+      errors.add_to_base "You can not move a #{@piece_moving.side} piece on #{match.next_to_move}'s turn"
+    end
+  end
+    
+  #during the validation phase it is possible to know which side is moving because we look up the piece moving
+  #Side_moving returns the side of that piece
+  def side_moving
+    return @piece_moving.side if @piece_moving
   end
   
   def from_coord

@@ -49,7 +49,7 @@ describe PlayersController do
       assert_response :success
     end
   end
-
+  
   protected
     def create_player(options = {})
       post :create, :player => { :login => 'quire', :email => 'quire@example.com',

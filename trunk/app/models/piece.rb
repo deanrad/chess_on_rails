@@ -31,6 +31,8 @@ class Piece
   KNIGHT_MOVES     =  [[1,2], [1,-2], [-1,2], [-1,-2], [2,1], [2,-1], [-2,1], [-2,-1] ]
   
   attr_reader :role, :side, :which
+  
+  #TODO lines_of_attack and such should not be instance data on pieces, it really bloats an instance of a board- better would be a lookup on role, I think
   attr_reader :lines_of_attack
   attr_reader :direct_moves
 
@@ -50,11 +52,11 @@ class Piece
     "#{@side}_#{side_id}".to_sym
   end      
   
-  #Desired_moves_from_here is what you see in a guide to playing chess- the way you first instruct
-  # somebody how a piece moves, in other words, what is possible with no special circumstances considered
+  #Desired_moves_from (here) gives you what you get in a guide to playing chess, and how you first instruct
+  # somebody how a piece moves, in other words, what is possible with no special circumstances considered.
   # It is customized by overriding vector_allowed_from in specific piece's class to, for example, instruct
-  # that a pawn may only move 2 from a given position. It is also filtered by the board later, but this 
-  # is just how the piece WANTS to move, if it were not impeded by outside rules :)
+  # that a pawn may only move 2 from a given position. It is also filtered by the board later, but first 
+  # Desired_moves_from describes how the piece WANTS to move, if it were not impeded by outside rules :)
   def desired_moves_from(here)
     move_vectors = []
     @lines_of_attack.each do |line|
@@ -73,24 +75,7 @@ class Piece
   def unblocked_moves(from_position, board)
     move_vectors = []
     @lines_of_attack.each do |line|
-      has_encountered_piece = false
-      
-      line.each do |move_vector| 
-        break if has_encountered_piece
-        
-        new_position = Position.new(from_position) + move_vector
-        break unless new_position.valid?
-        
-        piece_moved_upon = board[new_position]
-        if( piece_moved_upon )
-          has_encountered_piece = true
-          if vector_allowed_from(from_position, move_vector, board) and piece_moved_upon.side != self.side
-            move_vectors << move_vector 
-          end
-        else
-          move_vectors << move_vector if vector_allowed_from(from_position, move_vector, board) 
-        end
-      end
+      move_vectors += unblocked_moves_on_line(line, from_position, board)
     end
     
     @direct_moves.each do |move_vector| 
@@ -105,13 +90,37 @@ class Piece
     move_vectors
   end
   
-  # Creates a piece knowing at least its role and side, and program its possible moves
+  def unblocked_moves_on_line(line, from_position, board)
+      moves = []
+      line.each do |move_vector| 
+        
+        new_position = Position.new(from_position) + move_vector
+        return moves unless new_position.valid?
+        
+        piece_moved_upon = board[new_position]
+        
+        #if you find a piece you either append this position and return, or simply return
+        # depending on whether you can make a capture on that square
+        if( piece_moved_upon )
+          if vector_allowed_from(from_position, move_vector, board) and piece_moved_upon.side != self.side
+            moves << move_vector 
+          end
+          return moves
+        end
+
+        #otherwise there was no collision, append the move and move down the line        
+        moves << move_vector if vector_allowed_from(from_position, move_vector, board) 
+      end
+      moves    
+  end
+  
+  # Creates a piece knowing at least its role and side
   def initialize(role, side, which=nil)
     @role = role 
     @side = side
     @which = which 
     
-    #setup lines of attack
+    #TODO - this is moving out of instance data
     @lines_of_attack = []
     @direct_moves = []
   end

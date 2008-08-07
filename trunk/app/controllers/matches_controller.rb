@@ -3,7 +3,7 @@ class MatchesController < ApplicationController
 
   # GET /matches/N
   def show
-    @match = Match.find( params[:id] )
+    @match = Match.find( params[:id], :include => :moves )
   end
 
   # GET /matches

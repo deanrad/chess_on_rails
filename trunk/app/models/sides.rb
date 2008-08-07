@@ -1,6 +1,6 @@
 #Contains data on each side in Chess
 class Sides
-  Side = Struct.new("Side", :color, :back_rank, :front_rank, :advance_direction)
+  Side = Struct.new("Side", :color, :back_rank, :front_rank, :advance_direction) #unless defined?('Struct::Side')
 
   White = Side.new(         :white, 1,          2,          1)
   Black = Side.new(         :black, 8,          7,          -1)
