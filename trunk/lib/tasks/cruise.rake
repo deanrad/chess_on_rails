@@ -5,7 +5,10 @@ namespace :metrics do
 end
 
 desc "Task for CruiseControl.rb"
-task :cruise => ["db:migrate", "spec:rcov", "metrics:all", "spec_doc", "todos_doc"] do
+task :cruise => [ "db:migrate",
+                  "spec:rcov",
+                  "metrics:coverage", "metrics:cyclomatic_complexity", "metrics:stats",
+                  "spec_doc", "todos_doc", "doc_app"] do
 end
 
 desc "The Spec Doc report"
@@ -18,3 +21,7 @@ task :todos_doc do
   sh "rake notes > #{File.join(base_directory, 'todos.log')}"
 end
 
+desc "The Application Documentation"
+task :doc_app do
+  sh "rake doc:app"
+end
