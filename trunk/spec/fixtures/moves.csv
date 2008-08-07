@@ -6,11 +6,11 @@ fools_mate,2, e7, e5, e5
 fools_mate,3, g2, g4, g4
 fools_mate,4, d8, h4, Qh4#
 scholars_mate,1, e2, e4, e4
-scholars_mate,2, b8, c6, Nc6
-scholars_mate,3, f1, c4, Bc4
-scholars_mate,4, e7, e5, e5
-scholars_mate,5, d1, f3, Qf3
-scholars_mate,6, f8, c5, Bc5
+scholars_mate,2, e7, e5, e5
+scholars_mate,3, d1, h5, Qh5
+scholars_mate,4, b8, c6, Nc6
+scholars_mate,5, f1, c4, Bc4
+scholars_mate,6, g8, f6, Nf6
 immortal, 1, , , e4
 immortal, 2, , , e5
 immortal, 3, , , f4
