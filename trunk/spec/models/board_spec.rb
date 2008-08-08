@@ -9,6 +9,9 @@ describe Board do
 
     @lone_rook_board = Board[ :a1 => @rook ]
     @initial_board = Board.initial_board    
+    @castling_board_king  = Board[ :e1 => King.new(:white), :h1 => Rook.new(:white, :kings) ]
+    @castling_board_queen = Board[ :d8 => King.new(:black), :a8 => Rook.new(:black, :queens) ]
+    
     @kings_and_queens= Board[ :d1 => @white_queen, :e1 => @white_king, :d8 => @black_queen, :e8 => @black_king ]
   end
   
@@ -25,6 +28,22 @@ describe Board do
     end
     
     @lone_rook_board[:a1].should == @rook
+  end
+
+  it 'should be able to undo a considered move if castling' do
+    
+    @castling_board_king[:f1].should be_nil
+    
+    castling = Move.new( :from_coord => :e1, :to_coord => :g1, :castled => true) #must include castled=>true
+    @castling_board_king.consider_move( castling ) do
+      @castling_board_king[:f1].role.should == :rook
+      @castling_board_king[:g1].role.should == :king
+      @castling_board_king[:h1].should be_nil
+    end
+    
+    @castling_board_king[:h1].role.should == :rook
+    @castling_board_king[:e1].role.should == :king
+    @castling_board_king[:f1].should be_nil
   end
   
   it 'should not allow a piece to move onto one of its own color, now matter how nicely it asks' do
