@@ -1,4 +1,5 @@
 # Position represents one of the squares of the board
+# TODO can probably shrink this class in terms of LOC, and since its called into so much, should be perf-tweaked
 class Position
   # The string based array of all allowed positions. These are interned at load time for :a4 style access
   POSITIONS = %w( a8 b8 c8 d8 e8 f8 g8 h8  
@@ -61,6 +62,12 @@ class Position
     
     newpos #return
     
+  end
+  
+  #B-A is the vector you must add to A to get to B, just as 4-1 yields the 3 you must add to 1 to get 4
+  def -(other)
+    return unless other.kind_of?(Position)
+    return [ self.rank - other.rank, self.file - other.file ]
   end
   
 private

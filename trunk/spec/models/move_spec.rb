@@ -31,4 +31,22 @@ describe Move, 'A move' do
     match.moves << move
     move.side_moving.should == :white
   end
+  
+  #TODO Each move validation ought to have a spec in here
+  
+  it 'should populate the capture coordinate field of a move when capturing enpassant' do
+    match = matches(:unstarted_match)
+    board = Board[ :d5 => Pawn.new(:white, :d), :c5 => Pawn.new(:black, :c) ] 
+    match.instance_variable_set( :@board, board )
+    
+    move = match.moves.build( :from_coord => :d5, :to_coord => :c6 )
+    move.match = match
+    raise ArgumentError, "Different board !" unless move.match.board.size == 2
+
+    match.moves << move
+    #move.should be_valid
+    move.capture_coord.should == :c5
+  end
+  
+  #TODO Write a performance spec for making a move - in preparation for in_check?
 end

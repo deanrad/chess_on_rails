@@ -3,6 +3,7 @@
 # the location of +Piece+ s on the board and answering queries about the relationship of +Piece+ s
 #
 # It keys on symbolized positions such as :a4
+
 class Board < Hash
 
   FILES = [:a, :b, :c, :d, :e, :f, :g, :h]
@@ -89,10 +90,10 @@ class Board < Hash
     
     #if a capture is notated such as for enpassant, delete at that coordinate
     # otherwise delete whats moved upon. If nothing deleted, no worries
-    @piece_last_moved = move.capture_coord ? delete(move.capture_coord) : delete(move.from_coord) 
+    @piece_last_moved = delete(move.from_coord) 
     
     #place any captured piece aside
-    @piece_captured = delete(move.to_coord)
+    @piece_captured = move.capture_coord ? delete(move.capture_coord) : delete(move.to_coord)
     @piece_captured_from_coord = move.to_coord if @piece_captured
     
     #and move your guy there
@@ -117,6 +118,13 @@ class Symbol
   #allows :a + rank etc..
   def +(other)
     (self.to_s + other.to_s).to_sym
+  end
+  
+  #allows :b4 - :a4 to be expressed as [1,0], the move you must add to a4 to get to b4
+  def -(other)
+    destination = Position.new(self)
+    origin = Position.new(other)
+    return (destination-origin) if destination.valid? and origin.valid?
   end
 end
 

@@ -37,4 +37,10 @@ describe Position do
   it 'be callable via class method' do
     Position.as_symbol('d', 4).should == :d4
   end      
+  
+  it 'should yield the difference between two positions as a vector' do
+    p2 = Position.new( :b4 )
+    p1 = Position.new( :a4 )
+    (p2-p1).should == [0,1]
+  end
 end

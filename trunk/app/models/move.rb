@@ -11,10 +11,13 @@ class Move < ActiveRecord::Base
   belongs_to :match, :counter_cache => true
   
   before_validation :infer_coordinates_from_notation
+  
   validate  :ensure_coords_present_and_valid,
             :piece_must_be_present_on_from_coord,
             :piece_must_move_to_allowed_square,
             :piece_must_belong_to_that_player_who_is_next_to_move
+  
+  after_validation :update_capture_coord
   
   def infer_coordinates_from_notation
     @board ||= match.board if match
@@ -47,6 +50,13 @@ class Move < ActiveRecord::Base
   def piece_must_belong_to_that_player_who_is_next_to_move
     if @piece_moving and @piece_moving.side != match.next_to_move
       errors.add_to_base "You can not move a #{@piece_moving.side} piece on #{match.next_to_move}'s turn"
+    end
+  end
+  
+  def update_capture_coord
+    return unless @piece_moving and @piece_moving.kind_of?(Pawn)
+    if @piece_moving.is_en_passant_capture( from_coord, to_coord - from_coord , @board)
+      self[:capture_coord] = (Position.new(to_coord) + [ - Sides[@piece_moving.side].advance_direction, 0]).to_s
     end
   end
     
