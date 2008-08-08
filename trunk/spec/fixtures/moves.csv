@@ -11,6 +11,12 @@ scholars_mate,3, d1, h5, Qh5
 scholars_mate,4, b8, c6, Nc6
 scholars_mate,5, f1, c4, Bc4
 scholars_mate,6, g8, f6, Nf6
+ready_to_castle, 1, e2, e4, e4
+ready_to_castle, 2, e7, e5, e5
+ready_to_castle, 3, f1, d3, Bd3
+ready_to_castle, 4, f8, d6, Bd6
+ready_to_castle, 5, g1, f3, Nf3
+ready_to_castle, 6, g8, f6, Nf6
 immortal, 1, , , e4
 immortal, 2, , , e5
 immortal, 3, , , f4

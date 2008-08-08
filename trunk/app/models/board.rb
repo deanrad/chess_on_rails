@@ -82,6 +82,7 @@ class Board < Hash
   #These variables help us track what's happened and allow us to undo
   attr_accessor :piece_last_moved, :piece_last_moved_from_coord
   attr_accessor :piece_captured, :piece_captured_from_coord
+  attr_accessor :rook_castled, :rook_castled_from_coord, :rook_castled_to_coord
   attr_accessor :promoted_piece_last_side_id
   
   def move_and_record( move )
@@ -96,6 +97,16 @@ class Board < Hash
     @piece_captured = move.capture_coord ? delete(move.capture_coord) : delete(move.to_coord)
     @piece_captured_from_coord = move.to_coord if @piece_captured
     
+    #play castling
+    if(move.castled)
+      kings_square = Position.new(move.to_coord)
+      #the rook is 3 to the right or 4 to the left (whites view) for king/queenside
+      @rook_castled_from_coord = (kings_square + [0, (kings_square.file_char=='g') ? 1 : -2]).to_sym
+      @rook_castled_to_coord   = (kings_square + [0, (kings_square.file_char=='g') ? -1 : 1]).to_sym
+      @rook_castled = delete( rook_castled_from_coord )
+      store( @rook_castled_to_coord, @rook_castled )
+    end
+        
     #and move your guy there
     store( move.to_coord, @piece_last_moved )
   end
@@ -106,6 +117,12 @@ class Board < Hash
     
     #restore any captured piece
     store( @piece_captured_from_coord, @piece_captured) if @piece_captured
+    
+    #revert the rook move part of castling
+    if @rook_castled_to_coord 
+      rook = delete(@rook_castled_to_coord)
+      store( @rook_castled_from_coord, rook )
+    end
     
     #replace your piece back on the original square
     store( @piece_last_moved_from_coord, @piece_last_moved )

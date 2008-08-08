@@ -41,6 +41,10 @@ class Position
     "#{(@file + 96).chr}#{rank}"
   end
   
+  def file_char
+    (@file + 96).chr
+  end
+  
   def to_sym
     raise InvalidPositionError unless valid?
     self.to_s.to_sym 

@@ -84,6 +84,13 @@ describe Match do
       match.moves << Move.new( :from_coord => :d2, :to_coord => :d4, :capture_coord => :d7)
       match.board.size.should == 31
     end
+    
+    it 'should move the rook to adjacent square opposite the king when king is castling' do
+      match = matches(:ready_to_castle)
+      match.moves << Move.new( :from_coord => :e1, :to_coord => :g1 )
+      match.board[:f1].should_not be_nil
+      
+    end
   end
 
 end

@@ -35,17 +35,31 @@ describe Move, 'A move' do
   #TODO Each move validation ought to have a spec in here
   
   it 'should populate the capture coordinate field of a move when capturing enpassant' do
+
+    #note - here we are forcefeeding a board in to the match 
     match = matches(:unstarted_match)
     board = Board[ :d5 => Pawn.new(:white, :d), :c5 => Pawn.new(:black, :c) ] 
     match.instance_variable_set( :@board, board )
     
     move = match.moves.build( :from_coord => :d5, :to_coord => :c6 )
-    move.match = match
+    move.match = match #this is necessary to keep it from looking up and replaying its board
     raise ArgumentError, "Different board !" unless move.match.board.size == 2
 
     match.moves << move
     #move.should be_valid
     move.capture_coord.should == :c5
+  end
+
+  it 'should populate the castled field of a move when a king castles' do
+    #note - here we are forcefeeding a board in to the match 
+    match = matches(:unstarted_match)
+    board = Board[ :e1 => King.new(:white), :h1 => Rook.new(:white, :kings) ] 
+    match.instance_variable_set( :@board, board )
+    
+    move = match.moves.build( :from_coord => :e1, :to_coord => :g1 )    
+    move.match = match #this is necessary to keep it from looking up and replaying its board
+    match.moves << move
+    move.castled.should be_true
   end
   
   #TODO Write a performance spec for making a move - in preparation for in_check?

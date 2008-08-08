@@ -21,7 +21,11 @@ fools_mate:     #the shortest possible checkmate - very unlikely to occur in rea
 scholars_mate:  
   player1: dean
   player2: dean
-  
+
+ready_to_castle:  
+  player1: dean
+  player2: dean
+
 immortal:
   player1: anders
   player2: kieser

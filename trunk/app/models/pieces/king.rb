@@ -20,7 +20,10 @@ class King < Piece
   def can_move_on_board(here, vector, board)
     #we dont filter moves of length 1 here just the 2-long castling moves
     return true unless vector[1].abs == 2 
-
+    return is_castling_move?(here, vector, board)
+  end
+  
+  def is_castling_move?(here, vector, board)
     #figure out where we are
     position = Position.new(here)
     

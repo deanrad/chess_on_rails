@@ -17,7 +17,7 @@ class Move < ActiveRecord::Base
             :piece_must_move_to_allowed_square,
             :piece_must_belong_to_that_player_who_is_next_to_move
   
-  after_validation :update_capture_coord
+  after_validation :update_capture_coord, :update_castling_field
   
   def infer_coordinates_from_notation
     @board ||= match.board if match
@@ -59,7 +59,12 @@ class Move < ActiveRecord::Base
       self[:capture_coord] = (Position.new(to_coord) + [ - Sides[@piece_moving.side].advance_direction, 0]).to_s
     end
   end
-    
+  
+  def update_castling_field
+    return unless @piece_moving and @piece_moving.kind_of?(King)
+    self[:castled] = true if @piece_moving.is_castling_move?( from_coord, to_coord - from_coord, @board )
+  end  
+  
   #during the validation phase it is possible to know which side is moving because we look up the piece moving
   #Side_moving returns the side of that piece
   def side_moving
