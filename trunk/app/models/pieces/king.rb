@@ -27,6 +27,9 @@ class King < Piece
     #figure out where we are
     position = Position.new(here)
     
+    #king must be on initial square
+    return false unless position.file_char=='e'
+    
     #did i not instruct box 5 was to remain EMPTY ?! ensure intervening squares are empty
     intervening_square = board[ position + ( vector==[0,-2] ? [0, -1] : [0,1] ) ]
     return false if intervening_square != nil
