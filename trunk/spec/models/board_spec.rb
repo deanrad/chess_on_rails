@@ -60,4 +60,36 @@ describe Board do
     @kings_and_queens.allowed_moves(:d1).should_not include(:h1) #blocked by king
   end
   
+  it 'should know when a side is in check' do
+    match = matches(:scholars_mate)
+    match.moves << Move.new (:from_coord => :c4, :to_coord => :f7) #bishop, not mate
+    
+    board = match.board
+    board.in_check?(:black).should be_true
+    board.in_checkmate?(:black).should be_false
+  end
+
+  it 'should know when a side has been checkmated' do
+    match = matches(:scholars_mate)
+    match.moves << Move.new (:from_coord => :h5, :to_coord => :f7) #bishop, not mate
+    
+    board = match.board
+    board.in_checkmate?(:black).should be_true
+  end
+  
+  #it 'should be able to detect check (within a reasonable amount of time)' do
+  #  elapsed = Benchmark.realtime do
+  #    match = matches(:scholars_mate)
+  #    (1..50).each do 
+  #        #match.moves << Move.new( :from_coord => :c4, :to_coord => :f7 )  #bishop, not a mate
+  #        match.moves << Move.new( :from_coord => :h5, :to_coord => :f7 )  #queen , a mate
+  #        #test for checkmate
+  #        board = match.board
+  #        board.in_check?(:black).should be_true
+  #        match.moves.last.destroy
+  #    end
+  #  end
+  #  puts "50 checks tested in #{elapsed} seconds (on the PC each check for check takes .1 sec on average)"
+  #end
+
 end

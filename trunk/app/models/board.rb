@@ -63,7 +63,44 @@ class Board < Hash
     moves
   end
   
-    private
+  #The algorithm for in_check detection is a brute force search through all of your opponents
+  # allowed moves to see whether one of them is the square your king is on. This could perhaps
+  # be optimized to search backward from the king or some other such technique. Nonetheless, this
+  # routine, and even checkmate even more so (since it calls this routine repeatedly) are ripe 
+  # grounds to practice optimization
+  def in_check?( side )
+    #for all pieces which are owned by the opponent
+    opponents_positions = keys.select{ |key| self[key].side != side }
+    king_position = keys.detect{ |key| self[key].side==side and self[key].role==:king }
+    
+    #for all their allowed moves, we are in check if even one of them is our kings position
+    opponents_positions.each do |pos|
+      allowed_moves_of_piece_at(pos) do |move|
+        return true if move.to_sym==king_position
+      end
+    end
+    
+    return false
+  end
+  
+  #See the notes for in_check as well. The current algorithm for in_checkmate is: do you have a 
+  # move you can play, at the end of which, you are no longer in check ? While I chose algorithmic
+  # certainty over performance for the time being, I'm sure great gains in optimiztion can be had
+  # by tuning this routine and the in_check it routine it depends on 
+  def in_checkmate?( side )
+    return false unless in_check?(side)
+    defenders_positions = keys.select{ |key| self[key].side == side }
+    defenders_positions.each do |defender_position|
+      allowed_moves_of_piece_at(defender_position) do |defense_move|
+        consider_move( Move.new(:from_coord => defender_position, :to_coord => defense_move ) ) do
+          return false unless in_check?(side)
+        end
+      end
+    end
+    return true
+  end
+  
+  private
 
   #on this board, interprets the piece's own allowed moves according to the state of the other pieces
   #allowed_moves_of_piece_at is the iterator version called by allowed_moves(position)
