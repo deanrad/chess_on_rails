@@ -15,7 +15,8 @@ class Move < ActiveRecord::Base
   validate  :ensure_coords_present_and_valid,
             :piece_must_be_present_on_from_coord,
             :piece_must_move_to_allowed_square,
-            :piece_must_belong_to_that_player_who_is_next_to_move
+            :piece_must_belong_to_that_player_who_is_next_to_move,
+            :must_not_leave_ones_king_in_check
   
   after_validation :update_capture_coord, :update_castling_field
   
@@ -49,7 +50,17 @@ class Move < ActiveRecord::Base
   
   def piece_must_belong_to_that_player_who_is_next_to_move
     if @piece_moving and @piece_moving.side != match.next_to_move
-      errors.add_to_base "You can not move a #{@piece_moving.side} piece on #{match.next_to_move}'s turn"
+      errors.add_to_base "It is not #{@piece_moving.side}'s turn to move"
+    end
+  end
+  
+  def must_not_leave_ones_king_in_check
+    if @board.in_check?( @piece_moving.side )
+      @board.consider_move( self ) do
+        if @board.in_check?( @piece_moving.side )
+          errors.add_to_base "You are in check and must get out of check. That move does not move you out of check"
+        end
+      end
     end
   end
   

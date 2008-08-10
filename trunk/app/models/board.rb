@@ -40,7 +40,7 @@ class Board < Hash
 
       b.store( :a + back_rank, Rook.new(side, :queens ) )
       b.store( :b + back_rank, Knight.new(side, :queens ) )
-      b.store( :c + back_rank, Bishop.new(side, :queens ) )
+        b.store( :c + back_rank, Bishop.new(side, :queens ) )
 
       b.store( :h + back_rank, Rook.new(side, :kings ) )
       b.store( :g + back_rank, Knight.new(side, :kings ) )

@@ -22,7 +22,7 @@ describe Move, 'A move' do
 
   it 'should be invalid with any invalid coordinates' do 
     move = Move.new(:from_coord => :a2, :to_coord => 'broken')
-    move.valid?.should == false
+    move.should_not be_valid
   end
   
   it 'should know which side is moving (during validation)' do
@@ -62,5 +62,13 @@ describe Move, 'A move' do
     move.castled.should be_true
   end
   
-  #TODO Write a performance spec for making a move - in preparation for in_check?
+  it 'should be invalid if it leaves your own king in check' do
+    match = matches(:scholars_mate)
+    match.moves << Move.new( :from_coord => :h5, :to_coord => :f7 ) #white bishop checks black king
+    lambda{
+      move = match.moves.build( :from_coord => :a7, :to_coord => :a5 ) #black does not move out of check
+      match.moves << move
+    }.should_not change{ match.moves.count }
+
+  end
 end

@@ -62,7 +62,7 @@ describe Board do
   
   it 'should know when a side is in check' do
     match = matches(:scholars_mate)
-    match.moves << Move.new (:from_coord => :c4, :to_coord => :f7) #bishop, not mate
+    match.moves << Move.new(:from_coord => :c4, :to_coord => :f7) #bishop, not mate
     
     board = match.board
     board.in_check?(:black).should be_true
@@ -71,7 +71,7 @@ describe Board do
 
   it 'should know when a side has been checkmated' do
     match = matches(:scholars_mate)
-    match.moves << Move.new (:from_coord => :h5, :to_coord => :f7) #bishop, not mate
+    match.moves << Move.new(:from_coord => :h5, :to_coord => :f7) #bishop, not mate
     
     board = match.board
     board.in_checkmate?(:black).should be_true
