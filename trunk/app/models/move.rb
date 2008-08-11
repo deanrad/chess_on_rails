@@ -55,10 +55,16 @@ class Move < ActiveRecord::Base
   end
   
   def must_not_leave_ones_king_in_check
-    if @board.in_check?( @piece_moving.side )
-      @board.consider_move( self ) do
-        if @board.in_check?( @piece_moving.side )
-          errors.add_to_base "You are in check and must get out of check. That move does not move you out of check"
+    #currently the presence of @piece_moving is used to short-circuit later validations
+    return unless @piece_moving 
+    currently_in_check = @board.in_check?( @piece_moving.side )
+    @board.consider_move( self ) do
+      #if their move will leave them in check at the end of it we need to void the move and tell them why
+      if @board.in_check?( @piece_moving.side )
+        if currently_in_check
+          errors.add_to_base "You are in check and must move out of check"
+        else
+          errors.add_to_base "You can not move your king into check"
         end
       end
     end

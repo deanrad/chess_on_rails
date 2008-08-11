@@ -5,6 +5,26 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec'
 require 'spec/rails'
 
+
+#lets us play a move against an arbitrary board without concern for having to have a set of moves that play
+# up to that board
+def create_move_against_match_with_board( match, board, move_info )
+  #inject the prefab board into the match via its instance variable
+  match.instance_variable_set( :@board, board )
+  
+  #create move for this match 
+  move = match.moves.build( move_info )
+  
+  #and since unlike DataMapper, to keep this move from creating a new match instance (for the same)
+  # database ID, we inject the match instance into the move so its validations will check the board
+  # we set up earlier
+  move.match = match #this is necessary to keep it from looking up and replaying its board
+  
+  #let the caller have the move to append to match.moves when it likes
+  move
+end
+  
+#normal configuration follows
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
   # lines, delete config/database.yml and disable :active_record
@@ -17,41 +37,11 @@ Spec::Runner.configure do |config|
 
   include AuthenticatedTestHelper
 
-
-  # == Fixtures
-  #
-  # You can declare fixtures for each example_group like this:
-  #   describe "...." do
-  #     fixtures :table_a, :table_b
-  #
-  # Alternatively, if you prefer to declare them only once, you can
-  # do so right here. Just uncomment the next line and replace the fixture
-  # names with your fixtures.
-  #
   config.global_fixtures = :matches, :players, :moves
   
-  #
-  # If you declare global fixtures, be aware that they will be declared
-  # for all of your examples, even those that don't use them.
-  #
-  # You can also declare which fixtures to use (for example fixtures for test/fixtures):
-  #
-  # config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
-  #
-  # == Mock Framework
-  #
-  # RSpec uses it's own mocking framework by default. If you prefer to
-  # use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
-  #
-  # == Notes
-  # 
-  # For more information take a look at Spec::Example::Configuration and Spec::Runner
 end
 
+#patch to prevent an RSpec error with certain versions
 class Object
   def metaclass
     (class << self; self; end)

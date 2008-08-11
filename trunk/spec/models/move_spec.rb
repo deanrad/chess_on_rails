@@ -39,14 +39,10 @@ describe Move, 'A move' do
     #note - here we are forcefeeding a board in to the match 
     match = matches(:unstarted_match)
     board = Board[ :d5 => Pawn.new(:white, :d), :c5 => Pawn.new(:black, :c) ] 
-    match.instance_variable_set( :@board, board )
-    
-    move = match.moves.build( :from_coord => :d5, :to_coord => :c6 )
-    move.match = match #this is necessary to keep it from looking up and replaying its board
-    raise ArgumentError, "Different board !" unless move.match.board.size == 2
+
+    move = create_move_against_match_with_board( match, board, :from_coord => :d5, :to_coord => :c6 )
 
     match.moves << move
-    #move.should be_valid
     move.capture_coord.should == :c5
   end
 
@@ -54,10 +50,9 @@ describe Move, 'A move' do
     #note - here we are forcefeeding a board in to the match 
     match = matches(:unstarted_match)
     board = Board[ :e1 => King.new(:white), :h1 => Rook.new(:white, :kings) ] 
-    match.instance_variable_set( :@board, board )
     
-    move = match.moves.build( :from_coord => :e1, :to_coord => :g1 )    
-    move.match = match #this is necessary to keep it from looking up and replaying its board
+    move = create_move_against_match_with_board( match, board, :from_coord => :e1, :to_coord => :g1 )
+
     match.moves << move
     move.castled.should be_true
   end
