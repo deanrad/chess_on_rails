@@ -23,38 +23,22 @@ describe Piece do
     @black_queen.role.should == :queen
   end
   
-  it 'may be a bishop if you specify which one' do
-    @black_queens_bishop.should_not be_nil
+  it 'may be a bishop' do
+    @black_queens_bishop.kind_of?(Piece).should be_true
   end
 
-  it 'may not be a bishop if you do not specify which one' do
-    lambda{ bishop = Bishop.new(:white) }.should raise_error
+  it 'may be a knight' do
+    @white_kings_knight.kind_of?(Piece).should be_true
   end
 
-  it 'may be a knight if you specify which one' do
-    @white_kings_knight.should_not be_nil
+  it 'may be a rook' do
+    @white_kings_rook.kind_of?(Piece).should be_true
   end
 
-  it 'may not be a knight if you do not specify which one' do
-    lambda{ knight = Knight.new(:white) }.should raise_error
+  it 'may be a pawn' do
+    @d_pawn.kind_of?(Piece).should be_true
   end
 
-  it 'may be a rook if you specify which one' do
-    @white_kings_rook.should_not be_nil
-  end
-
-  it 'may not be a knight if you do not specify which one' do
-    lambda{ rook = Rook.new(:white) }.should raise_error
-  end
-
-  it 'may be a pawn if you specify which one' do
-    @d_pawn.should_not be_nil
-  end
-
-  it 'may not be a pawn if you do not specify which one' do
-    lambda{ pawn = Pawn.new(:white) }.should raise_error
-  end
-  
   it 'should tell you its desired moves (what it could do on an empty board) from a given position' do
     #desired_moves_from is a common interface to all pieces
     moves = Pawn.new(:white, :d).desired_moves_from( :d3 )

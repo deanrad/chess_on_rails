@@ -36,10 +36,10 @@ class Piece
   attr_reader :lines_of_attack
   attr_reader :direct_moves
 
-  # A unique one of white's pieces, for instance
+  # A unique one of white's pieces, for instance. To differentiate pawns from each other
+  # The which parameter is appended, but this is not needed for unique pieces on a side like king
   def side_id
-    if ROLES_WITH_MANY.include?(@role) || @which
-      raise AmbiguousPieceError unless @which
+    if @which
       "#{@which}_#{@role}".to_sym 
     else
       "#{@role}".to_sym
@@ -48,7 +48,6 @@ class Piece
   
   # A unique piece across the whole board
   def board_id
-    raise AmbiguousPieceError unless @side
     "#{@side}_#{side_id}".to_sym
   end      
   
@@ -145,5 +144,3 @@ class Piece
 
 end
 
-class AmbiguousPieceError < Exception
-end

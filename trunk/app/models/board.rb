@@ -63,24 +63,20 @@ class Board < Hash
     moves
   end
   
-  #The algorithm for in_check detection is a brute force search through all of your opponents
-  # allowed moves to see whether one of them is the square your king is on. This could perhaps
-  # be optimized to search backward from the king or some other such technique. Nonetheless, this
-  # routine, and even checkmate even more so (since it calls this routine repeatedly) are ripe 
-  # grounds to practice optimization
+  #The algorithm for in_check detection now searches backward from the king for pieces who could 
+  # be attacking it - this makes it unnecessary to search all the opponents possible moves
   def in_check?( side )
-    #for all pieces which are owned by the opponent
-    opponents_positions = keys.select{ |key| self[key] && self[key].side != side }
     king_position = keys.detect{ |key| self[key].side==side and self[key].role==:king }
+
+    return true if pawn_is_attacking_king(side, king_position)
+
+    return true if knight_is_attacking_king(side, king_position)
     
-    #for all their allowed moves, we are in check if even one of them is our kings position
-    opponents_positions.each do |pos|
-      allowed_moves_of_piece_at(pos) do |move|
-        return true if move.to_sym==king_position
-      end
-    end
+    return true if diagonal_piece_is_attacking_king(side, king_position)
     
-    return false
+    return true if straight_piece_is_attacking_king(side, king_position)
+    
+    false
   end
   
   #See the notes for in_check as well. The current algorithm for in_checkmate is: do you have a 
@@ -115,6 +111,82 @@ class Board < Hash
     end
   end
     
+  def pawn_is_attacking_king(side, king_position)
+    upfield = side==:white ? 1 : -1 #the direction an attacking pawn would come from
+    [ [upfield, 1], [upfield, -1] ].each do |possible_pawn_direction|
+        square = Position.new(king_position) + possible_pawn_direction
+        next unless square.valid?
+        return true if self[square] and self[square].side != side and self[square].role==:pawn
+    end
+    false
+  end
+  
+  #TODO created some duplication in order to speed up checkmate 5x - DRY it up
+  def diagonal_piece_is_attacking_king(side, king_position)
+    diagonals = []
+    Piece::DIAGONAL_MOTIONS.each { |motion| diagonals << LineOfAttack.new(motion) }
+    diagonals.each do |diagonal|
+      diagonal.each do |vector|
+        square = Position.new(king_position) + vector
+        break unless square.valid?
+        
+        #move on down the line if no piece found
+        next unless self[square]
+        
+        #otherwise see if validly attacked
+        if self[square].side != side and [:queen, :bishop].include?( self[square].role )
+          #we found an attacker
+          return true
+        else
+          #it was a blocker - ignore the rest of this line
+          break
+        end
+      end
+    end
+    false
+  end
+
+  def straight_piece_is_attacking_king(side, king_position)
+    straights = []
+    Piece::STRAIGHT_MOTIONS.each { |motion| straights << LineOfAttack.new(motion) }
+    straights.each do |straight|
+      straight.each do |vector|
+        square = Position.new(king_position) + vector
+        break unless square.valid?
+        
+        #move on down the line if no piece found
+        next unless self[square]
+        
+        #otherwise see if validly attacked
+        if self[square].side != side and [:queen, :rook].include?( self[square].role )
+          #we found an attacker
+          return true
+        else
+          #it was a blocker - ignore the rest of this line
+          break
+        end
+      end
+    end
+    false
+  end
+  
+  def knight_is_attacking_king(side, king_position)
+    Piece::KNIGHT_MOVES.each do |vector|
+        square = Position.new(king_position) + vector
+        next unless square.valid?
+        
+        #move on down the line if no piece found
+        next unless self[square]
+        
+        #otherwise see if validly attacked
+        if self[square].side != side and self[square].role == :knight
+          #we found an attacker
+          return true
+        end
+      
+    end
+    false
+  end
   
   #These variables help us track what's happened and allow us to undo
   attr_accessor :piece_last_moved, :piece_last_moved_from_coord

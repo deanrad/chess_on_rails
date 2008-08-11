@@ -94,21 +94,20 @@ describe Board do
     
   #TODO: the overall time to detect checkmate (in actual checkmate situation) has gotten much worse (5x) since adding checkmate detection at the end of every move.
   # 2 notes: 1) commenting out the after_save callback in move makes things 400% better
-  # 2) there seems to be a problem checking for in_check? inside consider_move - some pieces
-  # seem not to be found underneath their keys leading to a NoMethodError calling nil.side
-  #it 'should be able to detect check (within a reasonable amount of time)' do
-  #  elapsed = Benchmark.realtime do
-  #    match = matches(:scholars_mate)
-  #    (1..50).each do 
-  #        #match.moves << Move.new( :from_coord => :c4, :to_coord => :f7 )  #bishop, not a mate
-  #        match.moves << Move.new( :from_coord => :h5, :to_coord => :f7 )  #queen , a mate
-  #        #test for checkmate
-  #        board = match.board
-  #        board.in_check?(:black).should be_true
-  #        match.moves.last.destroy
-  #    end
-  #  end
-  #  puts "50 checks tested in #{elapsed} seconds (on the PC each check for check takes .1 sec on average)"
-  #end
-
+=begin  
+  it 'should be able to detect check (within a reasonable amount of time)' do
+    elapsed = Benchmark.realtime do
+      match = matches(:scholars_mate)
+      (1..50).each do 
+          #match.moves << Move.new( :from_coord => :c4, :to_coord => :f7 )  #bishop, not a mate
+          match.moves << Move.new( :from_coord => :h5, :to_coord => :f7 )  #queen , a mate
+          #test for checkmate
+          board = match.board
+          board.in_checkmate?(:black).should be_true
+          match.moves.last.destroy
+      end
+    end
+    puts "50 checks tested in #{elapsed} seconds (on the PC each check for check takes .1 sec on average)"
+  end
+=end
 end
