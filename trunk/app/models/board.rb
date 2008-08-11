@@ -134,13 +134,10 @@ class Board < Hash
         next unless self[square]
         
         #otherwise see if validly attacked
-        if self[square].side != side and [:queen, :bishop].include?( self[square].role )
-          #we found an attacker
-          return true
-        else
-          #it was a blocker - ignore the rest of this line
-          break
-        end
+        return true if self[square].side != side and [:queen, :bishop].include?( self[square].role )
+        #or blocker - ignore the rest of this line
+        break
+        
       end
     end
     false
@@ -158,13 +155,10 @@ class Board < Hash
         next unless self[square]
         
         #otherwise see if validly attacked
-        if self[square].side != side and [:queen, :rook].include?( self[square].role )
-          #we found an attacker
-          return true
-        else
-          #it was a blocker - ignore the rest of this line
-          break
-        end
+        return true if self[square].side != side and [:queen, :rook].include?( self[square].role )
+          
+        #or blocker - ignore the rest of this line
+        break
       end
     end
     false
