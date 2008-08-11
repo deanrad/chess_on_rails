@@ -64,10 +64,7 @@ class Move < ActiveRecord::Base
     @board.consider_move( self ) do
       #if their move will leave them in check at the end of it we need to void the move and tell them why
       if @board.in_check?( @piece_moving.side )
-        if currently_in_check
-          errors.add_to_base "You are in check and must move out of check"
-        else
-          errors.add_to_base "You can not move your king into check"
+          errors.add_to_base currently_in_check ? "You are in check and must move out of check" : "You can not move your king into check"
         end
       end
     end
