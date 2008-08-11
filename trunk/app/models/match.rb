@@ -21,20 +21,30 @@ class Match < ActiveRecord::Base
   def next_to_move
     moves.count % 2 == 0 ? :white : :black
   end
-  
+    
   # A formatted display of the players involved, white listed first
   def lineup
     "#{player1.name} vs. #{player2.name}"
   end
 
-  def board() # as_of_move = nil
+  def board( ) # as_of_move = nil
     #for now just return the initial board, played back to as many moves as we have
-    return @board if @board
+    return @board if @board 
     @board = Board.initial_board
     moves.each do |move|
       @board.move!( move )
     end
     @board
   end
+
+  def play_move(move)
+    #board.move!( move )
+  end
   
+  def check_for_mate(move)
+    #if black just moved - next_to_move is white 
+    #if board(true).in_checkmate?( next_to_move )
+      #update_attributes( :active => false, :winner => (next_to_move==:white ? player1 : player2 )  ) 
+    #end
+  end  
 end

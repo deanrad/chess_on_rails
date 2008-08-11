@@ -59,11 +59,23 @@ describe Move, 'A move' do
   
   it 'should be invalid if it leaves your own king in check' do
     match = matches(:scholars_mate)
-    match.moves << Move.new( :from_coord => :h5, :to_coord => :f7 ) #white bishop checks black king
+    match.moves << Move.new( :from_coord => :c4, :to_coord => :f7 ) #white bishop checks black king
     lambda{
       move = match.moves.build( :from_coord => :a7, :to_coord => :a5 ) #black does not move out of check
       match.moves << move
     }.should_not change{ match.moves.count }
 
   end
+  
+  it 'should mark match as finished when checkmating move completed' do
+    match = matches(:scholars_mate)
+    match.moves << Move.new( :from_coord => :h5, :to_coord => :f7 )
+    
+    # this reload is necessary since the instance that move after_save has access to is not the same 
+    # instance that we have here (a problem which DataMapper in Merb addresses but we must live with in AR)
+    match.reload 
+    match.active.should be_false
+    match.winner.id.should == match.player1.id
+  end
+  
 end

@@ -71,7 +71,7 @@ describe Board do
 
   it 'should know when a side has been checkmated' do
     match = matches(:scholars_mate)
-    match.moves << Move.new(:from_coord => :h5, :to_coord => :f7) #bishop, not mate
+    match.moves << Move.new(:from_coord => :h5, :to_coord => :f7) #queen- checkmate
     
     board = match.board
     board.in_checkmate?(:black).should be_true

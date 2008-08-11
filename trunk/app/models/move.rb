@@ -19,7 +19,9 @@ class Move < ActiveRecord::Base
             :must_not_leave_ones_king_in_check
   
   after_validation :update_capture_coord, :update_castling_field
-  
+
+  after_save :check_for_mate
+    
   def infer_coordinates_from_notation
     @board ||= match.board if match
     #TODO fill out infer_coordinates_from_notation
@@ -81,6 +83,15 @@ class Move < ActiveRecord::Base
     return unless @piece_moving and @piece_moving.kind_of?(King)
     self[:castled] = true if @piece_moving.is_castling_move?( from_coord, to_coord - from_coord, @board )
   end  
+  
+  def check_for_mate
+    #update boards state
+    return unless @board
+    @board.move!(self) 
+    if @board.in_checkmate?( match.next_to_move  )
+      match.update_attributes( :active => false, :winner => (match.next_to_move==:white ? match.player2 : match.player1)  )
+    end
+  end
   
   #during the validation phase it is possible to know which side is moving because we look up the piece moving
   #Side_moving returns the side of that piece
