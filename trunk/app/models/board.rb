@@ -8,7 +8,7 @@ class Board < Hash
 
   FILES = [:a, :b, :c, :d, :e, :f, :g, :h]
   
-  # changes the key (position symbol) under which this piece is stored
+  # plays a move without the intent to undo that move
   def move!( move )
     move_and_record(move)
   end
@@ -21,11 +21,13 @@ class Board < Hash
     undo_move(move)    
   end
 
+  #stores a piece, ensuring it is keyed by the symbol of the position
   def store(key, value)
     super if key.kind_of?(Symbol)
     super( key.to_sym, value )
   end
   
+  #retrieves a piece, ensuring the intended key is checked as a symbol
   def [](key)
     super if key.kind_of?(Symbol)
     super( key.to_sym  )
@@ -57,7 +59,6 @@ class Board < Hash
   #The board looks at all of a pieces unblocked moves, and then may take away certain moves
   # depending on whether they leave you in check, etc..
   def allowed_moves( position )
-    #TODO a hash by position may improve performance- right now dynamic only
     moves = []
     allowed_moves_of_piece_at(position) { |move| moves << move.to_sym }
     moves
@@ -68,21 +69,20 @@ class Board < Hash
   def in_check?( side )
     king_position = keys.detect{ |key| self[key].side==side and self[key].role==:king }
 
-    return true if pawn_is_attacking_king(side, king_position)
+    return true if pawn_is_attacking_king?(side, king_position)
 
-    return true if knight_is_attacking_king(side, king_position)
+    return true if knight_is_attacking_king?(side, king_position)
     
-    return true if diagonal_piece_is_attacking_king(side, king_position)
+    return true if diagonal_piece_is_attacking_king?(side, king_position)
     
-    return true if straight_piece_is_attacking_king(side, king_position)
+    return true if straight_piece_is_attacking_king?(side, king_position)
     
     false
   end
   
   #See the notes for in_check as well. The current algorithm for in_checkmate is: do you have a 
-  # move you can play, at the end of which, you are no longer in check ? While I chose algorithmic
-  # certainty over performance for the time being, I'm sure great gains in optimiztion can be had
-  # by tuning this routine and the in_check it routine it depends on 
+  # move you can play, at the end of which, you are no longer in check ? I'm sure great gains in
+  # optimiztion can be had by tuning this routine and the in_check it routine it depends on 
   def in_checkmate?( side )
     return false unless in_check?(side)
     defenders_positions = keys.select{ |key| self[key] && self[key].side == side }
@@ -111,7 +111,7 @@ class Board < Hash
     end
   end
     
-  def pawn_is_attacking_king(side, king_position)
+  def pawn_is_attacking_king?(side, king_position)
     upfield = side==:white ? 1 : -1 #the direction an attacking pawn would come from
     [ [upfield, 1], [upfield, -1] ].each do |possible_pawn_direction|
         square = Position.new(king_position) + possible_pawn_direction
@@ -121,33 +121,18 @@ class Board < Hash
     false
   end
   
-  #TODO created some duplication in order to speed up checkmate 5x - DRY it up
-  def diagonal_piece_is_attacking_king(side, king_position)
-    diagonals = []
-    Piece::DIAGONAL_MOTIONS.each { |motion| diagonals << LineOfAttack.new(motion) }
-    diagonals.each do |diagonal|
-      diagonal.each do |vector|
-        square = Position.new(king_position) + vector
-        break unless square.valid?
-        
-        #move on down the line if no piece found
-        next unless self[square]
-        
-        #otherwise see if validly attacked
-        return true if self[square].side != side and [:queen, :bishop].include?( self[square].role )
-        #or blocker - ignore the rest of this line
-        break
-        
-      end
-    end
-    false
+  def diagonal_piece_is_attacking_king?(side, king_position)
+    return piece_type_is_attacking_king?(side, king_position, Piece::DIAGONAL_MOTIONS, [:queen, :bishop] )
+  end
+  def straight_piece_is_attacking_king?(side, king_position)
+    return piece_type_is_attacking_king?(side, king_position, Piece::STRAIGHT_MOTIONS, [:queen, :rook] )
   end
 
-  def straight_piece_is_attacking_king(side, king_position)
-    straights = []
-    Piece::STRAIGHT_MOTIONS.each { |motion| straights << LineOfAttack.new(motion) }
-    straights.each do |straight|
-      straight.each do |vector|
+  def piece_type_is_attacking_king?( side, king_position, motion_types, role_types)
+    lines= []
+    motion_types.each { |motion| lines << LineOfAttack.new(motion) }
+    lines.each do |line|
+      line.each do |vector|
         square = Position.new(king_position) + vector
         break unless square.valid?
         
@@ -155,7 +140,7 @@ class Board < Hash
         next unless self[square]
         
         #otherwise see if validly attacked
-        return true if self[square].side != side and [:queen, :rook].include?( self[square].role )
+        return true if self[square].side != side and role_types.include?( self[square].role )
           
         #or blocker - ignore the rest of this line
         break
@@ -163,21 +148,17 @@ class Board < Hash
     end
     false
   end
-  
-  def knight_is_attacking_king(side, king_position)
+    
+  def knight_is_attacking_king?(side, king_position)
     Piece::KNIGHT_MOVES.each do |vector|
-        square = Position.new(king_position) + vector
-        next unless square.valid?
-        
-        #move on down the line if no piece found
-        next unless self[square]
-        
-        #otherwise see if validly attacked
-        if self[square].side != side and self[square].role == :knight
-          #we found an attacker
-          return true
-        end
+      square = Position.new(king_position) + vector
+      next unless square.valid?
       
+      #move on down the line if no piece found
+      next unless self[square]
+      
+      #otherwise see if validly attacked
+      return true if self[square].side != side and self[square].role == :knight
     end
     false
   end
@@ -188,6 +169,8 @@ class Board < Hash
   attr_accessor :rook_castled, :rook_castled_from_coord, :rook_castled_to_coord
   attr_accessor :promoted_pawn
   
+  #plays a move against the board and saves enough information in instance variables 
+  # to allow undoing the move if necessary
   def move_and_record( move )
     #lift your piece off the square
     @piece_last_moved_from_coord = move.from_coord
@@ -225,6 +208,7 @@ class Board < Hash
     
   end
   
+  #uses data cached in the board to undo the most recent move
   def undo_move( move )
     #lift your piece off the destination square
     delete(move.to_coord)

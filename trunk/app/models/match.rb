@@ -26,7 +26,7 @@ class Match < ActiveRecord::Base
   def lineup
     "#{player1.name} vs. #{player2.name}"
   end
-
+  
   def board( ) # as_of_move = nil
     #for now just return the initial board, played back to as many moves as we have
     return @board if @board 
@@ -37,14 +37,7 @@ class Match < ActiveRecord::Base
     @board
   end
 
-  def play_move(move)
-    #board.move!( move )
-  end
-  
-  def check_for_mate(move)
-    #if black just moved - next_to_move is white 
-    #if board(true).in_checkmate?( next_to_move )
-      #update_attributes( :active => false, :winner => (next_to_move==:white ? player1 : player2 )  ) 
-    #end
-  end  
+  #TODO return the notation of the moves for a match in a two-column format
+  #TODO allow names to be given to matches
+
 end

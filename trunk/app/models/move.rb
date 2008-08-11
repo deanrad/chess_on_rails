@@ -10,7 +10,7 @@
 class Move < ActiveRecord::Base
   belongs_to :match, :counter_cache => true
   
-  before_validation :infer_coordinates_from_notation
+  before_validation :calculate_board
   
   validate  :ensure_coords_present_and_valid,
             :piece_must_be_present_on_from_coord,
@@ -19,13 +19,16 @@ class Move < ActiveRecord::Base
             :must_not_leave_ones_king_in_check,
             :must_not_castle_across_check
   
-  after_validation :update_capture_coord, :update_castling_field, :update_promotion_field
+  after_validation :update_capture_coord,
+                   :update_castling_field,
+                   :update_promotion_field,
+                   :update_move_number,
+                   :update_notation
 
   after_save :check_for_mate
     
-  def infer_coordinates_from_notation
+  def calculate_board
     @board ||= match.board if match
-    #TODO fill out infer_coordinates_from_notation
   end
 
   def ensure_coords_present_and_valid
@@ -103,6 +106,14 @@ class Move < ActiveRecord::Base
     if Position.new(to_coord).rank == Sides[other_side].back_rank
       self[:promotion_piece] ||= Piece.role_to_abbrev(:queen)
     end
+  end
+  
+  def update_move_number
+    #TODO update move_number for move
+  end
+  
+  def update_notation
+    #TODO update notation when a move is made
   end
   
   #updates the match if the saving of this move resulted in checkmate

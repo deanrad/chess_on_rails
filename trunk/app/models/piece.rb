@@ -32,7 +32,7 @@ class Piece
   
   attr_reader :role, :side, :which
   
-  #TODO lines_of_attack and such should not be instance data on pieces, it really bloats an instance of a board- better would be a lookup on role, I think
+  #TODO it bugs me that lines_of_attack is instance data on pieces, which instead can be a lookup by role/side
   attr_reader :lines_of_attack
   attr_reader :direct_moves
 

@@ -1,5 +1,6 @@
-# Position represents one of the squares of the board
-# TODO can probably shrink this class in terms of LOC, and since its called into so much, should be perf-tweaked
+# Position represents one of the squares of the board and encapsulates logic for relative positions
+# Through this class you can determine if a square is still on the board, add a vector to a square
+# to get another, test the file and rank, etc...
 class Position
   # The string based array of all allowed positions. These are interned at load time for :a4 style access
   POSITIONS = %w( a8 b8 c8 d8 e8 f8 g8 h8  
@@ -28,7 +29,6 @@ class Position
       @file = args[0].to_s[0] - 96 # ascii a
       @rank = args[0].to_s[1].chr.to_i 
     end
-    #raise InvalidPositionError, "#{args.join(',')} did not specify a valid position" unless valid?
   end
   
   #convenience for creating and calling to_sym on an instance of Position
@@ -37,28 +37,33 @@ class Position
     p.to_sym
   end
   
+  #returns a4, b8, etc..
   def to_s
     "#{(@file + 96).chr}#{rank}"
   end
   
+  #returns a, b etc...
   def file_char
     (@file + 96).chr
   end
   
+  #returns :a4, etc... or raises InvalidPositionError if not a vald position
   def to_sym
     raise InvalidPositionError unless valid?
     self.to_s.to_sym 
   end
   
+  #determines whether this instance points to a valid position on the board
   def valid?
     POSITIONS.include?( self.to_s )
   end
   
-  # Allows adding to rank and file ala  +@a5 += [1,0]+
+  # Allows motion from one position to another, specified by a vector such as [1,0]
+  # Returns a new position instance for the new position which may or may not be valid?
   def +(vector)
     newpos = Position.new( self.to_s )
     if vector.kind_of?(Array) and vector.length == 2 and vector[0].kind_of?(Fixnum) and vector[1].kind_of?(Fixnum)
-      newpos.file += vector[1] #note reversal
+      newpos.file += vector[1] 
       newpos.rank += vector[0]
     else
       newpos.send('invalidate!')
@@ -80,5 +85,8 @@ private
   end
 end
 
+#While you may have an instance of the Position class referencing an invalid position (as a result of an add)
+# for example, you must not try and convert it to a symbol, or look it up on a board, or you will get
+# an InvalidPositionError. Thus the existance of the .valid? method on any position instance.
 class InvalidPositionError < Exception
 end

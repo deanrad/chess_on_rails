@@ -10,5 +10,7 @@ class MatchesController < ApplicationController
   def index
     @matches = current_player.matches if current_player
   end
-      
+
+  #TODO provide a way to create a new match with someone
+  #TODO provide a way (in advance of AJAX) to get a refresh of the state of the game
 end

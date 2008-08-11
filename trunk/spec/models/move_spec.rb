@@ -32,8 +32,6 @@ describe Move, 'A move' do
     move.side_moving.should == :white
   end
   
-  #TODO Each move validation ought to have a spec in here
-  
   it 'should populate the capture coordinate field of a move when capturing enpassant' do
 
     #note - here we are forcefeeding a board in to the match 
@@ -87,4 +85,9 @@ describe Move, 'A move' do
     match.moves << move
     move.promotion_piece.should == 'Q'
   end
+  
+  it 'should populate the move number for a move'
+  
+  it 'should populate the notation for a move'
+  
 end

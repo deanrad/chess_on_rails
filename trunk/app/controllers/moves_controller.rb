@@ -3,6 +3,7 @@ class MovesController < ApplicationController
 
   before_filter :get_match
   
+  #TODO ensure that a player can only move a side if they are playing that side
   def create
     
     @move = @match.moves.build( params[:move] )
@@ -19,6 +20,7 @@ class MovesController < ApplicationController
     #end
   end
   
+  #TODO ensure that a player can only get a match if its theirs, and that players must be authorized
   def get_match
     @match = Match.find( params[:match_id] )
     raise ActiveRecord::RecordNotFound unless @match
