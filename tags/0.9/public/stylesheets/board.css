@@ -1,0 +1,17 @@
+.label {background-color:gray; color:white; font-family:Arial; font-size:smaller}
+body {font-family: Arial; font-size: 10pt;}
+.instructions { font-size: 10pt; width:800px;}
+
+.board { border-width: 1px; border-style:solid; border-color:black; margin-top: 20px; margin-left: 20px; }
+
+.board .square{
+  width:45px; height:45px;
+  border-width: 1px; border-style:solid; border-color:black;
+  margin:0px; padding: 0px;
+ }
+
+.board .rank {width: 20px; text-align:center; background-color:#999; color:white; font-weight:bold; font-size: 9pt;}
+.board .file {height:20px; text-align:center; background-color:#999; color:white; font-weight:bold; font-size: 9pt;}
+
+.board .white{background-color:#fff}
+.board .black{background-color:#dfdfdf}

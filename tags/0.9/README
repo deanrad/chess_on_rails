@@ -1,0 +1,6 @@
+Chess On Rails is a player-to-player chess game in Rails MVC style, intended for public consumption and open to all.
+
+Dean Radcliffe developed it out of his love of Chess, and growing appreciation of Ruby, Rails and BDD.
+
+Priorities are on 100% Agile best practice compliance, natural mappings of code to world, brevity when possible, and finally most idiomatic and Restful. Of course, that it is fun and educational to play and read the source code of is important to me as well, but for that I require the involvement of individuals like yourselves to get involved and provide feedback. 
+

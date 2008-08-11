@@ -1,0 +1,47 @@
+<!-- include supporting elements here in case not available in layout as in case of facebook -->
+<%= stylesheet_link_tag "board" %>
+<%= javascript_include_tag :defaults %>
+<%= javascript_include_tag 'jquery-ui' %>
+
+<h1>Match</h1>
+<h3>Status: <%= @match.active ? "Active, #{@match.next_to_move}'s move" : "Winner:#{@match.winner.name}"%> </h3>
+
+<div class="instructions">
+Instructions: Ideally you move by drag and drop. If that appears not to work, reload the page and try again.
+If that still does not enable you to drag and drop your browser may not be compatible (sorry!). You can however
+enter the from and to coordinates (d2 d4) in the boxes and then Submit Move. Or if you're a smartie pants
+you can enter the Algebraic Notation ( Nbxc4 ). To castle drag king to its castling square. The move is submitted
+when you drop the piece or hit enter.
+</div>
+
+<script>
+  //scriptaculous version - has a jitter when you drop the piece and doesn't work in opera
+  function handle_release_of_piece(draggable, droparea){
+  
+     var origSquare = draggable.parentNode;
+     
+     $('move_from_coord').value = draggable.parentNode.id;
+     $('move_to_coord').value = droparea.id;
+  
+     //for now release it in the DOM, moving it
+     origSquare.removeChild(draggable);
+     origSquare.innerHTML = '&nbsp;';
+     
+     droparea.innerHTML = '';
+     droparea.appendChild(draggable);
+  
+     //this should perhaps be an option but for ease of playability...
+     $('new_move_form').submit();
+     
+  }
+
+</script>
+<div id="board_div" style="float:left">
+<%= render :partial => 'board', :locals => { :board => @match.board } %>
+</div>
+
+<div id="new_move_div" style="margin-left: 25px;">
+<%= render :partial => 'moves/create', :locals => {:match => @match, :move_in_error => flash[:move_in_error] } %>
+</div>
+
+

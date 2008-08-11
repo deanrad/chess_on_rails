@@ -1,0 +1,11 @@
+<h1>Your current duels</h1>
+
+<h3>Active Matches</h3>
+<ul>
+<% @matches.each do |match| %>
+	<li>
+		<%= link_to match.lineup, match_path(match)  %> 
+	</li>
+<% end%>
+</ul>	
+
