@@ -76,7 +76,13 @@ describe Match do
       }.should_not change{ match.moves.count}
     end
     
-    it 'should capture the opponents piece when landing on their square'
+    it 'should capture the opponents piece when landing on their square' do
+      match = Match.new
+      match.moves << Move.new( :from_coord => :d2, :to_coord => :d4 )
+      match.moves << Move.new( :from_coord => :e7, :to_coord => :e5 )
+      match.moves << Move.new( :from_coord => :d4, :to_coord => :e5 )
+      match.board.size.should == 31
+    end
     
     it 'should capture the opponents piece if a capture_coord has been specified (en_passant)' do
       #the user cannot enter these capture coordinates, they are auto-generated

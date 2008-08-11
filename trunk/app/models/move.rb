@@ -16,7 +16,8 @@ class Move < ActiveRecord::Base
             :piece_must_be_present_on_from_coord,
             :piece_must_move_to_allowed_square,
             :piece_must_belong_to_that_player_who_is_next_to_move,
-            :must_not_leave_ones_king_in_check
+            :must_not_leave_ones_king_in_check,
+            :must_not_castle_across_check
   
   after_validation :update_capture_coord, :update_castling_field
 
@@ -72,6 +73,20 @@ class Move < ActiveRecord::Base
     end
   end
   
+  #the square between a king and his destination castling square must not be under attack
+  def must_not_castle_across_check
+    return unless @piece_moving and @piece_moving.kind_of?(King)
+    return unless @piece_moving.is_castling_move?( from_coord, to_coord - from_coord, @board )    
+    
+    interim_square = Position.new(from_coord) + (to_coord - from_coord == [0,2] ? [0,1] : [0,-1] )
+    @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => interim_square ) ) do
+      if @board.in_check?(@piece_moving.side)
+        errors.add_to_base "You can not castle across a square which is under attack"
+      end
+    end
+  end
+
+  #updates the field that helps us to replay enpassant
   def update_capture_coord
     return unless @piece_moving and @piece_moving.kind_of?(Pawn)
     if @piece_moving.is_en_passant_capture( from_coord, to_coord - from_coord , @board)
@@ -79,11 +94,13 @@ class Move < ActiveRecord::Base
     end
   end
   
+  #updates the field that helps us to replay castling 
   def update_castling_field
     return unless @piece_moving and @piece_moving.kind_of?(King)
     self[:castled] = true if @piece_moving.is_castling_move?( from_coord, to_coord - from_coord, @board )
   end  
   
+  #updates the match if the saving of this move resulted in checkmate
   def check_for_mate
     #update boards state
     return unless @board
@@ -99,6 +116,8 @@ class Move < ActiveRecord::Base
     return @piece_moving.side if @piece_moving
   end
   
+  #The from_coord indicates the beginning of a pieces' motion.
+  #The fields *_coord are stored as strings, compared and manipulated as symbols
   def from_coord
     self[:from_coord].to_sym
   end
@@ -106,6 +125,8 @@ class Move < ActiveRecord::Base
     self[:from_coord] = val.to_s
   end
   
+  #The to_coord indicates the endpoint of a pieces' motion.
+  #The fields *_coord are stored as strings, compared and manipulated as symbols
   def to_coord
     self[:to_coord].to_sym
   end
@@ -113,6 +134,9 @@ class Move < ActiveRecord::Base
     self[:to_coord] = val.to_s
   end
   
+  #The field capture_coord exists solely to help replay enpassant- the only move in Chess where a capture
+  # occurs other than on the to_coord square
+  #The fields *_coord are stored as strings, compared and manipulated as symbols
   def capture_coord
     self[:capture_coord].to_sym if self[:capture_coord]
   end
