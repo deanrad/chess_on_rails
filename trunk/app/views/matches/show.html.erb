@@ -4,7 +4,7 @@
 <%= javascript_include_tag 'jquery-ui' %>
 
 <h1>Match</h1>
-
+<h3>Status: <%= @match.active ? "Active, #{@match.next_to_move}'s move" : "Winner:#{@match.winner.name}"%> </h3>
 
 <div class="instructions">
 Instructions: Ideally you move by drag and drop. If that appears not to work, reload the page and try again.

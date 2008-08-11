@@ -60,6 +60,7 @@ describe 'Pawn' do
       move.should be_valid
       match.moves << move
       match.board[:d8].role.should == :queen
+      match.board[:d8].kind_of?(Queen).should be_true
     end
   end  
   

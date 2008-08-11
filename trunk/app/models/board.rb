@@ -70,7 +70,7 @@ class Board < Hash
   # grounds to practice optimization
   def in_check?( side )
     #for all pieces which are owned by the opponent
-    opponents_positions = keys.select{ |key| raise ArgumentError, "Piece not found at #{key}" unless self[key]; self[key].side != side }
+    opponents_positions = keys.select{ |key| self[key] && self[key].side != side }
     king_position = keys.detect{ |key| self[key].side==side and self[key].role==:king }
     
     #for all their allowed moves, we are in check if even one of them is our kings position
@@ -89,7 +89,7 @@ class Board < Hash
   # by tuning this routine and the in_check it routine it depends on 
   def in_checkmate?( side )
     return false unless in_check?(side)
-    defenders_positions = keys.select{ |key| self[key].side == side }
+    defenders_positions = keys.select{ |key| self[key] && self[key].side == side }
     defenders_positions.each do |defender_position|
       allowed_moves_of_piece_at(defender_position) do |defense_move|
         consider_move( Move.new(:from_coord => defender_position, :to_coord => defense_move ) ) do
@@ -120,19 +120,21 @@ class Board < Hash
   attr_accessor :piece_last_moved, :piece_last_moved_from_coord
   attr_accessor :piece_captured, :piece_captured_from_coord
   attr_accessor :rook_castled, :rook_castled_from_coord, :rook_castled_to_coord
-  attr_accessor :promoted_piece_last_role, :promoted_piece_last_which
+  attr_accessor :promoted_pawn
   
   def move_and_record( move )
     #lift your piece off the square
     @piece_last_moved_from_coord = move.from_coord
-    
-    #if a capture is notated such as for enpassant, delete at that coordinate
-    # otherwise delete whats moved upon. If nothing deleted, no worries
     @piece_last_moved = delete(move.from_coord) 
     
-    #place any captured piece aside
-    @piece_captured = move.capture_coord ? delete(move.capture_coord) : delete(move.to_coord)
-    @piece_captured_from_coord = move.to_coord if @piece_captured
+    #store any captured piece and the coordinates we got them from
+    if move.capture_coord
+      @piece_captured = delete(move.capture_coord)
+      @piece_captured_from_coord = move.capture_coord
+    else
+      @piece_captured = delete(move.to_coord)
+      @piece_captured_from_coord = move.to_coord if @piece_captured
+    end
     
     #play castling
     if(move.castled)
@@ -144,15 +146,17 @@ class Board < Hash
       store( @rook_castled_to_coord, @rook_castled )
     end
     
-    #handle promotion
+    #if promotion we remove the pawn and place a new one 
     if( move.promotion_piece ) 
-       @promoted_piece_last_role, @promoted_piece_last_which = [@piece_last_moved.role, @piece_last_moved.which] 
-       @piece_last_moved.instance_variable_set(:@role, Piece.abbrev_to_role(move.promotion_piece) )
-       @piece_last_moved.instance_variable_set(:@which, :promoted )
+      @promoted_pawn = @piece_last_moved
+      promoted_piece = Queen.new(@promoted_pawn.side)
+      promoted_piece.instance_variable_set(:@which, :promoted)
+      store( move.to_coord, promoted_piece )
+    else
+      #otherwise we just move your guy there
+      store( move.to_coord, @piece_last_moved )
     end
     
-    #and move your guy there
-    store( move.to_coord, @piece_last_moved )
   end
   
   def undo_move( move )
@@ -168,11 +172,11 @@ class Board < Hash
       store( @rook_castled_from_coord, rook )
     end
     
-    #revert promotion
-    if @promoted_piece_last_role
-      @piece_last_moved.instance_variable_set(:@role,   @promoted_piece_last_role  )
-      @piece_last_moved.instance_variable_set(:@which,  @promoted_piece_last_which )
-    end
+    #revert promotion happens auto..
+    #if @promoted_pawn
+    #  @piece_last_moved.instance_variable_set(:@role,   @promoted_piece_last_role  )
+    #  @piece_last_moved.instance_variable_set(:@which,  @promoted_piece_last_which )
+    #end
     
     #replace your piece back on the original square
     store( @piece_last_moved_from_coord, @piece_last_moved )

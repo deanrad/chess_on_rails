@@ -112,8 +112,10 @@ class Move < ActiveRecord::Base
   #updates the match if the saving of this move resulted in checkmate
   def check_for_mate
     #update boards state
-    return unless @board
+    return unless @board = match.board
     @board.move!(self) 
+    #raise ArgumentError, "#{@board}"
+    
     if @board.in_checkmate?( match.next_to_move  )
       match.update_attributes( :active => false, :winner => (match.next_to_move==:white ? match.player2 : match.player1)  )
     end

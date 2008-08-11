@@ -38,7 +38,7 @@ class Piece
 
   # A unique one of white's pieces, for instance
   def side_id
-    if ROLES_WITH_MANY.include?(@role)
+    if ROLES_WITH_MANY.include?(@role) || @which
       raise AmbiguousPieceError unless @which
       "#{@which}_#{@role}".to_sym 
     else

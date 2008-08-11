@@ -84,15 +84,14 @@ describe Board do
     board[:d8].role.should == :queen
   end
   
-  it 'should be able to undo a considered move if promoting' do
-    board = Board[:d7 => Pawn.new(:white, :d)]
-    board.consider_move( Move.new( :from_coord => :d7, :to_coord => :d8, :promotion_piece => 'Q' ) ) do
-      board[:d8].role.should == :queen
-    end
-    board[:d8].should be_nil
-    board[:d7].role.should == :pawn
+  it 'should be able to find the bug' do
+    match = matches(:scholars_mate)
+    board = match.board
+    board.move!( Move.new(:from_coord => :h5, :to_coord => :f7) )
+    board.in_checkmate?(:black).should be_true
+    
   end
-  
+    
   #TODO: the overall time to detect checkmate (in actual checkmate situation) has gotten much worse (5x) since adding checkmate detection at the end of every move.
   # 2 notes: 1) commenting out the after_save callback in move makes things 400% better
   # 2) there seems to be a problem checking for in_check? inside consider_move - some pieces
