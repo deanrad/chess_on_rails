@@ -7,6 +7,7 @@ describe 'Pawn' do
     @en_passant = Board[ :d5 => Pawn.new(:white, :d), :c5 => Pawn.new(:black, :c) ]
     @pawn_center = Board[ :d5 => Pawn.new(:black, :d), :e5 => Pawn.new(:black, :e), 
                           :d4 => Pawn.new(:white, :d), :e4 => Pawn.new(:white, :e) ]
+    @promotable = Board[:d7 => Pawn.new(:white, :d)]
   end
   
   describe 'White' do
@@ -52,6 +53,14 @@ describe 'Pawn' do
       white_pawn.unblocked_moves(:d5, @en_passant).should include( [1,-1] ) #no piece there
     end
 
+    it 'should promote to queen by default upon reaching back rank' do
+      match = matches(:unstarted_match)
+      board = @promotable
+      move = create_move_against_match_with_board(match, board, :from_coord => :d7, :to_coord => :d8)
+      move.should be_valid
+      match.moves << move
+      match.board[:d8].role.should == :queen
+    end
   end  
   
   describe 'Black' do

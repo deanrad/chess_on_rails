@@ -13,6 +13,7 @@ describe Board do
     @castling_board_queen = Board[ :d8 => King.new(:black), :a8 => Rook.new(:black, :queens) ]
     
     @kings_and_queens= Board[ :d1 => @white_queen, :e1 => @white_king, :d8 => @black_queen, :e8 => @black_king ]
+    @promotable = Board[:d7 => Pawn.new(:white, :d)]
   end
   
   it 'should be able to store a piece on a specified square' do
@@ -77,6 +78,25 @@ describe Board do
     board.in_checkmate?(:black).should be_true
   end
   
+  it 'should change the role of a piece when a promotion_piece is specified' do
+    board = Board[:d7 => Pawn.new(:white, :d)]
+    board.move! Move.new( :from_coord => :d7, :to_coord => :d8, :promotion_piece => 'Q' )
+    board[:d8].role.should == :queen
+  end
+  
+  it 'should be able to undo a considered move if promoting' do
+    board = Board[:d7 => Pawn.new(:white, :d)]
+    board.consider_move( Move.new( :from_coord => :d7, :to_coord => :d8, :promotion_piece => 'Q' ) ) do
+      board[:d8].role.should == :queen
+    end
+    board[:d8].should be_nil
+    board[:d7].role.should == :pawn
+  end
+  
+  #TODO: the overall time to detect checkmate (in actual checkmate situation) has gotten much worse (5x) since adding checkmate detection at the end of every move.
+  # 2 notes: 1) commenting out the after_save callback in move makes things 400% better
+  # 2) there seems to be a problem checking for in_check? inside consider_move - some pieces
+  # seem not to be found underneath their keys leading to a NoMethodError calling nil.side
   #it 'should be able to detect check (within a reasonable amount of time)' do
   #  elapsed = Benchmark.realtime do
   #    match = matches(:scholars_mate)

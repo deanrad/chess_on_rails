@@ -19,7 +19,7 @@ class Move < ActiveRecord::Base
             :must_not_leave_ones_king_in_check,
             :must_not_castle_across_check
   
-  after_validation :update_capture_coord, :update_castling_field
+  after_validation :update_capture_coord, :update_castling_field, :update_promotion_field
 
   after_save :check_for_mate
     
@@ -99,6 +99,15 @@ class Move < ActiveRecord::Base
     return unless @piece_moving and @piece_moving.kind_of?(King)
     self[:castled] = true if @piece_moving.is_castling_move?( from_coord, to_coord - from_coord, @board )
   end  
+  
+  #updates the field that helps us to replay promotion
+  def update_promotion_field
+    return unless @piece_moving and @piece_moving.kind_of?(Pawn)
+    other_side = Sides.opposite_of(@piece_moving.side)
+    if Position.new(to_coord).rank == Sides[other_side].back_rank
+      self[:promotion_piece] ||= Piece.role_to_abbrev(:queen)
+    end
+  end
   
   #updates the match if the saving of this move resulted in checkmate
   def check_for_mate

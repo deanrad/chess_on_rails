@@ -126,6 +126,23 @@ class Piece
   end
 
   
+  #define static methods of piece class here
+  class << self
+    def role_to_abbrev(role)
+      return 'N' if role == :knight 
+      return role.to_s[0,1].upcase unless role == :pawn
+    end
+    
+    def abbrev_to_role(char)
+      return :knight  if char=='N'
+      return :king    if char=='K'
+      return :queen   if char=='Q'
+      return :bishop  if char=='B'
+      return :rook    if char=='R'
+      return :pawn    if ('a'..'h').to_a.include?(char)
+    end
+  end
+
 end
 
 class AmbiguousPieceError < Exception

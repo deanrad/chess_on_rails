@@ -70,7 +70,7 @@ class Board < Hash
   # grounds to practice optimization
   def in_check?( side )
     #for all pieces which are owned by the opponent
-    opponents_positions = keys.select{ |key| self[key].side != side }
+    opponents_positions = keys.select{ |key| raise ArgumentError, "Piece not found at #{key}" unless self[key]; self[key].side != side }
     king_position = keys.detect{ |key| self[key].side==side and self[key].role==:king }
     
     #for all their allowed moves, we are in check if even one of them is our kings position
@@ -120,7 +120,7 @@ class Board < Hash
   attr_accessor :piece_last_moved, :piece_last_moved_from_coord
   attr_accessor :piece_captured, :piece_captured_from_coord
   attr_accessor :rook_castled, :rook_castled_from_coord, :rook_castled_to_coord
-  attr_accessor :promoted_piece_last_side_id
+  attr_accessor :promoted_piece_last_role, :promoted_piece_last_which
   
   def move_and_record( move )
     #lift your piece off the square
@@ -143,7 +143,14 @@ class Board < Hash
       @rook_castled = delete( rook_castled_from_coord )
       store( @rook_castled_to_coord, @rook_castled )
     end
-        
+    
+    #handle promotion
+    if( move.promotion_piece ) 
+       @promoted_piece_last_role, @promoted_piece_last_which = [@piece_last_moved.role, @piece_last_moved.which] 
+       @piece_last_moved.instance_variable_set(:@role, Piece.abbrev_to_role(move.promotion_piece) )
+       @piece_last_moved.instance_variable_set(:@which, :promoted )
+    end
+    
     #and move your guy there
     store( move.to_coord, @piece_last_moved )
   end
@@ -159,6 +166,12 @@ class Board < Hash
     if @rook_castled_to_coord 
       rook = delete(@rook_castled_to_coord)
       store( @rook_castled_from_coord, rook )
+    end
+    
+    #revert promotion
+    if @promoted_piece_last_role
+      @piece_last_moved.instance_variable_set(:@role,   @promoted_piece_last_role  )
+      @piece_last_moved.instance_variable_set(:@which,  @promoted_piece_last_which )
     end
     
     #replace your piece back on the original square

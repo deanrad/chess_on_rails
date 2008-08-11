@@ -77,5 +77,14 @@ describe Move, 'A move' do
     match.active.should be_false
     match.winner.id.should == match.player1.id
   end
-  
+
+  it 'should populate the promtion field of a move when a default queen promotion' do
+    match = matches(:unstarted_match)
+    board = Board[ :d7 => Pawn.new(:white, :d) ] 
+    
+    move = create_move_against_match_with_board( match, board, :from_coord => :d7, :to_coord => :d8 )
+
+    match.moves << move
+    move.promotion_piece.should == 'Q'
+  end
 end

@@ -1,4 +1,7 @@
 class Pawn < Piece
+
+  ALLOWED_PROMOTIONS = [:queen, :rook, :bishop, :knight]  
+
   def initialize(side, which)
     super(:pawn, side, which)
 
@@ -12,6 +15,7 @@ class Pawn < Piece
     [1,-1].each{ |diag| @lines_of_attack << LineOfAttack.new( [forward, diag], 1 ) }
     
   end
+
   
   def vector_allowed_from(here, vector, board=nil)
     return can_move_on_board(here, vector, board) if(board) 

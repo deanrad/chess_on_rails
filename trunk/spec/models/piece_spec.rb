@@ -67,4 +67,41 @@ describe Piece do
     Knight.new(:black, :d).desired_moves_from( :g8 ).should have(3).items
   end
   
+  describe 'Abbreviations' do
+    it 'should recognize Q as queen' do
+      Piece.abbrev_to_role('Q').should == :queen
+    end
+  
+    it 'should recognize K as king' do
+      Piece.abbrev_to_role('K').should == :king
+    end
+  
+    it 'should recognize B as bishop' do
+      Piece.abbrev_to_role('B').should == :bishop
+    end
+  
+    it 'should recognize N as knight' do
+      Piece.abbrev_to_role('N').should == :knight
+    end
+  
+    it 'should recognize R as rook' do
+      Piece.abbrev_to_role('R').should == :rook
+    end
+  
+    it 'should recognize a lower case letter as a pawn' do
+      ('a'..'h').each do |letter|
+        Piece.abbrev_to_role( letter ).should == :pawn
+      end
+    end
+    
+    it 'should abbreviate knight as N' do
+      Piece.role_to_abbrev(:knight).should == 'N'
+    end
+
+    it 'should abbreviate all other non-pawn roles as their first letter' do
+      [:king, :queen, :bishop, :rook].each do |role| 
+        Piece.role_to_abbrev(role).should == role.to_s[0,1].upcase
+      end
+    end
+  end
 end

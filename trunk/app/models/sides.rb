@@ -16,4 +16,8 @@ class Sides
     yield Black.values
   end
   
+  def self.opposite_of(side)
+    return :black if side==:white
+    return :white if side==:black
+  end
 end
