@@ -1,7 +1,3 @@
-<!-- include supporting elements here in case not available in layout as in case of facebook -->
-<%= stylesheet_link_tag "board" %>
-<%= javascript_include_tag :defaults %>
-<%= javascript_include_tag 'jquery-ui' %>
 
 <h1>Match</h1>
 <h3>Status: <%= @match.active ? "Active, #{@match.next_to_move}'s move" : "Winner:#{@match.winner.name}"%> </h3>
@@ -14,7 +10,7 @@ you can enter the Algebraic Notation ( Nbxc4 ). To castle drag king to its castl
 when you drop the piece or hit enter.
 </div>
 
-<script>
+<script type="text/javascript">
   //scriptaculous version - has a jitter when you drop the piece and doesn't work in opera
   function handle_release_of_piece(draggable, droparea){
   
@@ -36,9 +32,12 @@ when you drop the piece or hit enter.
   }
 
 </script>
+
 <div id="board_div" style="float:left">
 <%= render :partial => 'board', :locals => { :board => @match.board } %>
 </div>
+
+<%= render :partial => 'board_js', :locals => { :board => @match.board } %>
 
 <div id="new_move_div" style="margin-left: 25px;">
 <%= render :partial => 'moves/create', :locals => {:match => @match, :move_in_error => flash[:move_in_error] } %>

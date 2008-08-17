@@ -1,0 +1,30 @@
+<%
+  #local variables accepted
+  viewed_by ||= side_of(@match, current_player)
+  board     ||= {}
+%>
+
+<script type="text/javascript">
+<% positions_by_row_as( viewed_by ) do | row | -%>
+    <% row.each do |position| -%>
+        //scriptaculous
+        Droppables.add('<%= position %>', {onDrop:handle_release_of_piece, accept: '<%= position %>' } );
+        
+        //jquery
+        /*
+        $('<%= position %>').droppable({ 
+            accept: '<%= "#{position}" %>' 
+            drop: function(ev, ui){
+              $(this).append('x')
+             }
+          } )
+        */
+        
+        <% if piece=board[position] -%>
+          new Draggable('<%= piece.board_id %>', {revert:true, snap:[49,47]})
+          //$('<%= piece.board_id %>').draggable();
+        <% end-%>
+
+    <% end -%>
+  <% end -%>
+</script>

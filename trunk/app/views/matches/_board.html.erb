@@ -11,30 +11,15 @@
       <%= row[0][1,1]  %>
     </td>
     <% row.each do |position| -%>
-      <% content_tag( 'td', :id => position, :class => ['square', position, square_color(position)].join(' ') ) do %>
+      <% content_tag( 'td', :id => position, :class => ['square', position, square_color(position)].join(' ') ) do -%>
       
-         <% if piece=board[position.to_sym] -%>
-           <%= render :partial =>'piece', :locals=>{ :position => position, :board => board, :piece => piece } %>
-         <% else %>
+         <% if piece=board[position] -%>
+           <%= render :partial =>'piece', :locals=>{ :position => position, :board => board, :piece => piece } -%>
+         <% else -%>
            &nbsp;
-         <% end %>
+         <% end -%>
                   
       <% end %>
-
-      <script>
-        //scriptaculous
-        Droppables.add('<%= position %>', {onDrop:handle_release_of_piece, accept: '<%= position %>' } );
-        
-        //jquery
-        /*
-        $('<%= position %>').droppable({ 
-            accept: '<%= ".#{position}" %>' 
-            drop: function(ev, ui){
-              $(this).append('x')
-             }
-          } )
-        */
-      </script>
 
     <% end -%>
   </tr>

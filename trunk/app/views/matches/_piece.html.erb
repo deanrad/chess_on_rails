@@ -13,12 +13,3 @@
     alt="<%= piece.board_id %>"
   class="<%= 'piece ' + moves.join(' ') %>"
 />
-
-<!-- scriptaculous draggable has a jitter when you drop it - doesnt look great -->
-<%= draggable_element( piece.board_id, :revert => 'true', :snap => '[49,47]' ) %> 
-<script>
-  //scriptaculous
-  new Draggable( <%= piece.board_id %>, {revert:true, snap:[49,47]});
-  //jquery 
-  //$('<%= piece.board_id %>').draggable();
-</script>
