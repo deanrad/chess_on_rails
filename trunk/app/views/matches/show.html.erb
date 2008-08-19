@@ -10,29 +10,6 @@ you can enter the Algebraic Notation ( Nbxc4 ). To castle drag king to its castl
 when you drop the piece or hit enter.
 </div>
 
-<script type="text/javascript">
-  //scriptaculous version - has a jitter when you drop the piece and doesn't work in opera
-  function handle_release_of_piece(draggable, droparea){
-  
-     var origSquare = draggable.parentNode;
-     
-     $('move_from_coord').value = draggable.parentNode.id;
-     $('move_to_coord').value = droparea.id;
-  
-     //for now release it in the DOM, moving it
-     origSquare.removeChild(draggable);
-     origSquare.innerHTML = '&nbsp;';
-     
-     droparea.innerHTML = '';
-     droparea.appendChild(draggable);
-  
-     //this should perhaps be an option but for ease of playability...
-     $('new_move_form').submit();
-     
-  }
-
-</script>
-
 <div id="board_div" style="float:left">
 <%= render :partial => 'board', :locals => { :board => @match.board } %>
 </div>
