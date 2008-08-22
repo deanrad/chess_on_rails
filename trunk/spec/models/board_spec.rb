@@ -6,7 +6,7 @@ describe Board do
     @rook = Piece.new(:rook, :white )
     @white_king, @white_queen = [ Piece.new(:king, :white), Piece.new(:queen, :white) ]
     @black_king, @black_queen = [ Piece.new(:king, :black), Piece.new(:queen, :black) ]
-
+    
     @lone_rook_board = Board[ :a1 => @rook ]
     @initial_board = Board.initial_board    
     @castling_board_king  = Board[ :e1 => King.new(:white), :h1 => Rook.new(:white, :kings) ]
