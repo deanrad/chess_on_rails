@@ -14,6 +14,10 @@ describe 'Notation - ' do
     @initial_knight_move  = Notation.new( 'Nc3', @initial_board )
     @initial_knight_move_by_coords  = Notation.new( :b1, :c3, @initial_board )
     @promotable = Board[:d7 => Pawn.new(:white, :d)]
+    @capturable = Board[:b2 => Bishop.new(:white, :queens), :h8 => Rook.new(:black, :kings) ]
+    
+    @two_knights_may_move_to_d5_diff_files = Board[ :c3 => Knight.new(:white, :kings), :f4 => Knight.new(:white, :queens) ]
+    @two_knights_may_move_to_d5_same_files = Board[ :c3 => Knight.new(:white, :kings), :c7 => Knight.new(:white, :queens) ]
   end
 
   describe 'Constructors' do
@@ -117,13 +121,32 @@ describe 'Notation - ' do
   end
 
   describe 'Piece disambiguation' do
-    it 'should be necessary if more than one of a piece type could have moved to the to coordinate'
-    it 'should preferentially be the file that differentiates between the pieces if it does so'
-    it 'should secondarily be the rank that differentiates between the pieces'
+    it 'should be necessary if more than one of a piece type could have moved to the to coordinate' do
+      board = @two_knights_may_move_to_d5_diff_files
+      n = Notation.new( :c3, :d5, board )
+      n.to_s.should == 'Ncd5'
+    end
+    
+    it 'should preferentially be the file that differentiates between the pieces if it does so' do
+      board = @two_knights_may_move_to_d5_diff_files
+      n = Notation.new( :f4, :d5, board )
+      #these are also on different ranks, but f is the disambiguator
+      #n.disambiguator.should == 'f'
+      n.to_s.should == 'Nfd5'
+    end
+
+    it 'should secondarily be the rank that differentiates between the pieces' do
+      board = @two_knights_may_move_to_d5_same_files
+      n = Notation.new( :c7, :d5, board )
+      n.to_s.should == 'N7d5'
+    end
   end
   
   describe 'Coordinates to Notation' do
-    it 'should have an X in the 2nd character position if capturing'
+    it 'should have an X in the 2nd character position if capturing' do
+      n = Notation.new(:b2, :h8, @capturable)
+      n.to_s[1,1].should == 'x'
+    end
   end
 
   describe 'Notation to Coordinates' do

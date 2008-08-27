@@ -51,9 +51,11 @@ class Pawn < Piece
     this_position = Position.new(here)
     new_position = Position.new(here) + vector
     pawn_attempting_capture = board[this_position]
-    
+
     #we expect to find an opponents' pawn 'behind' (whatever that means to the capturing pawn) the 
     # intended destination square
+    return false unless pawn_attempting_capture
+    
     expected_pawn_position = new_position + [ - Sides[pawn_attempting_capture.side].advance_direction, 0]
     
     return false unless board[expected_pawn_position] && 

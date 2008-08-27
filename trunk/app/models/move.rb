@@ -35,9 +35,10 @@ class Move < ActiveRecord::Base
     [:from_coord, :to_coord].each do |coord|
       if self[coord].blank? 
         errors.add coord, "#{(coord == :from_coord ? 'From' : 'To') + ' coordinate' } must not be blank"
+        return false
       else
         unless Position.new( self[coord] ).valid?
-          errors.add coord, "#{self[coord]} did not specify a valid position"  
+          errors.add coord, "#{self[coord]} did not specify a valid position" and return false
         end
       end
     end
@@ -45,49 +46,57 @@ class Move < ActiveRecord::Base
   
   def piece_must_be_present_on_from_coord
     @piece_moving ||= @board[ from_coord.to_sym ] if @board
-    errors.add :from_coord, "No piece present at #{self[:from_coord]}" unless @piece_moving
+    unless @piece_moving
+      errors.add :from_coord, "No piece present at #{self[:from_coord]}" and return false 
+    end
   end
       
   def piece_must_move_to_allowed_square
     unless @piece_moving and @board.allowed_moves(from_coord).include?(to_coord)
       errors.add :to_coord, "#{self[:to_coord]} is not an allowed move for the piece at #{self[:from_coord]}" 
+      return false
     end
   end
   
   def piece_must_belong_to_that_player_who_is_next_to_move
     if @piece_moving and @piece_moving.side != match.next_to_move
-      errors.add_to_base "It is not #{@piece_moving.side}'s turn to move"
+      errors.add_to_base "It is not #{@piece_moving.side}'s turn to move" and return false
     end
   end
   
   def must_not_leave_ones_king_in_check
     #currently the presence of @piece_moving is used to short-circuit later validations
-    return unless @piece_moving 
+    return true unless @piece_moving 
     currently_in_check = @board.in_check?( @piece_moving.side )
     @board.consider_move( self ) do
       #if their move will leave them in check at the end of it we need to void the move and tell them why
       if @board.in_check?( @piece_moving.side )
-          errors.add_to_base currently_in_check ? "You are in check and must move out of check" : "You can not move your king into check"
+          if currently_in_check
+            errors.add_to_base "You are in check and must move out of check" and return false
+          else
+            errors.add_to_base "You can not move your king into check" and return false
+          end
       end
     end
   end
   
   #the square between a king and his destination castling square must not be under attack
   def must_not_castle_across_check
-    return unless @piece_moving and @piece_moving.kind_of?(King)
-    return unless @piece_moving.is_castling_move?( from_coord, to_coord - from_coord, @board )    
+    return true unless @piece_moving and @piece_moving.kind_of?(King)
+    return true unless @piece_moving.is_castling_move?( from_coord, to_coord - from_coord, @board )    
     
     interim_square = Position.new(from_coord) + (to_coord - from_coord == [0,2] ? [0,1] : [0,-1] )
     @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => interim_square ) ) do
       if @board.in_check?(@piece_moving.side)
         errors.add_to_base "You can not castle across a square which is under attack"
+        return false
       end
     end
   end
 
   #updates the field that helps us to replay enpassant
   def update_capture_coord
-    return unless @piece_moving and @piece_moving.kind_of?(Pawn)
+    return true unless @piece_moving and @piece_moving.kind_of?(Pawn)
     if @piece_moving.is_en_passant_capture( from_coord, to_coord - from_coord , @board)
       self[:capture_coord] = (Position.new(to_coord) + [ - Sides[@piece_moving.side].advance_direction, 0]).to_s
     end
@@ -113,7 +122,13 @@ class Move < ActiveRecord::Base
   end
   
   def update_notation
-    #TODO update notation when a move is made
+    #TODO figure out when it is not safe to update notation and dont do it
+    #return unless @piece_moving
+    begin
+      self[:notation] = Notation.new(from_coord, to_coord, @board).to_s if @board
+    rescue
+      #silence
+    end
   end
   
   #updates the match if the saving of this move resulted in checkmate
