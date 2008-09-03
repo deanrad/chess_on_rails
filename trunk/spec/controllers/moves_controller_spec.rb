@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe MovesController do
   
-  integrate_views
+  #integrate_views
   
   before(:all) do
 
@@ -30,6 +30,13 @@ describe MovesController do
     post :create, {:match_id => @unstarted_match.id, :move => @logical_first_move }
 
     @unstarted_match.moves.count.should == 1
+  end
+  
+  it 'should not give you board refresh RJS if you have the latest board' do
+    match = matches(:unstarted_match)
+    xhr :get, :refresh, {:match_id => match.id, :move_num => 0 }
+    response.should be_success
+    #response should not contain rjs refresh logic   
   end
   
 =begin
