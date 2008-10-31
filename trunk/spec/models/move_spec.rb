@@ -64,6 +64,20 @@ describe Move, 'A move' do
     }.should_not change{ match.moves.count }
 
   end
+
+  it 'should be invalid if it moves your king into check' do
+    match = matches(:unstarted_match)
+    @white_king, @white_queen = [ Piece.new(:king, :white), Piece.new(:queen, :white) ]
+    @black_king, @black_queen = [ Piece.new(:king, :black), Piece.new(:queen, :black) ]
+    board = Board[ :d1 => @white_queen, :e1 => @white_king, :d8 => @black_queen, :e8 => @black_king ]
+
+    move = create_move_against_match_with_board( match, board, :from_coord => :e1, :to_coord => :d2 )
+    lambda{
+      match.moves << move
+    }.should_not change{ match.moves.count }
+    move.errors[:base].should == "You can not move your king into check"
+    
+  end
   
   it 'should mark match as finished when checkmating move completed' do
     match = matches(:scholars_mate)

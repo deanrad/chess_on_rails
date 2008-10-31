@@ -45,7 +45,7 @@ class Move < ActiveRecord::Base
   end
   
   def piece_must_be_present_on_from_coord
-    @piece_moving ||= @board[ from_coord.to_sym ] if @board
+    @piece_moving ||= @board[ from_coord ] if @board
     unless @piece_moving
       errors.add :from_coord, "No piece present at #{self[:from_coord]}" and return false 
     end
@@ -122,13 +122,7 @@ class Move < ActiveRecord::Base
   end
   
   def update_notation
-    #TODO figure out when it is not safe to update notation and dont do it
-    #return unless @piece_moving
-    begin
-      self[:notation] = Notation.new(from_coord, to_coord, @board).to_s if @board
-    rescue
-      #silence
-    end
+    (self[:notation] = Notation.new(from_coord, to_coord, @board).to_s if @board ) rescue nil
   end
   
   #updates the match if the saving of this move resulted in checkmate
@@ -152,7 +146,7 @@ class Move < ActiveRecord::Base
   #The from_coord indicates the beginning of a pieces' motion.
   #The fields *_coord are stored as strings, compared and manipulated as symbols
   def from_coord
-    self[:from_coord].to_sym
+    self[:from_coord].to_sym unless self[:from_coord].blank?
   end
   def from_coord=(val)
     self[:from_coord] = val.to_s
@@ -161,7 +155,7 @@ class Move < ActiveRecord::Base
   #The to_coord indicates the endpoint of a pieces' motion.
   #The fields *_coord are stored as strings, compared and manipulated as symbols
   def to_coord
-    self[:to_coord].to_sym
+    self[:to_coord].to_sym unless self[:to_coord].blank?
   end
   def to_coord=(val)
     self[:to_coord] = val.to_s

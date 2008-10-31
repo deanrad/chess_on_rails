@@ -22,6 +22,10 @@ scholars_mate:
   player1: dean
   player2: dean
 
+legal_mate:
+  player1: legal
+  player2: blackburne
+  
 ready_to_castle:  
   player1: dean
   player2: dean

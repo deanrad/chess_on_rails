@@ -19,6 +19,22 @@ chris:
   crypted_password: <%= Player.encrypt('1', Player.fixtures_salt) %>
   created_at: <%= 4.days.ago.to_s :db %>
 
+#the players of the Legal mate, Legal and Blackburne
+legal:
+  login: legal
+  email: legal@legal.com
+  salt: <%= Player.fixtures_salt %>
+  crypted_password: <%= Player.encrypt('1', Player.fixtures_salt) %>
+  created_at: 1950-07-07 #actually 1750 but many dbs wont support that
+
+blackburne:
+  login: blackburne
+  email: blackburne@legal.com
+  salt: <%= Player.fixtures_salt %>
+  crypted_password: <%= Player.encrypt('1', Player.fixtures_salt) %>
+  created_at: 1950-07-07 #actually 1750 but many dbs wont support that
+
+
 #the players of the immortal match, Anderssen and Kieseritsky
 anders:
   login: anders

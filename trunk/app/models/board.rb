@@ -18,6 +18,7 @@ class Board < Hash
   def consider_move( move )
     move_and_record(move)
     yield
+  ensure
     undo_move(move)    
   end
 
