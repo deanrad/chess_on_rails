@@ -24,6 +24,7 @@ class King < Piece
   end
   
   def is_castling_move?(here, vector, board)
+
     #figure out where we are
     position = Position.new(here)
     
@@ -31,8 +32,11 @@ class King < Piece
     return false unless position.file_char=='e'
     
     #did i not instruct box 5 was to remain EMPTY ?! ensure intervening squares are empty
-    intervening_square = board[ position + ( vector==[0,-2] ? [0, -1] : [0,1] ) ]
-    return false if intervening_square != nil
+    intervening_square_1 = board[ position + ( vector==[0,-2] ? [0, -1] : [0,1] ) ]
+    return false if intervening_square_1 != nil
+
+    intervening_square_2 = board[ position + ( vector==[0,-2] ? [0, -2] : [0,2] ) ]
+    return false if intervening_square_2 != nil
 
     #for queenside there must be no piece on the third square either
     return false if vector == [0,-2] and board[ position + [0, -3] ] != nil

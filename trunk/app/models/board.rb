@@ -96,6 +96,20 @@ class Board < Hash
     end
     return true
   end
+
+  #provides a format for tracing
+  def to_s
+    output = '' # ' ' * (8 * 8 * 2) #spaces or newlines after each 
+    %w{ 8 7 6 5 4 3 2 1 }.each do |rank|
+      %w{ a b c d e f g h }.each do |file|
+        piece = self[ file + rank ]
+        #output << file+rank
+        output << (piece ? (piece.abbrev or 'p') : ' ')
+        output << (file != "h" ? ' ' : "\n")
+      end
+    end  
+    output + "\n"
+  end
   
   private
 

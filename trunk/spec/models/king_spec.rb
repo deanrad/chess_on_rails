@@ -33,6 +33,10 @@ describe 'King' do
       @match.moves << move
     }.should_not change{ @match.moves.count }
   end
+
+  # NOTE: the lack of *negative* tests as recently added below caused a bunch of lost time
+  # when a situation incorrectly mistaken for a castle caused a knight to disappear randomly
+  it 'should not be allowed to castle across occupied squares'
   
   #these are the stronger versions which forbid castling if a piece has moved and returned
   #in practice allowing this would come up one match in 1000 and confer little advantage

@@ -8,7 +8,7 @@
 # Also stored is the canonical notation for the move, in standard short algebraic form.
 # See: http://en.wikipedia.org/wiki/Chess_notation for information on notation and coordinates
 class Move < ActiveRecord::Base
-  belongs_to :match, :counter_cache => true
+  belongs_to :match
   
   before_validation :calculate_board
   
@@ -27,6 +27,8 @@ class Move < ActiveRecord::Base
 
   after_save :check_for_mate
     
+  attr_accessor :board
+  
   def calculate_board
     @board ||= match.board if match
   end
@@ -59,7 +61,7 @@ class Move < ActiveRecord::Base
   end
   
   def piece_must_belong_to_that_player_who_is_next_to_move
-    if @piece_moving and @piece_moving.side != match.next_to_move
+    if @piece_moving and match and @piece_moving.side != match.next_to_move
       errors.add_to_base "It is not #{@piece_moving.side}'s turn to move" and return false
     end
   end

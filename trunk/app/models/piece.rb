@@ -51,6 +51,10 @@ class Piece
     "#{@side}_#{side_id}".to_sym
   end      
   
+  def abbrev
+    Piece.role_to_abbrev( @role )
+  end
+  
   #Desired_moves_from (here) gives you what you get in a guide to playing chess, and how you first instruct
   # somebody how a piece moves, in other words, what is possible with no special circumstances considered.
   # It is customized by overriding vector_allowed_from in specific piece's class to, for example, instruct

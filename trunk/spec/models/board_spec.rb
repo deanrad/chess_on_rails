@@ -19,7 +19,19 @@ describe Board do
   it 'should be able to store a piece on a specified square' do
     @lone_rook_board[:a1].role.should == :rook
   end
-
+  
+  it 'should dump to a readable text format' do
+    sample = [
+    'R N B Q K B N R',
+    'p p p p p p p p',
+    '               ', 
+    '               ', 
+    '               ', 
+    '               ', 
+    'p p p p p p p p', 
+    'R N B Q K B N R' ].join("\n") << ("\n"*2)
+    @initial_board.to_s.should == sample
+  end
   it 'should be able to undo a considered move' do
     @lone_rook_board[:a1].should == @rook
     
@@ -84,13 +96,6 @@ describe Board do
     board[:d8].role.should == :queen
   end
   
-  it 'should be able to find the bug' do
-    match = matches(:scholars_mate)
-    board = match.board
-    board.move!( Move.new(:from_coord => :h5, :to_coord => :f7) )
-    board.in_checkmate?(:black).should be_true
-    
-  end
     
   #TODO: the overall time to detect checkmate (in actual checkmate situation) has gotten much worse (5x) since adding checkmate detection at the end of every move.
   # 2 notes: 1) commenting out the after_save callback in move makes things 400% better
