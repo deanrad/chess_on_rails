@@ -40,10 +40,26 @@ describe MatchesController do
 
   ##### index action tests ##### 
   
-  it 'renders list of matches for current player' do
+  it 'should render the list of matches for current player' do
     login_as(:dean)
     get :index
     response.should be_success
+    #todo assert for some tag
+  end
+
+  ##### new action tests ##### 
+  it 'should provide form for creating new match' do
+    login_as(:dean)
+    get :new
+    response.should be_success
+  end
+
+  ##### new action tests ##### 
+  it 'should provide form for creating new match with current player as white' do
+    login_as(:dean)
+    post :create, { :match => { :player2_id => players(:maria).id } }
+    response.should be_redirect
+    #todo we're cheating on coverage by not testing black
   end
 
 end
