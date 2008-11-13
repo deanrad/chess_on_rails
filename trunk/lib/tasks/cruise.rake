@@ -25,3 +25,21 @@ desc "The Application Documentation"
 task :doc_app do
   sh "rdoc -x -i app/* --op #{File.join(base_directory, 'doc')}"
 end
+
+namespace :perf do
+
+  desc "Run Performance Profile Test"
+  task :run => [ :environment ] do
+    num = 10
+    sh "Rails env #{RAILS_ENV}"
+    m = Match.find( :first, :conditions => ['player1_id = ? ', Player.find_by_login('legal').id],
+      :include => :moves )
+    b = nil
+    time = Benchmark.realtime do
+        num.times { b = m.board; m.instance_variable_set(:@board, nil) }
+    end
+    p b
+    sh "echo 'Benchmark 1: #{time} seconds to run legal mate #{num} times'"
+    nil
+  end
+end
