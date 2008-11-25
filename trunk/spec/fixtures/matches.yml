@@ -9,6 +9,7 @@ maria_vs_dean:
   player2: dean
 
 unstarted_match:
+  name: unstarted
   player1: dean
   player2: dean
 
@@ -18,11 +19,13 @@ fools_mate:     #the shortest possible checkmate - very unlikely to occur in rea
 
 #this mate is often mistakenly called fools mate: http://en.wikipedia.org/wiki/Scholars_mate
 #this fixture leaves it as whites turn where white can make the mating move or a non-mating move
-scholars_mate:  
+scholars_mate: 
+  name: scholars_mate 
   player1: dean
   player2: dean
 
 legal_mate:
+  name: legal_mate
   player1: legal
   player2: blackburne
   
@@ -31,6 +34,7 @@ ready_to_castle:
   player2: dean
 
 immortal:
+  name: immortal
   player1: anders
   player2: kieser
   created_at: 1901-07-07 #actually 1851 but many dbs wont support that

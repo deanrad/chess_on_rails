@@ -9,14 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080729005133) do
+ActiveRecord::Schema.define(:version => 20081029003757) do
 
   create_table "matches", :force => true do |t|
-    t.integer  "player1_id",  :limit => 11,                    :null => false
-    t.integer  "player2_id",  :limit => 11,                    :null => false
-    t.boolean  "active",                    :default => true
-    t.boolean  "moves_count",               :default => false
-    t.integer  "winner_id",   :limit => 11
+    t.integer  "player1_id", :limit => 11,                   :null => false
+    t.integer  "player2_id", :limit => 11,                   :null => false
+    t.boolean  "active",                   :default => true
+    t.string   "name",       :limit => 25
+    t.integer  "winner_id",  :limit => 11
     t.string   "outcome"
     t.datetime "created_at"
     t.datetime "updated_at"
