@@ -15,6 +15,8 @@ describe 'Notation - ' do
     @initial_knight_move_by_coords  = Notation.new( :b1, :c3, @initial_board )
     @promotable = Board[:d7 => Pawn.new(:white, :d)]
     @capturable = Board[:b2 => Bishop.new(:white, :queens), :h8 => Rook.new(:black, :kings) ]
+    @castling_board = Board[:a1 => Rook.new(:white, :queens), :e1 => King.new(:white), :h1 => Rook.new(:white, :kings)]
+
     
     @two_knights_may_move_to_d5_diff_files = Board[ :c3 => Knight.new(:white, :kings), :f4 => Knight.new(:white, :queens) ]
     @two_knights_may_move_to_d5_same_files = Board[ :c3 => Knight.new(:white, :kings), :c7 => Knight.new(:white, :queens) ]
@@ -139,6 +141,19 @@ describe 'Notation - ' do
       board = @two_knights_may_move_to_d5_same_files
       n = Notation.new( :c7, :d5, board )
       n.to_s.should == 'N7d5'
+    end
+  end
+  
+  describe 'Castling' do
+    it 'should reflect kingside castle with O-O' do
+      board = @castling_board
+      n = Notation.new( :e1, :g1, board )
+      n.to_s.should == 'O-O'
+    end
+    it 'should reflect queenside castle with O-O-O' do
+      board = @castling_board
+      n = Notation.new( :e1, :c1, board )
+      n.to_s.should == 'O-O-O'
     end
   end
   

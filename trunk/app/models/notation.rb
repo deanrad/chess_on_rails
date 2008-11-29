@@ -25,7 +25,7 @@ class Notation
   
   #does the work of serializing an instance of this class for display or db storage
   def to_s
-    @notation || create_notation_from_fields
+    @notation || castling_notation_from_fields || create_notation_from_fields
   end
   
   private
@@ -39,6 +39,14 @@ class Notation
   def init_from_notation_and_board(note, board)
     @notation = note
     @board = board
+  end
+  
+  def castling_notation_from_fields
+    k = @board[@from_coord]
+    return nil unless k && k.role == :king
+    vector = Position.new(@to_coord) - Position.new(@from_coord)
+    return nil unless k.is_castling_move?( @from_coord, vector, @board)
+    vector[1] > 0 ? "O-O" : "O-O-O" #kingside is in increasing direction of files a-h
   end
   
   #unless you are using this class to interpret a notation, serializes fields into notation conforming
