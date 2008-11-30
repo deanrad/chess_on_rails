@@ -2,7 +2,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'Notation - ' do
   before(:all) do
-    #TODO - dry up these initial copies of test objects
     @initial_board = Board.initial_board    
 
     @white_king, @white_queen = [ Piece.new(:king, :white), Piece.new(:queen, :white) ]
@@ -109,17 +108,17 @@ describe 'Notation - ' do
     end
     
     it 'should have a + following the to coordinate if check occurred but not checkmate' do
-      queen_capture_notation = Notation.new(:d1, :d8, @kings_and_queens)
-      queen_capture_notation.to_s[4,1].should == '+'
+      n = Notation.new(:d1, :d8, @kings_and_queens)
+      n.check = true
+      n.to_s[4,1].should == '+'
     end
     
-    it 'should have a # following the to coordinate if checkmate occurred'
-    # not developed yet
-    # do
-    #  matable_board = Board[:d1 => Rook.new(:white, :kings), :d2 => Queen.new(:white), :d8 => King.new(:black) ]
-    #  n = Notation.new(:d2, :d7, matable_board)
-    #  n.to_s[3,1].should == '#'
-    #end
+    it 'should have a # following the to coordinate if checkmate occurred' do
+      board = Board[:d1 => Rook.new(:white, :kings), :d2 => Queen.new(:white), :d8 => King.new(:black) ]
+      n = Notation.new(:d2, :d7, board)
+      n.checkmate = true    #must be set by caller
+      n.to_s[3,1].should == '#'
+    end
   end
 
   describe 'Piece disambiguation' do
@@ -165,9 +164,57 @@ describe 'Notation - ' do
   end
 
   describe 'Notation to Coordinates' do
-    it 'should raise an error if more than one of that piece type could move to that destination square'
-    it 'should return a from and to coordinate pair if one is understandable from notation with respect to a board'
-    it 'should raise an Exception if a from and to coordinate pair cannot be found'
+    it 'should parse Nc3 as b1 to c3' do
+      board = @initial_board
+      n = Notation.new( "Nc3", board )
+      n.to_coords.should == [:b1, :c3]
+    end
+    
+    it 'should parse O-O as e1 to g1 with white next to move' do 
+      board = @castling_board
+      n = Notation.new( "O-O", board )
+      n.next_to_move = :white
+      n.to_coords.should == [:e1, :g1]
+    end
+    
+    it 'should parse O-O as e8 to g8 with black next to move' do 
+      board = @castling_board
+      n = Notation.new( "O-O", board )
+      n.next_to_move = :black
+      n.to_coords.should == [:e8, :g8]
+    end
+
+    it 'should parse O-O-O as e1 to c1 with white next to move' do 
+      board = @castling_board
+      n = Notation.new( "O-O-O", board )
+      n.next_to_move = :white
+      n.to_coords.should == [:e1, :c1]
+    end
+
+    it 'should parse O-O-O as e8 to c8 with black next to move' do 
+      board = @castling_board
+      n = Notation.new( "O-O-O", board )
+      n.next_to_move = :black
+      n.to_coords.should == [:e8, :c8]
+    end
+    
+    it 'should raise an error if more than one of that piece type could move to that destination square' do
+      board = @two_knights_may_move_to_d5_diff_files
+      n = Notation.new( "Nd5", board )
+      lambda{ c = n.to_coords }.should raise_error
+    end
+    
+    it 'should use a piece disambiguator if needed' do
+      board = @two_knights_may_move_to_d5_diff_files
+      n = Notation.new( "Ncd5", board )
+      n.to_coords.should == [:c3, :d5]
+    end
+
+    it 'should raise an Exception if a from and to coordinate pair cannot be found' do
+      board = @castling_board
+      n = Notation.new( "Ke4", board) #cant move there
+      lambda{ c = n.to_coords }.should raise_error
+    end
   end   
   
 end

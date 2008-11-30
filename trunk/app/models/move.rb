@@ -135,7 +135,13 @@ class Move < ActiveRecord::Base
     #raise ArgumentError, "#{@board}"
     
     if @board.in_checkmate?( match.next_to_move  )
-      match.update_attributes( :active => false, :winner => (match.next_to_move==:white ? match.player2 : match.player1)  )
+      match.update_attributes(
+      :active => false,
+      :winner => (match.next_to_move==:white ? match.player2 : match.player1)
+      )
+      if self[:notation].include?("+") || !self[:notation].include?("#")
+        self.update_attribute( :notation, self[:notation].sub('+','') << '#' )
+      end
     end
   end
   

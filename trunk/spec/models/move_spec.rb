@@ -100,8 +100,6 @@ describe Move, 'A move' do
     move.promotion_piece.should == 'Q'
   end
   
-  it 'should populate the move number for a move'
-  
   it 'should populate the notation for a move' do
     match = matches(:scholars_mate)
     match.moves << Move.new( :from_coord => :c4, :to_coord => :f7 ) #white bishop checks black king
