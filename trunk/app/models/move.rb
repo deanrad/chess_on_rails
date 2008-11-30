@@ -22,7 +22,6 @@ class Move < ActiveRecord::Base
   after_validation :update_capture_coord,
                    :update_castling_field,
                    :update_promotion_field,
-                   :update_move_number,
                    :update_notation
 
   after_save :check_for_mate
@@ -119,10 +118,6 @@ class Move < ActiveRecord::Base
     end
   end
   
-  def update_move_number
-    #TODO update move_number for move
-  end
-  
   def update_notation
     (self[:notation] = Notation.new(from_coord, to_coord, @board).to_s if @board ) rescue nil
   end
@@ -132,16 +127,12 @@ class Move < ActiveRecord::Base
     #update boards state
     return unless @board = match.board
     @board.move!(self) 
-    #raise ArgumentError, "#{@board}"
     
     if @board.in_checkmate?( match.next_to_move  )
       match.update_attributes(
       :active => false,
       :winner => (match.next_to_move==:white ? match.player2 : match.player1)
       )
-      if self[:notation].include?("+") || !self[:notation].include?("#")
-        self.update_attribute( :notation, self[:notation].sub('+','') << '#' )
-      end
     end
   end
   
