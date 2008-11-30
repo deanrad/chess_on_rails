@@ -6,6 +6,16 @@ describe Move, 'A move' do
     m = Move.new( :from_coord => :d4 )
     m.valid?.should == false
   end
+
+  it "should be creatable several ways" do
+    m = Move.new( :from_coord => :d2, :to_coord => :d4 )
+    m.from_coord.should == :d2 
+    m.to_coord.should   == :d4
+
+    m = Move.new( :d2, :d4 )
+    m.from_coord.should == :d2 
+    m.to_coord.should   == :d4
+  end
   
   it 'should be able to use symbols to refer to its coordinates' do
     m = Move.new(:from_coord => :a2, :to_coord => :a4)

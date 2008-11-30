@@ -27,7 +27,20 @@ class Move < ActiveRecord::Base
   after_save :check_for_mate
     
   attr_accessor :board
-  
+
+  def initialize *opts
+    if Hash===opts[0]
+      super
+    elsif opts.length == 2
+      #we have to pop our two custom args off the stack and call super with a null opts
+      from = opts.shift
+      to = opts.shift
+      super
+      #before we can access these attributes
+      self[:from_coord], self[:to_coord] = from, to
+    end
+  end
+
   def calculate_board
     @board ||= match.board if match
   end
