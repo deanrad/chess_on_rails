@@ -56,8 +56,11 @@ describe 'Pawn' do
     it 'should promote to queen by default upon reaching back rank' do
       match = matches(:unstarted_match)
       board = @promotable
-      move = create_move_against_match_with_board(match, board, :from_coord => :d7, :to_coord => :d8)
-      move.should be_valid
+      move = Move.new(:from_coord => :d7, :to_coord => :d8)
+      match.board = move.board = board
+      
+      move.valid?.should == true
+      
       match.moves << move
       match.board[:d8].role.should == :queen
       match.board[:d8].kind_of?(Queen).should be_true

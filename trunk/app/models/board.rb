@@ -31,6 +31,8 @@ class Board < Hash
   #retrieves a piece, ensuring the intended key is checked as a symbol
   def [](key)
     super if key.kind_of?(Symbol)
+    return unless key
+    #umm, does super really work this way ? 
     super( key.to_sym  )
   end
   
@@ -110,6 +112,8 @@ class Board < Hash
     end  
     output + "\n"
   end
+  
+  def inspect; "\n" + to_s; end
   
   private
 
@@ -250,6 +254,7 @@ class Board < Hash
 end
 
 #Extension to symbol for more expressive position manipulation
+# TODO refactor symbol and other extension methods to new file
 class Symbol
   #allows :a + rank etc..
   def +(other)
@@ -263,4 +268,3 @@ class Symbol
     return (destination-origin) if destination.valid? and origin.valid?
   end
 end
-

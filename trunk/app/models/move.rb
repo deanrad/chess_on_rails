@@ -12,7 +12,8 @@ class Move < ActiveRecord::Base
   
   before_validation :calculate_board
   
-  validate  :ensure_coords_present_and_valid,
+  validate  :parse_notation,
+            :ensure_coords_present_and_valid,
             :piece_must_be_present_on_from_coord,
             :piece_must_move_to_allowed_square,
             :piece_must_belong_to_that_player_who_is_next_to_move,
@@ -24,7 +25,8 @@ class Move < ActiveRecord::Base
                    :update_promotion_field,
                    :update_notation
 
-  after_save :check_for_mate
+  after_save :update_board, 
+             :check_for_mate
     
   attr_accessor :board
 
@@ -38,6 +40,10 @@ class Move < ActiveRecord::Base
       super
       #before we can access these attributes
       self[:from_coord], self[:to_coord] = from, to
+    elsif opts.length == 1
+      notation = opts.shift
+      super
+      self[:notation] = notation 
     end
   end
 
@@ -45,6 +51,17 @@ class Move < ActiveRecord::Base
     @board ||= match.board if match
   end
 
+  def parse_notation
+    return if self[:notation].blank? || !self[:from_coord].blank? || !self[:to_coord].blank?
+    notation = Notation.new( self[:notation], @board )
+    notation.next_to_move = match.next_to_move
+    coords = notation.to_coords
+    self[:from_coord] = coords[0].to_s; self[:to_coord] = coords[1].to_s
+  rescue Exception => ex
+    errors.add :notation, ex.to_s
+    return false
+  end
+  
   def ensure_coords_present_and_valid
     [:from_coord, :to_coord].each do |coord|
       if self[coord].blank? 
@@ -134,18 +151,17 @@ class Move < ActiveRecord::Base
   def update_notation
     (self[:notation] = Notation.new(from_coord, to_coord, @board).to_s if @board ) rescue nil
   end
+
+  def update_board
+    @board.move!(self)
+  end
   
   #updates the match if the saving of this move resulted in checkmate
   def check_for_mate
-    #update boards state
-    return unless @board = match.board
-    @board.move!(self) 
-    
     if @board.in_checkmate?( match.next_to_move  )
-      match.update_attributes(
-      :active => false,
-      :winner => (match.next_to_move==:white ? match.player2 : match.player1)
-      )
+      match.active = false
+      match.winner = (match.next_to_move==:white ? match.player2 : match.player1)
+      match.save
     end
   end
   
@@ -183,4 +199,6 @@ class Move < ActiveRecord::Base
     self[:capture_coord] = val.to_s
   end
 
+  def to_s;  "#<Move #{to_coord} - #{from_coord} (#{notation})> "; end  
+  def inspect; to_s; end
 end
