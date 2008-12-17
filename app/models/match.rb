@@ -6,7 +6,7 @@ class Match < ActiveRecord::Base
   belongs_to :winner,   :class_name => 'Player'
   
   #This match has a list of moves, played by each player in turn
-  has_many :moves, :order => 'created_at ASC'
+  has_many :moves, :order => 'created_at ASC', :after_add => :return_board
 
   attr_accessor :board
 
@@ -38,6 +38,8 @@ class Match < ActiveRecord::Base
     end
     @board
   end
+  
+  def return_board() @board end
 
   #TODO return the notation of the moves for a match in a two-column format
   #TODO allow names to be given to matches
