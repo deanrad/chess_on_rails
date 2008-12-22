@@ -1,3 +1,4 @@
+require 'piece'
 class Queen< Piece
   
   def initialize(side)

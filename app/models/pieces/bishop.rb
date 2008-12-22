@@ -1,3 +1,4 @@
+require 'piece'
 class Bishop < Piece
   def initialize(side, which)
     super(:bishop, side, which)

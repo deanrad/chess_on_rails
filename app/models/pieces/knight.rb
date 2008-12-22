@@ -1,3 +1,4 @@
+require 'piece'
 class Knight < Piece
   def initialize(side, which)
     super(:knight, side, which)

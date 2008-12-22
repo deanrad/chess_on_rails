@@ -1,3 +1,9 @@
+require 'notation'
+require 'position'
+#special pieces which alter how moves are played
+require 'pieces/king'
+require 'pieces/pawn' 
+
 # A Move represents what a player did with respect to the pieces on the board in their turn.
 # They may have:
 # * moved a piece from +from_coord+ to +to_coord+

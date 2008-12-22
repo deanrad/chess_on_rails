@@ -1,3 +1,4 @@
+require 'piece'
 class Pawn < Piece
 
   ALLOWED_PROMOTIONS = [:queen, :rook, :bishop, :knight]  

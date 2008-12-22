@@ -1,3 +1,4 @@
+require 'board'
 # A Match is a game of Chess between two players
 class Match < ActiveRecord::Base
   

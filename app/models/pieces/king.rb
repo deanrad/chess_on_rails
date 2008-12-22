@@ -1,3 +1,4 @@
+require 'piece'
 class King < Piece
   def initialize(side)
     super(:king, side)
