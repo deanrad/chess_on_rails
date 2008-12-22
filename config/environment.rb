@@ -51,7 +51,6 @@ Rails::Initializer.run do |config|
     :session_key => '_en_passant_session',
     :secret      => '280cbb811e7203a8fd4b59ffa043d0b1e03815d4721083775d64d871073c6732b8ca2fcc0fd61fa3d17c90713d7965b0396cddf015c8ff0eafa4b77c3d1463c4'
   }
-  config.active_record.observers = :match_observer
 
   # Use the database for sessions instead of the cookie-based default,
   # which shouldn't be used to store highly confidential information
