@@ -40,7 +40,7 @@ class Match < ActiveRecord::Base
     @board
   end
   
-  def return_board() @board end
+  def return_board(m=nil) @board end
 
   #TODO return the notation of the moves for a match in a two-column format
   #TODO allow names to be given to matches
