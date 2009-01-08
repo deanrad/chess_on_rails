@@ -10,12 +10,15 @@ class AuthenticationControllerTest < ActionController::TestCase
     assert_not_nil dean
     assert_equal dean, dean2
   end
-  
-  def test_test_user_dean_can_login
+
+  def test_test_user_dean_can_login_and_get_redirected_to_his_match_page
     post :login, :email => 'chicagogrooves@gmail.com', :security_phrase => '9'
     
     assert_equal 1, session[:player_id]
     assert_not_nil assigns(:player)
+
+    #LEFTOFF: 
+    assert_response 302
   end
   
   def test_user_can_login

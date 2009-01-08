@@ -2,6 +2,12 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class MatchControllerTest < ActionController::TestCase
 
+  # TODO this will change if viewing a read-only match
+  def test_redirected_to_login_if_requesting_active_match
+    get :show, { :id => matches(:paul_vs_dean).id } #no player_id in session
+    assert_response 302
+  end
+
   def test_redirected_to_match_listing_page_when_resigning_match
   get :resign, { :format => 'html', :id => 2}, {:player_id => 1}
   assert_response 302
@@ -60,10 +66,10 @@ class MatchControllerTest < ActionController::TestCase
     assert_select 'table#board_table'
   end
 
-  def test_can_undo_last_move_if_you_made_it
-    assert_equal true, matches(:paul_vs_dean).turn_of?( players(:paul) )
-    get :undo_last, { :match_id => matches(:paul_vs_dean).id } , {:player_id => players(:dean).id}
-    assert_response :redirect #back to match
-  end
+  #def test_can_undo_last_move_if_you_made_it
+  #  assert_equal true, matches(:paul_vs_dean).turn_of?( players(:paul) )
+  #  get :undo_last, { :match_id => matches(:paul_vs_dean).id } , {:player_id => players(:dean).id}
+  #  assert_response :redirect #back to match
+  #end
 
 end
