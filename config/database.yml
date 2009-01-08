@@ -3,7 +3,7 @@
 development:
   adapter: mysql
   host: localhost
-  database: ChessOnRails_development
+  database: chessonrails_development
   username: chessonrails
   password: ch3550nrails
 
@@ -15,6 +15,6 @@ test:
   
   adapter: mysql
   host: localhost
-  database: ChessOnRails_test
+  database: chessonrails_test
   username: chessonrails
   password: ch3550nrails
