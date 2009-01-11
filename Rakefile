@@ -8,3 +8,17 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
+
+# not merging with rails own predefined rake task yet..
+# GOAL: Eventually report on JS, comments, etc, through extensible lambda-based infrastructure
+# as opposed to hacking within a for-loop
+# 
+desc "Report statistics (lines, lines of ERB, etc) about the views in this application"
+task :view_stats do
+
+  require 'misc/view_statistics'
+  ViewStatistics.new( *[
+    %w(Views             app/views)
+  ]).to_s
+
+end
