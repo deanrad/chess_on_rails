@@ -10,7 +10,12 @@ if @status_has_changed
 	page['move_submit_btn'].disabled = ! @your_turn
 	#todo play with start/end color to signify things
 	page.visual_effect(:highlight, @last_move.to_coord, :startcolor => (@last_move.notation.include?('x') ? 'ff0000' : '00ff00') , :duration => 5) #if @your_turn 
-	page['new_move_form'].reset
+	# page['new_move_form'].reset
+
+	# The first few chars of the title bar may be visible if window is minimized, so update
+        # them to indicate its your turnx
+        page << "document.title = 'Your move: ' + document.title.replace(/^.*move:/, '')" if @your_turn
+        page << "document.title = document.title.replace(/^.*move:/, '')" if ! @your_turn
 
 	return if @match.active == 1
 
