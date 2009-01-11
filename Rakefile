@@ -13,12 +13,17 @@ require 'tasks/rails'
 # GOAL: Eventually report on JS, comments, etc, through extensible lambda-based infrastructure
 # as opposed to hacking within a for-loop
 # 
-desc "Report statistics (lines, lines of ERB, etc) about the views in this application"
-task :view_stats do
 
-  require 'misc/view_statistics'
-  ViewStatistics.new( *[
-    %w(Views             app/views)
-  ]).to_s
+#namespace :analyze do
 
-end
+  desc "Report statistics (lines, lines of ERB, etc) about the views in this application"
+  task :analyze_stats => [:stats] do
+    
+    require 'misc/view_statistics'
+    ViewStatistics.new( *[
+      %w(Views             app/views)
+    ]).to_s
+
+  end
+
+#end
