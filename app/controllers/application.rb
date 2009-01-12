@@ -29,6 +29,18 @@ class ApplicationController < ActionController::Base
     detect_facebook unless session[:player_id] 
 
     @current_player = Player.find(session[:player_id]) and return if session[:player_id] 
+
+
+    #else try basic auth for Curl/Wget functionality
+    authenticate_with_http_basic do |username, password|
+      puts "no player_id, looking up by #{username} and #{password}"
+      u = User.find_by_email_and_security_phrase(username, password)
+      if u
+        @current_player = u.playing_as
+        session[:player_id] = @current_player.id 
+      end
+    end
+    return if session[:player_id]
     
     flash[:notice] = "Login is required in order to take this action."
     session[:original_uri] = request.request_uri
