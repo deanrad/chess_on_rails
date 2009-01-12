@@ -24,7 +24,7 @@ class ViewStatistics #:nodoc:
       @pairs.inject({}) { |stats, pair| stats[pair.first] = calculate_directory_statistics(pair.last); stats }
     end
 
-    def calculate_directory_statistics(directory, pattern = /.*\.(rhtml|erb)$/)
+    def calculate_directory_statistics(directory, pattern = /.*\.(rhtml|erb|rjs)$/)
       stats = { "lines" => 0, "erblines" => 0, "classes" => 0, "methods" => 0 }
 
       Dir.foreach(directory) do |file_name| 
@@ -40,6 +40,9 @@ class ViewStatistics #:nodoc:
 
         while line = f.gets
           stats["lines"]     += 1
+
+          # every line in an rjs template counts as code 
+          stats["erblines"]  += 1 and next if file_name =~ /\.rjs$/
 
           # each erb output sequence adds one to the erb line count
           stats["erblines"] += ( line.split('<%=').length - 1 )
