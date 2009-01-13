@@ -35,12 +35,6 @@ class MoveController < ApplicationController
       }
     end
   end
-
-  
-  #list the moves for the given match
-  def index
-    render :partial => 'match/move_list', :layout => false
-  end
   
 protected
   def get_match

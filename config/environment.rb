@@ -56,4 +56,8 @@ Rails::Initializer.run do |config|
 
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
+
+  require 'action_controller/mime_type'
+  Mime::Type.register "text/pgn", :pgn
+
 end
