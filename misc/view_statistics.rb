@@ -48,9 +48,9 @@ class ViewStatistics #:nodoc:
           stats["erblines"] += ( line.split('<%=').length - 1 )
 
           # a one-line non-output sequence
-          if line =~ /<%[^=]+.*%>/ then 
-             stats["erblines"] += 1 and next
-          end
+          #if line =~ /<%[^=]+.*%>/ then 
+          #   stats["erblines"] += 1 and next
+          #end
 
           # stop counting erb lines if you've met an end
           inside_erb = false if line.include?( '%>' ) && ! line.include?( '<%=' )
