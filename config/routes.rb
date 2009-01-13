@@ -14,13 +14,11 @@ ActionController::Routing::Routes.draw do |map|
   #map.new_match    'match/new', :controller => 'match', :action => 'new'
   map.match_action 'match/:action', :controller => 'match'
   
-  map.undo_last 'match/:match_id/undo_last', :controller => 'match', :action => 'undo_last'
-  
   map.fbuser  'fbuser/:action', :controller => 'fbuser'
   map.login   'authentication/login', :controller => 'authentication', :action => 'login'
   map.logout  'authentication/logout', :controller => 'authentication', :action => 'logout'
 
-  map.create_move 'match/:match_id/moves/:side', :controller => 'move', :action => 'create', :conditions =>{ :method => :post }, :defaults => { :side => nil }
+  map.create_move 'match/:match_id/moves/:notation', :controller => 'move', :action => 'create', :defaults => { :notation => nil }
 
   map.match_moves 'match/:match_id/moves', :controller => 'move', :action => 'index'
   

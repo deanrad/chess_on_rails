@@ -8,20 +8,34 @@ class MoveController < ApplicationController
 
   #accessible via get or post but should be idempotent on 2x get
   def create
-    @match.moves << Move.new( params[:move] )
+    #render :text => "#{params[:match_id] + params[:notation]}" and return
+    
+    if params[:move]
+      @match.moves << Move.new( params[:move] )
+    elsif params[:notation]
+      @match.moves << Move.new( :notation => params[:notation] )
+    end
     
     @match.save! #only here to trigger validation
     
     #unceremonious way of saying you just ended the game 
     redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
 
-    #back to the match if non-ajax
-    redirect_to(:back) and return unless request.xhr? 
+    respond_to do |format|
+      format.html{
+        #back to the match if non-ajax
+        redirect_to( match_path(@match) ) and return unless request.xhr? 
 
-    #otherwise do a normal status update to refresh UI
-    set_match_status_instance_variables
-    render :template => 'match/status' and return
+        #otherwise do a normal status update to refresh UI
+        set_match_status_instance_variables
+        render :template => 'match/status' and return
+      }
+      format.text{
+        render :text => @match.board.to_s( @viewed_from_side==:black )
+      }
+    end
   end
+
   
   #list the moves for the given match
   def index
