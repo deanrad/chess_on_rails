@@ -30,7 +30,6 @@ class Piece
   # abbrev(:notation) - the default - eg N B K
   # abbrev(:fen)      - same, but uppercase for white, lower for black
   def abbrev( abbrev_type = :notation )
-    puts "looking up #{@type}"
     single_char = Types[@type.to_sym]
     return single_char if abbrev_type==:notation
     return single_char.sub( /[a-h]/, 'p').send( @side==:white ? 'upcase' : 'downcase' ) if abbrev_type==:fen
