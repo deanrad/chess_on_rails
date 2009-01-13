@@ -17,7 +17,7 @@
 
           <img class="piece <%= p.allowed_moves(board) * ' ' %>"
             id="<%= p.board_id %>"
-            alt="<%= p.img_name %>"
+            alt="<%= p.abbrev(:fen) %>"
             src="<%= "http://www.insightfultraining.com/images/chess_pieces/#{p.img_name}.gif" %>"
            />
 

@@ -127,14 +127,18 @@ class Board
     end
 
   #provides a format for tracing
-  def to_s
+  def to_s( for_black = false )
     output = '' # ' ' * (8 * 8 * 2) #spaces or newlines after each 
-    %w{ 8 7 6 5 4 3 2 1 }.each do |rank|
-      %w{ a b c d e f g h }.each do |file|
+    ranks  = %w{ 8 7 6 5 4 3 2 1 }
+    files  = %w{ a b c d e f g h } 
+    (ranks.reverse! and files.reverse!) if for_black
+    last_file = files[7]
+    ranks.each do |rank|
+      files.each do |file|
         piece = self[ file + rank ]
         #output << file+rank
         output << (piece ? piece.abbrev(:fen) : ' ')
-        output << (file != "h" ? ' ' : "\n")
+        output << (file != last_file ? ' ' : "\n")
       end
     end  
     output + "\n"

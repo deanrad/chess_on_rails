@@ -16,7 +16,7 @@ class MatchController < ApplicationController
     set_match_status_instance_variables
     respond_to do |format|
       format.html { render :template => 'match/result' and return if @match.active == 0 }
-      format.text { render :text => @match.board.to_s }
+      format.text { render :text => @match.board.to_s(@viewed_from_side==:black) }
     end
   end
 
