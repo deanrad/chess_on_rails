@@ -14,8 +14,10 @@ class MatchController < ApplicationController
     @match = Match.find( params[:id] )
     
     set_match_status_instance_variables
-
-    render :template => 'match/result' and return if @match.active == 0
+    respond_to do |format|
+      format.html { render :template => 'match/result' and return if @match.active == 0 }
+      format.text { render :text => @match.board.to_s }
+    end
   end
 
   # GET /match/ 
