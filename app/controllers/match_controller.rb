@@ -2,7 +2,6 @@ class MatchController < ApplicationController
   
   before_filter :authorize
   before_filter :fbml_cleanup, :except => 'show'
-  helper_method :can_undo?
   
   def fbml_cleanup
     params[:format]='html' if params[:format]=='fbml'
@@ -37,15 +36,6 @@ class MatchController < ApplicationController
     @match = Match.new
   end
 
-  #if last move is yours, you can undo it (in otherwords you cant undo on your turn)
-  def undo_last
-    @match = Match.find( params[:match_id] )
-    if can_undo?(@match)
-      session[:move_count] = @match.moves.length if @match.moves.last.destroy
-    end
-    redirect_to :action => 'show', :id=>@match.id 
-  end
-
   def resign
     @match = Match.find( params[:id] )
     @match.resign( @current_player )
@@ -60,8 +50,4 @@ class MatchController < ApplicationController
     redirect_to :action => 'show', :id=>@match.id if @match
   end
   
-  protected 
-  def can_undo?( match )
-    match and not match.turn_of?( @current_player )
-  end
 end
