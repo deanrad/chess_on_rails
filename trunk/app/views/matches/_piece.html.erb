@@ -8,8 +8,9 @@
 
 %>
 
-<img src="<%= image_source_of(piece) %>"
-     id="<%= piece.board_id %>"
-    alt="<%= piece.board_id %>"
-  class="<%= 'piece ' + moves.join(' ') %>"
-/>
+<%= 
+  image_tag image_source_of(piece), 
+    :id => piece.board_id, 
+    :alt => piece.board_id, 
+    :class => 'piece ' + moves.join(' ')
+%>
