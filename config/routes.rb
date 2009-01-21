@@ -20,6 +20,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.create_move 'match/:match_id/moves/:notation', :controller => 'move', :action => 'create', :defaults => { :notation => nil }
 
+  #this can probably go away now
   map.match_moves 'match/:match_id/moves', :controller => 'move', :action => 'index'
   
   # Install the default routes as the lowest priority.
