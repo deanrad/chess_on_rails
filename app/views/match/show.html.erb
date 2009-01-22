@@ -13,6 +13,10 @@ to its castling square. The move is submitted when you drop the piece or hit ent
 Takebacks are not enabled. Have fun !
 </div>
 
+<div id="select_set_div" style=" ">
+<%= render :partial => "sets/select_set" %>
+</div>
+
 <br/>
 
 <%= periodically_call_remote(:method => 'get', :frequency => 5, :url => {:id => @match.id, :action => 'status' })  %>
