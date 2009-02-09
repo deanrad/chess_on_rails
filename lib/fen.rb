@@ -70,7 +70,7 @@ module Fen
   def each_piece_in_fen_order
     "12345678".each_char do |rank|
       "abcdefgh".each_char do |file|
-        yield self.piece_at( "#{file}#{rank}" )
+        yield self[ "#{file}#{rank}" ]
       end
     end
   end
