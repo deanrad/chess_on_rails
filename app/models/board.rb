@@ -1,12 +1,22 @@
 #A Board is a snapshot of a match at a moment in time.
 class Board
 
+  include Fen
+
   attr_accessor :match	
   attr_accessor :pieces
   attr_accessor :as_of_move
   
   #todo remove need for pieces
-  def initialize(match, pieces)
+  def initialize( *args )
+    if args.length == 2
+      _initialize args[0], args[1]
+    elsif args.length == 1
+      _initialize_fen( args[0] )
+    end
+  end
+
+  def _initialize(match, pieces)
     #puts "initializing board"
     
     #initialize from the game's initial board, but replay moves...
