@@ -38,8 +38,14 @@ class Match < ActiveRecord::Base
     self.next_to_move == side_of(plyr)
   end
 
+  # as long as the game starts at the beginning, white goes first
+  def first_to_move
+    :white
+  end
+
+  # the next_to_move alternates sides each move (technically every half-move)
   def next_to_move
-    (moves.count & 1 == 0) ? :white : :black
+    moves.count.even? ? first_to_move : opp(first_to_move)
   end
 
   def side_of( plyr ) 
@@ -67,4 +73,11 @@ class Match < ActiveRecord::Base
     save!
   end
 
+  # returns the opposite of a side, or nil
+  def opp( s )
+    case s
+      when :white; :black
+      when :black; :white
+    end
+  end
 end
