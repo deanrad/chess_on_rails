@@ -26,13 +26,13 @@ namespace :spec do
   Spec::Rake::SpecTask.new(:rcov) do |t|
     #t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
 
-    #t.spec_files = FileList['spec/**/*_spec.rb']
-    t.spec_files = FileList['test/**/*_test.rb']
+    t.spec_files = FileList['spec/**/*_spec.rb']
+    #t.spec_files = FileList['test/**/*_test.rb']
 
     t.rcov = true
-    #t.rcov_opts = lambda do
-    #  IO.readlines("#{RAILS_ROOT}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten
-    #end
+    t.rcov_opts = lambda do
+      IO.readlines("#{RAILS_ROOT}/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten
+    end
   end
   
   desc "Print Specdoc for all specs (excluding plugin specs)"
@@ -103,12 +103,21 @@ namespace :spec do
 
     desc "start spec_server."
     task :start do
-      if File.exist?(daemonized_server_pid)
-        $stderr.puts "spec_server is already running."
-      else
-        $stderr.puts "Starting up spec server."
-        system("ruby", "script/spec_server", "--daemon", "--pid", daemonized_server_pid)
+      # see if we have an orphaned pid file due (pid, but no process running)
+      # not MS Windows-safe
+      really_running = (`ps -ef | grep -e "ruby.*spec_server" | grep -v grep` != "")
+      pidfile_exists = File.exist?(daemonized_server_pid)
+
+      if pidfile_exists and really_running
+        $stderr.puts "spec_server is already running." and return
       end
+
+      if pidfile_exists and ! really_running
+          puts 'deleting orphaned pid' and File.delete(daemonized_server_pid)
+      end
+
+      $stderr.puts "Starting up spec server."
+      system("ruby", "script/spec_server", "--daemon", "--pid", daemonized_server_pid)
     end
 
     desc "stop spec_server."
