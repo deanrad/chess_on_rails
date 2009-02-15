@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
-class MatchTest < ActiveSupport::TestCase
+describe Match, "A match" do
 
   def test_32_pieces_on_chess_initial_board
     assert_equal 32, matches(:unstarted_match).board.pieces.length
@@ -52,6 +52,18 @@ class MatchTest < ActiveSupport::TestCase
     m1.resign( players(:paul) )
     assert_not_nil m1.winning_player
     assert_equal players(:dean), m1.winning_player
+  end
+
+  describe "- with FEN changes - " do
+
+    AFTER_E4 = 'RNBQKBNR/PPPP1PPP/4P3/8/8/8/pppppppp/rnbqkbnr b'
+
+    it 'should have next_to_move black if FEN starts black (and even # of moves)' do
+       m = Match.new( :start_pos => AFTER_E4 )
+       m.next_to_move.should == :black
+    end
+
+   
   end
 
 end

@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.integer  "player1_id",     :limit => 11,                :null => false
     t.integer  "player2_id",     :limit => 11,                :null => false
     t.integer  "active",         :limit => 11, :default => 1
-    t.text     "pieces"
+    t.text     "start_pos"
     t.text     "result"
     t.integer  "winning_player", :limit => 11
     t.datetime "created_at"

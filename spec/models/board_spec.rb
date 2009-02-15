@@ -1,7 +1,11 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
+
 
 #The board has the 
-class BoardTest < ActiveSupport::TestCase
+describe Board do
+
+  # TODO - no fixtures
+  fixtures :all
   
   def test_new_match_gets_an_initial_board
     m1 = matches(:unstarted_match)
