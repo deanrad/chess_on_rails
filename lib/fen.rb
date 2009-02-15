@@ -7,8 +7,8 @@ module Fen
 
     validate! str
 
-    fenstr = FenString.new(str)
-    fenstr.layout.each_with_index do |rank, rank_num|
+    @fenstr = FenString.new(str)
+    @fenstr.ranks.each_with_index do |rank, rank_num|
       current_file = 1   
       rank.each_char do |instr|
         if instr.match FenString::PIECE_REGEX
@@ -75,25 +75,35 @@ module Fen
     end
   end
 
+  # if we have a fen string, whatever that fen string says
+  def next_to_move
+    return nil unless @fenstr
+    @fenstr.next_to_move == 'b' ? :black : :white
+  end
+
   private
 
   # the fields of a fen string
   class FenString
     PIECE_REGEX = /[rnbkqp]/i
 
-    attr_accessor :layout
-    attr_accessor :next_to_move
-    attr_accessor :allowed_castles
+    # the original text
+    attr_accessor :text 
+
+    # the fields comprising the full text 
+    attr_accessor :pieces, :next_to_move, :allowed_castles
 
     def initialize str
-      self.layout = str #for testing
-      #layout, next_to_move, allowed_castles = str.split /\w+/
+      self.text = str
+      @pieces, @next_to_move, @allowed_castles = text.split /\s+/
     end
 
     # the array of rank sections
-    def layout
-      @layout.split '/'
+    def ranks
+      pieces.split '/'
     end
+
+    def to_s; self.text; end
   end
 
 
@@ -110,6 +120,8 @@ module Fen
     def to_piece
       type = case role
         when :pawn then :a_pawn
+        when :queen then :queen
+        when :king  then :king
         else :"kings_#{role}"
       end
       ::Piece.new( side, type, position )

@@ -47,3 +47,9 @@ promote_crazy:
    id: 9
    player1_id: 3
    player2_id: 1
+
+e4: # a FEN notated match after 1. e4 
+   id: 10
+   player1_id: 3
+   player2_id: 2
+   start_pos: RNBQKBNR/PPPP1PPP/8/4P3/8/8/pppppppp/rnbqkbnr b

@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
-class PieceTest < ActiveSupport::TestCase
+describe 'Piece' do
 
   def test_recognize_valid_piece_types
     p = Piece.new(:white, :queens_knight)

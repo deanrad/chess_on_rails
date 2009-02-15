@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
-class MoveTest < ActiveSupport::TestCase
+describe "A move" do
     
   def test_unstarted_match_has_no_moves
     match = matches(:unstarted_match)

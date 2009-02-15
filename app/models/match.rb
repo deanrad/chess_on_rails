@@ -31,7 +31,11 @@ class Match < ActiveRecord::Base
   end
     
   def replay_board
-    @board = Board.new( self, Chess.initial_pieces )
+    if self[:start_pos].blank?
+      @board = Board.new( self, Chess.initial_pieces ) 
+    else
+      @board = Board.new( self[:start_pos] )
+    end
   end
   
   def turn_of?( plyr )	
@@ -40,7 +44,8 @@ class Match < ActiveRecord::Base
 
   # as long as the game starts at the beginning, white goes first
   def first_to_move
-    :white
+    return :white if self[:start_pos].blank?
+    @first_to_move ||= Board.new( self[:start_pos] ).next_to_move
   end
 
   # the next_to_move alternates sides each move (technically every half-move)

@@ -59,11 +59,28 @@ describe Match, "A match" do
     AFTER_E4 = 'RNBQKBNR/PPPP1PPP/4P3/8/8/8/pppppppp/rnbqkbnr b'
 
     it 'should have next_to_move black if FEN starts black (and even # of moves)' do
-       m = Match.new( :start_pos => AFTER_E4 )
-       m.next_to_move.should == :black
+      m = Match.new( :start_pos => AFTER_E4 )
+      m.next_to_move.should == :black
     end
 
-   
+    it 'should have newly retrieved matches current with FEN' do
+      m = matches(:e4)
+      m.next_to_move.should == :black
+    end
+
+    it 'should have next_to_move white if FEN starts black (and odd # of moves)' do
+      m = matches(:e4)
+      m.next_to_move.should == :black
+
+      m.moves << newm = Move.new( :from_coord => 'e7', :to_coord => 'e5' )
+      m.next_to_move.should == :white
+    end
+
+    it 'should reflect the piece location FEN indicates, not the initial board' do
+      m = matches(:e4)
+      m.board['e2'].should be_nil
+      m.board['e4'].should_not be_nil
+    end
   end
 
 end
