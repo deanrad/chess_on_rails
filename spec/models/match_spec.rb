@@ -71,9 +71,11 @@ describe Match, "A match" do
     it 'should have next_to_move white if FEN starts black (and odd # of moves)' do
       m = matches(:e4)
       m.next_to_move.should == :black
+      m.turn_of?( m.player2 ).should be_true
 
       m.moves << newm = Move.new( :from_coord => 'e7', :to_coord => 'e5' )
       m.next_to_move.should == :white
+      m.turn_of?( m.player1 ).should be_true
     end
 
     it 'should reflect the piece location FEN indicates, not the initial board' do

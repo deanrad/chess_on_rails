@@ -1,10 +1,8 @@
 class CreateFbusers < ActiveRecord::Migration
   def self.up
     create_table :fbusers do |t|
-
-	t.integer :facebook_user_id
+      t.integer :facebook_user_id
       t.integer :playing_as
-
       t.timestamps
     end
 

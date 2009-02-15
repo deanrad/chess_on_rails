@@ -1,17 +1,14 @@
 class CreatePlayers < ActiveRecord::Migration
-	def self.up
+  def self.up
+    create_table :players do |t|
+      t.column :name, :string, :limit => 20
+    end
 
-		create_table :players do |t|
-			t.column :name, :string, :limit=>20
+    add_index :players, [:name], :unique => true
+  end
 
-		end
-
-		add_index :players, [:name], :unique=>true
-
-	end
-
-	def self.down
-		drop_table :players
-	end
+  def self.down
+    drop_table :players
+  end
 
 end

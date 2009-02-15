@@ -1,32 +1,23 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
-class PlayerTest < ActiveSupport::TestCase
-  
-  fixtures :players
-  
-  def test_can_be_created
-    p = Player.new
-    assert true
-  end
-  
-  def test_stores_name
-    name = "Deano"
-    p = Player.new :name=>name
+describe Player, "A player" do
     
-    assert_equal name, p.name
+  it "can be created" do
+    p = Player.new
+    p.should_not be_nil
   end
   
-    #endregion
+  it "stores a name" do
+    name = "Deano"
+    p = Player.new :name => name
+    p.name.should == name
+  end
   
-  
-  def test_reject_registering_duplicate_player_names
+  it "should not be allowed to register an existing name" do
+    # warning - frail test dependent on fixtures
     #already one named Dean loaded by fixture
     p = Player.new :name=>"Dean"
-    assert !p.valid?
-    assert !p.save
-    
-    #puts p.errors.on(:name)
-    assert_equal ActiveRecord::Errors.default_error_messages[:taken],
-    p.errors.on(:name)
+    p.should_not be_valid
   end
+
 end
