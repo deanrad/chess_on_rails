@@ -16,7 +16,7 @@ describe Player, "A player" do
   it "should not be allowed to register an existing name" do
     # warning - frail test dependent on fixtures
     #already one named Dean loaded by fixture
-    p = Player.new :name=>"Dean"
+    p = Player.new :name => "Dean"
     p.should_not be_valid
   end
 

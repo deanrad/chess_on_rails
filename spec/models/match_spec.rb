@@ -18,7 +18,7 @@ describe Match, "A match" do
     assert_equal 0, m1.moves.count
     assert m1.turn_of?( m1.player1 )
     
-    m1.moves << Move.new(:from_coord=>'b2', :to_coord=>'b4' )
+    m1.moves << Move.new(:from_coord => 'b2', :to_coord => 'b4' )
     
     assert m1.turn_of?( m1.player2 )
 

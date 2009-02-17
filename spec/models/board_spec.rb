@@ -24,8 +24,8 @@ describe Board do
   
   #def test_board_can_refer_to_move_number_or_refer_to_current_move
   #  m1 = matches(:unstarted_match)
-  #  m1.moves << Move.new(:from_coord=>'d2', :to_coord=>'d4', :moved_by=>1, :notation=>'d4')
-  #  m1.moves << Move.new(:from_coord=>'e7', :to_coord=>'e5', :moved_by=>2, :notation=>'e5')
+  #  m1.moves << Move.new(:from_coord => 'd2', :to_coord => 'd4', :moved_by => 1, :notation => 'd4')
+  #  m1.moves << Move.new(:from_coord => 'e7', :to_coord => 'e5', :moved_by => 2, :notation => 'e5')
   #  m1.save
   #  
   #  assert_not_nil m1.board(0)
@@ -125,7 +125,7 @@ describe Board do
   #  match = matches(:unstarted_match)
   #  assert_not_nil match.board
   #  
-  #  match.moves << Move.new( :from_coord=>'d2', :to_coord=>'d4', :notation=>'d4' )
+  #  match.moves << Move.new( :from_coord => 'd2', :to_coord => 'd4', :notation => 'd4' )
   #end
   
   def test_detects_moved_piece
@@ -133,7 +133,7 @@ describe Board do
     assert_not_nil match.board
     
     assert_nil match.board.piece_at('d4')
-    match.moves << Move.new( :from_coord=>'d2', :to_coord=>'d4', :notation=>'d4' )
+    match.moves << Move.new( :from_coord => 'd2', :to_coord => 'd4', :notation => 'd4' )
     
     assert_not_nil match.board.piece_at('d4')
   end
