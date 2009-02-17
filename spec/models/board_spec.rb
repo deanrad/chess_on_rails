@@ -48,45 +48,38 @@ describe Board do
     ['d3','d4'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
     
     p = Piece.new(:black, :e_pawn)
-    p.position = 'e7'
-    moves = p.theoretical_moves
+    moves = p.theoretical_moves( 'e7' )
     ['e6','e5'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
   end
   
   def test_pawn_can_only_advance_one_on_successive_moves
     p = Piece.new(:white, :d_pawn)
-    p.position='d4'
-    moves = p.theoretical_moves
+    moves = p.theoretical_moves('d4')
     assert !moves.include?('d6')
     
     p = Piece.new(:black, :e_pawn)
-    p.position = 'e3'
-    moves = p.theoretical_moves
+    moves = p.theoretical_moves('e3')
     assert !moves.include?('e1')
   end
   
   def test_pawn_diagonal_captures_possible_accounting_for_ends
     p = Piece.new(:white, :d_pawn)
-    p.position = 'd2'
-    moves = p.theoretical_moves
+    moves = p.theoretical_moves 'd2'
     ['e3','c3'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}" }
     assert_equal 4, moves.length
     
     p = Piece.new(:black, :e_pawn)
-    p.position='e7'
-    moves = p.theoretical_moves
+    moves = p.theoretical_moves 'e7'
     ['f6','d6'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
     assert_equal 4, moves.length
   end
     
-  def test_piece_cannot_move_off_edge_of_board
+  it 'has fewer moves at edge of board than in center' do
     edge_pawn = Piece.new(:white, :a_pawn)
-    edge_pawn.position='a2'
     
     center_pawn = Piece.new(:white, :f_pawn)
-    center_pawn.position='f2'
     
-    assert_operator edge_pawn.theoretical_moves.length, :<, center_pawn.theoretical_moves.length
+    edge_pawn.theoretical_moves('a2').length.should <= center_pawn.theoretical_moves('f2').length
   end
   
   def test_knight_has_more_moves_in_the_center
@@ -113,8 +106,8 @@ describe Board do
   end 
   
   def test_knows_what_piece_is_on_a_square
-    assert_nil matches(:unstarted_match).board.piece_at('d4')
-    p1 = matches(:unstarted_match).board.piece_at('b2')
+    assert_nil matches(:unstarted_match).board['d4']
+    p1 = matches(:unstarted_match).board['b2']
     assert_not_nil p1
     
     assert_equal 'pawn', p1.role
@@ -132,16 +125,16 @@ describe Board do
     match = matches(:unstarted_match)
     assert_not_nil match.board
     
-    assert_nil match.board.piece_at('d4')
+    assert_nil match.board['d4']
     match.moves << Move.new( :from_coord => 'd2', :to_coord => 'd4', :notation => 'd4' )
     
-    assert_not_nil match.board.piece_at('d4')
+    assert_not_nil match.board['d4']
   end
 
   def test_castled_short_white_king_on_g1
     match = matches(:castled)
 
-    piece = match.board.piece_at('g1')
+    piece = match.board['g1']
     assert_not_nil piece
     assert_equal :king, piece.type
 
@@ -150,18 +143,6 @@ describe Board do
     assert_equal :kings_rook, piece.type
 
   end
-
-  #def test_can_refer_to_previous_board_with_negative_index
-  #  match = matches(:castled)
-  #
-    #the king is on the square he started on
-  #  piece = match.board(-1).piece_at('e1')
-  #  assert_not_nil piece
-  #  assert_equal :king, piece.type
-
-    #other pieces are moved
-  #  assert_nil match.board(-1).piece_at('f1')
-  #end
 
   def test_knows_if_side_is_in_check
     match = matches(:dean_vs_paul)
@@ -175,7 +156,7 @@ describe Board do
   def test_scholars_mate_capture_with_queen_is_checkmate
     match = matches(:scholars_mate)
     assert_equal :white, match.next_to_move
-    assert_equal 'queen', match.board.piece_at('f3').role
+    assert_equal 'queen', match.board['f3'].role
 
     #make the killer move    
     match.moves << Move.new( :notation => 'Qf7' )
@@ -192,7 +173,7 @@ describe Board do
     match.moves << Move.new( :notation => 'Bxf7' )
     assert match.board.in_check?(:black)
 
-    assert match.board.piece_at('e8').allowed_moves(match.board).include?('e7')
+    assert match.board['e8'].allowed_moves(match.board).include?('e7')
     
     assert !match.board.in_checkmate?( :black ), "Black in checkmate unexpectedly"
   end
@@ -208,13 +189,13 @@ describe Board do
     board = match.board
     assert_not_nil board['e5'] #just moved there
     
-    assert_equal ['e6','d6'], board.piece_at('e5').allowed_moves(board)
+    assert_equal ['e6','d6'], board['e5'].allowed_moves(board, 'e5')
     assert board.is_en_passant_capture?( 'e5', 'd6' )
 
     match.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
     
     assert_equal 'd5', match.moves.last.captured_piece_coord
-    assert_nil   match.board.piece_at('d5') 
+    assert_nil   match.board['d5'] 
   end	
 
   def test_pawn_en_passant_not_possible_for_single_stepped_opponent_pawn
@@ -223,14 +204,14 @@ describe Board do
     m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
 
     b = m.board
-    assert_equal ['e6'], b.piece_at('e5').allowed_moves(b)
+    assert_equal ['e6'], b['e5'].allowed_moves(b, 'e5')
   end	
 
   def test_promotes_automatically_to_queen_on_reaching_opposing_back_rank
     m = matches(:promote_crazy)
     m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8' )
 
-    assert_equal 'queen', m.board.piece_at('a8').role
+    assert_equal 'queen', m.board['a8'].role
 
     assert_equal 'bxa8=Q', m.moves.last.notation
   end

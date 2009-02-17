@@ -13,8 +13,8 @@ class Move < ActiveRecord::Base
     #determine coordinates from notation
     infer_coordinates_from_notation if !self[:notation].blank? && (from_coord.blank? || to_coord.blank?)
 
-    @piece_moving = @board.piece_at(from_coord)
-    @piece_moved_upon = @board.piece_at(to_coord)
+    @piece_moving = @board[from_coord]
+    @piece_moved_upon = @board[to_coord]
   end
 
   #fields like the notation and whether this was a castling are stored with the move
@@ -25,9 +25,8 @@ class Move < ActiveRecord::Base
     end
 
     #promotion
-    where_p_will_be = @piece_moving.clone
-    where_p_will_be.position = to_coord
-    self[:promotion_choice] ||= 'Q' if where_p_will_be.promotable?
+    puts "Landing on rank #{to_coord[1].chr}"
+    self[:promotion_choice] ||= 'Q' if @piece_moving.promotable?( to_coord[1].chr )
 
     #castling
     self[:castled] = 1 if (@piece_moving.type==:king && from_coord[0].chr=='e' && ['c','g'].include?( to_coord[0].chr ) )
@@ -55,16 +54,23 @@ class Move < ActiveRecord::Base
       errors.add_to_base "#{coord} is not a valid coordinate" unless Chess.valid_position?( coord )
     end
 
-    errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return if @possible_movers && @possible_movers.length==0
+    if @possible_movers && @possible_movers.length==0
+      errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return 
+    end
 
     #verify allowability of the move
     
     errors.add_to_base "No piece present at #{from_coord} on this board" and return if !@piece_moving
-    errors.add_to_base "#{@piece_moving.role} not allowed to move to #{to_coord}" unless @piece_moving.allowed_moves(@board).include?( to_coord ) 
+
+    unless @piece_moving.allowed_moves(@board, from_coord).include?( to_coord ) 
+      errors.add_to_base "#{@piece_moving.role} not allowed to move to #{to_coord}" 
+    end
 
     #can not leave your king in check at end of a move
     new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
-    errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" if new_board.in_check?( @piece_moving.side )
+    if new_board.in_check?( @piece_moving.side )
+      errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
+    end
   end
 
   def infer_coordinates_from_notation
@@ -79,9 +85,13 @@ class Move < ActiveRecord::Base
     self[:to_coord] =  notation.to_s[-2,2]
     role = NOTATION_TO_ROLE_MAP[ notation[0,1] ] ? NOTATION_TO_ROLE_MAP[ notation[0,1] ] : 'pawn'
 
-    @possible_movers = @board.pieces.select{ |p| p.side == match.next_to_move && p.role == role && p.allowed_moves(@board).include?( self[:to_coord] ) }
+    @possible_movers = @board.select do |pos, piece| 
+      piece.side == match.next_to_move && 
+      piece.role == role && 
+      piece.allowed_moves(@board, pos).include?( self[:to_coord] )
+    end
 
-    self[:from_coord] = @possible_movers[0].position if @possible_movers.length == 1
+    self[:from_coord] = @possible_movers[0][0] if @possible_movers.length == 1
   end
 
   #returns the notation for a given move - depends on alot of things - whether check was given, a capture made, etc..
@@ -95,8 +105,8 @@ class Move < ActiveRecord::Base
     # disambiguate which piece moved if a 'sister_piece' could have moved there as well
     if( @piece_moving.role=='rook') || (@piece_moving.role=='knight')
       mynotation = mynotation[0].chr
-      sister_piece = @board.sister_piece_of(@piece_moving)
-      if( sister_piece != nil && sister_piece.allowed_moves(@board).include?(to_coord) )
+      sister_piece = @board.sister_piece_of(@piece_moving, from_coord)
+      if( sister_piece != nil && sister_piece.allowed_moves(@board, from_coord).include?(to_coord) )
         #prefer using file to disambiguate but use rank if file insufficient
         mynotation += ( @piece_moving.file != sister_piece.file) ? @piece_moving.file : @piece_moving.rank
       end
@@ -116,11 +126,8 @@ class Move < ActiveRecord::Base
       mynotation = 'O-O' + ((to_coord[0].chr=='c') ? '-O' : '' ) 
     end
 
-    #relocate the piece now and notate a few more things
-    @piece_moving.position = to_coord
-
     #promotion
-    if @piece_moving.promotable?
+    if @piece_moving.promotable?( to_coord[0].chr )
       mynotation += "=#{promotion_choice}"
     end
     

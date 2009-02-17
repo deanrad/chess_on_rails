@@ -1,12 +1,15 @@
-#A Board is a snapshot of a match at a moment in time.
-class Board
+# A Board is a snapshot of a match at a moment in time, implemented as a hash
+# whose keys are positions and whose values are the pieces at those positions
+class Board < Hash
 
   include Fen
 
   attr_accessor :match	
-  attr_accessor :pieces
   attr_accessor :as_of_move
   
+  alias :pieces	   :values
+  alias :positions :keys
+
   #todo remove need for pieces
   def initialize( *args )
     if args.length == 2
@@ -16,11 +19,14 @@ class Board
     end
   end
 
-  def _initialize(match, pieces)
+  def _initialize(match, pieces_with_positions)
     #puts "initializing board"
     
     #initialize from the game's initial board, but replay moves...
-    @pieces = pieces
+    pieces_with_positions.each do | piece, pos |
+      self[pos] = piece
+    end
+
     @match = match
     
     #this is the only supported option right now
@@ -34,23 +40,32 @@ class Board
   # updates internals with a given move played
   def play_move!( m )
     #kill any existing piece we're moving onto or capturing enpassant
-    @pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
+    self.delete_if { |pos, piece| pos == m.to_coord || pos == m.captured_piece_coord }
+    #@pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
 
     #move to that square
-    piece_moved = nil
-    @pieces.each{ |p| p.position = m.to_coord and piece_moved = p if p.position==m.from_coord }
+    piece_moved = self.delete(m.from_coord)
+    self[m.to_coord] = piece_moved
+
+    #@pieces.each{ |p| p.position = m.to_coord and piece_moved = p if p.position==m.from_coord }
 
     #reflect castling
     if m.castled==1
       castling_rank = m.to_coord[1].chr
-      [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, rook_file, orig_rook_file|
-        #update the position of the rook if we landed on the kings castling square
-        @pieces.each { |p| p.position = "#{rook_file}#{castling_rank}" if m.to_coord[0].chr==king_file && p.position=="#{orig_rook_file}#{castling_rank}"}
+      [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, new_rook_file, orig_rook_file|
+        #update the position of the rook corresponding to the square the king landed on
+	if m.to_coord[0].chr==king_file 
+	   rook = self.delete("#{orig_rook_file}#{castling_rank}")
+	   self["#{new_rook_file}#{castling_rank}"] = rook
+	end
+        #@pieces.each { |p| p.position = "#{rook_file}#{castling_rank}" if m.to_coord[0].chr==king_file && p.position=="#{orig_rook_file}#{castling_rank}"}
       end
     end
 
     #reflect promotion
-    piece_moved.promote!( Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) if piece_moved && piece_moved.promotable? 
+    if piece_moved && piece_moved.promotable?( m.to_coord[1].chr )
+      piece_moved.promote!( m.to_coord[1].chr, Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) 
+    end
     
     self
   end
@@ -69,46 +84,42 @@ class Board
     yield(considered_board)
   end
 
-  #todo - can dry up these methods 
-  def piece_at(pos)
-    p = @pieces.find { |piece| piece.position == pos }
-  end
-
-  def [] ( pos ) 
-    piece_at(pos)
-  end
-
   def side_occupying(pos)
-    p = piece_at(pos)
+    p = self[pos]
     return nil if !p 
     return p.side
   end
 
-  def sister_piece_of( piece )
-    p = @pieces.find { |p| (p.side == piece.side) && (p.role == piece.role ) && (p.position != piece.position) }
+  def sister_piece_of( a_piece, sitting_here )
+    pos, piece = select do |pos, piece| 
+      piece.side == a_piece.side && 
+      piece.role == a_piece.role && 
+      pos != sitting_here
+    end
   end
   
   def in_check?( side )
-    king_to_check = @pieces.find{ |p| p.role=='king' && p.side == side }
+    king_pos, king  = select{ |pos, piece| piece.role=='king' && piece.side == side }
 
-    @pieces.select { |p| p.side != side }.each do |attacker|
-      return true if attacker.allowed_moves( self ).include?( king_to_check.position )
+    assassin = self.select do |position, attacker|
+      attacker.side != side &&
+      attacker.allowed_moves( self, position ).include?(king_pos)
     end
-    return false
+    return assassin!=[]
   end
 
   def is_en_passant_capture?( from_coord, to_coord ) 
 
     to_rank, to_file = to_coord[1].chr, to_coord[0].chr
-    return false unless p = piece_at( from_coord )
+    return false unless p = self[ from_coord ]
 
     capture_rank, advanced_pawn_rank, original_pawn_rank = (p.side==:white) ? %w{ 6 5 7 } : %w{ 3 4 2 }
-    possible_advanced_pawn = piece_at( to_file + advanced_pawn_rank )
+    possible_advanced_pawn = self[ to_file + advanced_pawn_rank ]
 
     #if behind a pawn
     if (to_rank == capture_rank) && possible_advanced_pawn && (possible_advanced_pawn.role=='pawn') 
       #and that pawn was doubly (not singly) advanced
-      @match.moves.find_by_from_coord_and_to_coord( ( to_file + original_pawn_rank ) , possible_advanced_pawn.position ) != nil
+      @match.moves.find_by_from_coord_and_to_coord( ( to_file + original_pawn_rank ) , to_file + advanced_pawn_rank ) != nil
     else
       return false
     end
