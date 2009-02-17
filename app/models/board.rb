@@ -25,16 +25,7 @@ class Board
     
     #this is the only supported option right now
     @as_of_move = @match.moves.count
-    
-    #figure out the number of moves we're replaying to
-    #if (as_of_move==:current)
-    #    @as_of_move = @match.moves.count
-    #elsif  as_of_move.to_i < 0
-    #    @as_of_move = @match.moves.count + as_of_move.to_i
-    #else
-    #    @as_of_move = as_of_move.to_i
-    #end
-    
+        
     #replay the board to that position
     @match.moves[0..@as_of_move-1].each{ |m| play_move!(m) }
     
@@ -64,10 +55,18 @@ class Board
     self
   end
  
-  #returns a copy of self with move played
-  def consider_move(m)
+  # returns a copy of self with move played
+  # examples: 
+  # # block style for instant answer
+  # woot = board.consider_move( Move.new(...) ){ in_check?( :black ) } 
+  # # get the board for future consideration
+  # new = board.consider_move( Move.new(...) )
+  def consider_move(m, &block)
     considered_board = Marshal::load(Marshal.dump(self)) #deep copy to decouple pieces array
     considered_board.play_move!(m)
+
+    return considered_board unless block
+    yield(considered_board)
   end
 
   #todo - can dry up these methods 
@@ -128,8 +127,9 @@ class Board
       return false if way_out
 
       p.allowed_moves(self).each do |mv|
-        hypothetical_board = self.consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) )
-        way_out = true unless hypothetical_board.in_check?( side )
+        consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) ) do |b|
+	  way_out = ! b.in_check?( side )
+	end
       end
 
     end

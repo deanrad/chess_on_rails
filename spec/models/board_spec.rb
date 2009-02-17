@@ -243,7 +243,7 @@ describe Board do
     assert_equal 'knight', m.board['a8'].role
   end
 
-  #consider 
+  # consider yields a copy of the board on which the move has occurred
   def test_considering_a_move_is_temporary
     match = matches(:unstarted_match)
     board = match.board
@@ -251,7 +251,6 @@ describe Board do
     assert_equal :black, board['e7'].side
     
     board.consider_move( Move.new( :from_coord => 'a2', :to_coord => 'a4'  ) ) do |new_board|
-      #assert_nil new_board.piece_at('a2')
       assert_nil      new_board['a2']
       assert_not_nil  new_board['a4']
     end
