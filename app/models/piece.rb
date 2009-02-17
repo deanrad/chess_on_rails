@@ -3,11 +3,11 @@
 class Piece  
 
   #the allowed types and their shorthand
-  Types = {:kings_rook =>'R', :kings_knight =>'N',  :kings_bishop=>'B',  
-    :queens_rook=>'R', :queens_knight=>'N',  :queens_bishop=>'B', 
-    :king=>'K',  :queen=>'Q',
-    :a_pawn=>'a', :b_pawn=>'b', :c_pawn=>'c', :d_pawn=>'d',
-    :e_pawn=>'e', :f_pawn=>'f', :g_pawn=>'g', :h_pawn=>'h'
+  Types = {:kings_rook => 'R', :kings_knight => 'N',  :kings_bishop => 'B',  
+    :queens_rook => 'R', :queens_knight => 'N',  :queens_bishop => 'B', 
+    :king => 'K',  :queen => 'Q',
+    :a_pawn => 'a', :b_pawn => 'b', :c_pawn => 'c', :d_pawn => 'd',
+    :e_pawn => 'e', :f_pawn => 'f', :g_pawn => 'g', :h_pawn => 'h'
   }
   
   attr_accessor :id        #uniquely identifies a piece throughout a match, generally a combination of side and type

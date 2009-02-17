@@ -47,7 +47,7 @@ class MatchController < ApplicationController
     return unless request.post?
 
     @match = Match.new_for( @current_player, Player.find( params[:opponent_id] ), params[:opponent_side] )
-    redirect_to :action => 'show', :id=>@match.id if @match
+    redirect_to :action => 'show', :id => @match.id if @match
   end
   
 end
