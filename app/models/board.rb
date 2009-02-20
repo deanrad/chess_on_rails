@@ -96,16 +96,21 @@ class Board < Hash
       piece.role == a_piece.role && 
       pos != sitting_here
     end
+    piece
   end
   
   def in_check?( side )
-    king_pos, king  = select{ |pos, piece| piece.role=='king' && piece.side == side }
 
-    assassin = self.select do |position, attacker|
-      attacker.side != side &&
-      attacker.allowed_moves( self, position ).include?(king_pos)
+    king_pos, king  = detect do |pos, piece| 
+      piece.role=='king' && piece.side == side 
     end
-    return assassin!=[]
+
+    assassin = self.detect do |position, attacker|
+      (attacker.side != side) &&
+      attacker.allowed_moves( self, position ).include?(king_pos.to_s)
+    end
+
+    !! assassin
   end
 
   def is_en_passant_capture?( from_coord, to_coord ) 
@@ -133,12 +138,12 @@ class Board < Hash
     return false unless in_check?( side )
     
     way_out = false
-    @pieces.each do |p|
-      next if p.side != side
+    each_pair do |pos, piece|
+      next if piece.side != side
       return false if way_out
 
-      p.allowed_moves(self).each do |mv|
-        consider_move( Move.new( :from_coord => p.position, :to_coord => mv ) ) do |b|
+      piece.allowed_moves(self, pos).each do |mv|
+        consider_move( Move.new( :from_coord => pos, :to_coord => mv ) ) do |b|
 	  way_out = ! b.in_check?( side )
 	end
       end

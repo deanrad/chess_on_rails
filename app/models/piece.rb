@@ -63,9 +63,11 @@ class Piece
   
   #The part of the notation - with a piece disambiguator for pawns minors and rooks
   # It will be removed later if deemed unnecessary
-  def notation
+  def notation( current_pawn_file=nil )
     #Types contains the notation bases as values of the Hash
-    return (role == 'pawn') ? @type.to_s.split('_')[0] : Types[@type]
+    return Types[self.type] unless role == 'pawn'
+    return self.type.to_s.split('_')[0] unless current_pawn_file
+    current_pawn_file
   end
   
   #eliminates theoretical moves that would not be applicable on a certain board

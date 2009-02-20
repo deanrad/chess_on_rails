@@ -22,9 +22,13 @@ describe 'Piece' do
     
   end
   
-  def test_has_a_notation_for_pawn
+  it 'should notate a pawn correctly' do
     p1 = Piece.new(:black, :b_pawn)
-    assert_equal 'b', p1.notation
+    #if still on file  b
+    p1.notation.should == 'b'
+
+    #if still on file c
+    p1.notation('c').should == 'c'
   end
   
   def test_rook_has_four_lines_of_attack

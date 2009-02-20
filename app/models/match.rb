@@ -22,6 +22,9 @@ class Match < ActiveRecord::Base
   end
   
   def recalc_board_and_check_for_checkmate(last_move)
+    # i thought this was being done for me, but just in case...
+    # raise ActiveRecord::RecordInvalid unless last_move.errors.empty?
+
     #update internal representation of the board
     @board.play_move! last_move
     
@@ -73,6 +76,7 @@ class Match < ActiveRecord::Base
   end
 
   def checkmate_by( side )
+    self.reload
     self.result, self.active = ['Checkmate', 0]
     self.winning_player = (side == :white ? player1 : player2 )
     save!

@@ -13,6 +13,9 @@ class Move < ActiveRecord::Base
     #determine coordinates from notation
     infer_coordinates_from_notation if !self[:notation].blank? && (from_coord.blank? || to_coord.blank?)
 
+    # validations will get us later
+    return unless from_coord
+
     @piece_moving = @board[from_coord]
     @piece_moved_upon = @board[to_coord]
   end
@@ -25,7 +28,6 @@ class Move < ActiveRecord::Base
     end
 
     #promotion
-    puts "Landing on rank #{to_coord[1].chr}"
     self[:promotion_choice] ||= 'Q' if @piece_moving.promotable?( to_coord[1].chr )
 
     #castling
@@ -43,7 +45,7 @@ class Move < ActiveRecord::Base
       errors.add_to_base 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
     end
 
-    errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length>1
+    errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length > 1
     
     if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
       errors.add :notation, "Failed to infer move coordinates from #{notation}" and return 
@@ -100,7 +102,7 @@ class Move < ActiveRecord::Base
     analyze_board_position unless @board
 
     # start off with the pieces own notation
-    mynotation = @piece_moving.notation
+    mynotation = @piece_moving.notation( from_coord[0].chr )
     
     # disambiguate which piece moved if a 'sister_piece' could have moved there as well
     if( @piece_moving.role=='rook') || (@piece_moving.role=='knight')
@@ -127,7 +129,7 @@ class Move < ActiveRecord::Base
     end
 
     #promotion
-    if @piece_moving.promotable?( to_coord[0].chr )
+    if @piece_moving.promotable?( to_coord[1].chr )
       mynotation += "=#{promotion_choice}"
     end
     

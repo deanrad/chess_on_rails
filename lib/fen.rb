@@ -51,7 +51,7 @@ module Fen
   # creates and places a piece based on 1-based indices of rank and file
   def place_piece( current_file, rank, instr )
     piece = Fen::Piece.new
-    piece.position = "#{(current_file+96).chr}#{rank+1}"
+
     piece.side = instr.upcase == instr ? :white : :black
     piece.role = case instr.upcase
       when 'K' then :king
@@ -62,6 +62,8 @@ module Fen
       when 'P' then :pawn
     end
     @pieces << piece.to_piece
+    # piece.position = "#{(current_file+96).chr}#{rank+1}"
+    self["#{(current_file+96).chr}#{rank+1}"] = piece.to_piece
   end
   
   # defines the order in which we iterate over the board while 

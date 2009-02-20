@@ -22,17 +22,6 @@ describe Board do
     
   end
   
-  #def test_board_can_refer_to_move_number_or_refer_to_current_move
-  #  m1 = matches(:unstarted_match)
-  #  m1.moves << Move.new(:from_coord => 'd2', :to_coord => 'd4', :moved_by => 1, :notation => 'd4')
-  #  m1.moves << Move.new(:from_coord => 'e7', :to_coord => 'e5', :moved_by => 2, :notation => 'e5')
-  #  m1.save
-  #  
-  #  assert_not_nil m1.board(0)
-  #  assert_not_nil m1.board(1)
-  #  assert_not_nil m1.board(2)
-  #end
-
   def test_knows_a_valid_location_and_distinguishes_between_invalid_one
     assert    Chess.valid_position?('a1')
     assert  ! Chess.valid_position?('n9')
@@ -42,8 +31,7 @@ describe Board do
   
   def test_pawn_can_advance_one_or_two_on_first_move
     p = Piece.new(:white, :d_pawn)
-    p.position = 'd2'
-    moves = p.theoretical_moves
+    moves = p.theoretical_moves('d2')
 
     ['d3','d4'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
     
@@ -81,23 +69,7 @@ describe Board do
     
     edge_pawn.theoretical_moves('a2').length.should <= center_pawn.theoretical_moves('f2').length
   end
-  
-  def test_knight_has_more_moves_in_the_center
-    center_knight = Piece.new(:white, :queens_knight)
-    center_knight.position ='d4'
     
-    assert_equal 8, center_knight.theoretical_moves.length, "In #{center_knight.theoretical_moves} #{center_knight.position}"
-    assert center_knight.theoretical_moves.include?( 'e6' )
-    
-    corner_knight = Piece.new(:white, :kings_knight)
-    corner_knight.position = 'h8'
-    
-    
-    assert_equal 2, corner_knight.theoretical_moves.length
-    assert corner_knight.theoretical_moves.include?('g6')
-    assert corner_knight.theoretical_moves.include?('f7')
-  end
-  
   def test_knows_what_side_occupies_a_square
     board = matches(:unstarted_match).board
         
@@ -144,13 +116,15 @@ describe Board do
 
   end
 
-  def test_knows_if_side_is_in_check
+  it "knows when king is in check" do
     match = matches(:dean_vs_paul)
     ck = Move.new( :match_id => match.id, :from_coord => 'f8', :to_coord => 'b4' ) 
-    assert_equal 'Bb4+', ck.notate
+    #assert_equal 'Bb4+', ck.notate
     
     match.moves << ck
-    assert_equal true, match.board.in_check?( :white ) #nope
+    match.board['b4'].allowed_moves(match.board, 'b4').should include('e1')
+
+    assert_equal true, match.board.in_check?( :white ) 
   end
 
   def test_scholars_mate_capture_with_queen_is_checkmate
@@ -173,7 +147,7 @@ describe Board do
     match.moves << Move.new( :notation => 'Bxf7' )
     assert match.board.in_check?(:black)
 
-    assert match.board['e8'].allowed_moves(match.board).include?('e7')
+    assert match.board['e8'].allowed_moves(match.board, 'e8').include?('e7')
     
     assert !match.board.in_checkmate?( :black ), "Black in checkmate unexpectedly"
   end

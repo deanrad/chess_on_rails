@@ -12,18 +12,6 @@ describe "A move" do
     match.moves << Move.new( :from_coord => 'b1', :to_coord => 'c3' ) 
     assert_equal 'Nc3', match.moves.last.notation
   end
-
-  def test_pawn_cannot_move_two_initially_if_blocked
-    match = matches(:unstarted_match)
-    board = match.board
-
-    assert_equal ['d3', 'd4'], board['d2'].allowed_moves(board)
-
-    #now move the knight to block the d-pawn
-    board['b8'].position = 'd3' 
-
-    assert_equal [], board['d2'].allowed_moves( board )
-  end
   
   def test_notates_noncapturing_pawn_moves_correctly
     match = matches(:unstarted_match)
@@ -86,7 +74,7 @@ describe "A move" do
 
     #models can raise errors, controllers ultimately should not
     assert_raises ActiveRecord::RecordInvalid do
-      match.moves.build( :notation => 'Bb3' ).save!
+      match.moves << Move.new( :notation => 'Bb3' )
     end
   end
   
@@ -115,9 +103,8 @@ describe "A move" do
 
   def test_errs_if_unrecognized_notation
     match = matches(:dean_vs_maria)
-    move = match.moves.build( :notation => 'move it baby' )
     assert_raises ActiveRecord::RecordInvalid do
-      move.save!
+      match.moves << move =  Move.new( :notation => 'move it baby' )
     end
   end
   
@@ -125,8 +112,7 @@ describe "A move" do
 
     match = matches(:queenside_castled)
     assert_raises ActiveRecord::RecordInvalid do
-      move = match.moves.build( :notation => 'Nf3' )
-      move.save!
+      match.moves << move = Move.new( :notation => 'Nf3' )
     end
   end
 
