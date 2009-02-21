@@ -10,6 +10,28 @@ RAILS_GEM_VERSION = '>= 2.1.0' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+# trying to get past startup errors for rake spec occurring since 
+# ubuntu 8.10 upgrade
+module Rails
+  class Initializer
+    def require_frameworks
+      configuration.frameworks.each do |framework| 
+        puts "loading #{framework.to_s}"
+        require(framework.to_s)
+      end
+    rescue LoadError => e
+      # re-raise because Mongrel would swallow it
+      # raise e.to_s
+    end
+    def initialize_framework_caches
+      if configuration.frameworks.include?(:action_controller)
+        ActionController::Base.cache_store ||= RAILS_CACHE rescue nil
+      end
+    end
+
+  end
+end
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -19,6 +41,8 @@ Rails::Initializer.run do |config|
   # Skip frameworks you're not going to use (only works if using vendor/rails).
   # To use Rails without a database, you must remove the Active Record framework
   # config.frameworks -= [ :active_record, :active_resource, :action_mailer ]
+  config.frameworks -= [ :action_mailer, :active_resource ]
+
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
