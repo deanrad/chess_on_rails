@@ -107,10 +107,16 @@ class Move < ActiveRecord::Base
     # disambiguate which piece moved if a 'sister_piece' could have moved there as well
     if( @piece_moving.role=='rook') || (@piece_moving.role=='knight')
       mynotation = mynotation[0].chr
-      sister_piece = @board.sister_piece_of(@piece_moving, from_coord)
-      if( sister_piece != nil && sister_piece.allowed_moves(@board, from_coord).include?(to_coord) )
+
+      # look for a piece of the same type which also could have moved 
+      sister_piece_pos, sister_piece = @board.consider_move(self) do |b|
+          b.sister_piece_of(@piece_moving, from_coord)
+      end
+
+      if( sister_piece != nil && sister_piece.allowed_moves(@board, sister_piece_pos).include?(to_coord) )
         #prefer using file to disambiguate but use rank if file insufficient
-        mynotation += ( @piece_moving.file != sister_piece.file) ? @piece_moving.file : @piece_moving.rank
+        # mynotation += ( @piece_moving.file != sister_piece.file) ? @piece_moving.file : @piece_moving.rank
+        mynotation += ( from_coord[0] != sister_piece_pos[0]) ? from_coord[0].chr : from_coord[1].chr
       end
     end
         
@@ -134,7 +140,9 @@ class Move < ActiveRecord::Base
     end
     
     #check/mate
-    mynotation += '+' if @board.in_check?(  @piece_moving.side==:white ? :black : :white  )
+    mynotation += '+' if @board.consider_move(self) do |b|
+      b.in_check?( @piece_moving.side==:white ? :black : :white )
+    end
 
     return mynotation
   end

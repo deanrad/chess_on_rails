@@ -23,7 +23,7 @@ class Match < ActiveRecord::Base
   
   def recalc_board_and_check_for_checkmate(last_move)
     # i thought this was being done for me, but just in case...
-    # raise ActiveRecord::RecordInvalid unless last_move.errors.empty?
+    raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?
 
     #update internal representation of the board
     @board.play_move! last_move
