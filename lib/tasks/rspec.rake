@@ -21,27 +21,25 @@ Spec::Rake::SpecTask.new(:spec => spec_prereq) do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
 
-  # HACK to allow daisy-chaining of rake tasks - eg supplement rake test
-  # with your own functionality
-  # adapted from 
-  # http://onemanswalk.com/work/2009/01/16/stop-running-testunit-tests-when-using-rspec/
-  Rake::TaskManager.class_eval do
-    def remove_task(task_name)
-      @tasks.delete(task_name.to_s)
-    end
-    def get_task(task_name)
-      @tasks[task_name.to_s]
-    end
+# BEGIN HACK to allow daisy-chaining of rake tasks - eg supplement rake test
+# with your own functionality, adapted from http://preview.tinyurl.com/cjbwxz
+Rake::TaskManager.class_eval do
+  def delete_task(task_name)
+    @tasks.delete(task_name.to_s)
   end
-  
-  run_test_unit, run_rspec = [Rake.application.remove_task("test"), Rake.application.get_task("spec")]
-  
-  task :test do
-    puts "IM IN YOUR rake test, runnin your RSPEC!"
-    run_test_unit.invoke
-    run_rspec.invoke
+  def get_task(task_name)
+    @tasks[task_name.to_s]
   end
-
+end
+  
+#run_test_unit, run_rspec = [Rake.application.delete_task("test"), Rake.application.get_task("spec")]
+  
+#task :test do
+#  run_test_unit.invoke
+#  puts "IM IN YOUR rake test, runnin your RSPEC!"
+#  run_rspec.invoke
+#end
+# END HACK
 
 namespace :spec do
   desc "Run all specs in spec directory with RCov (excluding plugin specs)"

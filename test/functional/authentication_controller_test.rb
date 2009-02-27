@@ -1,6 +1,11 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class AuthenticationControllerTest < ActionController::TestCase
+  def setup 
+    @controller  = AuthenticationController.new
+    @request     = ActionController::TestRequest.new
+    @response    = ActionController::TestResponse.new
+  end
   
   #not technically a controller test
   def test_login_security_question_only
