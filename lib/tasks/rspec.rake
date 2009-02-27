@@ -21,6 +21,28 @@ Spec::Rake::SpecTask.new(:spec => spec_prereq) do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
 
+  # HACK to allow daisy-chaining of rake tasks - eg supplement rake test
+  # with your own functionality
+  # adapted from 
+  # http://onemanswalk.com/work/2009/01/16/stop-running-testunit-tests-when-using-rspec/
+  Rake::TaskManager.class_eval do
+    def remove_task(task_name)
+      @tasks.delete(task_name.to_s)
+    end
+    def get_task(task_name)
+      @tasks[task_name.to_s]
+    end
+  end
+  
+  run_test_unit, run_rspec = [Rake.application.remove_task("test"), Rake.application.get_task("spec")]
+  
+  task :test do
+    puts "IM IN YOUR rake test, runnin your RSPEC!"
+    run_test_unit.invoke
+    run_rspec.invoke
+  end
+
+
 namespace :spec do
   desc "Run all specs in spec directory with RCov (excluding plugin specs)"
   Spec::Rake::SpecTask.new(:rcov) do |t|
@@ -97,6 +119,7 @@ namespace :spec do
       end
     end
   end
+
 
   namespace :server do
     daemonized_server_pid = File.expand_path("spec_server.pid", RAILS_ROOT + "/tmp")
