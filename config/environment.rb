@@ -58,7 +58,8 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
 
   #prevents script/console from coming up
-  #require 'action_controller/mime_type'
-  #Mime::Type.register "text/pgn", :pgn
+  require 'action_controller/mime_type'
+  Mime::Type.register "text/pgn", :pgn
+  Mime::Type.register "text/fen", :fen
 
 end

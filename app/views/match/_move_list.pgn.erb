@@ -1,3 +1,7 @@
+[Event "Match"]
+[White "<%= @match.player1.name %>"]
+[Black "<%= @match.player1.name %>"]
+
 <% @match.moves.each_with_index do |m, i| -%>
 <%=  (i%2)==0 ? ( ((i+2)/2).to_s + "." + m.notation ).ljust(9) : "#{m.notation}\n" -%>
 <% end %>

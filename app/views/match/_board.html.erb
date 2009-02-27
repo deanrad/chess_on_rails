@@ -12,23 +12,16 @@
 
         <script>    Droppables.add('<%= position %>', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: '<%= position %>' } ); </script>
 
-        <% p = board.piece_at(position)
+        <% p = board[position]
            if p                                       -%>
 
-          <!-- img class="piece <%= p.allowed_moves(board) * ' ' %>"
-            id="<%= p.board_id %>"
-            alt="<%= p.abbrev(:fen) %>"
-            <%# full url is encoded here because we cant use relative due to routes %>
-            src="<%= "http://www.insightfultraining.com/images/chess_pieces/#{p.img_name}.gif" %>"
-           -->
-
-<!-- TODO allow png images to not be picked up by routes (served from public) -->
-<%= 
-  image_tag image_source_of(p), 
-    :id => p.board_id, 
-    :alt => p.abbrev(:fen),
-    :class => 'piece ' + p.allowed_moves(board).join(' ')
-%>
+	  <!-- TODO allow png images to not be picked up by routes (served from public) -->
+	  <%= 
+	    image_tag image_source_of(p), 
+	      :id => p.board_id, 
+	      :alt => p.abbrev(:fen),
+	      :class => 'piece ' + p.allowed_moves(board, position).join(' ')
+	  %>
 
           <%= draggable_element( p.board_id, :revert => 'true', :snap => '[49,47]' ) if @match.turn_of?(@current_player) %> 
 
