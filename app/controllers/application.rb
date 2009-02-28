@@ -66,7 +66,10 @@ class ApplicationController < ActionController::Base
 
     # too small to refactor away - but indicates whether the status has changed since last requested
     session[:move_count] ||= @match.moves.length 
+
+    #LEFTOFF - this appears not to populate properly - time to implement correctly ?
     @status_has_changed  = ( session[:move_count] != @match.moves.length )
+
     session[:move_count] = @match.moves.length
   end	
   
