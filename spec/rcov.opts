@@ -1,1 +1,3 @@
 --rails
+--exclude /var/lib/gems/*
+
