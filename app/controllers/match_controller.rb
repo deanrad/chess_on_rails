@@ -28,6 +28,7 @@ class MatchController < ApplicationController
 
   def status 
     @match = Match.find( params[:id] )
+
     set_match_status_instance_variables
   end
 

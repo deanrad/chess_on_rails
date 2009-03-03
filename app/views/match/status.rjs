@@ -1,26 +1,37 @@
 page['move_error'].innerHTML = flash[:move_error] || ''
 
+
+
 if @status_has_changed
-	#page << "Droppables.clear();" #clear these out if having problems
-	#page << "Draggables.clear();"
 
-	page.replace_html 'move_list', :partial => 'match/move_list'
-	page.replace_html 'move_indicator_parent', :partial => 'match/move_indicator', :locals => {:your_turn => @your_turn}
-	page.replace_html 'board_parent', :partial => "match/board", :locals => { :ranks => @ranks, :files => @files, :board => @board }
-	page['move_submit_btn'].disabled = ! @your_turn
-	#todo play with start/end color to signify things
-	page.visual_effect(:highlight, @last_move.to_coord, :startcolor => (@last_move.notation.include?('x') ? 'ff0000' : '00ff00') , :duration => 5) #if @your_turn 
-	# page['new_move_form'].reset
+  page.replace_html 'move_list', :partial => 'match/move_list'
+  page.replace_html 'move_indicator_parent', :partial => 'match/move_indicator', :locals => {:your_turn => @your_turn}
+  page.replace_html 'board_parent', :partial => "match/board", :locals => { :ranks => @ranks, :files => @files, :board => @board }
+  page['move_submit_btn'].disabled = ! @your_turn
 
-	# The first few chars of the title bar may be visible if window is minimized, so update
-        # them to indicate its your turnx
-        page << "document.title = 'Your move: ' + document.title.replace(/^.*move:/, '')" if @your_turn
-        page << "document.title = document.title.replace(/^.*move:/, '')" if ! @your_turn
+  
+  # destroy the old PeriodicExecuter
 
-	return if @match.active == 1
 
-	if @match.result.include?('Checkmate')
-		page.alert('It appears your opponent has gotten the best of you today. Checkmate !')
-		page.redirect_to '../'
-	end
+logger.warn "replacing old periodicex - new one will refer to move #{@match.moves.length}"
+
+#TODO try using partial instead
+    page.replace_html 'updater_div', :partial => 'match/updater'
+
+  #todo play with start/end color to signify things
+  page.visual_effect(:highlight, @last_move.to_coord, :startcolor => (@last_move.notation.include?('x') ? 'ff0000' : '00ff00') , :duration => 5) #if @your_turn 
+  # page['new_move_form'].reset
+
+  # The first few chars of the title bar may be visible if window is minimized, so update
+  # them to indicate its your turnx
+  page << "document.title = 'Your move: ' + document.title.replace(/^.*move:/, '')" if @your_turn
+  page << "document.title = document.title.replace(/^.*move:/, '')" if ! @your_turn
+
+  return if @match.active == 1
+
+  if @match.result.include?('Checkmate')
+    page.alert('It appears your opponent has gotten the best of you today. Checkmate !')
+    page.redirect_to '../'
+  end
+
 end
