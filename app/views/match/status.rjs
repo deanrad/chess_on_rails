@@ -12,4 +12,15 @@ if @status_has_changed
   page.replace_html 'board_parent', :partial => "match/board", :locals => { :ranks => @ranks, :files => @files, :board => @board }
   page['move_submit_btn'].disabled = ! @your_turn
 
+  page.visual_effect(
+    :highlight, 
+    @last_move.to_coord, 
+    :startcolor => (@last_move.notation.include?('x') ? 'ff0000' : '00ff00'), 
+    :duration => 10
+  )
+
+  # The first few chars of the title bar may be visible if window is minimized, so update
+  # them to indicate its your turnx
+  page << "document.title = 'Your move: ' + document.title.replace(/^.*move:/, '')" 
+
 end
