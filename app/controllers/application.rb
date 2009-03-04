@@ -54,8 +54,6 @@ class ApplicationController < ActionController::Base
 
     @board = @match.board
 
-    logger.warn "BEN HARPER says #{@match.moves.length} vs #{params[:move]}"
-
     @viewed_from_side = (@current_player == @match.player1) ? :white : :black
     @your_turn = @match.turn_of?( @current_player )
 
@@ -65,8 +63,7 @@ class ApplicationController < ActionController::Base
     end
 
     @last_move = @match.reload.moves.last
-    @status_has_changed = ( params[:move].to_i != @match.moves.length)
-    logger.warn "STATUS HAS CHANGED ! " if @status_has_changed
+    @status_has_changed = ( params[:move].to_i == @match.moves.length)
   end	
   
   # See ActionController::RequestForgeryProtection for details

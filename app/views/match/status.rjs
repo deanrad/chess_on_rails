@@ -1,37 +1,15 @@
-page['move_error'].innerHTML = flash[:move_error] || ''
-
-
+# status.rjs - this template emits JS to update the board in-place, as well as to increment
+# the move number the page is polling. While the same URL could have been used, embedding 
+# the move number in the URL requested by the client allows the page to be handled more 
+# statelessly, adds a layer of tracability, and does not leak state into cookies or session
+# variables, allowing for future tracking of multiple matches at once.
 
 if @status_has_changed
+  page << "next_move_url = '#{url_for( :action => :status, :move => @match.moves.length + 1 ) }';"
 
   page.replace_html 'move_list', :partial => 'match/move_list'
   page.replace_html 'move_indicator_parent', :partial => 'match/move_indicator', :locals => {:your_turn => @your_turn}
   page.replace_html 'board_parent', :partial => "match/board", :locals => { :ranks => @ranks, :files => @files, :board => @board }
   page['move_submit_btn'].disabled = ! @your_turn
-
-  
-  # destroy the old PeriodicExecuter
-
-
-logger.warn "replacing old periodicex - new one will refer to move #{@match.moves.length}"
-
-#TODO try using partial instead
-    page.replace_html 'updater_div', :partial => 'match/updater'
-
-  #todo play with start/end color to signify things
-  page.visual_effect(:highlight, @last_move.to_coord, :startcolor => (@last_move.notation.include?('x') ? 'ff0000' : '00ff00') , :duration => 5) #if @your_turn 
-  # page['new_move_form'].reset
-
-  # The first few chars of the title bar may be visible if window is minimized, so update
-  # them to indicate its your turnx
-  page << "document.title = 'Your move: ' + document.title.replace(/^.*move:/, '')" if @your_turn
-  page << "document.title = document.title.replace(/^.*move:/, '')" if ! @your_turn
-
-  return if @match.active == 1
-
-  if @match.result.include?('Checkmate')
-    page.alert('It appears your opponent has gotten the best of you today. Checkmate !')
-    page.redirect_to '../'
-  end
 
 end

@@ -41,5 +41,8 @@ body {font-family: Arial; font-size: 10pt;}
 #h2, #h4, #h6, #h8
 {background-color:#dfdfdf}
 
-	.active_yours {background-color:black; color:white; font-weight:bold}
-	.active_theirs {background-color:eee; color:bbb; font-weight:bold}
+.active_yours {background-color:black; color:white; font-weight:bold}
+.active_theirs {background-color:eee; color:bbb; font-weight:bold}
+
+.just_moved {  background-color:afa;  }
+.just_moved_w_capture {  background-color:d44;  }

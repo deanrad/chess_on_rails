@@ -27,8 +27,29 @@ Takebacks are not enabled. Have fun !
 
 <br/>
 
+<script>
+   // this url will be polled for updates, and when a move has been made, this url
+   // will be replaced by the new url to poll for updates
+   // TODO its clear this will only allow one match to be tracked per DOM 
+   //  if its ever to be the case that one DOM manages several matches, some scoping will be needed
+   var next_move_url = '<%= url_for( :action => :status, :move => @match.moves.length + 1 ) %>';
+</script>
 <div id="updater_div">
-<%= render :partial => "match/updater" %>
+<script>
+  //<![CDATA[
+
+<% if ! @your_turn %>
+  this_updater = new PeriodicalExecuter(
+    function(){
+      new Ajax.Request(
+        next_move_url, 
+        {asynchronous:true, evalScripts:true, method:'get'} 
+      )
+    }, 15
+  )
+<% end %>
+//]]>
+</script>
 </div>
 
 <span id="move_indicator_parent">
