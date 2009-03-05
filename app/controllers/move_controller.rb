@@ -11,9 +11,9 @@ class MoveController < ApplicationController
     #render :text => "#{params[:match_id] + params[:notation]}" and return
     
     if params[:move]
-      @match.moves << Move.new( params[:move] )
+      @match.moves << @move = Move.new( params[:move] )
     elsif params[:notation]
-      @match.moves << Move.new( :notation => params[:notation] )
+      @match.moves << @move = Move.new( :notation => params[:notation] )
     end
     
     @match.save! #only here to trigger validation
@@ -45,12 +45,12 @@ protected
   end
 
   def display_error(ex)
-    flash[:move_error] = ex.to_s
+    flash[:move_error] = ex.to_s  #TODO this error handling SUCKS !
     
-    if request.xhr?
-      set_match_status_instance_variables
-      render :template => 'match/status' and return
-    end
+    #if request.xhr?
+    #  set_match_status_instance_variables
+    #  render :template => 'match/status' and return
+    #end
 
     redirect_to( match_url(@match.id) ) and return if @match
     

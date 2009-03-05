@@ -46,25 +46,6 @@ class ApplicationController < ActionController::Base
     session[:original_uri] = request.request_uri
     redirect_to login_url unless params[:format]=='fbml'
   end
-
-  #given a @match and @current_player, sets up other instance variables 
-  def set_match_status_instance_variables
-    @files = Chess::Files
-    @ranks = Chess::Ranks.reverse
-
-    @board = @match.board
-
-    @viewed_from_side = (@current_player == @match.player1) ? :white : :black
-    @your_turn = @match.turn_of?( @current_player )
-
-    if @viewed_from_side == :black
-      @files.reverse!
-      @ranks.reverse!
-    end
-
-    @last_move = @match.reload.moves.last
-    @status_has_changed = ( params[:move].to_i == @match.moves.length)
-  end	
   
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
