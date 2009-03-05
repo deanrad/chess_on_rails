@@ -7,6 +7,8 @@ ActionController::Routing::Routes.draw do |map|
   map.login   'authentication/login', :controller => 'authentication', :action => 'login'
   map.logout  'authentication/logout', :controller => 'authentication', :action => 'logout'
 
+  #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
+  map.create_move 'match/:match_id/moves/:notation', :controller => 'move', :action => 'create', :defaults => { :notation => nil }
 
   map.resources :match , :except => [:delete], :shallow => true do |match|
     match.resources :moves, :controller => :move, :collection => { :create => :post }
