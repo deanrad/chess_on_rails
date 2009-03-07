@@ -101,8 +101,12 @@ namespace :spec do
     ::CodeStatistics::TEST_TYPES << "View specs" if File.exist?('spec/views')
     ::CodeStatistics::TEST_TYPES << "Controller specs" if File.exist?('spec/controllers')
     ::CodeStatistics::TEST_TYPES << "Helper specs" if File.exist?('spec/helpers')
-    ::CodeStatistics::TEST_TYPES << "Library specs" if File.exist?('spec/lib')
-    ::STATS_DIRECTORIES.delete_if {|a| a[0] =~ /test/}
+
+    #We're not counting library files which add 'plugin' like functionality only (FEN, etc)
+    ::STATS_DIRECTORIES.reject!{ |elem| elem[0].include? "Librar" }
+    # ::CodeStatistics::TEST_TYPES << "Library specs" if File.exist?('spec/lib')
+
+    # ::STATS_DIRECTORIES.delete_if {|a| a[0] =~ /test/}
   end
 
   namespace :db do
