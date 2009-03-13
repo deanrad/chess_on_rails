@@ -1,15 +1,9 @@
+require 'notation'
 
 #An instance of a piece bound to a particular match
 class Piece  
+  include PieceNotation
 
-  #the allowed types and their shorthand
-  Types = {:kings_rook => 'R', :kings_knight => 'N',  :kings_bishop => 'B',  
-    :queens_rook => 'R', :queens_knight => 'N',  :queens_bishop => 'B', 
-    :king => 'K',  :queen => 'Q',
-    :a_pawn => 'a', :b_pawn => 'b', :c_pawn => 'c', :d_pawn => 'd',
-    :e_pawn => 'e', :f_pawn => 'f', :g_pawn => 'g', :h_pawn => 'h'
-  }
-  
   attr_accessor :id        #uniquely identifies a piece throughout a match, generally a combination of side and type
   attr_accessor :side      #black or white
   attr_accessor :type      #ex. queens_bishop
@@ -60,16 +54,7 @@ class Piece
     return  BISHOP_LINES + ROOK_LINES  if role=='queen'
     @lines_of_attack || []
   end
-  
-  #The part of the notation - with a piece disambiguator for pawns minors and rooks
-  # It will be removed later if deemed unnecessary
-  def notation( current_pawn_file=nil )
-    #Types contains the notation bases as values of the Hash
-    return Types[self.type] unless role == 'pawn'
-    return self.type.to_s.split('_')[0] unless current_pawn_file
-    current_pawn_file
-  end
-  
+    
   #eliminates theoretical moves that would not be applicable on a certain board
   # for reasons of: 1) would be on your own sides square
   # 2) would place your king in check

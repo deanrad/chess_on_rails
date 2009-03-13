@@ -7,30 +7,7 @@ describe 'Piece' do
     p = Piece.new(:black, :a_pawn)
     #completes without error
   end
-    
-  def test_has_a_notation_for_king_and_queen
-    assert_equal 'Q', Piece.new(:white, :queen).notation
-    assert_equal 'K', Piece.new(:white, :king).notation
-  end
-  
-  def test_has_a_notation_for_minor_and_rook
-    p1 = Piece.new(:white, :queens_rook)
-    assert_equal 'R', p1.notation
-    
-    p1 = Piece.new(:white, :queens_knight)
-    assert_equal 'N', p1.notation
-    
-  end
-  
-  it 'should notate a pawn correctly' do
-    p1 = Piece.new(:black, :b_pawn)
-    #if still on file  b
-    p1.notation.should == 'b'
-
-    #if still on file c
-    p1.notation('c').should == 'c'
-  end
-  
+        
   def test_rook_has_four_lines_of_attack
     p = Piece.new(:black, :queens_rook, 'a8')
     assert_equal 4, p.lines_of_attack.length
