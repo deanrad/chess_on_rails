@@ -29,18 +29,19 @@ module Fen
 
     self.each_piece_in_fen_order do |piece| 
       if piece
-        fen << (consec_space > 0 ? consec_space.to_s : '') << piece.abbrev(:fen) and consec_space=0 
+        fen << (consec_space > 0 ? consec_space.to_s : '') << piece.abbrev and consec_space=0 
       else
         consec_space += 1
       end
       this_file += 1
       if this_file > 8
-        fen << (consec_space == 8 ? consec_space.to_s : '') << '/'
+        #fen << (consec_space == 8 ? consec_space.to_s : '') << '/'
+        fen << (consec_space > 1 ? consec_space.to_s : '') << '/'
         this_file = 1 ; consec_space = 0
       end
     end
 
-     fen.chomp
+     fen.chop
   end
 
   # verifies validity or throws error

@@ -78,7 +78,11 @@ describe 'Forsyth-Edwards (FEN) Notation' do
       it 'should increment to the next rank once 8 has been reached' do
         b = Board.new( "8/P7/8/8/8/8/8/8" )
         b.pieces.should have(1).piece
-        b.pieces[0].position.should == "a2"
+      end
+
+      it 'should round-trip quite nicely' do
+        b = Board.new( KQ_ONLY )
+        b.to_fen.should == KQ_ONLY
       end
     end
 
