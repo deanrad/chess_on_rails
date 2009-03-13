@@ -7,6 +7,13 @@ class Move < ActiveRecord::Base
 
   NOTATION_TO_ROLE_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
 
+  def initialize( opts )
+    super
+    if self[:notation].blank? == ( self[:from_coord].blank? && self[:to_coord].blank? )
+      raise 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
+    end
+  end
+
   def analyze_board_position
     @board = match.board
 
@@ -40,10 +47,6 @@ class Move < ActiveRecord::Base
   #stuff here depends on knowledge of the board's position prior to the move being committed
   # this should be considered a before-save function and maybe validate is not exactly the best place
   def validate
-
-    if self[:notation].blank? && ( self[:from_coord].blank? || self[:to_coord].blank? )
-      errors.add_to_base 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
-    end
 
     errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length > 1
     

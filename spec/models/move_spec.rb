@@ -116,6 +116,14 @@ describe "A move" do
     end
   end
 
+  it "should disallow combined notation and coordinate move" do
+    match = matches(:unstarted_match)
+    lambda{
+      m = Move.new( :notation => 'e4', :from_coord => 'e2', :to_coord => 'e4' )
+    }.should raise_error
+
+  end
+
   #TODO uncomment test test_errs_if_move_leaves_ones_own_king_in_check
 =begin
   def test_errs_if_move_leaves_ones_own_king_in_check

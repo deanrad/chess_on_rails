@@ -98,7 +98,7 @@ describe Board do
     assert_not_nil match.board
     
     assert_nil match.board['d4']
-    match.moves << Move.new( :from_coord => 'd2', :to_coord => 'd4', :notation => 'd4' )
+    match.moves << Move.new( :from_coord => 'd2', :to_coord => 'd4' )
     
     assert_not_nil match.board['d4']
   end
