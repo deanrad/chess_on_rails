@@ -19,7 +19,7 @@
 	  <%= 
 	    image_tag image_source_of(p), 
 	      :id => p.board_id, 
-	      :alt => p.abbrev(:fen),
+	      :alt => p.abbrev,
 	      :class => 'piece ' + p.allowed_moves(board, position).join(' ') + 
 	      (@last_move.to_coord == position ? ' just_moved' : '' ) +
 	      (@last_move.notation.include?('x') ? '_w_capture' : '' )

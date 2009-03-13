@@ -14,6 +14,12 @@ module PieceNotation
   def notation( current_pawn_file = nil )
     role_notation(role) || current_pawn_file
   end
+
+  # but uppercase for white, lower for black, and P for all pawns
+  def abbrev
+    single_char = role_notation(role) || 'p'
+    return single_char.send( @side==:white ? 'upcase' : 'downcase' )
+  end
 end
 
 module MoveNotation
