@@ -163,7 +163,7 @@ class Board < Hash
       files.each do |file|
         piece = self[ file + rank ]
         #output << file+rank
-        output << (piece ? piece.abbrev(:fen) : ' ')
+        output << (piece ? piece.abbrev : ' ')
         output << (file != last_file ? ' ' : "\n")
       end
     end  

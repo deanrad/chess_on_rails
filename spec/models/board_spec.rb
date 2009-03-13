@@ -214,4 +214,19 @@ describe Board do
     assert_nil        board['a4']    
   end 
 
+  it 'can output board in string format' do
+    match = matches(:unstarted_match)
+    board = match.board
+    board.to_s.should == <<-DaBoard
+r n b q k b n r
+p p p p p p p p
+               
+               
+               
+               
+P P P P P P P P
+R N B Q K B N R
+
+DaBoard
+  end
 end
