@@ -3,16 +3,13 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 #The board has the 
 describe Board do
-
-  # TODO - no fixtures
-  fixtures :all
   
-  def test_new_match_gets_an_initial_board
+  it 'should new_match_gets_an_initial_board' do
     m1 = matches(:unstarted_match)
     assert_equal 32, m1.board.pieces.length
   end
   
-  def test_after_one_move_board_reflects_move
+  it 'should after_one_move_board_reflects_move' do
     m1 = matches(:unstarted_match)
     
     m1.moves << Move.new(:notation => 'e4')
@@ -22,14 +19,14 @@ describe Board do
     
   end
   
-  def test_knows_a_valid_location_and_distinguishes_between_invalid_one
+  it 'should knows_a_valid_location_and_distinguishes_between_invalid_one' do
     assert    Chess.valid_position?('a1')
     assert  ! Chess.valid_position?('n9')
     assert  ! Chess.valid_position?('a9')
     assert  ! Chess.valid_position?('1a')
   end
   
-  def test_pawn_can_advance_one_or_two_on_first_move
+  it 'should pawn_can_advance_one_or_two_on_first_move' do
     p = Piece.new(:white, :d_pawn)
     moves = p.theoretical_moves('d2')
 
@@ -40,7 +37,7 @@ describe Board do
     ['e6','e5'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
   end
   
-  def test_pawn_can_only_advance_one_on_successive_moves
+  it 'should pawn_can_only_advance_one_on_successive_moves' do
     p = Piece.new(:white, :d_pawn)
     moves = p.theoretical_moves('d4')
     assert !moves.include?('d6')
@@ -50,7 +47,7 @@ describe Board do
     assert !moves.include?('e1')
   end
   
-  def test_pawn_diagonal_captures_possible_accounting_for_ends
+  it 'should pawn_diagonal_captures_possible_accounting_for_ends' do
     p = Piece.new(:white, :d_pawn)
     moves = p.theoretical_moves 'd2'
     ['e3','c3'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}" }
@@ -70,14 +67,14 @@ describe Board do
     edge_pawn.theoretical_moves('a2').length.should <= center_pawn.theoretical_moves('f2').length
   end
     
-  def test_knows_what_side_occupies_a_square
+  it 'should knows_what_side_occupies_a_square' do
     board = matches(:unstarted_match).board
         
     assert_equal :white, board['a2'].side
     assert_equal :black, board['e7'].side
   end 
   
-  def test_knows_what_piece_is_on_a_square
+  it 'should knows_what_piece_is_on_a_square' do
     assert_nil matches(:unstarted_match).board['d4']
     p1 = matches(:unstarted_match).board['b2']
     assert_not_nil p1
@@ -85,15 +82,8 @@ describe Board do
     assert_equal 'pawn', p1.role
     assert_equal :white, p1.side
   end
-  
-  #def test_can_refer_to_as_many_boards_as_there_are_moves
-  #  match = matches(:unstarted_match)
-  #  assert_not_nil match.board
-  #  
-  #  match.moves << Move.new( :from_coord => 'd2', :to_coord => 'd4', :notation => 'd4' )
-  #end
-  
-  def test_detects_moved_piece
+    
+  it 'should detects_moved_piece' do
     match = matches(:unstarted_match)
     assert_not_nil match.board
     
@@ -103,7 +93,7 @@ describe Board do
     assert_not_nil match.board['d4']
   end
 
-  def test_castled_short_white_king_on_g1
+  it 'should castled_short_white_king_on_g1' do
     match = matches(:castled)
 
     piece = match.board['g1']
@@ -127,7 +117,7 @@ describe Board do
     assert_equal true, match.board.in_check?( :white ) 
   end
 
-  def test_scholars_mate_capture_with_queen_is_checkmate
+  it 'should scholars_mate_capture_with_queen_is_checkmate' do
     match = matches(:scholars_mate)
     assert_equal :white, match.next_to_move
     assert_equal 'queen', match.board['f3'].role
@@ -142,7 +132,7 @@ describe Board do
     assert match.board.in_checkmate?(:black), "Not in checkmate as expected"
   end
 
-  def test_scholars_mate_capture_with_bishop_not_checkmate
+  it 'should scholars_mate_capture_with_bishop_not_checkmate' do
     match = matches(:scholars_mate)
     match.moves << Move.new( :notation => 'Bxf7' )
     assert match.board.in_check?(:black)
@@ -152,7 +142,7 @@ describe Board do
     assert !match.board.in_checkmate?( :black ), "Black in checkmate unexpectedly"
   end
 
-  def test_pawn_can_capture_en_passant
+  it 'should pawn_can_capture_en_passant' do
     match = matches(:unstarted_match)
     
     match.moves << Move.new(:notation => 'e4') 
@@ -172,7 +162,7 @@ describe Board do
     assert_nil   match.board['d5'] 
   end	
 
-  def test_pawn_en_passant_not_possible_for_single_stepped_opponent_pawn
+  it 'should pawn_en_passant_not_possible_for_single_stepped_opponent_pawn' do
     m = matches(:unstarted_match)
     m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'd6')
     m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
@@ -181,7 +171,7 @@ describe Board do
     assert_equal ['e6'], b['e5'].allowed_moves(b, 'e5')
   end	
 
-  def test_promotes_automatically_to_queen_on_reaching_opposing_back_rank
+  it 'should promotes_automatically_to_queen_on_reaching_opposing_back_rank' do
     m = matches(:promote_crazy)
     m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8' )
 
@@ -190,7 +180,7 @@ describe Board do
     assert_equal 'bxa8=Q', m.moves.last.notation
   end
 
-  def test_may_promote_to_knight_on_reaching_opposing_back_rank
+  it 'should may_promote_to_knight_on_reaching_opposing_back_rank' do
     m = matches(:promote_crazy)
     #b = m.board
     m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8', :promotion_choice => 'N' )
@@ -199,7 +189,7 @@ describe Board do
   end
 
   # consider yields a copy of the board on which the move has occurred
-  def test_considering_a_move_is_temporary
+  it 'should considering_a_move_is_temporary' do
     match = matches(:unstarted_match)
     board = match.board
     assert_equal :white, board['a2'].side
