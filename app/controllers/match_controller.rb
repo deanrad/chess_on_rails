@@ -58,6 +58,7 @@ class MatchController < ApplicationController
   end
 
   private 
+
   #given a @match and @current_player, sets up other instance variables 
   def set_view_vars
     @files = Chess::Files
