@@ -1,5 +1,3 @@
-require 'ruby-debug'
-
 class MoveController < ApplicationController
 
   rescue_from ArgumentError, :with => :display_error
