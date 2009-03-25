@@ -53,7 +53,7 @@ class Move < ActiveRecord::Base
     errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length > 1
     
     if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
-      errors.add :notation, "Failed to infer move coordinates from #{notation}" and return 
+      errors.add :notation, "The notation #{notation} doesn't specify a valid move" and return 
     end
     
     #ensure the validity of the coordinates we have whether specified or inferred

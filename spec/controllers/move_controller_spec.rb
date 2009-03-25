@@ -8,9 +8,10 @@ describe MoveController do
     @response   = ActionController::TestResponse.new
   end
   
-  def test_reject_move_made_with_one_or_more_invalid_coordinates
+  it 'should have a flash error upon an invalid move' do
     post :create, {:match_id => 3, :move => { :from_coord =>'e2', :to_coord => 'x9' }  }, {:player_id => 1}
-    assert_not_nil flash[:move_error]
+    flash[:move_error].should include('x9 is not a valid')
+    
   end
   
   def test_accepts_and_notates_move_via_coordinates
