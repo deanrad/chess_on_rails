@@ -21,8 +21,8 @@
 	      :id => p.board_id, 
 	      :alt => p.abbrev,
 	      :class => 'piece ' + p.allowed_moves(board, position).join(' ') + 
-	      (@last_move.to_coord == position ? ' just_moved' : '' ) +
-	      (@last_move.notation.include?('x') ? '_w_capture' : '' )
+	      (@last_move && @last_move.to_coord == position ? ' just_moved' : '' ) +
+	      (@last_move && @last_move.notation.include?('x') ? '_w_capture' : '' )
 	  %>
 
           <%= draggable_element( p.board_id, :revert => 'true', :snap => '[49,47]' ) if @match.turn_of?(@current_player) %> 
