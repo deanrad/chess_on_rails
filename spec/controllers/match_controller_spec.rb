@@ -9,6 +9,16 @@ describe MatchController do
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
+  
+  it 'should allow POST creation of a match between two player_ids' do
+    post :create, {:opponent_id => 3, :opponent_side => 'black'}, {:player_id => players(:dean).id }
+
+    match = assigns[:match]
+
+    match.should_not be_nil
+    response.should redirect_to( :controller => :match, :action => :show, :id => match.id )
+    match.player2.should == Player.find(3)
+  end
 
   describe '- status updating' do
     before(:all) do 

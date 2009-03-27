@@ -11,16 +11,22 @@ class Match < ActiveRecord::Base
   
   attr_reader :board
   
-  #AR callback - ensures a match object has a replayed board
+  #AR callback - ensures a match object has an initialized board
   def after_find
-    replay_board
+    init_board
+  end
+
+  def initialize( opts={} )
+    opts[:player1] = opts.delete(:white) if opts[:white]
+    opts[:player2] = opts.delete(:black) if opts[:black]
+    super
   end
   
-  def self.new_for( plyr1, plyr2, plyr2_side )
-    plyr1, plyr2 = [plyr2, plyr1] if plyr2_side == '1'
-    Match.new( :player1 => plyr1, :player2 => plyr2 )
+  def switch
+    raise ArgumentError, "Cannot switch players on a saved match" unless new_record?
+    b = self.player2; self.player2 = self.player1; self.player1 = b;
   end
-  
+
   def recalc_board_and_check_for_checkmate(last_move)
     # i thought this was being done for me, but just in case...
     raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?
@@ -33,7 +39,7 @@ class Match < ActiveRecord::Base
     checkmate_by( last_move.side ) if @board.in_checkmate?( other_guy )
   end
     
-  def replay_board
+  def init_board
     if self[:start_pos].blank?
       @board = Board.new( self, Chess.initial_pieces ) 
     else

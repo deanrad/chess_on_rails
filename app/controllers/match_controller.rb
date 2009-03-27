@@ -53,8 +53,11 @@ class MatchController < ApplicationController
   def create
     return unless request.post?
 
-    @match = Match.new_for( @current_player, Player.find( params[:opponent_id] ), params[:opponent_side] )
-    redirect_to :action => 'show', :id => @match.id if @match
+    @match = Match.new( :player1 => @current_player, :player2 => Player.find( params[:opponent_id] ) )
+    @match.switch if params[:opponent_side] == 'white'
+    @match.save!
+
+    redirect_to match_url(@match.id) if @match
   end
 
   private 
