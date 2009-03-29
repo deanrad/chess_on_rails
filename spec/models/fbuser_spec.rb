@@ -10,4 +10,9 @@ describe "Facebook User" do
     fb.reload.playing_as.name.should == expected
     fb.name.should == expected
   end
+
+  it 'enhances player class with facebook_id' do
+    players(:dean).facebook_id.should_not be_nil
+    players(:chris).facebook_id.should    be_nil
+  end
 end

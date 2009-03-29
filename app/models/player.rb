@@ -5,6 +5,12 @@ class Player < ActiveRecord::Base
 
   belongs_to :user
 
+  has_one    :fbuser, :foreign_key => :playing_as
+  def facebook_id
+    return nil unless fbuser
+    fbuser.facebook_user_id
+  end
+
   has_many  :matches, :class_name => "Match",
     :finder_sql => 'SELECT matches.* FROM matches WHERE ( player1_id = #{id} OR player2_id= #{id} )'
 
