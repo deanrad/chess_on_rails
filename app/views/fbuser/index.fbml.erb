@@ -1,11 +1,12 @@
 <div style="float:left; height:500px; margin-right: 25px;"> <%= fb_profile_pic( session[:facebook_user_id] ) %> </div>
 
-<% if @current_player %>
+<% if current_player %>
 
 	<h1>I feel fat, and sassy - let's play some Chess !</h1>
 
-	You have <strong><%= @current_player.active_matches.count %></strong> Active Matches.<br/>
+	You have <strong><%= current_player.active_matches.count %></strong> Active Matches.<br/>
 
+	<%# FB FIXME hardcode this path ? or better way ? %>
 	<div style="margin-top: 20px"><%= link_to 'Go to my Chess games', '/enpassant/match/'  %></div>
 
 <% else %>

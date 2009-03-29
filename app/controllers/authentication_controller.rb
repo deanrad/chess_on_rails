@@ -11,10 +11,10 @@ class AuthenticationController < ApplicationController
     session[:player_id] = @player.id
 
     #return them to original page requested
-    redirect_to session[:original_uri] and return if session[:original_uri] and params[:format] != 'fbml'
+    redirect_to session[:original_uri] and return if session[:original_uri]
     
     #or their homepage
-    redirect_to matches_url and return
+    redirect_to match_index_url and return
   end
   
   def logout

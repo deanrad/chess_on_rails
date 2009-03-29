@@ -5,28 +5,10 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
   #only use layout if not a facebook request - todo - standardize the 'is_facebook' test
-  layout proc{ |c| c.params[:fb_sig] ? false : 'application' }
-
-  #in advance of the call to authorize, detect_facebook infers authorization information
-  # from facebook request headers
-  def detect_facebook
-    session[:facebook_user_id]= params[:fb_sig_user].to_i if RAILS_ENV == 'test' && !params[:fb_sig_user].blank?
-
-    unless session[:facebook_user_id]
-      return unless session[:facebook_session]
-      session[:facebook_user_id]= session[:facebook_session].user.id
-    end
-
-    fb_user = Fbuser.find_by_facebook_user_id( session[:facebook_user_id] )
-    return unless fb_user
-
-    session[:player_id] = fb_user.playing_as.id
-  end	
-
+  # layout proc{ |c| c.params[:fb_sig] ? false : 'application' }
 
   # allow descendant controllers to protect their methods against unauthorized access		
   def authorize
-    detect_facebook unless session[:player_id] 
 
     @current_player = Player.find(session[:player_id]) and return if session[:player_id] 
 
@@ -44,8 +26,16 @@ class ApplicationController < ActionController::Base
     
     flash[:notice] = "Login is required in order to take this action."
     session[:original_uri] = request.request_uri
-    redirect_to login_url unless params[:format]=='fbml'
+    redirect_to login_url
   end
+
+  # Going through this method will end confusion as to how to determine the current player
+  #  - whether from session[:player_id], @current_player, facebook info, etc..
+  # For now just return the instance variable set by authorize. 
+  def current_player
+    @current_player
+  end
+  helper_method :current_player
   
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store

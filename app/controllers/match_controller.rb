@@ -1,11 +1,6 @@
 class MatchController < ApplicationController
   
   before_filter :authorize
-  before_filter :fbml_cleanup, :except => 'show'
-  
-  def fbml_cleanup
-    params[:format]='html' if params[:format]=='fbml'
-  end
 
   # GET /match/1
   def show
@@ -24,7 +19,7 @@ class MatchController < ApplicationController
   # GET /match/ 
   def index
     # shows active matches
-    @matches = @current_player.active_matches
+    @matches = current_player.active_matches
   end
 
   # match/:id/status?move=N returns javascript to update the board to move N. 
@@ -62,15 +57,15 @@ class MatchController < ApplicationController
 
   private 
 
-  #given a @match and @current_player, sets up other instance variables 
+  #given a @match and current_player, sets up other instance variables 
   def set_view_vars
     @files = Chess::Files
     @ranks = Chess::Ranks.reverse
 
     @board = @match.board
 
-    @viewed_from_side = (@current_player == @match.player1) ? :white : :black
-    @your_turn = @match.turn_of?( @current_player )
+    @viewed_from_side = (current_player == @match.player1) ? :white : :black
+    @your_turn = @match.turn_of?( current_player )
 
     if @viewed_from_side == :black
       @files.reverse!

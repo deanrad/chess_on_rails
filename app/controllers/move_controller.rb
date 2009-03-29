@@ -7,10 +7,10 @@ class MoveController < ApplicationController
 
   #accessible via get or post but should be idempotent on 2x get
   def create
-    @match = @current_player.active_matches.find( params[:match_id] || params[:move][:match_id] )
+    @match = current_player.active_matches.find( params[:match_id] || params[:move][:match_id] )
 
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
-    raise ArgumentError, "It is your not your turn to move yet" unless @match.turn_of?( @current_player )
+    raise ArgumentError, "It is your not your turn to move yet" unless @match.turn_of?( current_player )
 
     if params[:move]
       @match.moves << @move = Move.new( params[:move] )
