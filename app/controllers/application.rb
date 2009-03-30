@@ -4,38 +4,47 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
+  helper_attr :current_fbuser  #attr_accessor and helper_method
+  attr_accessor :current_player
+  helper_method :current_player
+
   #only use layout if not a facebook request - todo - standardize the 'is_facebook' test
   # layout proc{ |c| c.params[:fb_sig] ? false : 'application' }
 
-  # allow descendant controllers to protect their methods against unauthorized access		
+  # descendant controllers call authorize to ensure player is logged in, or redirect them to login
   def authorize
+    self.current_player ||= player_in_session || player_in_facebook || player_in_cookie || player_over_http
 
-    @current_player = Player.find(session[:player_id]) and return if session[:player_id] 
-
-
-    #else try basic auth for Curl/Wget functionality
-    authenticate_with_http_basic do |username, password|
-      puts "no player_id, looking up by #{username} and #{password}"
-      u = User.find_by_email_and_security_phrase(username, password)
-      if u
-        @current_player = u.playing_as
-        session[:player_id] = @current_player.id 
-      end
+    unless self.current_player
+      flash[:notice] = "Login is required in order to take this action."
+      session[:original_uri] = request.request_uri
+      redirect_to login_url
     end
-    return if session[:player_id]
-    
-    flash[:notice] = "Login is required in order to take this action."
-    session[:original_uri] = request.request_uri
-    redirect_to login_url
   end
 
-  # Going through this method will end confusion as to how to determine the current player
-  #  - whether from session[:player_id], @current_player, facebook info, etc..
-  # For now just return the instance variable set by authorize. 
-  def current_player
-    @current_player
+  # an already logged in player
+  def player_in_session
+    return nil unless session[:player_id] 
+    Player.find(session[:player_id])
   end
-  helper_method :current_player
+
+  # if accessed over facebook, the player referenced
+  def player_in_facebook
+    #TODO 
+  end
+
+  # authenticates from a stored md5 hash in a cookie
+  def player_in_cookie
+    return nil unless cookies[:auth_token]
+    User.find_by_auth_token( cookies[:auth_token] ).playing_as
+  end
+
+  # provides basic auth for Curl/Wget functionality
+  def player_over_http
+    authenticate_with_http_basic do |username, password|
+      User.find_by_email_and_security_phrase(username, password).playing_as
+    end
+  end
   
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store

@@ -1,5 +1,19 @@
 class AuthenticationController < ApplicationController
 
+  # sets the cookie to track who this stranger is - 
+  def tag
+    cookies[:auth_token] = Digest::MD5.hexdigest(Time.now.to_s)
+    redirect_to :action => 'register'
+  end
+
+  # a tagged visitor can be prompted to register, and their tag will be 
+  # saved with them, along with any name and password info they have chosen
+  def register
+  end
+
+  def save_registration
+  end
+
   #when posting
   def login
     return unless request.post?
