@@ -5,8 +5,10 @@ ActionController::Routing::Routes.draw do |map|
   map.facebook_root '', :controller => "match", :conditions => {:canvas => true}
   map.root :controller => "authentication", :conditions => {:canvas => false}
 
-  map.auth  'authentication/:action', :controller => 'authentication'
-  map.login   'authentication/login', :controller => 'authentication', :action => 'login'
+  map.auth       'authentication/:action',  :controller => 'authentication'
+  map.login      'authentication/login',    :controller => 'authentication', :action => 'login'
+  map.logout     'authentication/logout',   :controller => 'authentication', :action => 'logout'
+  map.register   'authentication/register', :controller => 'authentication', :action => 'register'
 
   #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
   map.create_move 'match/:match_id/moves/:notation', :controller => 'move', :action => 'create', :defaults => { :notation => nil }

@@ -12,6 +12,13 @@ describe MatchController do
   
   it 'should get the matches page from facebook for a known user' do
     facebook_get :index, :fb_sig_user => fbusers(:dean).facebook_user_id
+    response.should be_success
+    assert_template 'match/index'
+  end
+
+  it 'should redirect to register page for unknown facebook user' do
+    facebook_get :index, :fb_sig_user => '0000007'
+    response.should be_success
   end
 
 end

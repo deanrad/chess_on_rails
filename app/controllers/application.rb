@@ -18,8 +18,18 @@ class ApplicationController < ActionController::Base
     unless self.current_player
       flash[:notice] = "Login is required in order to take this action."
       session[:original_uri] = request.request_uri
-      redirect_to login_url
+      redirect_to is_facebook? ? register_url : login_url
     end
+  end
+
+
+  private
+
+  # if this request is coming from facebook- its been seen while testing match_controller_fb_spec
+  # that sometimes facebook_session is nil in test mode. We'll extend the definition for now to
+  # also allow for hacked-on fb_sig_user as well
+  def is_facebook?
+    !! ( facebook_session || params[:fb_sig_user] )
   end
 
   # an already logged in player
@@ -30,7 +40,10 @@ class ApplicationController < ActionController::Base
 
   # if accessed over facebook, the player referenced
   def player_in_facebook
-    #TODO 
+    fb_id = facebook_session ? facebook_session.user.id : params[:fb_sig_user]
+    return unless fb_id
+    fbuser = Fbuser.find_by_facebook_user_id(fb_id)
+    return fbuser.playing_as if fbuser
   end
 
   # authenticates from a stored md5 hash in a cookie

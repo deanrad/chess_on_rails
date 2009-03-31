@@ -12,7 +12,7 @@
 ActiveRecord::Schema.define(:version => 6) do
 
   create_table "fbusers", :force => true do |t|
-    t.integer  "facebook_user_id", :limit => 20
+    t.integer  "facebook_user_id", :limit => 20,                :null => false
     t.integer  "playing_as",       :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.string   "email",                :limit => 50
     t.integer  "playing_as",           :limit => 11
     t.string   "security_phrase",      :limit => 200
-    t.string   "security_phrase_hint", :limit => 200
+    t.string   "auth_token", :limit => 200
     t.datetime "created_at"
     t.datetime "updated_at"
   end

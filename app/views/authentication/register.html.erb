@@ -1,6 +1,6 @@
 Register for En Passant !
 
-<% form_for(:user, :url => 'save_registration'  ) do |f| %>
+<% form_for(:user) do |f| %>
 
   <div>Email: <%= f.text_field :email %></div>
   <div>Password: <%= f.text_field :security_phrase %></div>

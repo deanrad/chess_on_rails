@@ -24,9 +24,9 @@ describe AuthenticationController do
 
     it 'should set a cookie upon hitting the tag action' do
       get :tag
-      # why does this not work ? 
-      # response.cookies[:auth_token].should_not be_nil
       response.cookies.to_s.should include('auth_token')
+      # todo - why does this not work ? 
+      # response.cookies[:auth_token].should_not be_nil
     end
 
     it 'should redirect to registration after tagging' do
@@ -41,7 +41,7 @@ describe AuthenticationController do
 
   describe 'registration' do
     it 'should log a person in upon registration' do
-      post :save_registration, { :player => {:name => 'x'}, 
+      post :register, { :player => {:name => 'x'}, 
         :user=>{:security_phrase => 'xx', :email => 'foo@foo.com'} }
       session[:player_id].should_not be_nil
     end
@@ -49,6 +49,5 @@ describe AuthenticationController do
     it 'should render with save_registration as the form post location' 
   end
 
-  it 'should take user to uri first requrested upon login'
   it 'should stay on login screen upon failed login'
 end
