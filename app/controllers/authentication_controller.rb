@@ -12,6 +12,10 @@ class AuthenticationController < ApplicationController
   end
 
   def save_registration
+    u = User.create_with_player( params[:user], params[:player] ) 
+    session[:player_id] = u.playing_as.id
+    # current_player = u.playing_as
+    redirect_to match_index_url
   end
 
   #when posting

@@ -39,7 +39,16 @@ describe AuthenticationController do
 
   end
 
-  it 'should take logged in user to their match/ page'
+  describe 'registration' do
+    it 'should log a person in upon registration' do
+      post :save_registration, { :player => {:name => 'x'}, 
+        :user=>{:security_phrase => 'xx', :email => 'foo@foo.com'} }
+      session[:player_id].should_not be_nil
+    end
+
+    it 'should render with save_registration as the form post location' 
+  end
+
   it 'should take user to uri first requrested upon login'
   it 'should stay on login screen upon failed login'
 end

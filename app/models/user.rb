@@ -1,10 +1,13 @@
 class User < ActiveRecord::Base
   belongs_to :playing_as, :class_name => "Player", :foreign_key => "playing_as"
 
-  # allows user to set the name they are playing as 
-  def player_name=( val )
-    playing_as.name = val
-    playing_as.save! 
+  # creates a user and the corresponding player, passing a hash of options to each 
+  def self.create_with_player( user_opts, player_opts )
+    returning User.create( user_opts ) do |u|
+      p = Player.create( player_opts )
+      u.playing_as = p
+      u.save!
+    end
   end
 
 end
