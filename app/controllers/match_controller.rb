@@ -10,6 +10,7 @@ class MatchController < ApplicationController
     set_view_vars
 
     respond_to do |format|
+      format.fbml # should be same as html
       format.html { render :template => 'match/result' and return if @match.active == 0 }
       format.text { render :text => @match.board.to_s(@viewed_from_side==:black) }
       format.pgn  { render :partial => 'match/move_list' }
