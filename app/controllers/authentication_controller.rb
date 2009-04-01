@@ -30,7 +30,9 @@ class AuthenticationController < ApplicationController
     redirect_to match_index_url
   end
 
-  #when posting
+  # allows user to post the credentials they stored to initiate a session
+  # an auth token will by default persist their logged in state for as long
+  # as the client holds the cookie (it 1 year)
   def login
     return unless request.post?
     

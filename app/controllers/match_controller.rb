@@ -41,7 +41,7 @@ class MatchController < ApplicationController
 
   def resign
     @match = Match.find( params[:id] )
-    @match.resign( @current_player )
+    @match.resign( current_player )
     redirect_to :action => 'index'
   end
 
@@ -49,7 +49,7 @@ class MatchController < ApplicationController
   def create
     return unless request.post?
 
-    @match = Match.new( :player1 => @current_player, :player2 => Player.find( params[:opponent_id] ) )
+    @match = Match.new( :player1 => current_player, :player2 => Player.find( params[:opponent_id] ) )
     @match.switch if params[:opponent_side] == 'white'
     @match.save!
 

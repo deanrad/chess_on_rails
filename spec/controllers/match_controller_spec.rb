@@ -20,6 +20,21 @@ describe MatchController do
     match.player2.should == Player.find(3)
   end
 
+  it 'should show a match requested' do
+    get :show, {:id => 1},  {:player_id => players(:dean).id }
+    assigns[:match].should_not be_nil
+  end
+
+  it 'should render a form for a new match' do
+    get :new, {},  {:player_id => players(:dean).id }
+    assigns[:match].should be_a_new_record
+  end
+
+  it 'should allow resignation via POST' do
+    post :resign , {:id => 1},  {:player_id => players(:dean).id }
+    assigns[:match].should_not be_active
+  end
+
   describe '- status updating' do
     before(:all) do 
     end
