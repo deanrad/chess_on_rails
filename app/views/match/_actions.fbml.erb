@@ -1,0 +1,6 @@
+<div id="match_ender">
+  <%= link_to "Resign", url_for(:action => 'resign'), 
+	:confirm => 'Are you truly ready to accept disgrace and sulk back to the rock from under which you came ?' %>
+
+  <%= link_to "PGN", match_url(@match, :format=>'pgn') %>
+</div>

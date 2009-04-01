@@ -1,0 +1,18 @@
+
+<!-- form> 
+	<%= check_box_tag :auto_submit_move_ck, 1, :id => 'auto_submit_move_ck', :title => 'Auto submit dropped moves' %> Auto submit dropped moves
+</form -->
+<% form_for :move, :html => {:id => 'new_move_form'}, :url => create_match_moves_path(match_id)  do |f| %>
+    Notation: <%= f.text_field :notation, :maxlength => '5' %> or... <br/>
+    From: <%= f.text_field :from_coord, :maxlength => '2' %> and
+    To: <%= f.text_field :to_coord, :maxlength => '2' %>
+    <%= f.hidden_field :match_id, :value => match_id %><br/>
+    <%= submit_tag "Submit Move", :id => 'move_submit_btn', :disabled => !your_turn %>
+    <input type="button" value="Cancel" onclick="document.location.reload()"/>
+<% end %>
+
+<%= javascript_tag("$('move_notation').focus()") %>
+
+<div id="move_error">
+	<%= flash[:move_error] %>
+</div>
