@@ -21,8 +21,8 @@ class Match < ActiveRecord::Base
     black = opts.delete(:black) if opts[:black]
     super
     save!
-    gameplays << Gameplay.new(:player_id => white.id)
-    gameplays << Gameplay.new(:player_id => black.id, :black => true)
+    gameplays << Gameplay.new(:player_id => white.id) if white
+    gameplays << Gameplay.new(:player_id => black.id, :black => true) if black
   end
 
   def player1

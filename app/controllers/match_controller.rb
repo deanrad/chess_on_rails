@@ -20,7 +20,7 @@ class MatchController < ApplicationController
   # GET /match/ 
   def index
     # shows active matches
-    @matches = current_player.active_matches
+    @matches = current_player.matches.active
   end
 
   # match/:id/status?move=N returns javascript to update the board to move N. 
@@ -48,10 +48,11 @@ class MatchController < ApplicationController
   # POST /match/create
   def create
     return unless request.post?
-
-    @match = Match.new( :player1 => current_player, :player2 => Player.find( params[:opponent_id] ) )
-    @match.switch if params[:opponent_side] == 'white'
-    @match.save!
+    if params[:opponent_side] == 'black'
+      @match = Match.new( :white => current_player, :black => Player.find( params[:opponent_id] ) )
+    else
+      @match = Match.new( :black => current_player, :white => Player.find( params[:opponent_id] ) )
+    end
 
     redirect_to match_url(@match.id) if @match
   end

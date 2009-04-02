@@ -7,7 +7,7 @@ class MoveController < ApplicationController
 
   #accessible via get or post but should be idempotent on 2x get
   def create
-    @match = current_player.active_matches.find( params[:match_id] || params[:move][:match_id] )
+    @match = current_player.matches.find( params[:match_id] || params[:move][:match_id] )
 
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
     raise ArgumentError, "It is your not your turn to move yet" unless @match.turn_of?( current_player )
@@ -24,14 +24,8 @@ class MoveController < ApplicationController
     redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
 
     respond_to do |format|
-      format.html{
-        #back to the match if non-ajax
-        redirect_to( match_path(@match) ) and return unless request.xhr? 
-
-        #otherwise do a normal status update to refresh UI
-        set_match_status_instance_variables
-        render :template => 'match/status' and return
-      }
+      format.html{ create_respond }
+      format.fbml{ create_respond }
       format.text{
         render :text => @match.board.to_s( @viewed_from_side==:black )
       }
@@ -39,6 +33,14 @@ class MoveController < ApplicationController
   end
   
 protected
+  def create_respond
+    #back to the match if non-ajax
+    redirect_to( match_path(@match) ) and return unless request.xhr? 
+    
+    #otherwise do a normal status update to refresh UI
+    set_match_status_instance_variables
+    render :template => 'match/status' and return
+  end
 
   def display_error(ex)
     if ex.kind_of?(ArgumentError)
