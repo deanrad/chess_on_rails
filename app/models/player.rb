@@ -3,7 +3,7 @@ class Player < ActiveRecord::Base
   validates_length_of :name, :maximum => 20
   validates_uniqueness_of :name
 
-  has_many  :game_plays
+  has_many  :gameplays
   has_many  :matches, :through => 'gameplays'
 
   has_one    :user, :foreign_key => :playing_as

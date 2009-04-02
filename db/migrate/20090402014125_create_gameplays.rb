@@ -1,6 +1,6 @@
-class CreateGamePlays < ActiveRecord::Migration
+class CreateGameplays < ActiveRecord::Migration
   def self.up
-    create_table :game_plays do |t|
+    create_table :gameplays do |t|
       t.integer :player_id, :null => false
       t.integer :match_id, :null => false
       t.boolean :black, :default => false
@@ -10,6 +10,6 @@ class CreateGamePlays < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :game_plays
+    drop_table :gameplays
   end
 end

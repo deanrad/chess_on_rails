@@ -2,8 +2,8 @@ class Match < ActiveRecord::Base
   
   has_many :moves, :order => 'created_at ASC', :after_add => :recalc_board_and_check_for_checkmate
 
-  has_many :game_plays
-  has_many :players, :through => :game_plays
+  has_many :gameplays
+  has_many :players, :through => :gameplays
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
   
@@ -19,16 +19,16 @@ class Match < ActiveRecord::Base
     white = opts.delete(:white) if opts[:white]
     black = opts.delete(:black) if opts[:black]
     super
-    self.game_plays << GamePlay.new(:player => white)
-    self.game_plays << GamePlay.new(:player => black, :black => true)
+    self.gameplays << Gameplay.new(:player => white)
+    self.gameplays << Gameplay.new(:player => black, :black => true)
   end
 
   def player1
-    @player1 ||= game_plays.white.first.player
+    @player1 ||= gameplays.white.first.player
   end
 
   def player2
-    @player2 ||= game_plays.black.first.player
+    @player2 ||= gameplays.black.first.player
   end
   
   def recalc_board_and_check_for_checkmate(last_move)

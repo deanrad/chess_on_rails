@@ -1,5 +1,5 @@
 # The participation of a player in a given match
-class GamePlay < ActiveRecord::Base
+class Gameplay < ActiveRecord::Base
   belongs_to :player
   belongs_to :match
 

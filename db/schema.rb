@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 20090402014125) do
     t.datetime "updated_at"
   end
 
-  create_table "game_plays", :force => true do |t|
+  create_table "gameplays", :force => true do |t|
     t.integer  "player_id",                     :null => false
     t.integer  "match_id",                      :null => false
     t.boolean  "black",      :default => false
