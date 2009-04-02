@@ -3,7 +3,7 @@ Hi. Welcome, <%= current_player.name %>.
 
 <h3>Active Matches</h3>
 <ul>
-<% current_player.active_matches.each do |m| %>
+<% current_player.matches.active.each do |m| %>
 	<li>
 		<%= link_to m.lineup, match_url(m.id)  %> 
 		<%=  '(Your move)' if m.turn_of?( current_player ) %>
@@ -13,7 +13,7 @@ Hi. Welcome, <%= current_player.name %>.
 
 <h3>Completed Matches</h3>
 <ul>
-<% current_player.completed_matches.each do |m| %>
+<% current_player.matches.completed.each do |m| %>
 	<li>
 		<%= link_to m.lineup, match_url(m.id) %> 
 		(<%=  m.result %> 

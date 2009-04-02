@@ -7,7 +7,9 @@ class Match < ActiveRecord::Base
 
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
-  
+
+  named_scope :active,    :conditions => { :active => true }
+  named_scope :completed, :conditions => { :active => false }
   
   attr_reader :board
   
