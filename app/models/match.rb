@@ -23,13 +23,12 @@ class Match < ActiveRecord::Base
     self.game_plays << GamePlay.new(:player => black, :black => true)
   end
 
-  # deprecated- doesn't white/black read much clearer ??
   def player1
-    @player1 ||= game_plays.find_by_black(false).player
+    @player1 ||= game_plays.white.first.player
   end
 
   def player2
-    @player2 ||= game_plays.find_by_black(true).player
+    @player2 ||= game_plays.black.first.player
   end
   
   def recalc_board_and_check_for_checkmate(last_move)
