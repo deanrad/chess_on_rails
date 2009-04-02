@@ -11,11 +11,8 @@ describe 'User model' do
   end
 
   it 'should be creatable with the suggested player name' do
-    #stupid mocha sideeffect error from use of it in auth_controller.spec - breaks this
-    pending do
-      u = User.create_with_player( {:email => 'foo@foo.com', :security_phrase => 'x'}, {:name => 'myoplex'} )
-      u.should_not be_nil
-      u.playing_as.name.should == 'myoplex'
-    end
+    u = User.create_with_player( {:email => 'foo@foo.com', :security_phrase => 'x'}, {:name => 'myoplex'} )
+    u.should_not be_nil
+    u.playing_as.name.should == 'myoplex'
   end
 end

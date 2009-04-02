@@ -14,7 +14,7 @@ Spec::Runner.configure do |config|
   config.use_instantiated_fixtures  = false
 
   config.fixture_path = RAILS_ROOT + '/test/fixtures/'
-  config.global_fixtures = :matches, :players, :moves, :users, :fbusers
+  config.global_fixtures = :all # :matches, :players, :moves, :users, :fbusers
 
   # == Mock Framework
   #
