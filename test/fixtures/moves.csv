@@ -1,40 +1,40 @@
-match_id, moved_by, from_coord, to_coord, notation, castled
-3, 1, d2, d4, d4
-3, 2, g8, f6, Nf6
-3, 1, e2, e3, e3
-3, 2, e7, e6, e6
-1, 1, e2, e4, e4
-1, 2, e7, e5, e5
-1, 1, f1, d3, Bd3
-1, 2, f8, d6, Bd6
-1, 1, g1, f3, Nf3
-1, 2, g8, f6, Nf6
-5, 1, e2, e4, e4
-5, 2, e7, e5, e5
-5, 1, f1, d3, Bd3
-5, 2, f8, d6, Bd6
-5, 1, g1, f3, Nf3
-5, 2, g8, f6, Nf6
-5, 1, e1, g1, O-O, 1
-7, 1, d2, d4, d4
-7, 2, d7, d5, d5
-7, 1, c1, e3, Be3
-7, 2, c8, e6, Be6
-7, 1, d1, d3, Qd3
-7, 2, d8, d6, Qd6
-7, 1, b1, d2, Nd2
-7, 2, b8, c6, Nc6
-8, 1, e2, e4, e4
-8, 2, b8, c6, Nc6
-8, 1, f1, c4, Bc4 
-8, 2, e7, e5, e5 
-8, 1, d1, f3, Qf3
-8, 2, f8, c5, Bc5
-9, 1, c2, c4, c4
-9, 2, e7, e5, e5
-9, 1, c4, c5, c5
-9, 2, b8, a6, Na6
-9, 1, c5, c6, c6
-9, 2, e8, e7, Ke7
-9, 1, c6, b7, cxb7
-9, 2, d7, d6, d6 
+match_id, from_coord, to_coord, notation, castled
+3, d2, d4, d4
+3, g8, f6, Nf6
+3, e2, e3, e3
+3, e7, e6, e6
+1, e2, e4, e4
+1, e7, e5, e5
+1, f1, d3, Bd3
+1, f8, d6, Bd6
+1, g1, f3, Nf3
+1, g8, f6, Nf6
+5, e2, e4, e4
+5, e7, e5, e5
+5, f1, d3, Bd3
+5, f8, d6, Bd6
+5, g1, f3, Nf3
+5, g8, f6, Nf6
+5, e1, g1, O-O, 1
+7, d2, d4, d4
+7, d7, d5, d5
+7, c1, e3, Be3
+7, c8, e6, Be6
+7, d1, d3, Qd3
+7, d8, d6, Qd6
+7, b1, d2, Nd2
+7, b8, c6, Nc6
+8, e2, e4, e4
+8, b8, c6, Nc6
+8, f1, c4, Bc4 
+8, e7, e5, e5 
+8, d1, f3, Qf3
+8, f8, c5, Bc5
+9, c2, c4, c4
+9, e7, e5, e5
+9, c4, c5, c5
+9, b8, a6, Na6
+9, c5, c6, c6
+9, e8, e7, Ke7
+9, c6, b7, cxb7
+9, d7, d6, d6 

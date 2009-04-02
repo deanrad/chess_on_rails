@@ -12,7 +12,7 @@
 ActiveRecord::Schema.define(:version => 20090402014125) do
 
   create_table "fbusers", :force => true do |t|
-    t.integer  "facebook_user_id"
+    t.integer  "facebook_user_id", :limit => 8
     t.integer  "playing_as"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -21,17 +21,15 @@ ActiveRecord::Schema.define(:version => 20090402014125) do
   create_table "game_plays", :force => true do |t|
     t.integer  "player_id",                     :null => false
     t.integer  "match_id",                      :null => false
-    t.boolean  "black_side", :default => false
+    t.boolean  "black",      :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "matches", :force => true do |t|
-    t.integer  "player1_id",                    :null => false
-    t.integer  "player2_id",                    :null => false
-    t.integer  "active",         :default => 1
-    t.text     "start_pos"
-    t.text     "result"
+    t.integer  "active",                        :default => 1
+    t.string   "start_pos",      :limit => 100
+    t.string   "result",         :limit => 10
     t.integer  "winning_player"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -39,7 +37,6 @@ ActiveRecord::Schema.define(:version => 20090402014125) do
 
   create_table "moves", :force => true do |t|
     t.integer  "match_id"
-    t.integer  "moved_by"
     t.string   "from_coord",           :limit => 10
     t.string   "to_coord",             :limit => 10
     t.string   "notation",             :limit => 10

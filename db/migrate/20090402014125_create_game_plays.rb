@@ -3,7 +3,7 @@ class CreateGamePlays < ActiveRecord::Migration
     create_table :game_plays do |t|
       t.integer :player_id, :null => false
       t.integer :match_id, :null => false
-      t.boolean :black_side, :default => false
+      t.boolean :black, :default => false
 
       t.timestamps
     end

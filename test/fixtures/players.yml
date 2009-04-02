@@ -1,5 +1,3 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
  dean:
    id:      1
    name:    Dean
@@ -15,24 +13,15 @@
  chris:
    id:      5
    name:    Chris
- jack:
-   id:      6
-   name:    Jack
  milan:
-   id:      7
+   id:      6
    name:    Milan
- dustin:
-   id:      8
-   name:    Dustin
- jones:
-   id:      9
-   name:    Jones
- paul_fb:
-   id:      10
-   name:    Paul (facebook)
+ miles:
+   id:      7
+   name:    Miles
  stephen:
-   id:      11
+   id:      8
    name:    Stephen
- maula:
-   id:      12
-   name:    Maula
+ brian:
+   id:      9
+   name:    Brian

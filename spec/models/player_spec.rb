@@ -7,16 +7,13 @@ describe Player, "A player" do
     p.should_not be_nil
   end
   
-  it "stores a name" do
-    name = "Deano"
-    p = Player.new :name => name
-    p.name.should == name
+  it "has a name" do
+    p = Player.new :name => "Deano"
+    p.name.should == "Deano"
   end
   
   it "should not be allowed to register an existing name" do
-    # warning - frail test dependent on fixtures
-    #already one named Dean loaded by fixture
-    p = Player.new :name => "Dean"
+    p = Player.new :name => players(:dean).name
     p.should_not be_valid
   end
 

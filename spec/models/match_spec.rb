@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Match, "A match" do
+describe Match do
 
   it 'should have player1 be the first to move' do
     m1 = matches(:unstarted_match)
@@ -30,20 +30,6 @@ describe Match, "A match" do
   it 'should be creatable with one player as white and another as black' do
     m = Match.new( :white => players(:maria), :black => players(:paul) )
     m.player2.should == players(:paul)
-  end
-
-  it 'should allow side switching if not saved yet' do
-    m = Match.new( :white => players(:maria), :black => players(:paul) )
-    m.switch
-
-    m.player1.should == players(:paul)
-  end
-
-  it 'should not allow side switching after save' do
-    m = Match.new( :white => players(:maria), :black => players(:paul) )
-    m.save
-
-    lambda{ m.switch }.should raise_error
   end
 
   describe 'resignation' do

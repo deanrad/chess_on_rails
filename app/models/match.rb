@@ -1,11 +1,12 @@
 class Match < ActiveRecord::Base
-
-  belongs_to :player1,	:class_name => 'Player'
-  belongs_to :player2,	:class_name => 'Player'
-  
-  belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
   
   has_many :moves, :order => 'created_at ASC', :after_add => :recalc_board_and_check_for_checkmate
+
+  has_many :game_plays
+  has_many :players, :through => :game_plays
+
+  belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
+  
   
   attr_reader :board
   
@@ -15,16 +16,22 @@ class Match < ActiveRecord::Base
   end
 
   def initialize( opts={} )
-    opts[:player1] = opts.delete(:white) if opts[:white]
-    opts[:player2] = opts.delete(:black) if opts[:black]
+    white = opts.delete(:white) if opts[:white]
+    black = opts.delete(:black) if opts[:black]
     super
-  end
-  
-  def switch
-    raise ArgumentError, "Cannot switch players on a saved match" unless new_record?
-    b = self.player2; self.player2 = self.player1; self.player1 = b;
+    self.game_plays << GamePlay.new(:player => white)
+    self.game_plays << GamePlay.new(:player => black, :black => true)
   end
 
+  # deprecated- doesn't white/black read much clearer ??
+  def player1
+    @player1 ||= game_plays.find_by_black(false).player
+  end
+
+  def player2
+    @player2 ||= game_plays.find_by_black(true).player
+  end
+  
   def recalc_board_and_check_for_checkmate(last_move)
     # i thought this was being done for me, but just in case...
     raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?

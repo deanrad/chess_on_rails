@@ -1,55 +1,35 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 dean_vs_maria:
-   id: 1
-   player1_id: 1
-   player2_id: 2
+  id: 1
 
 paul_vs_dean:
-   id: 2
-   player1_id: 3
-   player2_id: 1
+  id: 2
    
 dean_vs_paul:
-   id: 3
-   player1_id: 1
-   player2_id: 3
+  id: 3
    
 unstarted_match:
-   id: 4
-   player1_id: 2
-   player2_id: 3
+  id: 4
 
 castled:
-   id: 5
-   player1_id: 3
-   player2_id: 1
+  id: 5
 
 resigned:
-   id: 6
-   player1_id: 3
-   player2_id: 1
-   active: 0
-   result: Resigned
-   winning_player: 3
+  id: 6
+  active: 0
+  result: Resigned
+  winning_player: 3
 
 queenside_castled:
-   id: 7
-   player1_id: 5
-   player2_id: 1
+  id: 7
 
 scholars_mate:
-   id: 8
-   player1_id: 5
-   player2_id: 1
+  id: 8
 
 promote_crazy:
-   id: 9
-   player1_id: 3
-   player2_id: 1
+  id: 9
 
 e4: # a FEN notated match after 1. e4 
-   id: 10
-   player1_id: 3
-   player2_id: 1
-   start_pos: RNBQKBNR/PPPP1PPP/8/4P3/8/8/pppppppp/rnbqkbnr b
+  id: 10
+  start_pos: RNBQKBNR/PPPP1PPP/8/4P3/8/8/pppppppp/rnbqkbnr b
