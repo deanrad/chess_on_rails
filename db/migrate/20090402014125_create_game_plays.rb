@@ -1,9 +1,9 @@
 class CreateGamePlays < ActiveRecord::Migration
   def self.up
     create_table :game_plays do |t|
-      t.int :player_id
-      t.int :match_id
-      t.bool :black_side
+      t.integer :player_id, :null => false
+      t.integer :match_id, :null => false
+      t.boolean :black_side, :default => false
 
       t.timestamps
     end

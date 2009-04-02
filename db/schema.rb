@@ -9,33 +9,41 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 6) do
+ActiveRecord::Schema.define(:version => 20090402014125) do
 
   create_table "fbusers", :force => true do |t|
-    t.integer  "facebook_user_id", :limit => 20,                :null => false
-    t.integer  "playing_as",       :limit => 11
+    t.integer  "facebook_user_id"
+    t.integer  "playing_as"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "game_plays", :force => true do |t|
+    t.integer  "player_id",                     :null => false
+    t.integer  "match_id",                      :null => false
+    t.boolean  "black_side", :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "matches", :force => true do |t|
-    t.integer  "player1_id",     :limit => 11,                :null => false
-    t.integer  "player2_id",     :limit => 11,                :null => false
-    t.integer  "active",         :limit => 11, :default => 1
+    t.integer  "player1_id",                    :null => false
+    t.integer  "player2_id",                    :null => false
+    t.integer  "active",         :default => 1
     t.text     "start_pos"
     t.text     "result"
-    t.integer  "winning_player", :limit => 11
+    t.integer  "winning_player"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "moves", :force => true do |t|
-    t.integer  "match_id",             :limit => 11
-    t.integer  "moved_by",             :limit => 11
+    t.integer  "match_id"
+    t.integer  "moved_by"
     t.string   "from_coord",           :limit => 10
     t.string   "to_coord",             :limit => 10
     t.string   "notation",             :limit => 10
-    t.integer  "castled",              :limit => 11
+    t.integer  "castled"
     t.string   "captured_piece_coord", :limit => 10
     t.string   "promotion_choice",     :limit => 1
     t.datetime "created_at"
@@ -59,10 +67,10 @@ ActiveRecord::Schema.define(:version => 6) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                :limit => 50
-    t.integer  "playing_as",           :limit => 11
-    t.string   "security_phrase",      :limit => 200
-    t.string   "auth_token", :limit => 200
+    t.string   "email",           :limit => 50
+    t.integer  "playing_as"
+    t.string   "security_phrase", :limit => 200
+    t.string   "auth_token",      :limit => 200
     t.datetime "created_at"
     t.datetime "updated_at"
   end
