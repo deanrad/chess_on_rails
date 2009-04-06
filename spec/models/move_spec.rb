@@ -134,5 +134,20 @@ describe Move do
       end
     end
   end
-  
+
+  it 'should strip off the move queue part of any notated move' do
+    match = matches(:unstarted_match)
+    match.moves << m = Move.new( :notation => 'e4 e5 d4' )
+    m.notation.should == 'e4'
+  end
+
+  it 'should store the move queue part of any notated move' do
+    match = matches(:unstarted_match)
+    match.moves << m = Move.new( :notation => 'e4 e5 d4' )
+    m.match.gameplays.white.first.move_queue.to_s.should == 'e5 d4'
+
+    match.moves << m = Move.new( :notation => 'e5 d4 f5' )
+    m.match.gameplays.black.first.move_queue.to_s.should == 'd4 f5'
+  end
+
 end

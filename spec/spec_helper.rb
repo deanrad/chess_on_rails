@@ -27,8 +27,3 @@ Spec::Runner.configure do |config|
   #
 end
 
-####### helper functions #########
-# convenience syntax
-def with(arg)
-  yield arg
-end

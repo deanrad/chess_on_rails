@@ -16,8 +16,11 @@ class Move < ActiveRecord::Base
     end
   end
 
-  def before_validate
+  def before_validation
     @board = match.board
+
+    #strip off to the move queue any portion of notation
+    split_off_move_queue
 
     #determine coordinates from notation
     infer_coordinates_from_notation if !self[:notation].blank? && (from_coord.blank? || to_coord.blank?)
@@ -81,5 +84,16 @@ class Move < ActiveRecord::Base
 
   end
 
+private
+
+  def split_off_move_queue
+    return if self[:notation].blank?
+
+    all_moves = self[:notation].split /[,; ]/
+    self[:notation] = all_moves.shift
+    with match.gameplays.send( match.next_to_move ).first do |gp|
+      gp.update_attribute( :move_queue, all_moves.join(' ') )
+    end
+  end
   
 end

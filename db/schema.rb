@@ -19,9 +19,10 @@ ActiveRecord::Schema.define(:version => 20090402014125) do
   end
 
   create_table "gameplays", :force => true do |t|
-    t.integer  "player_id",                     :null => false
-    t.integer  "match_id",                      :null => false
-    t.boolean  "black",      :default => false
+    t.integer  "player_id",                                   :null => false
+    t.integer  "match_id",                                    :null => false
+    t.boolean  "black",                    :default => false
+    t.string   "move_queue", :limit => 20
     t.datetime "created_at"
     t.datetime "updated_at"
   end
