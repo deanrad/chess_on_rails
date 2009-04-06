@@ -26,3 +26,9 @@ Spec::Runner.configure do |config|
   # config.mock_with :rr
   #
 end
+
+####### helper functions #########
+# convenience syntax
+def with(arg)
+  yield arg
+end

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Player, "A player" do
+describe Player do
     
   it "can be created" do
     p = Player.new

@@ -6,7 +6,7 @@ class Move < ActiveRecord::Base
   belongs_to :match
 
   attr_accessor :side
-  before_validation :analyze_board_position
+
   before_save :update_computed_fields
 
   def initialize( opts )
@@ -16,7 +16,7 @@ class Move < ActiveRecord::Base
     end
   end
 
-  def analyze_board_position
+  def before_validate
     @board = match.board
 
     #determine coordinates from notation
@@ -78,6 +78,7 @@ class Move < ActiveRecord::Base
     if new_board.in_check?( @piece_moving.side )
       errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
     end
+
   end
 
   

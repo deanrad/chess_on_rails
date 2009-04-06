@@ -14,6 +14,12 @@ describe Match do
     
     m1.turn_of?(m1.player2).should be_true
   end
+
+  it 'should know current player via next to move' do
+    m1 = matches(:paul_vs_dean)
+    m1.next_to_move.should == :white
+    m1.current_player.should == players(:paul)
+  end
       
   it 'should label player1 as white and player2 as black' do
     m1 = matches(:paul_vs_dean)

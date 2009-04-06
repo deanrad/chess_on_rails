@@ -54,6 +54,11 @@ class Match < ActiveRecord::Base
       @board = Board.new( self[:start_pos] )
     end
   end
+
+  # for purposes of move validation it's handy to have access to such a variable
+  def current_player
+    next_to_move == :black ? gameplays.black.first.player : gameplays.white.first.player
+  end
   
   def turn_of?( plyr )	
     self.next_to_move == side_of(plyr)
