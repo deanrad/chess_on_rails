@@ -3,7 +3,7 @@ class Match < ActiveRecord::Base
   has_many :gameplays
   has_many :players, :through => :gameplays
 
-  has_many :moves, :order => 'created_at ASC', :after_add => :recalc_board_and_check_for_checkmate
+  has_many :moves, :order => 'created_at ASC', :after_add => [:recalc_board_and_check_for_checkmate, :play_queued_moves]
 
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
@@ -61,6 +61,7 @@ class Match < ActiveRecord::Base
   end
   
   def turn_of?( plyr )	
+    return true #HACK
     self.next_to_move == side_of(plyr)
   end
 
@@ -107,5 +108,28 @@ class Match < ActiveRecord::Base
       when :white; :black
       when :black; :white
     end
+  end
+
+  # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue
+  # for now requires exact match on the notation
+  def play_queued_moves( m )
+
+    opponent = m.match.gameplays.send( m.match.next_to_move ).first
+    return unless queue = opponent.move_queue
+
+    expected, response = queue.shift(2)
+
+    if expected != m.notation
+      # the tree of possibilities has been pruned
+      opponent.update_attribute(:move_queue, nil) and return 
+    end
+
+    # the queue may still be alive, but we need to mark the passage of time
+    opponent.update_attribute(:move_queue, queue.to_s)
+
+    # and make the response move
+    response_move = Move.create(:match_id => self.id, :notation => response)
+
+    play_queued_moves(response_move)
   end
 end

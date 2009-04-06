@@ -145,9 +145,40 @@ describe Move do
     match = matches(:unstarted_match)
     match.moves << m = Move.new( :notation => 'e4 e5 d4' )
     m.match.gameplays.white.first.move_queue.to_s.should == 'e5 d4'
-
-    match.moves << m = Move.new( :notation => 'e5 d4 f5' )
-    m.match.gameplays.black.first.move_queue.to_s.should == 'd4 f5'
   end
+
+  it 'should play the next move in the move queue if the notation matches' do
+    match = matches(:unstarted_match)
+    match.moves << m = Move.new( :notation => 'e4 e5 d4' )
+    match.moves << m = Move.new( :notation => 'e5' )
+
+    match.reload
+    match.moves.count.should == 3
+    match.moves.reload.last.notation.should == 'd4'
+    match.gameplays.white.first.move_queue.should be_blank
+  end
+
+  it 'should keep playing from each move queue in turn' do
+    match = matches(:unstarted_match)
+    match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc6 Nc3' )
+    match.moves << m = Move.new( :notation => 'e5 d4 Nc6' )
+
+    match.reload ; match.moves.reload
+    match.moves[1].notation.should == 'e5'
+    match.moves[2].notation.should == 'd4'
+    match.moves[3].notation.should == 'Nc6'
+    pending { match.moves[4].should_not be_nil }
+
+    match.gameplays.white.first.move_queue.should be_blank
+  end
+
+  it 'should invalidate the move queue if an invalid prediction was made' do
+    match = matches(:unstarted_match)
+    match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc3 Nc6' )
+    match.moves << m = Move.new( :notation => 'd5' )
+    match.gameplays.white.first.move_queue.should be_blank
+  end
+  
+  #it 'should play the next two moves in the move queue if the notation differs but indicates same move'
 
 end
