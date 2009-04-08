@@ -149,7 +149,7 @@ describe Move do
 
   it 'should play the next move in the move queue if the notation matches' do
     match = matches(:unstarted_match)
-    match.moves << m = Move.new( :notation => 'e4 e5 d4' )
+    match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc6 Nc3' )
     match.moves << m = Move.new( :notation => 'e5' )
 
     match.reload
@@ -167,7 +167,7 @@ describe Move do
     match.moves[1].notation.should == 'e5'
     match.moves[2].notation.should == 'd4'
     match.moves[3].notation.should == 'Nc6'
-    pending { match.moves[4].should_not be_nil }
+    match.moves[4].notation.should == 'Nc3'
 
     match.gameplays.white.first.move_queue.should be_blank
   end

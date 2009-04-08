@@ -90,7 +90,11 @@ private
     return if self[:notation].blank?
 
     all_moves = self[:notation].split /[,; ]/
+
     self[:notation] = all_moves.shift
+
+    return if all_moves.length == 0 #no move queue
+    
     with match.gameplays.send( match.next_to_move ).first do |gp|
       gp.update_attribute( :move_queue, all_moves.join(' ') )
     end
