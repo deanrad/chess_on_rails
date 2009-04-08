@@ -63,7 +63,7 @@ class Match < ActiveRecord::Base
   end
   
   def turn_of?( plyr )	
-    return true #HACK
+    #return true #HACK
     self.next_to_move == side_of(plyr)
   end
 
