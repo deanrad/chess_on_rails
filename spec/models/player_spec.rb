@@ -23,10 +23,8 @@ describe Player do
   end
 
   it "should retrieve active matches for a player" do
-    pending do
-      p = Player.find(1)
-      p.matches.active.count.should > 1 
-    end
+    p = Player.find(1)
+    p.matches.active.count.should > 1 
   end
 
 end

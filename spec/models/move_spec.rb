@@ -155,7 +155,6 @@ describe Move do
     match.reload
     match.moves.count.should == 3
     match.moves.reload.last.notation.should == 'd4'
-    match.gameplays.white.first.move_queue.should be_blank
   end
 
   it 'should keep playing from each move queue in turn' do

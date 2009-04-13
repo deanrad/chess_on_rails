@@ -13,7 +13,6 @@ describe Gameplay do
   
   it "should be able to store a move queue for a player (low-level)" do
     with matches(:dean_vs_paul).gameplays[0] do |gp|
-      puts gp.inspect
       gp[:move_queue].should_not be_nil
     end
   end
