@@ -53,6 +53,11 @@ class Move < ActiveRecord::Base
   # this should be considered a before-save function and maybe validate is not exactly the best place
   def validate
 
+    if self[:from_coord].blank? && @possible_movers && @possible_movers.length > 1
+      errors.add :notation, "Ambiguous move #{notation}. Clarify as in Ngf3 or R2d4, for example"
+      return 
+    end
+
     if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
       errors.add :notation, "The notation #{notation} doesn't specify a valid move" and return 
     end
