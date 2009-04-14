@@ -28,12 +28,12 @@ Initial Position
 
 Board
   The state of a match as of a given move, nominally the set of pieces and where they are
-  Validates legality of moves made against it - for rules like Check Rules that require board knowledge
+  Validates legality of moves made against it - some rules like Check Rules that require board knowledge
   
 Move
   is specified by a from and to coordinate
   coordinates must be valid Positions
-  the from coordinate piece must validate the plausibility of the move for its type
+  the piece on the from coordinate must validate the plausibility of the move for its type
   the capturability rules must be satisfied
   (may be the output of a module that translates notation to moves)
   records the position a piece was captured from
@@ -41,7 +41,7 @@ Move
 
 Piece Movement
   General 
-    same square not valid move
+    same square not valid move (and must move)
   King 
     can move one in each direction
     cannot move more than one in any direction
@@ -50,22 +50,21 @@ Piece Movement
 Capturability
   - is summed up nicely by this table
   piece_moving_is_pawn?  Destination_occupied?  piece_opp_color? move_allowed ?
-  0                      0                        n/a            Y
   1                      1                        n/a            N
+  n/a                    0                        n/a            Y
   0                      1                        1              Y
   0                      1                        0              N
 
 Legal Moves
-  Pieces allowed by piece motion / capture rules, but excluding those which 
+  Are those moves allowed by piece motion / capture rules, but excluding those which 
    leave ones king in check 
-   consider  KB    b, a bishop pinned to the king by an attacking bishop.
+   consider a bishop pinned against the king by an attacking bishop.
      If the White bishop were to move anywhere but to capture its attacker it 
-     would be an illegal move. So the real question to evaluate is if the move 
-     is fully played, is the mover in check at the end of it, including all captures.
-
+     would be an illegal move. So the criteria to evaluate is if the move 
+     is fully played, is the mover in check at the end of it.
 
 Check
   For a given board (match/move combo), a side is in check if there is a Legal Move
   its opponent can make (excluding placing themselves in check) which would leave 
-  the side in question in check. A move should not be deemed illegal solely based on the opponents
-  possible moves, but only on their legal ones. 
+  the side in question in check. 
+
