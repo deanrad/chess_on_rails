@@ -45,12 +45,9 @@ describe MoveController do
 
   it 'should prohibit moving on a match you dont own' do
     m = matches(:paul_vs_dean)    
-    pending do
-      lambda{
-        post :create, { :match_id => m.id, :move => {:from_coord => 'e2', :to_coord => 'e4'} }, {:player_id => players(:maria).id }
-        flash[:move_error].should_not be_nil
-      }.should_not raise_error
-    end
+    lambda{
+      post :create, { :match_id => m.id, :move => {:from_coord => 'e2', :to_coord => 'e4'} }, {:player_id => players(:maria).id }
+    }.should raise_error
   end
 
   it 'should prohibit moving when not your turn' do 

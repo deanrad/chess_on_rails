@@ -53,8 +53,6 @@ class Move < ActiveRecord::Base
   # this should be considered a before-save function and maybe validate is not exactly the best place
   def validate
 
-    errors.add :notation, "Ambiguous move #{notation}" and return if @possible_movers && @possible_movers.length > 1
-    
     if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
       errors.add :notation, "The notation #{notation} doesn't specify a valid move" and return 
     end
@@ -62,10 +60,6 @@ class Move < ActiveRecord::Base
     #ensure the validity of the coordinates we have whether specified or inferred
     [from_coord, to_coord].each do |coord|
       errors.add_to_base "#{coord} is not a valid coordinate" unless Chess.valid_position?( coord )
-    end
-
-    if @possible_movers && @possible_movers.length==0
-      errors.add :to_coord, "No piece capable of moving to #{self[:to_coord]} on this turn" and return 
     end
 
     #verify allowability of the move

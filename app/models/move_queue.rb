@@ -14,10 +14,6 @@ class MoveQueue < Array
     self.valid = false unless self.length % 2 == 0
   end
 
-  def next_move_pair
-    self.shift 2
-  end
-
   # allows it to be stored in a string field
   def to_s
     self.join " "

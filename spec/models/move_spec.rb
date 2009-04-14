@@ -72,6 +72,15 @@ describe Move do
       match.moves << Move.new( :notation => 'Bb3' )
     end
   end
+
+  it 'should detect an illegal move' do
+    match = matches(:unstarted_match)
+    m = nil
+    assert_raises ActiveRecord::RecordInvalid do
+      match.moves << m = Move.new( :from_coord => 'b1', :to_coord => 'd1' ) #Nd1 ??
+      # match.moves << m = Move.new( :from_coord => 'b3', :to_coord => 'b4' ) # ??
+    end
+  end
   
   it 'should notate_which_knight_moved_to_a_square_if_ambiguous' do
     match = matches(:queenside_castled)
@@ -82,13 +91,9 @@ describe Move do
   end
 
   it 'should disambiguate_knight_move_in_coordinates_when_moved_by_notation' do
-    pending do
-      match = matches(:queenside_castled)
-    
-      move = match.moves.build( :notation => 'Ngf3' )
-      move.save!
-      assert_equal 'g1', match.moves.last.from_coord
-    end
+    match = matches(:queenside_castled)
+    match.moves << move = Move.new( :notation => 'Ngf3' )
+    match.moves.last.from_coord.should == 'g1'
   end
 
   it 'should allow castle_via_notation' do
@@ -122,16 +127,13 @@ describe Move do
   end
 
   it 'should be an error to leave ones king in check' do
-    pending do
-      match = matches(:scholars_mate)
-
-      #this is not a mating move but king is in check and must move
-      match.moves << Move.new( :notation => 'Bxf7' )
-      
-      assert_raises ActiveRecord::RecordInvalid do
-        move = match.moves.build( :notation => 'Nf6' )
-        move.save!
-      end
+    match = matches(:scholars_mate)
+    
+    #this is not a mating move but king is in check and must move
+    match.moves << move = Move.new( :notation => 'Bxf7' )
+    
+    assert_raises ActiveRecord::RecordInvalid do
+      match.moves << move = Move.new( :notation => 'Nf6' )
     end
   end
 

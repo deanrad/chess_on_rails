@@ -26,6 +26,7 @@ describe Match do
     
     m1.side_of( players(:paul) ).should == :white
     m1.side_of( players(:dean) ).should == :black
+    m1.opposite_side_of( players(:paul) ).should == :black
   end
 
   it 'should display the lineup as player1 vs. player 2' do

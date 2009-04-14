@@ -38,14 +38,19 @@ module MoveNotation
     
     self[:to_coord] =  notation.to_s[-2,2]
     role = NOTATION_TO_ROLE_MAP[ notation[0,1] ] ? NOTATION_TO_ROLE_MAP[ notation[0,1] ] : 'pawn'
-
     @possible_movers = @board.select do |pos, piece| 
       piece.side == match.next_to_move && 
       piece.role == role && 
       piece.allowed_moves(@board, pos).include?( self[:to_coord] )
     end
 
-    self[:from_coord] = @possible_movers[0][0] if @possible_movers.length == 1
+    self[:from_coord] = @possible_movers[0][0] and return if @possible_movers.length == 1
+    disambiguator = notation[-3,1]
+    matcher = (disambiguator =~ /[1-8]/) ? Regexp.new( "^.#{disambiguator}$" ) : Regexp.new( "^#{disambiguator}.$" )
+    movers = @possible_movers.select { |pos, piece| matcher.match(pos) }
+
+    self[:from_coord] = movers[0][0] and return if movers.length == 1
+
   end
 
   #returns the notation for a given move - depends on alot of things - whether check was given, a capture made, etc..
