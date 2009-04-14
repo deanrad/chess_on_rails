@@ -24,6 +24,19 @@ describe MoveController do
     assert_equal 1, m.reload.moves.length
     assert_not_nil m.moves.last.notation
   end
+
+  it 'should accept a move via notation' do 
+    m = matches(:paul_vs_dean)
+    post :create, { :match_id => m.id, :notation => 'a4' }, {:player_id => m.player1.id}
+    assert_response 302
+  end
+
+  it 'should accept a move via ajax' do 
+    m = matches(:paul_vs_dean)
+    xhr :post, :create, { :match_id => m.id, :notation => 'a4' }, {:player_id => m.player1.id}
+    response.should be_success
+    assigns[:viewed_from_side].should == :white
+  end
   
   it 'should err if specified match not there or active' do
     post :create, { :match_id => 9, :move => {:from_coord => 'e2', :to_coord => 'e4'} }, {:player_id => 1}

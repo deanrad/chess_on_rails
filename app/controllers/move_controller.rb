@@ -22,7 +22,6 @@ class MoveController < ApplicationController
 
     #unceremonious way of saying you just ended the game 
     redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
-
     respond_to do |format|
       format.html{ create_respond }
       format.fbml{ create_respond }
@@ -38,7 +37,7 @@ protected
     redirect_to( match_path(@match) ) and return unless request.xhr? 
     
     #otherwise do a normal status update to refresh UI
-    set_match_status_instance_variables
+    set_view_vars
     render :template => 'match/status' and return
   end
 
@@ -57,4 +56,25 @@ protected
     redirect_to( match_url(@match.id) ) and return if @match
     
   end
+
+  # duplicate of method in match_controller - ugh - should use helper pattern instead
+  # of this crap
+  def set_view_vars
+    @files = Chess::Files
+    @ranks = Chess::Ranks.reverse
+
+    @board = @match.board
+
+    @viewed_from_side = (current_player == @match.player1) ? :white : :black
+    @your_turn = @match.turn_of?( current_player )
+
+    if @viewed_from_side == :black
+      @files.reverse!
+      @ranks.reverse!
+    end
+
+    @last_move = @match.reload.moves.last
+    @status_has_changed = ( params[:move].to_i == @match.moves.length)
+  end	
+
 end
