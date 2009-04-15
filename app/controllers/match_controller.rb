@@ -1,18 +1,13 @@
 class MatchController < ApplicationController
   
   before_filter :authorize
-
+  
   # GET /match/1
-  def show
-    # shows whose move it is 
-    @match = Match.find( params[:id] )
-    
-    set_view_vars
-
+  def show    
     respond_to do |format|
       format.fbml # should be same as html
-      format.html { render :template => 'match/result' and return if @match.active == 0 }
-      format.text { render :text => @match.board.to_s(@viewed_from_side==:black) }
+      format.html { render :template => 'match/result' and return if match.active == 0 }
+      format.text { render :text => match.board.to_s(viewed_from_side==:black) }
       format.pgn  { render :partial => 'match/move_list' }
     end
   end
@@ -29,14 +24,10 @@ class MatchController < ApplicationController
   # move has been made, though, future requests will return JS to update the board
   # and the URL that the client polls for.
   def status 
-    @match = Match.find( params[:id] )
-
-    set_view_vars
   end
 
   # GET /match/new
   def new
-    @match = Match.new
   end
 
   def resign
@@ -59,23 +50,46 @@ class MatchController < ApplicationController
 
   private 
 
-  #given a @match and current_player, sets up other instance variables 
-  def set_view_vars
-    @files = Chess::Files
-    @ranks = Chess::Ranks.reverse
-
-    @board = @match.board
-
-    @viewed_from_side = (current_player == @match.player1) ? :white : :black
-    @your_turn = @match.turn_of?( current_player )
-
-    if @viewed_from_side == :black
-      @files.reverse!
-      @ranks.reverse!
+  def match
+    @match ||= if params[:id] 
+      Match.find( params[:id] )
+    else
+      Match.new # params[:match]?
     end
+  end
 
-    @last_move = @match.reload.moves.last
-    @status_has_changed = ( params[:move].to_i == @match.moves.length)
-  end	
-  
+  def board
+    @board ||= match.board
+  end
+
+  def viewed_from_side
+    @viewed_from_side ||= (current_player == match.player1) ? :white : :black
+  end
+
+  def your_turn
+    @your_turn ||= match.turn_of?( current_player )
+  end
+
+  def last_move
+    @last_move ||= match.moves.last
+  end
+
+  def status_has_changed
+    @status_has_changed ||= ( params[:move].to_i == match.moves.length)
+  end
+
+  # the files, in order from the viewed_from_side for rendering
+  def files
+    @files ||= Chess::Files
+  end
+
+  # the ranks, in order from the viewed_from_side for rendering
+  def ranks
+    @ranks = Chess::Ranks.reverse
+    @ranks.reverse! if viewed_from_side == :black
+    @ranks
+  end
+
+  helper_method :match, :board, :your_turn, :files, :ranks, :last_move, :status_has_changed
+
 end
