@@ -72,6 +72,11 @@ Takebacks are not enabled. Have fun !
   <pre><%= render :partial => 'move_list' %></pre>
 </div>
 
+Your Move Queue:<div id="this_move_queue">
+  <%=  @match.gameplays.send(@match.side_of(current_player))[0].move_queue %>
+  <!-- TODO in-place edit ? -->
+</div>
+
 </div>
 
 

@@ -75,7 +75,7 @@ class MatchController < ApplicationController
     end
 
     @last_move = @match.reload.moves.last
-    @status_has_changed = ( params[:move].to_i == @match.moves.length)
+    @status_has_changed = ( params[:move].to_i <= @match.moves.length)
   end	
   
 end

@@ -34,6 +34,15 @@ describe MatchController do
     post :resign , {:id => 1},  {:player_id => players(:dean).id }
     assigns[:match].should_not be_active
   end
+  
+  it 'should show any current move queue in the page' do
+    #TODO default the format to html not fbml !
+    get :show, {:id => 3, :format => 'html'}, {:player_id => players(:dean).id }
+
+    #TODO get this so the proxy returns the unique (first) gameplay per scope
+
+    response.should have_tag("div#this_move_queue", :text => 'Nc4 b5')
+  end
 
   describe '- status updating' do
     before(:all) do 
