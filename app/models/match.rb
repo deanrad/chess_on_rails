@@ -1,6 +1,14 @@
 class Match < ActiveRecord::Base
   
-  has_many :gameplays
+  has_many :gameplays do
+    def white
+      self[0]
+    end
+    def black
+      self[1]
+    end
+  end
+
   has_many :players, :through => :gameplays
 
   has_many :moves, :order => 'created_at ASC',
@@ -30,11 +38,11 @@ class Match < ActiveRecord::Base
   end
 
   def player1
-    @player1 ||= gameplays.white.first.player
+    @player1 ||= gameplays.white.player
   end
 
   def player2
-    @player2 ||= gameplays.black.first.player
+    @player2 ||= gameplays.black.player
   end
   
   def recalc_board_and_check_for_checkmate(last_move)
@@ -59,7 +67,7 @@ class Match < ActiveRecord::Base
 
   # for purposes of move validation it's handy to have access to such a variable
   def current_player
-    next_to_move == :black ? gameplays.black.first.player : gameplays.white.first.player
+    next_to_move == :black ? gameplays.black.player : gameplays.white.player
   end
   
   def turn_of?( plyr )	
@@ -115,7 +123,7 @@ class Match < ActiveRecord::Base
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue
   # for now requires exact match on the notation
   def play_queued_moves( m )
-    opponent = m.match.gameplays.send( m.match.next_to_move ).first
+    opponent = m.match.gameplays.send( m.match.next_to_move )
     queue = opponent.move_queue
     return unless queue.length > 1
 

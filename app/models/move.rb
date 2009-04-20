@@ -94,7 +94,7 @@ private
 
     return if all_moves.length == 0 #no move queue
     
-    with match.gameplays.send( match.next_to_move ).first do |gp|
+    with match.gameplays.send( match.next_to_move ) do |gp|
       gp.update_attribute( :move_queue, all_moves.join(' ') )
     end
   end

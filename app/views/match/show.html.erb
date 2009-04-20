@@ -73,7 +73,7 @@ Takebacks are not enabled. Have fun !
 </div>
 
 Your Move Queue:<div id="this_move_queue">
-  <%=  @match.gameplays.send(@match.side_of(current_player))[0].move_queue %>
+  <%=  @match.gameplays.send(@match.side_of(current_player)).move_queue %>
   <!-- TODO in-place edit ? -->
 </div>
 

@@ -4,8 +4,8 @@ describe Gameplay do
 
   it "should link a player to a match" do
     with matches(:dean_vs_paul).gameplays do |gps|
-      gps[0].player.should == players(:dean)
-      gps[1].player.should == players(:paul)
+      gps.white.player.should == players(:dean)
+      gps.black.player.should == players(:paul)
     end
   end
 

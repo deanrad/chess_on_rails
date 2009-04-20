@@ -146,7 +146,7 @@ describe Move do
   it 'should store the move queue part of any notated move' do
     match = matches(:unstarted_match)
     match.moves << m = Move.new( :notation => 'e4 e5 d4' )
-    m.match.gameplays.white.first.move_queue.to_s.should == 'e5 d4'
+    m.match.gameplays.white.move_queue.to_s.should == 'e5 d4'
   end
 
   it 'should play the next move in the move queue if the notation matches' do
@@ -170,16 +170,14 @@ describe Move do
     match.moves[3].notation.should == 'Nc6'
     match.moves[4].notation.should == 'Nc3'
 
-    match.gameplays.white.first.move_queue.should be_blank
+    match.gameplays.white.move_queue.should be_blank
   end
 
   it 'should invalidate the move queue if an invalid prediction was made' do
     match = matches(:unstarted_match)
     match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc3 Nc6' )
     match.moves << m = Move.new( :notation => 'd5' )
-    match.gameplays.white.first.move_queue.should be_blank
+    match.gameplays.white.move_queue.should be_blank
   end
-  
-  #it 'should play the next two moves in the move queue if the notation differs but indicates same move'
 
 end
