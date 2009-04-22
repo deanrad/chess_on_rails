@@ -1,9 +1,9 @@
 
-<% form_for :move, :html => {:id => 'new_move_form'}, :url => create_match_moves_path(match_id)  do |f| %>
+<% form_for :move, :html => {:id => 'new_move_form'}, :url => create_match_moves_path(match.id)  do |f| %>
     Notation: <%= f.text_field :notation  %> or... <br/>
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
-    <%= f.hidden_field :match_id, :value => match_id %><br/>
+    <%= f.hidden_field :match_id, :value => match.id %><br/>
     <%= submit_tag "Submit Move", :id => 'move_submit_btn', :disabled => !your_turn %>
     <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>

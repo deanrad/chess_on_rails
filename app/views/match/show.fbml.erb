@@ -1,8 +1,8 @@
-	<h1><%= "A Duel to the Death between #{@match.player1.name} and #{@match.player2.name}!" -%></h1>
+	<h1><%= "A Duel to the Death between #{match.player1.name} and #{match.player2.name}!" -%></h1>
 
-Hi. Welcome, <%= @current_player.name %>.
+Hi. Welcome, <%= current_player.name %>.
 
 <!-- use facebook hybrid model to load our nice ajax page in iframe  -->
-<fb:iframe src="<%= "http://enpassant.dyndns.org/match/#{@match.id}/show.html" %>" width="750" height="750" style="border:0px">
+<fb:iframe src="<%= "http://enpassant.dyndns.org/match/#{match.id}/show.html" %>" width="750" height="750" style="border:0px">
 
 </fb:iframe>

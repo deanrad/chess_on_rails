@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
     p = Player.create( player_opts )
     u.playing_as = p
     u.save!
+    u
   end
 
 end

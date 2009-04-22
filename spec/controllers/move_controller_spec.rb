@@ -35,7 +35,6 @@ describe MoveController do
     m = matches(:paul_vs_dean)
     xhr :post, :create, { :match_id => m.id, :notation => 'a4' }, {:player_id => m.player1.id}
     response.should be_success
-    assigns[:viewed_from_side].should == :white
   end
   
   it 'should err if specified match not there or active' do
