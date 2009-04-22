@@ -80,14 +80,12 @@ class MatchController < ApplicationController
 
   # the files, in order from the viewed_from_side for rendering
   def files
-    @files ||= Chess::Files
+    @files ||= (viewed_from_side == :black) ? Chess::Files.reverse : Chess::Files
   end
 
   # the ranks, in order from the viewed_from_side for rendering
   def ranks
-    @ranks = Chess::Ranks.reverse
-    @ranks.reverse! if viewed_from_side == :black
-    @ranks
+    @ranks ||= (viewed_from_side == :black) ? Chess::Ranks : Chess::Ranks.reverse
   end
 
   helper_method :match, :board, :your_turn, :files, :ranks, :last_move, :status_has_changed
