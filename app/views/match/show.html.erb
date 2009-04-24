@@ -80,8 +80,6 @@ Takebacks are not enabled. Have fun !
 <div id="chat_form" style="float:left;">
 <% remote_form_for( Chat.new, :url => match_chat_path(match), :update => 'chat' ) do |f| %>
   <%= f.text_field :text, :style => 'width:150px' %>
-  <%= f.hidden_field :match_id, :value => match.id %>
-  <%= f.hidden_field :player_id, :value => current_player.id %>
   <%= f.submit 'Send' %>
 <% end %>
 </div>
