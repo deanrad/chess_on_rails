@@ -20,9 +20,6 @@ class MovesController < ApplicationController
     #end
   end
   
-  def refresh
-  end
-  
   #TODO ensure that a player can only get a match if its theirs, and that players must be authorized
   def get_match
     @match = Match.find( params[:match_id] )
