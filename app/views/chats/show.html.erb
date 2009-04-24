@@ -1,0 +1,5 @@
+<ul>
+  <% chats.each do |chat| %>
+  <li><b title="<%= chat.created_at.strftime("%a %H:%M") %>"><%= chat.player.name %>: </b><%= chat.text %></li>
+  <% end %>
+</ul>

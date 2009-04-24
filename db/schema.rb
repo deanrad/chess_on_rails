@@ -9,7 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090402014125) do
+ActiveRecord::Schema.define(:version => 20090424042453) do
+
+  create_table "chats", :force => true do |t|
+    t.integer  "match_id"
+    t.integer  "player_id"
+    t.string   "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "fbusers", :force => true do |t|
     t.integer  "facebook_user_id", :limit => 8

@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Default routes - facebook or not
@@ -15,6 +16,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :match , :except => [:delete], :shallow => true, :collection => { :create => :post } do |match|
     match.resources :moves, :controller => :move, :collection => { :create => :post }
+    match.resource :chat
   end
 
   #sets controller courtesy of Sean

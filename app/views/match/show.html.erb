@@ -68,8 +68,23 @@ Takebacks are not enabled. Have fun !
 <%= render :partial => "match/actions" %>
 </div>
 
-<div id="move_list" style="border:solid 1px black; width:180px; height:300px; overflow:auto; font-family:Courier New, Courier; font-size:10pt">
+<div id="move_list" style="border:solid 1px black; float:left; width:180px; height:300px; overflow:auto; font-family:Courier New, Courier; font-size:10pt">
   <pre><%= render :partial => 'move_list' %></pre>
+</div>
+
+<div id="chat_container" style="float:left;">
+<%= periodically_call_remote( :url => match_chat_url(match), :method => :get, :frequency => 7, :update => 'chat') %>
+<div id="chat" style="overflow:auto; border:solid 1px black; height: 300px; width: 180px;">
+  <%= render :template => "chats/show" %>
+</div>
+<div id="chat_form" style="float:left;">
+<% remote_form_for( Chat.new, :url => match_chat_path(match), :update => 'chat' ) do |f| %>
+  <%= f.text_field :text, :style => 'width:150px' %>
+  <%= f.hidden_field :match_id, :value => match.id %>
+  <%= f.hidden_field :player_id, :value => current_player.id %>
+  <%= f.submit 'Send' %>
+<% end %>
+</div>
 </div>
 
 <!-- TODO in-place edit ? -->

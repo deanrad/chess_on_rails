@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  match_id: 2
+  player_id: 2
+  text: MyString
+  created_at: 2009-04-23 23:13:28
+
+two:
+  match_id: 2
+  player_id: 1
+  text: MyString
+  created_at: 2009-04-23 23:13:28
