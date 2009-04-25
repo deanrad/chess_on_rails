@@ -1,35 +1,39 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 dean_vs_maria:
-  id: 1
+  active: 1
 
 paul_vs_dean:
-  id: 2
-   
+  active: 1
+
 dean_vs_paul:
-  id: 3
-   
+  active: 1
+
 unstarted_match:
-  id: 4
+  active: 1
 
 castled:
-  id: 5
+  active: 1
 
 resigned:
-  id: 6
   active: 0
   result: Resigned
   winning_player: 3
 
 queenside_castled:
-  id: 7
+  active: 1
 
 scholars_mate:
-  id: 8
+  active: 1
 
 promote_crazy:
-  id: 9
+  active: 1
 
 e4: # a FEN notated match after 1. e4 
-  id: 10
   start_pos: RNBQKBNR/PPPP1PPP/8/4P3/8/8/pppppppp/rnbqkbnr b
+
+legal:
+  name: Legal vs. St. Brie, 1750
+
+immortal:
+  name: The Immortal Match (Anderssen vs. Kieseritzky, 1851)  
