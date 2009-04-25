@@ -9,7 +9,7 @@ PeriodicalExecuter.prototype.stop = function() {
     clearInterval(this.intervalID);
 }
 </script>
-<h1><%= "#{match.lineup} - (#{current_player.name} on #{match.side_of(current_player)})" %></h1>
+<h1><%= "#{match.name}" %></h1>
 
 
 
@@ -86,9 +86,11 @@ Takebacks are not enabled. Have fun !
 </div>
 
 <!-- TODO in-place edit ? -->
+<% if match.side_of(current_player) %>
 Your Move Queue:<div id="this_move_queue">
-  <%=  @match.gameplays.send(@match.side_of(current_player)).move_queue %>
+  <%=  match.gameplays.send(match.side_of(current_player)).move_queue %>
 </div>
+<% end %>
 
 </div>
 

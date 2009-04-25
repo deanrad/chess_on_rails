@@ -39,6 +39,11 @@ describe Match do
     m.player2.should == players(:paul)
   end
 
+  it 'should have a name' do
+    m = matches(:immortal)
+    m.name.should == "The Immortal Match (Anderssen vs. Kieseritzky, 1851)"
+  end
+
   describe 'resignation' do
 
     it 'should make a match inactive' do

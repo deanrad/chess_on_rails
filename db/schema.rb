@@ -12,8 +12,8 @@
 ActiveRecord::Schema.define(:version => 20090424042453) do
 
   create_table "chats", :force => true do |t|
-    t.integer  "match_id"
-    t.integer  "player_id"
+    t.integer  "match_id",   :null => false
+    t.integer  "player_id",  :null => false
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20090424042453) do
     t.string   "start_pos",      :limit => 100
     t.string   "result",         :limit => 10
     t.integer  "winning_player"
+    t.string   "name",           :limit => 100
     t.datetime "created_at"
     t.datetime "updated_at"
   end

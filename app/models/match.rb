@@ -11,10 +11,8 @@ class Match < ActiveRecord::Base
 
   has_many :players, :through => :gameplays
 
-  has_many :moves, :order => 'created_at ASC',
-    :after_add => [:recalc_board_and_check_for_checkmate, 
-                   :play_queued_moves
-                  ]
+  has_many :moves, :after_add => [:recalc_board_and_check_for_checkmate, 
+                                  :play_queued_moves]
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 
@@ -44,7 +42,11 @@ class Match < ActiveRecord::Base
   def player2
     @player2 ||= gameplays.black.player
   end
-  
+
+  def name
+    self[:name] || lineup
+  end
+
   def recalc_board_and_check_for_checkmate(last_move)
     # i thought this was being done for me, but just in case...
     raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?

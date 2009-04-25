@@ -5,7 +5,7 @@ Hi. Welcome, <%= current_player.name %>.
 <ul>
 <% current_player.matches.active.each do |m| %>
 	<li>
-		<%= link_to m.lineup, match_url(m.id)  %> 
+		<%= link_to m.name, match_url(m)  %> 
 		<%=  '(Your move)' if m.turn_of?( current_player ) %>
 	</li>
 <% end%>
@@ -15,7 +15,7 @@ Hi. Welcome, <%= current_player.name %>.
 <ul>
 <% current_player.matches.completed.each do |m| %>
 	<li>
-		<%= link_to m.lineup, match_url(m.id) %> 
+		<%= link_to m.name, match_url(m) %> 
 		(<%=  m.result %> 
 <% if m.winning_player %>
 <%= ", Winner: #{m.winning_player == current_player ? 'You' : m.winning_player.name}" %> 
