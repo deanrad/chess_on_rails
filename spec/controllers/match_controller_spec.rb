@@ -21,7 +21,7 @@ describe MatchController do
   end
 
   it 'should show a match requested' do
-    get :show, {:id => 1},  {:player_id => players(:dean).id }
+    get :show, {:id => matches(:dean_vs_paul).id},  {:player_id => players(:dean).id }
     assigns[:match].should_not be_nil
   end
 
@@ -30,14 +30,19 @@ describe MatchController do
     pending{ assigns[:match].should be_a_new_record }
   end
 
+  it 'should populate the start position for a new match' do
+    post :create, {:opponent_id => 3, :opponent_side => 'black', :start_pos => 'foo'},  {:player_id => players(:dean).id }
+    assigns[:match].start_pos.should == 'foo'
+  end
+
   it 'should allow resignation via POST' do
-    post :resign , {:id => 1},  {:player_id => players(:dean).id }
+    post :resign , {:id => matches(:dean_vs_paul).id},  {:player_id => players(:dean).id }
     assigns[:match].should_not be_active
   end
   
   it 'should show any current move queue in the page' do
     #TODO default the format to html not fbml !
-    get :show, {:id => 3, :format => 'html'}, {:player_id => players(:dean).id }
+    get :show, {:id => matches(:dean_vs_paul).id, :format => 'html'}, {:player_id => players(:dean).id }
 
     #TODO get this so the proxy returns the unique (first) gameplay per scope
 

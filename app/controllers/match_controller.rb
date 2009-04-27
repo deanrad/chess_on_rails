@@ -39,11 +39,14 @@ class MatchController < ApplicationController
   # POST /match/create
   def create
     return unless request.post?
+    attrs = {}
     if params[:opponent_side] == 'black'
-      @match = Match.new( :white => current_player, :black => Player.find( params[:opponent_id] ) )
+      attrs = {:white => current_player, :black => Player.find( params[:opponent_id] )}
     else
-      @match = Match.new( :black => current_player, :white => Player.find( params[:opponent_id] ) )
+      attrs = {:black => current_player, :white => Player.find( params[:opponent_id] )}
     end
+    attrs[:start_pos] = params[:start_pos] if params[:start_pos]
+    @match = Match.new( attrs )
 
     redirect_to match_url(@match.id) if @match
   end

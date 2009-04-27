@@ -9,7 +9,7 @@ describe MoveController do
   end
   
   it 'should have a flash error upon an invalid move' do
-    post :create, {:match_id => 3, :move => { :from_coord =>'e2', :to_coord => 'x9' }  }, {:player_id => 1}
+    post :create, {:match_id => matches(:dean_vs_paul).id, :move => { :from_coord =>'e2', :to_coord => 'x9' }  }, {:player_id => 1}
     flash[:move_error].should include('x9 is not a valid')
     
   end
@@ -37,11 +37,6 @@ describe MoveController do
     response.should be_success
   end
   
-  it 'should err if specified match not there or active' do
-    post :create, { :match_id => 9, :move => {:from_coord => 'e2', :to_coord => 'e4'} }, {:player_id => 1}
-    pending {flash[:move_error].should_not be_nil }
-  end
-
   it 'should prohibit moving on a match you dont own' do
     m = matches(:paul_vs_dean)    
     lambda{
