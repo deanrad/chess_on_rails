@@ -73,4 +73,13 @@ describe PGN do
     m.moves.length.should == 2
     pgn.playback_errors.should be_blank
   end
+
+  it 'should save playback errors' do
+    m = matches(:unstarted_match)
+    pgn = PGN.new('1. e4 e5 2. Nd7')
+    pgn.playback_against(m)
+    
+    pgn.playback_errors.should_not be_blank
+    m.reload.moves.length.should == 2
+  end
 end

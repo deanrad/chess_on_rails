@@ -42,6 +42,7 @@ class PGN
       begin
       match.moves << last_move = Move.new( :notation => notation )
       rescue
+        @playback_errors = last_move.errors
         break;
       end
     end
