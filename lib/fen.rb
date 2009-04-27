@@ -49,6 +49,11 @@ module Fen
 
   end 
 
+  # Primitive implementation of FEN detection
+  def self.is_fen?( str )
+    str.split('/').length > 5
+  end
+
   # creates and places a piece based on 1-based indices of rank and file
   def place_piece( current_file, rank, instr )
     piece = Fen::Piece.new

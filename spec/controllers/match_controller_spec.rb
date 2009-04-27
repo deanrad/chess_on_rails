@@ -30,9 +30,15 @@ describe MatchController do
     pending{ assigns[:match].should be_a_new_record }
   end
 
-  it 'should populate the start position for a new match' do
-    post :create, {:opponent_id => 3, :opponent_side => 'black', :start_pos => 'foo'},  {:player_id => players(:dean).id }
-    assigns[:match].start_pos.should == 'foo'
+  it 'should populate the start position for a new match if FEN given' do
+    post :create, {:opponent_id => 3, :opponent_side => 'black', :start_pos => 'R7/8/8/8/8/8/8/8'},  {:player_id => players(:dean).id }
+    assigns[:match].start_pos.should == 'R7/8/8/8/8/8/8/8'
+  end
+
+  it 'should create moves for a new match if PGN given' do
+    post :create, {:opponent_id => 3, :opponent_side => 'black', :start_pos => '1. e4'},  {:player_id => players(:dean).id }
+    assigns[:match].moves.count.should == 1
+    assigns[:match].moves[0].notation.should == 'e4'
   end
 
   it 'should allow resignation via POST' do

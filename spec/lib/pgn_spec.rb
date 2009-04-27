@@ -55,4 +55,22 @@ describe PGN do
     pgn.notations.length.should == 20
   end
 
+  it 'should know that a FEN is not a PGN' do
+    PGN.is_pgn?( 'RNBQKBNR/PPPP1PPP/4P3/8/8/8/pppppppp/rnbqkbnr b' ).should be_false
+  end
+
+  it 'should know an invalid PGN when it sees one' do
+    pgn = PGN.new( 'ooga booga' )
+    pgn.should_not be_valid
+  end
+
+  # an integration test unless match stuff is stubbed..
+  it 'should be able to playback PGN against a match' do
+    m = matches(:unstarted_match)
+    pgn = PGN.new('1. e4 e5')
+    pgn.playback_against(m)
+    
+    m.moves.length.should == 2
+    pgn.playback_errors.should be_blank
+  end
 end

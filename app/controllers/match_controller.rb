@@ -45,8 +45,17 @@ class MatchController < ApplicationController
     else
       attrs = {:black => current_player, :white => Player.find( params[:opponent_id] )}
     end
-    attrs[:start_pos] = params[:start_pos] if params[:start_pos]
-    @match = Match.new( attrs )
+    setup = params[:start_pos]
+    
+    attrs[:start_pos] = setup if setup and Fen::is_fen?( setup )
+    @match = Match.create( attrs )
+    
+    if setup and PGN::is_pgn?( setup )
+      pgn = PGN.new( setup )
+      pgn.playback_against( @match )
+      # todo display errors somewhere ??
+      # flash[:notice] = pgn.playback_errors.values.join(',') if pgn.playback_errors
+    end
 
     redirect_to match_url(@match.id) if @match
   end
