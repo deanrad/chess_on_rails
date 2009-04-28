@@ -9,7 +9,7 @@ class Piece
   attr_accessor :type      #ex. queens_bishop
   
   # maintaining position as a field for now for test purposes
-  def initialize(side, type, pos=nil)
+  def initialize(side, type)
     @side = side
     @type = type
   end

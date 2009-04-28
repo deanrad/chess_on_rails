@@ -132,7 +132,7 @@ module Fen
         when :king  then :king
         else :"kings_#{role}"
       end
-      ::Piece.new( side, type, position )
+      ::Piece.new( side, type )
     end
   end
 end

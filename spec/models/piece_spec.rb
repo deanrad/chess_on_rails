@@ -9,17 +9,17 @@ describe 'Piece' do
   end
         
   it 'should rook_has_four_lines_of_attack' do
-    p = Piece.new(:black, :queens_rook, 'a8')
+    p = Piece.new(:black, :queens_rook)
     assert_equal 4, p.lines_of_attack.length
   end
 
   it 'should bishop_has_four_lines_of_attack' do
-    p = Piece.new(:white, :queens_bishop, 'c1')
+    p = Piece.new(:white, :queens_bishop)
     assert_equal 4, p.lines_of_attack.length
   end
 
   it 'should queen_has_eight_lines_of_attack' do
-    p = Piece.new(:white, :queen, 'h8')
+    p = Piece.new(:white, :queen)
     assert_equal 8, p.lines_of_attack.length
   end
   
