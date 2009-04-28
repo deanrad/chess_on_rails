@@ -36,7 +36,7 @@ describe Board do
     pawn.allowed_move?([0,1], 2).should == true
     pawn.allowed_move?([0,2], 2).should == true
 
-    pawn.allowed_moves.should == [:d3, :d4]
+    pawn.allowed_moves(board).should == [:d3, :d4]
 #######
 # 1)
 # 'Board a pawn on its home square can move one or two' FAILED

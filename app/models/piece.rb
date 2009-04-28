@@ -41,6 +41,20 @@ class Piece
     self.class.allowed_move?(vector)
   end
 
+  def position_on(board)
+    board.index(self)
+  end
+
+  def allowed_moves(board)
+    #LEFTOFF - must lookup position of this piece, convert sqaures to vectors, etc..
+    mypos = position_on(board)
+    returning( moves = [] ) do
+      board.each_square do |sq|
+        moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) #&& !obstructed?( sq, board )
+      end
+    end
+  end
+
   # when rendered the client id uniquely specifies an individual piece within a board
   # example: f_pawn_w
   def board_id

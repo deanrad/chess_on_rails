@@ -41,6 +41,14 @@ class Board < Hash
     @match.moves[0..@as_of_move-1].each{ |m| play_move!(m) }
     
   end
+  
+  def each_square &block
+    "12345678".each_char do |rank|
+      "abcdefgh".each_char do |file|
+        yield "#{file}#{rank}"
+      end
+    end
+  end
 
   # updates internals with a given move played
   def play_move!( m )

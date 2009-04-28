@@ -17,6 +17,6 @@ class Pawn < Piece
       when 1, 0, -1
         return true if vector[1] == advance_direction
     end
-    return vector[1] == 2*advance_direction && starting_rank == home_rank
+    return vector == [0, 2*advance_direction] && starting_rank == home_rank
   end
 end
