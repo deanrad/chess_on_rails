@@ -19,6 +19,11 @@ class Board < Hash
     end
   end
 
+  # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
+  def [] x
+    super(x.to_s)
+  end
+
   def _initialize(match, pieces_with_positions)
     #puts "initializing board"
     

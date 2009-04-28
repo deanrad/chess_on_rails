@@ -26,15 +26,32 @@ describe Board do
     assert  ! Chess.valid_position?('1a')
   end
   
-  it 'should pawn_can_advance_one_or_two_on_first_move' do
-    p = Piece.new(:white, :d_pawn)
-    moves = p.theoretical_moves('d2')
+  # LEFTOFF: making this API pass 
+  it 'a pawn on its home square can move one or two' do
+    match = matches(:unstarted_match)
+    board = match.board
 
-    ['d3','d4'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
-    
-    p = Piece.new(:black, :e_pawn)
-    moves = p.theoretical_moves( 'e7' )
-    ['e6','e5'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
+    pawn = board[:d2] #TODO we must do away with string access
+    Pawn.should === pawn
+    pawn.allowed_move?([0,1], 2).should == true
+    pawn.allowed_move?([0,2], 2).should == true
+
+    pawn.allowed_moves.should == [:d3, :d4]
+#######
+# 1)
+# 'Board a pawn on its home square can move one or two' FAILED
+# expected: #<Piece:0xb731bde0 @function="d_pawn", @side=:white>,
+#      got: Pawn (using ===)
+# ./spec/models/board_spec.rb:35:
+######
+
+    #moves = p.theoretical_moves('d2')
+    #
+    #['d3','d4'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
+    # 
+    #p = Piece.new(:black, :e_pawn)
+    #moves = p.theoretical_moves( 'e7' )
+    #['e6','e5'].each{ |loc| assert moves.include?(loc), "#{loc} not in list #{moves}"  }
   end
   
   it 'should pawn_can_only_advance_one_on_successive_moves' do
