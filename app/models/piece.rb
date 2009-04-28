@@ -20,7 +20,7 @@ class Piece
   end
 
   def initialize(side, function, discriminator=nil)
-    @side, @function = side, function
+    @side, @function, @discriminator = side, function, discriminator
   end
 
   # default implementation, has no knowledge of capturability
@@ -33,7 +33,6 @@ class Piece
         return true if vector == [ dir[0]*multiple, dir[1]*multiple ]
       end
     end
-
     return false
   end
 
@@ -43,12 +42,15 @@ class Piece
   end
 
   # when rendered the client id uniquely specifies an individual piece within a board
-  # example: white_f_pawn
+  # example: f_pawn_w
   def board_id
+    dtag = @discriminator ? @discriminator.to_s[0,1]+'_':''
+    "#{dtag}#{@function}_#{@side.to_s[0,1]}"
   end
 
   # a combination of the side and function
   def img_name
+    "#{@function}_#{@side.to_s[0,1]}"
   end
     
 

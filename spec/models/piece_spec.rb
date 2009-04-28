@@ -2,6 +2,16 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'Piece' do
 
+  it 'should have an image name made of function and color' do
+    Rook.new(:black, :queens).img_name.should == 'rook_b'
+    Piece.new(:white, :pawn, :c).img_name.should == 'pawn_w'
+  end	
+
+  it 'should have a board id made of function and color and discriminator' do
+    Piece.new(:white, :pawn, :c).board_id.should == 'c_pawn_w'
+    Rook.new(:black, :queens).board_id.should    == 'q_rook_b'
+  end	
+
   describe 'Move Directions' do
     it 'king can move one in any direction' do
       King.allowed_move?( [0,1] ).should be_true
