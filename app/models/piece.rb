@@ -50,9 +50,27 @@ class Piece
     mypos = position_on(board)
     returning( moves = [] ) do
       board.each_square do |sq|
-        moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) #&& !obstructed?( sq, board )
+        moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
       end
     end
+  end
+
+  # Am I forbidden to move from mypos to the position specified by vector, on this board ? 
+  # Returns yes for such situations as - intervening pieces, blocked by your own piece, etc..
+  def obstructed?( board, mypos, vector )
+    dest_piece = board[ mypos ^ vector ]
+
+    # a pawns sideways move is obstructed by space or his own side
+    if @function==:pawn && vector[0].abs != 0 
+      return true unless dest_piece && dest_piece.side != self.side
+    end
+
+    # no piece can obstruct a one-unit move or less (except for pawns, above), or a knight move
+    return false if @function==:knight || vector.map(&:abs).max <= 1
+
+    # TODO do interpolation
+    return false
+
   end
 
   # when rendered the client id uniquely specifies an individual piece within a board
