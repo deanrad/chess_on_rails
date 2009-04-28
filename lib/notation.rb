@@ -1,27 +1,5 @@
 module Notation; end # unconfuse rails' easily confused loader 
 
-module PieceNotation
-
-  # pieces other than pawn have notations for their role
-  # memoizable
-  def role_notation( role )
-    return nil if role == 'pawn'
-    role == 'knight' ? 'N' : role[0..0].upcase
-  end
-
-  #The part of the notation - with a piece disambiguator for pawns minors and rooks
-  # It will be removed later if deemed unnecessary
-  def notation( current_pawn_file = nil )
-    role_notation(role) || current_pawn_file
-  end
-
-  # but uppercase for white, lower for black, and P for all pawns
-  def abbrev
-    single_char = role_notation(role) || 'p'
-    return single_char.send( @side==:white ? 'upcase' : 'downcase' )
-  end
-end
-
 module MoveNotation
 
   NOTATION_TO_ROLE_MAP = { 'R' => 'rook', 'N' => 'knight', 'B' => 'bishop', 'Q' => 'queen', 'K' => 'king' }
