@@ -15,6 +15,9 @@ class String
   def rank
     self[1..1].to_i
   end
+  def file
+    self[0..0]
+  end
 
   # Lets you do d2 - d1 and get [0, -1]
   def - other
@@ -28,10 +31,14 @@ class String
   end
 end
 
+class Fixnum
+  def sign; self == 0 ? 0 : self < 0 ? -1 : 1 ; end
+end
+
 class Array
     # the basis vector - [1,1] for [n, n] [-1, 0] for [-n, 0]
   def basis
-    self.map{|comp| comp == 0 ? 0 : comp < 0 ? -1 : 1 }
+    self.map{|comp| comp.sign }
   end
 
   # for [3,0] yields [1,0], [2,0], and [3,0] in succession
@@ -41,4 +48,7 @@ class Array
       yield [ basis[0] * mult, basis[1] * mult ]
     end
   end
+
 end
+
+

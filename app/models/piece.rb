@@ -28,14 +28,20 @@ class Piece
     return false if vector == [0,0] #cant move to self
     return move_vectors.include?(vector) unless moves_unlimited
 
-    move_vectors.each do |dir|
-      1.upto(8).each do |multiple|
-        return true if vector == [ dir[0]*multiple, dir[1]*multiple ]
-      end
+    likely_vector = move_vectors.detect do |mv| 
+      mv[0].sign == vector[0].sign  && mv[1].sign == vector[1].sign 
     end
-    return false
+
+    return likely_vector != nil
+    #move_vectors.each do |dir|
+    #  1.upto(8).each do |multiple|
+    #    return true if vector == [ dir[0]*multiple, dir[1]*multiple ]
+    #  end
+    #end
+    # return false
   end
 
+  
   # gives instances access to the class method, but allow child classes to override
   def allowed_move?(vector, starting_rank=nil)
     self.class.allowed_move?(vector, starting_rank)
@@ -43,13 +49,17 @@ class Piece
 
   # the set of squares on the board for which this piece answers allowed_move? == true
   def allowed_moves(board)
-    #TODO if this *exact instance* of the piece is not in that board hash, we may need to hack this
+    #quick dirty attempt at memoization
+    @moves_cache ||= {}
+    return @moves_cache[board] if @moves_cache[board]
+
     mypos = board.index(self) 
 
     returning( moves = [] ) do
       board.each_square do |sq|
         moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
       end
+      @moves_cache[board] = moves
     end
   end
 

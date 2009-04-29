@@ -21,7 +21,7 @@ class Match < ActiveRecord::Base
   
   attr_reader :board
   def board
-    init_board
+    @board ||= init_board
   end
   
   def initialize( opts={} )
@@ -47,21 +47,22 @@ class Match < ActiveRecord::Base
 
   def recalc_board_and_check_for_checkmate(last_move)
     # i thought this was being done for me, but just in case...
-    raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?
+    # raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?
 
     #update internal representation of the board
-    @board.play_move! last_move
+    board.play_move! last_move
     
     other_guy = (last_move.side == :black ? :white : :black)
 
     checkmate_by( last_move.side ) if @board.in_checkmate?( other_guy )
   end
     
+  # Runs the first time initialization of the board for a match
   def init_board
     if self[:start_pos].blank?
-      @board = Board.new( self, Chess.initial_pieces ) 
+      Board.new( self, Chess.initial_pieces ) 
     else
-      @board = Board.new( self[:start_pos] )
+      Board.new( self[:start_pos] )
     end
   end
 

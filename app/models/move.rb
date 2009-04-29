@@ -40,7 +40,7 @@ class Move < ActiveRecord::Base
     end
 
     #castling
-    self[:castled] = 1 if (@piece_moving.type==:king && from_coord[0].chr=='e' && ['c','g'].include?( to_coord[0].chr ) )
+    self[:castled] = 1 if (@piece_moving.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
 
     #finally ensure move is notated
     self[:notation] = notate
@@ -68,15 +68,15 @@ class Move < ActiveRecord::Base
     
     errors.add_to_base "No piece present at #{from_coord} on this board" and return if !@piece_moving
 
-    unless @piece_moving.allowed_moves(@board).include?( to_coord ) 
+    unless @piece_moving.allowed_moves(@board).include?( to_coord.to_sym ) 
       errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" 
     end
 
     #can not leave your king in check at end of a move
-    new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
-    if new_board.in_check?( @piece_moving.side )
-      errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
-    end
+    #new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
+    #if new_board.in_check?( @piece_moving.side )
+    #  errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
+    #end
 
   end
 

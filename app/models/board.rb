@@ -47,34 +47,30 @@ class Board < Hash
   end
 
   # updates internals with a given move played
+  # Dereferences any existing piece we're moving onto or capturing enpassant
   def play_move!( m )
-    #kill any existing piece we're moving onto or capturing enpassant
     self.delete_if { |pos, piece| pos == m.to_coord || pos == m.captured_piece_coord }
-    #@pieces.reject!{ |p| (p.position == m.to_coord) || (p.position == m.captured_piece_coord) }	
 
-    #move to that square
     piece_moved = self.delete(m.from_coord)
     self[m.to_coord] = piece_moved
 
-    #@pieces.each{ |p| p.position = m.to_coord and piece_moved = p if p.position==m.from_coord }
-
-    #reflect castling
     if m.castled==1
-      castling_rank = m.to_coord[1].chr
+      castling_rank = m.to_coord.rank.to_s
       [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, new_rook_file, orig_rook_file|
         #update the position of the rook corresponding to the square the king landed on
-	if m.to_coord[0].chr==king_file 
+	if m.to_coord.file == king_file 
 	   rook = self.delete("#{orig_rook_file}#{castling_rank}")
 	   self["#{new_rook_file}#{castling_rank}"] = rook
 	end
-        #@pieces.each { |p| p.position = "#{rook_file}#{castling_rank}" if m.to_coord[0].chr==king_file && p.position=="#{orig_rook_file}#{castling_rank}"}
       end
     end
 
     #reflect promotion
-    if piece_moved && piece_moved.function == :pawn and m.to_coord.rank == piece_moved.promotion_rank
-      piece_moved.function = Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice || 'Q' ].to_sym 
-      piece_moved.discriminator = :promoted
+    if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
+      self.delete(m.to_coord)
+      self[m.to_coord] = Queen.new(piece_moved.side, :promoted)
+      #puts self.to_s if m.to_coord == 'a8'
+      #debugger if m.to_coord == 'a8'
     end
     
     self
@@ -87,7 +83,7 @@ class Board < Hash
   # # get the board for future consideration
   # new = board.consider_move( Move.new(...) )
   def consider_move(m, &block)
-    considered_board = Marshal::load(Marshal.dump(self)) #deep copy to decouple pieces array
+    considered_board = self.dup # Marshal::load(Marshal.dump(self)) #deep copy to decouple pieces array
     considered_board.play_move!(m)
 
     return considered_board unless block
@@ -110,14 +106,13 @@ class Board < Hash
   end
   
   def in_check?( side )
-
     king_pos, king  = detect do |pos, piece| 
-      piece.function==:king && piece.side == side 
+      piece && piece.function==:king && piece.side == side 
     end
 
     assassin = self.detect do |position, attacker|
-      (attacker.side != side) &&
-      attacker.allowed_moves(self).include?(king_pos.to_s)
+      attacker && (attacker.side != side) &&
+      attacker.allowed_moves(self).include?(king_pos.to_sym)
     end
 
     !! assassin
