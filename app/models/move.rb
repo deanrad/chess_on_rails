@@ -69,7 +69,7 @@ class Move < ActiveRecord::Base
     errors.add_to_base "No piece present at #{from_coord} on this board" and return if !@piece_moving
 
     unless @piece_moving.allowed_moves(@board).include?( to_coord ) 
-      errors.add_to_base "#{@piece_moving.role} not allowed to move to #{to_coord}" 
+      errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" 
     end
 
     #can not leave your king in check at end of a move

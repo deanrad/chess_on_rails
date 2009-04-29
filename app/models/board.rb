@@ -72,9 +72,9 @@ class Board < Hash
     end
 
     #reflect promotion
-    if piece_moved.function == :pawn and m.to_coord.rank == piece_moved.promotion_rank
-      piece_moved.function = Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ].to_sym 
-      piece_moved.disambiguator = :promoted
+    if piece_moved && piece_moved.function == :pawn and m.to_coord.rank == piece_moved.promotion_rank
+      piece_moved.function = Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice || 'Q' ].to_sym 
+      piece_moved.discriminator = :promoted
     end
     
     self
@@ -103,7 +103,7 @@ class Board < Hash
   def sister_piece_of( a_piece, sitting_here )
     pos, piece = select do |pos, piece| 
       piece.side == a_piece.side && 
-      piece.role == a_piece.role && 
+      piece.function == a_piece.function && 
       pos != sitting_here
     end
     piece
@@ -112,7 +112,7 @@ class Board < Hash
   def in_check?( side )
 
     king_pos, king  = detect do |pos, piece| 
-      piece.role=='king' && piece.side == side 
+      piece.function==:king && piece.side == side 
     end
 
     assassin = self.detect do |position, attacker|
@@ -132,7 +132,7 @@ class Board < Hash
     possible_advanced_pawn = self[ to_file + advanced_pawn_rank ]
 
     #if behind a pawn
-    if (to_rank == capture_rank) && possible_advanced_pawn && (possible_advanced_pawn.role=='pawn') 
+    if (to_rank == capture_rank) && possible_advanced_pawn && (possible_advanced_pawn.function==:pawn) 
       #and that pawn was doubly (not singly) advanced
       @match.moves.find_by_from_coord_and_to_coord( ( to_file + original_pawn_rank ) , to_file + advanced_pawn_rank ) != nil
     else

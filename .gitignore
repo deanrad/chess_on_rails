@@ -1,0 +1,11 @@
+*~HEAD*
+#*#
+*#*
+*~
+*.cache
+log/*
+tmp/*
+coverage/*
+doc/plugins/*
+*database.yml*
+/tmp/spec_server.pid
