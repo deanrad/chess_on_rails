@@ -1,5 +1,8 @@
 ####### helper functions #########
 
+# An alternate syntax is to 'opening' up the class is to define a module and then
+# Object.send(:include, MyCoolModule)
+
 class Object
   # convenience syntax
   def with(arg)
