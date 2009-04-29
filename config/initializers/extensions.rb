@@ -27,3 +27,18 @@ class String
     "#{file}#{rank}"
   end
 end
+
+class Array
+    # the basis vector - [1,1] for [n, n] [-1, 0] for [-n, 0]
+  def basis
+    self.map{|comp| comp == 0 ? 0 : comp < 0 ? -1 : 1 }
+  end
+
+  # for [3,0] yields [1,0], [2,0], and [3,0] in succession
+  # for [2,2] yields [1,1], and [2,2] in succession
+  def walk
+    1.upto( self.map(&:abs).max ) do |mult|
+      yield [ basis[0] * mult, basis[1] * mult ]
+    end
+  end
+end

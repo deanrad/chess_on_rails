@@ -41,13 +41,11 @@ class Piece
     self.class.allowed_move?(vector, starting_rank)
   end
 
-  def position_on(board)
-    board.index(self)
-  end
-
+  # the set of squares on the board for which this piece answers allowed_move? == true
   def allowed_moves(board)
-    #LEFTOFF - must lookup position of this piece, convert sqaures to vectors, etc..
-    mypos = position_on(board)
+    #TODO if this *exact instance* of the piece is not in that board hash, we may need to hack this
+    mypos = board.index(self) 
+
     returning( moves = [] ) do
       board.each_square do |sq|
         moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
@@ -55,22 +53,29 @@ class Piece
     end
   end
 
-  # Am I forbidden to move from mypos to the position specified by vector, on this board ? 
-  # Returns yes for such situations as - intervening pieces, blocked by your own piece, etc..
+  # Answers "Am I forbidden to move from [mypos] to the position specified by [vector], on this board" ?
+  # Returns yes when blocked by your own piece, etc..
+  # - No piece can obstruct a knight move
+  # - A pawns sideways move is obstructed by space or his own side
+  # - We walk along a piece's attack-line looking for obstructions
+  # - If you hit a piece along the attack-line, but not at the end, you're blocked
+  # - At the end of the attack-line, you're blocked only if by your own piece
   def obstructed?( board, mypos, vector )
-    dest_piece = board[ mypos ^ vector ]
 
-    # a pawns sideways move is obstructed by space or his own side
-    if @function==:pawn && vector[0].abs != 0 
+    return false if @function==:knight
+
+    if @function==:pawn && vector[0] != 0 
+      dest_piece = board[ mypos ^ vector ]
       return true unless dest_piece && dest_piece.side != self.side
     end
 
-    # no piece can obstruct a one-unit move or less (except for pawns, above), or a knight move
-    return false if @function==:knight || vector.map(&:abs).max <= 1
-
-    # TODO do interpolation
+    vector.walk do |step|
+      if dest_piece = board[ mypos ^ step ]
+        return step != vector || dest_piece.side == self.side
+      end
+    end
+    
     return false
-
   end
 
   # when rendered the client id uniquely specifies an individual piece within a board
@@ -87,7 +92,11 @@ class Piece
     
   # for FEN like situations
   def abbrev
-    letter = @function == :pawn ? 'p' : @function.to_s[0..1]
+    letter = case @function 
+      when :pawn then 'p' 
+      when :knight then 'n'
+      else @function.to_s[0,1]
+    end
     return letter.send( @side==:white ? :upcase : :downcase )
   end
 
