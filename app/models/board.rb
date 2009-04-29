@@ -5,7 +5,6 @@ class Board < Hash
   include Fen
 
   attr_accessor :match	
-  attr_accessor :as_of_move
   
   alias :pieces	   :values
   alias :positions :keys
@@ -34,11 +33,8 @@ class Board < Hash
 
     @match = match
     
-    #this is the only supported option right now
-    @as_of_move = @match.moves.count
-        
     #replay the board to that position
-    @match.moves[0..@as_of_move-1].each{ |m| play_move!(m) }
+    @match.moves.each{ |m| play_move!(m) }
     
   end
   
@@ -76,8 +72,9 @@ class Board < Hash
     end
 
     #reflect promotion
-    if piece_moved && piece_moved.promotable?( m.to_coord[1].chr )
-      piece_moved.promote!( m.to_coord[1].chr, Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ] ) 
+    if piece_moved.function == :pawn and m.to_coord.rank == piece_moved.promotion_rank
+      piece_moved.function = Move::NOTATION_TO_ROLE_MAP[ m.promotion_choice ].to_sym 
+      piece_moved.disambiguator = :promoted
     end
     
     self
@@ -120,7 +117,7 @@ class Board < Hash
 
     assassin = self.detect do |position, attacker|
       (attacker.side != side) &&
-      attacker.allowed_moves( self, position ).include?(king_pos.to_s)
+      attacker.allowed_moves(self).include?(king_pos.to_s)
     end
 
     !! assassin
@@ -155,7 +152,7 @@ class Board < Hash
       next if piece.side != side
       return false if way_out
 
-      piece.allowed_moves(self, pos).each do |mv|
+      piece.allowed_moves(self).each do |mv|
         consider_move( Move.new( :from_coord => pos, :to_coord => mv ) ) do |b|
 	  way_out = ! b.in_check?( side )
 	end

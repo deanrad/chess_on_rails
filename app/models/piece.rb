@@ -37,8 +37,8 @@ class Piece
   end
 
   # gives instances access to the class method, but allow child classes to override
-  def allowed_move?(vector)
-    self.class.allowed_move?(vector)
+  def allowed_move?(vector, starting_rank=nil)
+    self.class.allowed_move?(vector, starting_rank)
   end
 
   def position_on(board)
@@ -77,14 +77,19 @@ class Piece
   # example: f_pawn_w
   def board_id
     dtag = @discriminator ? @discriminator.to_s[0,1]+'_':''
-    "#{dtag}#{@function}_#{@side.to_s[0,1]}"
+    "#{dtag}#{self.img_name}"
   end
 
-  # a combination of the side and function
+  # a combination of the function (role) and side
   def img_name
     "#{@function}_#{@side.to_s[0,1]}"
   end
     
+  # for FEN like situations
+  def abbrev
+    letter = @function == :pawn ? 'p' : @function.to_s[0..1]
+    return letter.send( @side==:white ? :upcase : :downcase )
+  end
 
 end
 

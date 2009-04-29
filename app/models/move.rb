@@ -39,9 +39,6 @@ class Move < ActiveRecord::Base
       self[:captured_piece_coord] = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
     end
 
-    #promotion
-    self[:promotion_choice] ||= 'Q' if @piece_moving.promotable?( to_coord[1].chr )
-
     #castling
     self[:castled] = 1 if (@piece_moving.type==:king && from_coord[0].chr=='e' && ['c','g'].include?( to_coord[0].chr ) )
 
@@ -71,7 +68,7 @@ class Move < ActiveRecord::Base
     
     errors.add_to_base "No piece present at #{from_coord} on this board" and return if !@piece_moving
 
-    unless @piece_moving.allowed_moves(@board, from_coord).include?( to_coord ) 
+    unless @piece_moving.allowed_moves(@board).include?( to_coord ) 
       errors.add_to_base "#{@piece_moving.role} not allowed to move to #{to_coord}" 
     end
 

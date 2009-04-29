@@ -20,12 +20,10 @@ class Match < ActiveRecord::Base
   named_scope :completed, :conditions => { :active => false }
   
   attr_reader :board
-  
-  #AR callback - ensures a match object has an initialized board
-  def after_find
+  def board
     init_board
   end
-
+  
   def initialize( opts={} )
     white = opts.delete(:white) if opts[:white]
     black = opts.delete(:black) if opts[:black]

@@ -7,8 +7,12 @@ class Pawn < Piece
     @side == :white ? 1 : -1
   end
 
-  def home_rank; 
+  def home_rank
     @side == :white ? 2 : 7
+  end
+
+  def promotion_rank
+    @side == :white ? 8 : 1
   end
 
   def allowed_move?( vector, starting_rank = nil ) 

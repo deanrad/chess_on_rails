@@ -129,7 +129,7 @@ describe Board do
     #assert_equal 'Bb4+', ck.notate
     
     match.moves << ck
-    match.board['b4'].allowed_moves(match.board, 'b4').should include('e1')
+    match.board['b4'].allowed_moves(match.board).should include('e1')
 
     assert_equal true, match.board.in_check?( :white ) 
   end
@@ -154,7 +154,7 @@ describe Board do
     match.moves << Move.new( :notation => 'Bxf7' )
     assert match.board.in_check?(:black)
 
-    assert match.board['e8'].allowed_moves(match.board, 'e8').include?('e7')
+    assert match.board['e8'].allowed_moves(match.board).include?('e7')
     
     assert !match.board.in_checkmate?( :black ), "Black in checkmate unexpectedly"
   end
@@ -170,7 +170,7 @@ describe Board do
     board = match.board
     assert_not_nil board['e5'] #just moved there
     
-    assert_equal ['e6','d6'], board['e5'].allowed_moves(board, 'e5')
+    assert_equal ['e6','d6'], board['e5'].allowed_moves(board)
     assert board.is_en_passant_capture?( 'e5', 'd6' )
 
     match.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
@@ -185,7 +185,7 @@ describe Board do
     m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
 
     b = m.board
-    assert_equal ['e6'], b['e5'].allowed_moves(b, 'e5')
+    assert_equal ['e6'], b['e5'].allowed_moves(b)
   end	
 
   it 'should promotes_automatically_to_queen_on_reaching_opposing_back_rank' do

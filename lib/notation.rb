@@ -19,7 +19,7 @@ module MoveNotation
     @possible_movers = @board.select do |pos, piece| 
       piece.side == match.next_to_move && 
       piece.role == role && 
-      piece.allowed_moves(@board, pos).include?( self[:to_coord] )
+      piece.allowed_moves(@board).include?( self[:to_coord] )
     end
 
     self[:from_coord] = @possible_movers[0][0] and return if @possible_movers.length == 1
@@ -48,7 +48,7 @@ module MoveNotation
           b.sister_piece_of(@piece_moving, from_coord)
       end
 
-      if( sister_piece != nil && sister_piece.allowed_moves(@board, sister_piece_pos).include?(to_coord) )
+      if( sister_piece != nil && sister_piece.allowed_moves(@board).include?(to_coord) )
         #prefer using file to disambiguate but use rank if file insufficient
         # mynotation += ( @piece_moving.file != sister_piece.file) ? @piece_moving.file : @piece_moving.rank
         mynotation += ( from_coord[0] != sister_piece_pos[0]) ? from_coord[0].chr : from_coord[1].chr
