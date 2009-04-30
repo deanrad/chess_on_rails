@@ -68,3 +68,8 @@ Check
   its opponent can make (excluding placing themselves in check) which would leave 
   the side in question in check. 
 
+Bugs
+  upon chatting, clear out the chat text
+  chat should scroll to bottom automatically ? 
+  always update move queue on refresh (it may have been zeroed out)
+  piece b6 b5 c6_w_capture 

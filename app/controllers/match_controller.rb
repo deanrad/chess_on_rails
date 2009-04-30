@@ -53,8 +53,7 @@ class MatchController < ApplicationController
     if setup and PGN::is_pgn?( setup )
       pgn = PGN.new( setup )
       pgn.playback_against( @match )
-      # todo display errors somewhere ??
-      # flash[:notice] = pgn.playback_errors.values.join(',') if pgn.playback_errors
+      logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{setup}" if pgn.playback_errors
     end
 
     redirect_to match_url(@match.id) if @match
