@@ -3,6 +3,7 @@
 *#*
 *~
 *.cache
+.dotest/*
 log/*
 tmp/*
 coverage/*
