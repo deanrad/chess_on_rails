@@ -29,7 +29,10 @@ Initial Position
 Board
   The state of a match as of a given move, nominally the set of pieces and where they are
   Validates legality of moves made against it - some rules like Check Rules that require board knowledge
-  
+
+Refreshability
+  Should show if opponent hasn't refreshed in a while (meaning they're away ?)  
+
 Move
   is specified by a from and to coordinate
   coordinates must be valid Positions
