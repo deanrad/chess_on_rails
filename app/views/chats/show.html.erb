@@ -3,3 +3,7 @@
   <li><b title="<%= chat.created_at.strftime("%a %H:%M") %>"><%= chat.player.name %>: </b><%= chat.text %></li>
   <% end %>
 </ul>
+<script language="javascript">
+var objDiv = document.getElementById("chat");
+objDiv.scrollTop = objDiv.scrollHeight;
+</script>

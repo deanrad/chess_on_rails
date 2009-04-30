@@ -14,15 +14,20 @@
 
         <% #indexing the helper-returned variable board doesnt work unless called through self.board
 	   p = self.board[position] 
+	   capture_class = case last_move && last_move.to_coord == position
+	     when true
+	        " just_moved#{last_move && last_move.notation.include?('x') ? '_w_capture' : '' }"
+	     else
+                ''
+	   end
            if p                                       -%>
 
 	  <%= 
 	    image_tag image_source_of(p), 
 	      :id => p.board_id, 
 	      :alt => p.abbrev,
-	      :class => 'piece ' + p.allowed_moves(self.board, position).join(' ') + 
-	      (last_move && last_move.to_coord == position ? ' just_moved' : '' ) +
-	      (last_move && last_move.notation.include?('x') ? '_w_capture' : '' )
+	      :class => 'piece ' + p.allowed_moves(self.board, position).join(' ') + capture_class
+	      
 	  %>
 
           <%= draggable_element( p.board_id, :revert => 'true', :snap => '[49,47]' ) if match.turn_of?(current_player) %> 
