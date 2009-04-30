@@ -39,9 +39,9 @@ class PGN
   def playback_against( match )
     last_move = nil
     notations.each do |notation|
-      begin
       match.moves << last_move = Move.new( :notation => notation )
-      rescue
+      unless last_move.valid?
+        # raise ArgumentError, last_move.errors.to_a 
         @playback_errors = last_move.errors
         break;
       end

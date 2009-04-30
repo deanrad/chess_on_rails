@@ -2,9 +2,13 @@
 # whose keys are positions and whose values are the pieces at those positions
 class Board < Hash
 
+  # the to, from, and enpassant ranks for each side
+  EN_PASSANT_CONFIG = {:white => [2, 4, 3], :black => [7, 5, 6] }
+
   include Fen
 
   attr_accessor :match	
+  attr_accessor :en_passant_square
   
   alias :pieces	   :values
   alias :positions :keys
@@ -48,6 +52,7 @@ class Board < Hash
 
   # updates internals with a given move played
   # Dereferences any existing piece we're moving onto or capturing enpassant
+  # Updates our EP square or nils it out
   def play_move!( m )
     self.delete_if { |pos, piece| pos == m.to_coord || pos == m.captured_piece_coord }
 
@@ -64,6 +69,13 @@ class Board < Hash
 	end
       end
     end
+    
+    #TODO investigate why this method is getting called multiply per moves << Move.new
+    return unless piece_moved
+    ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
+    @en_passant_square = ( piece_moved.function == :pawn &&
+                           m.from_coord.rank == ep_from_rank && 
+                           m.to_coord.rank == ep_to_rank ) ? m.from_coord.file + ep_rank.to_s : nil
 
     #reflect promotion
     if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
@@ -114,6 +126,8 @@ class Board < Hash
       attacker && (attacker.side != side) &&
       attacker.allowed_moves(self).include?(king_pos.to_sym)
     end
+
+    $stderr.puts "#{assassin.inspect} - allowed: #{assassin[1].allowed_moves(self)}"
 
     !! assassin
   end

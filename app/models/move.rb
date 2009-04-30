@@ -42,7 +42,7 @@ class Move < ActiveRecord::Base
     #castling
     self[:castled] = 1 if (@piece_moving.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
 
-    #finally ensure move is notated
+    #finally ensure move is (re)notated
     self[:notation] = notate
   end
 

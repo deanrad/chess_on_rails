@@ -41,7 +41,7 @@ module MoveNotation
     mynotation = @piece_moving.abbrev.upcase.sub('P', from_coord.file)
     
     # disambiguate which piece moved if a 'sister_piece' could have moved there as well
-    if( @piece_moving.function=='rook') || (@piece_moving.function=='knight')
+    if( @piece_moving.function==:rook) || (@piece_moving.function==:knight)
       mynotation = mynotation.file
 
       # look for a piece of the same type which also could have moved 
@@ -60,7 +60,7 @@ module MoveNotation
     end
 
     #notate the destination square - a straight append except for noncapturing pawns
-    mynotation = '' if( (@piece_moving.function=='pawn') && !captured )
+    mynotation = '' if( (@piece_moving.function==:pawn) && !captured )
     mynotation += to_coord
         
     #castling 3 O's if queenside otherwise 2 O's

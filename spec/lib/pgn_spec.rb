@@ -66,20 +66,27 @@ describe PGN do
 
   # an integration test unless match stuff is stubbed..
   it 'should be able to playback PGN against a match' do
+    Board.any_instance.stubs('in_check?').returns false
+
     m = matches(:unstarted_match)
     pgn = PGN.new('1. e4 e5')
     pgn.playback_against(m)
-    
-    m.moves.length.should == 2
+
     pgn.playback_errors.should be_blank
+    m.moves.length.should == 2
   end
 
   it 'should save playback errors' do
+    Board.any_instance.stubs('in_check?').returns false
+
     m = matches(:unstarted_match)
     pgn = PGN.new('1. e4 e5 2. Nd7')
     pgn.playback_against(m)
     
-    pgn.playback_errors.should_not be_blank
     m.reload.moves.length.should == 2
+
+    m.moves.first.notation.should == 'e4'
+
+    pgn.playback_errors.should_not be_blank
   end
 end

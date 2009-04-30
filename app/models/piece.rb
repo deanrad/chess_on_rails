@@ -28,17 +28,19 @@ class Piece
     return false if vector == [0,0] #cant move to self
     return move_vectors.include?(vector) unless moves_unlimited
 
-    likely_vector = move_vectors.detect do |mv| 
-      mv[0].sign == vector[0].sign  && mv[1].sign == vector[1].sign 
-    end
-
-    return likely_vector != nil
-    #move_vectors.each do |dir|
-    #  1.upto(8).each do |multiple|
-    #    return true if vector == [ dir[0]*multiple, dir[1]*multiple ]
-    #  end
+    #likely_vector = move_vectors.detect do |mv| 
+    #  (vector[0] == 0 && mv[0] == 0 ) || 
+    #  (vector[1] == 0 && mv[1] == 0) ||
+    #  (vector[0] / mv[0] == vector[1] / mv[1])
     #end
-    # return false
+
+    #return likely_vector != nil
+    move_vectors.each do |dir|
+      1.upto(8).each do |multiple|
+        return true if vector == [ dir[0]*multiple, dir[1]*multiple ]
+      end
+    end
+    return false
   end
 
   

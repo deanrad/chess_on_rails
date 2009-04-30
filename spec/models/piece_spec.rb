@@ -72,4 +72,16 @@ describe 'Piece' do
       k.allowed_move?( [1, -2] ).should be_true
     end
   end
+
+  describe 'Allowed move examples' do
+    it 'should count bishops moves after 1. e4 correctly' do
+      Board.any_instance.stubs('in_checkmate?').returns false
+      Board.any_instance.stubs('in_check?').returns false
+
+      m = matches(:unstarted_match)
+      m.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
+
+      m.board[:f1].allowed_moves(m.board).should == [:e2, :d3, :c4, :b5, :a6]
+    end
+  end
 end

@@ -23,6 +23,7 @@ module Fen
   end
 
   # spits out the current state of the board
+  # TODO also spit out the en_passant_square now that we know to save it 
   def to_fen
     fen = ''
     consec_space = 0; this_file = 1

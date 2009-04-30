@@ -59,6 +59,17 @@ describe Board do
     match.board.should_not be_in_checkmate( :black )
   end
 
+  it 'should have no available en_passant sqaure to begin with' do
+    match = matches(:unstarted_match)
+    match.board.en_passant_square.should be_nil
+  end
+  it 'should know of the en_passant square once a pawn has made that move' do
+    Board.any_instance.stubs(:in_check?).returns(false)
+    match = matches(:unstarted_match)
+    match.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
+    match.board.en_passant_square.should == 'e3'
+  end
+
   it 'should pawn_can_capture_en_passant' do
     match = matches(:unstarted_match)
     
@@ -90,6 +101,8 @@ describe Board do
 
   #LEFTOFF restoring promotion
   it 'should promote automatically to queen' do
+    Board.any_instance.stubs('in_check?').returns false
+
     m = matches(:promote_crazy)
     m.moves << promo = Move.new( :from_coord => 'b7', :to_coord => 'a8' )
     promo.should be_valid
