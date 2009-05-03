@@ -127,8 +127,6 @@ class Board < Hash
       attacker.allowed_moves(self).include?(king_pos.to_sym)
     end
 
-    $stderr.puts "#{assassin.inspect} - allowed: #{assassin[1].allowed_moves(self)}"
-
     !! assassin
   end
 
