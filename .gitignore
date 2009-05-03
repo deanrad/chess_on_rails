@@ -1,0 +1,7 @@
+.do*
+*#*
+*~*
+*.cache
+coverage/*
+doc/plugins/*
+log/*
