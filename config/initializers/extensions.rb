@@ -34,6 +34,11 @@ class String
   end
 end
 
+class Symbol
+  def rank; self.to_s.rank ; end
+  def file; self.to_s.file ; end
+end
+
 class Fixnum
   def sign; self == 0 ? 0 : self < 0 ? -1 : 1 ; end
 end
