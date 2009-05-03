@@ -1,4 +1,13 @@
+//////////////  Set up prototype extensions //////////////
+PeriodicalExecuter.prototype.registerCallback = function() {
+    this.intervalID = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
+}
+      
+PeriodicalExecuter.prototype.stop = function() {
+    clearInterval(this.intervalID);
+}
 
+////////////// Allow submission of form from drop of piece /////////////
 function handle_release_of_piece(draggable, droparea){
 
    var origSquare = draggable.parentNode;

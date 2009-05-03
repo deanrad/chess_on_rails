@@ -1,5 +1,7 @@
 .label {background-color:gray; color:white; font-family:Arial; font-size:smaller}
 body {font-family: Arial; font-size: 10pt;}
+/* div {border: solid 1px black;} */
+
 .instructions { font-size: 10pt; width:600px;}
 #new_move_form { font-size: 10pt; }
 #match_ender { font-size: 10pt; }

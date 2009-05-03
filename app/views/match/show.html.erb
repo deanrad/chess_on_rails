@@ -1,44 +1,69 @@
-<%= javascript_include_tag :defaults %>
-<%= javascript_include_tag 'board_action' %>
-<script>
-PeriodicalExecuter.prototype.registerCallback = function() {
-    this.intervalID = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
-}
-
-PeriodicalExecuter.prototype.stop = function() {
-    clearInterval(this.intervalID);
-}
-</script>
 <h1><%= "#{match.name}" %></h1>
 
+<!-- Physical layout of chess board -->
+<div id="board_parent" style="float:left">
+  <%= render :partial => "board" %>
+</div>
 
+<span id="move_indicator_parent">
+  <%= render :partial => "move_indicator" %> 
+</span>
+
+
+<div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">
+ 
+  <div id="move_list" style="border:solid 1px black; float:left; width:180px; height:300px; overflow:auto; font-family:Courier New, Courier; font-size:10pt">
+    <pre><%= render :partial => 'move_list' %></pre>
+  </div>
+  
+  <div id="chat_container" style="float:left;">
+    <%= periodically_call_remote( :url => match_chat_url(match), :method => :get, :frequency => 7, :update => 'chat') %>
+    <div id="chat" style="overflow:auto; border:solid 1px black; height: 300px; width: 180px;">
+      <%= render :template => "chats/show" %>
+    </div>
+    <div id="chat_form" style="float:left;">
+      <% remote_form_for( Chat.new, :url => match_chat_path(match), :update => 'chat' ) do |f| %>
+      <%= f.text_field :text, :style => 'width:150px' %>
+      <%= f.submit 'Send', :onclick=>"window.setTimeout(function(){ $('chat_text').clear() }, 500)" %>
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <div class="instructions">
-Instructions: Ideally you move by drag and drop. It's not the smoothest, but should work.
-Alternately you can enter the from and to coordinates (d2 d4) in the boxes and then Submit Move. 
-You can also enter the Algebraic Notation if you're showing off ( Nbxc4 ). To castle drag king
-to its castling square. The move is submitted when you drop the piece or hit enter. 
-Takebacks are not enabled. Have fun !
+  Instructions: Ideally you move by drag and drop. It's not the smoothest, but should work.
+  Alternately you can enter the from and to coordinates (d2 d4) in the boxes and then Submit Move. 
+  You can also enter the Algebraic Notation if you're showing off ( Nbxc4 ). To castle drag king
+  to its castling square. The move is submitted when you drop the piece or hit enter. 
+  Takebacks are not enabled. Have fun !
 </div>
 
+
+<div id="move_creator_parent">
+  <%= render :partial => "move/create" %>
+  <%= render :partial => "match/actions" %>
+</div>
+
+Your Move Queue:
+<div id="this_move_queue">
+  <%=  move_queue %>
+</div>
+
+<%# TODO move this to an options box %>
 <div id="select_set_div" style=" ">
-<%= render :partial => "sets/select_set" %>
+  <%= render :partial => "sets/select_set" %>
 </div>
 
-<br/>
 
-<script>
+<% content_for :js do %>
+   ///////////////////////////////  BEGIN JS Updater ///////////////////////////////
    // this url will be polled for updates, and when a move has been made, this url
    // will be replaced by the new url to poll for updates
    // TODO its clear this will only allow one match to be tracked per DOM 
    //  if its ever to be the case that one DOM manages several matches, some scoping will be needed
    var next_move_url = '<%= url_for( :action => :status, :move => match.moves.length + 1 ) %>';
-</script>
-<div id="updater_div">
-<script>
-  //<![CDATA[
 
-<% if ! your_turn %>
+
   this_updater = new PeriodicalExecuter(
     function(){
       new Ajax.Request(
@@ -47,53 +72,7 @@ Takebacks are not enabled. Have fun !
       )
     }, 10
   )
+   ///////////////////////////////  END JS Updater ///////////////////////////////
 <% end %>
-//]]>
-</script>
-</div>
-
-<span id="move_indicator_parent">
-<%= render :partial => "move_indicator" %> 
-</span>
-
-
-
-<div id="board_parent" style="float:left">
-<%= render :partial => "board" %>
-</div>
-
-<div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">
-<div id="move_creator_parent">
-<%= render :partial => "move/create" %>
-<%= render :partial => "match/actions" %>
-</div>
-
-<div id="move_list" style="border:solid 1px black; float:left; width:180px; height:300px; overflow:auto; font-family:Courier New, Courier; font-size:10pt">
-  <pre><%= render :partial => 'move_list' %></pre>
-</div>
-
-<div id="chat_container" style="float:left;">
-<%= periodically_call_remote( :url => match_chat_url(match), :method => :get, :frequency => 7, :update => 'chat') %>
-<div id="chat" style="overflow:auto; border:solid 1px black; height: 300px; width: 180px;">
-  <%= render :template => "chats/show" %>
-</div>
-<div id="chat_form" style="float:left;">
-<% remote_form_for( Chat.new, :url => match_chat_path(match), :update => 'chat' ) do |f| %>
-  <%= f.text_field :text, :style => 'width:150px' %>
-  <%= f.submit 'Send' %>
-<% end %>
-</div>
-</div>
-
-<!-- TODO in-place edit ? -->
-<% if match.side_of(current_player) %>
-Your Move Queue:<div id="this_move_queue">
-  <%=  match.gameplays.send(match.side_of(current_player)).move_queue %>
-</div>
-<% end %>
-
-</div>
-
-
 
 
