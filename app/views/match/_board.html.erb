@@ -3,11 +3,11 @@
 <%= stylesheet_link_tag "board" %>
 
 <table id="board_table">
-  <% ranks.each_byte do |rank| -%>
+  <% ranks.each_char do |rank| -%>
     <tr>
-    <td class="label rank"><%= rank.chr %></td>
-    <% files.each_byte do |file|
-      position = file.chr + rank.chr -%>
+    <td class="label rank"><%= rank %></td>
+    <% files.each_char do |file|
+      position = "#{file}#{rank}" -%>
       <td class="<%= position %>" id="<%= position %>">
 
         <script>    Droppables.add('<%= position %>', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: '<%= position %>' } ); </script>
@@ -42,8 +42,8 @@
     <% if rank==ranks[7] %>
       <tr>
         <td>&nbsp;</td>
-        <% files.each_byte do |file| -%>
-          <td class="label file"><%= file.chr %></td>	
+        <% files.each_char do |file| -%>
+          <td class="label file"><%= file %></td>	
         <% end %>
       </tr>
     <% end %>
