@@ -1,5 +1,7 @@
 class Rook < Piece
-  def initialize(side = :white)
-    super(side, :rook)
+  move_directions :straight, :limit => :none
+
+  def initialize(side, discriminator=nil)
+    super(side, :rook, discriminator)
   end
 end

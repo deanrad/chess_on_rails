@@ -30,6 +30,7 @@ scholars_mate:
   active: 1
 
 promote_crazy:
+  name: Promotable
   active: 1
 
 e4: # a FEN notated match after 1. e4 

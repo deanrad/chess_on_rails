@@ -22,8 +22,7 @@
 	    image_tag image_source_of(p), 
 	      :id => p.board_id, 
 	      :alt => p.abbrev,
-	      :class => 'piece ' + p.allowed_moves(self.board, position).join(' ') + capture_class
-	      
+	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
 	  %>
 
           <%= draggable_element( p.board_id, :revert => 'true', :snap => '[49,47]' ) if match.turn_of?(current_player) %> 

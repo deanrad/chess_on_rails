@@ -2,98 +2,86 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'Piece' do
 
-  it 'should recognize_valid_piece_types' do
-    p = Piece.new(:white, :queens_knight)
-    p = Piece.new(:black, :a_pawn)
-    #completes without error
-  end
-        
-  it 'should rook_has_four_lines_of_attack' do
-    p = Piece.new(:black, :queens_rook, 'a8')
-    assert_equal 4, p.lines_of_attack.length
-  end
-
-  it 'should bishop_has_four_lines_of_attack' do
-    p = Piece.new(:white, :queens_bishop, 'c1')
-    assert_equal 4, p.lines_of_attack.length
-  end
-
-  it 'should queen_has_eight_lines_of_attack' do
-    p = Piece.new(:white, :queen, 'h8')
-    assert_equal 8, p.lines_of_attack.length
-  end
-  
-  it 'should kings_knights_pawns_have_no_lines_of_attack' do
-    k = [ Piece.new(:white, :king), 'h8']
-    n = [ Piece.new(:black, :knight), 'b2']
-    p = [ Piece.new(:white, :pawn), 'd2']
-    
-    #the theoretical moves must be evaluated first before lines of attack can be known
-    # (kind of backwards, yes, but)
-    [k,n,p].each do |piece, position|
-      moves = piece.theoretical_moves(position)
-      assert_equal 0, piece.lines_of_attack.length, "Piece #{piece.to_s} had lines of attack unexpectedly"
-    end
-    
-  end
-
-  # this is not the style of test we want - its more of a sanity check
-  it 'should rook_can_move_nowhere_on_initial_board' do
-    r = Piece.new(:black, :queens_rook)
-    b = matches(:unstarted_match).board
-    
-    assert_equal 0,  r.allowed_moves( b, 'a8' ).length
-  end
-
-  it 'should image_names_abstract_away_irrelevant_details' do
-    assert_equal 'rook_b', Piece.new(:black, :queens_rook).img_name
-    assert_equal 'pawn_w', Piece.new(:white, :b_pawn).img_name
+  it 'should have an image name made of function and color' do
+    Rook.new(:black, :queens).img_name.should == 'rook_b'
+    Piece.new(:white, :pawn, :c).img_name.should == 'pawn_w'
   end	
 
-  it 'should nodoc_piece_is_promotable_to_queen_by_default' do
-    p = Piece.new(:white, :b_pawn)
-    p.promote!('8')
+  it 'should have a board id made of function and color and discriminator' do
+    Piece.new(:white, :pawn, :c).board_id.should == 'c_pawn_w'
+    Rook.new(:black, :queens).board_id.should    == 'q_rook_b'
+  end	
 
-    assert_equal :queen.to_s, p.role
-  end
-
-  it 'should pawn_may_not_promote_to_king' do
-    p = Piece.new(:black, :c_pawn)
-    assert_raises ArgumentError do
-      p.promote!('8', :king )
-    end
-  end
-
-  it 'should pawn_may_not_promote_unless_on_back_rank' do
-    #black pawn must be on 1
-    p = Piece.new(:black, :c_pawn)
-    assert_raises ArgumentError do
-      p.promote!('8')
+  describe 'Move Directions' do
+    it 'king can move one in any direction' do
+      King.allowed_move?( [0,1] ).should be_true
     end
 
-    p.side = :white
-    assert_raises ArgumentError do
-      p.promote!('7')
+    it 'king can not move more than one in any direction' do
+      King.allowed_move?( [0,2] ).should be_false
     end
-  end
 
-  it 'should nodoc_ascertains_promotability' do
-    p = Piece.new(:black, :c_pawn)
-    assert ! p.promotable?('8')
-    assert Piece.new(:black, :f_pawn).promotable?('1')
-  end
-  
-  it 'should nodoc_board_id_indicates_promoted_piece' do
-    p = Piece.new(:white, :a_pawn)
-    p.promote!('8')
-    assert_equal 'white_promoted_queen', p.board_id
-  end
-
-  it 'should no_piece_other_than_pawn_may_promote' do
-    p = Piece.new(:black, :queens_bishop)
-    assert_raises ArgumentError do
-      p.promote!('8')
+    it 'king can not move more than one in any direction (instance version)' do
+      k = King.new(:white)
+      k.allowed_move?( [0,2] ).should be_false
     end
-  end
+
+    it 'queen can move one in any direction' do
+      Queen.allowed_move?( [1,0] ).should be_true
+    end
+
+    it 'queen can move in long straight lines' do
+      Queen.allowed_move?( [3,3] ).should be_true
+    end
+
+    it 'queen cant move like knight' do
+      q = Queen.new(:black)
+      Queen.allowed_move?( [2,-1] ).should be_false
+    end
     
+  end
+
+  describe 'Piece Types' do
+    it 'white pawn can move forward two from its home rank' do
+      p = Pawn.new(:white)
+      p.allowed_move?( [0, 2], 2).should be_true
+    end
+
+    it 'white pawn can not move forward two beyond its home rank' do
+      p = Pawn.new(:white)
+      p.allowed_move?( [0, 2], 4).should be_false
+    end
+
+    it 'white pawn can move forward-diagonal one unit' do
+      p = Pawn.new(:white)
+      p.allowed_move?( [1, 1], 2).should be_true
+    end
+
+    it 'black pawn can move forward two from its home rank' do
+      p = Pawn.new(:black)
+      p.allowed_move?( [0, -2], 7).should be_true
+    end
+
+    it 'white pawn can not move forward two beyond its home rank' do
+      p = Pawn.new(:white)
+      p.allowed_move?( [0, -2], 5).should be_false
+    end
+
+    it 'knight can move 2 and 1 units' do
+      k = Knight.new(:black)
+      k.allowed_move?( [1, -2] ).should be_true
+    end
+  end
+
+  describe 'Allowed move examples' do
+    it 'should count bishops moves after 1. e4 correctly' do
+      Board.any_instance.stubs('in_checkmate?').returns false
+      Board.any_instance.stubs('in_check?').returns false
+
+      m = matches(:unstarted_match)
+      m.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
+
+      m.board[:f1].allowed_moves(m.board).should == [:e2, :d3, :c4, :b5, :a6]
+    end
+  end
 end

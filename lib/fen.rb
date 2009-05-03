@@ -23,11 +23,13 @@ module Fen
   end
 
   # spits out the current state of the board
+  # TODO also spit out the en_passant_square now that we know to save it 
   def to_fen
     fen = ''
     consec_space = 0; this_file = 1
 
-    self.each_piece_in_fen_order do |piece| 
+    self.each_square do |pos|
+      piece = self[pos]
       if piece
         fen << (consec_space > 0 ? consec_space.to_s : '') << piece.abbrev and consec_space=0 
       else
@@ -72,17 +74,6 @@ module Fen
     self["#{(current_file+96).chr}#{rank+1}"] = piece.to_piece
   end
   
-  # defines the order in which we iterate over the board while 
-  # generating Fen
-  # (only for implementations of board lacking each)
-  def each_piece_in_fen_order
-    "12345678".each_char do |rank|
-      "abcdefgh".each_char do |file|
-        yield self[ "#{file}#{rank}" ]
-      end
-    end
-  end
-
   # if we have a fen string, whatever that fen string says
   def next_to_move
     return nil unless @fenstr
@@ -132,14 +123,7 @@ module Fen
         when :king  then :king
         else :"kings_#{role}"
       end
-      ::Piece.new( side, type, position )
+      ::Piece.new( side, type )
     end
-  end
-end
-
-#for ruby < 1.9 to use ruby 1.9 each_char unicode safe syntax
-class String
-  def each_char
-    (0..self.length-1).each { |place| yield self[place..place] }
   end
 end

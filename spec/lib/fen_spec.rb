@@ -39,7 +39,7 @@ describe 'Forsyth-Edwards (FEN) Notation' do
     describe '- a section one layout instruction' do
       it 'should correspond to square a1 initially' do
         b = Board.new( ROOK_A1_ONLY )
-        b["a1"].role.should == "rook"
+        b["a1"].function.should == :rook
       end
 
       it 'should lay out a piece if rnbqkp' do

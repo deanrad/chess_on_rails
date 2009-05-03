@@ -20,12 +20,10 @@ class Match < ActiveRecord::Base
   named_scope :completed, :conditions => { :active => false }
   
   attr_reader :board
-  
-  #AR callback - ensures a match object has an initialized board
-  def after_find
-    init_board
+  def board
+    @board ||= init_board
   end
-
+  
   def initialize( opts={} )
     white = opts.delete(:white) if opts[:white]
     black = opts.delete(:black) if opts[:black]
@@ -49,21 +47,22 @@ class Match < ActiveRecord::Base
 
   def recalc_board_and_check_for_checkmate(last_move)
     # i thought this was being done for me, but just in case...
-    raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?
+    # raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?
 
     #update internal representation of the board
-    @board.play_move! last_move
+    board.play_move! last_move
     
     other_guy = (last_move.side == :black ? :white : :black)
 
     checkmate_by( last_move.side ) if @board.in_checkmate?( other_guy )
   end
     
+  # Runs the first time initialization of the board for a match
   def init_board
     if self[:start_pos].blank?
-      @board = Board.new( self, Chess.initial_pieces ) 
+      Board.new( self, Chess.initial_pieces ) 
     else
-      @board = Board.new( self[:start_pos] )
+      Board.new( self[:start_pos] )
     end
   end
 

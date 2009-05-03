@@ -1,7 +1,12 @@
-.do*
+*~HEAD*
+#*#
 *#*
-*~*
+*~
 *.cache
+.dotest/*
+log/*
+tmp/*
 coverage/*
 doc/plugins/*
-log/*
+*database.yml*
+/tmp/spec_server.pid

@@ -1,5 +1,7 @@
 class Bishop < Piece
-  def initialize(side = :white)
-    super(side, :bishop)
+  move_directions :diagonal, :limit => :none
+
+  def initialize(side, discriminator=nil)
+    super(side, :bishop, discriminator)
   end
 end

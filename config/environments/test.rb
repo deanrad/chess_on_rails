@@ -22,3 +22,4 @@ config.action_controller.allow_forgery_protection    = false
 config.action_mailer.delivery_method = :test
 
 require 'ruby-debug'
+require 'ruby-prof'

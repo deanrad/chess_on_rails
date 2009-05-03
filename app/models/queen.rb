@@ -1,5 +1,7 @@
 class Queen < Piece
-  def initialize(side = :white)
-    super(side, :queen)
+  move_directions :diagonal, :straight, :limit => :none
+
+  def initialize(side, discriminator=nil)
+    super(side, :queen, discriminator)
   end
 end
