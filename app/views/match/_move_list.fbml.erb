@@ -1,3 +1,0 @@
-<% @match.moves.each_with_index do |m, i| -%>
-<%=  (i%2)==0 ? ( ((i+2)/2).to_s + "." + m.notation ).ljust(9) : "#{m.notation}<br/>" -%>
-<% end %>
