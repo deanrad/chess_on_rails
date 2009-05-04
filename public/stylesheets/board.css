@@ -1,3 +1,4 @@
+/*
 .label {background-color:gray; color:white; font-family:Arial; font-size:smaller}
 body {font-family: Arial; font-size: 10pt;}
 .instructions { font-size: 10pt; width:600px;}
@@ -20,6 +21,17 @@ body {font-family: Arial; font-size: 10pt;}
 
 .ml { height: 20px; }
 .hoverActive { background-color: #00ff00; }
+*/
+
+h1 { font-size: 14pt; font-weight: bold }
+.board_table td{
+  width:40px; height:40px;
+  border-width: 1px; border-style:solid; border-color:#333;
+  margin:0px; padding: 0px;
+ }
+
+.move_creator_parent { clear: all; float: left; }
+.instructions { display:none }
 
 #a2, #a4, #a6, #a8,
 #b1, #b3, #b5, #b7,
@@ -44,5 +56,7 @@ body {font-family: Arial; font-size: 10pt;}
 .active_yours {background-color:black; color:white; font-weight:bold}
 .active_theirs {background-color:eee; color:bbb; font-weight:bold}
 
+/*
 .just_moved {  background-color:afa;  }
 .just_moved_w_capture {  background-color:d44;  }
+*/

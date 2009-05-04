@@ -4,6 +4,12 @@
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
     <%= f.hidden_field :match_id, :value => match.id %><br/>
+
+    <%= link_to "Resign", url_for(:action => 'resign'), 
+    :confirm => 'Are you truly ready to accept disgrace and sulk back to the rock from under which you came ?' %>
+    
+    <%= link_to "PGN", match_url(@match, :format=>'pgn') %>
+    
     <%= submit_tag "Submit Move", :id => 'move_submit_btn', :disabled => !your_turn %>
     <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
