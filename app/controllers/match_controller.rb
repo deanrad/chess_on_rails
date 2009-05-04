@@ -63,7 +63,7 @@ class MatchController < ApplicationController
 
   def match
     @match ||= if params[:id] 
-      Match.find( params[:id] )
+      params[:id].to_i != 0 ? Match.find( params[:id] ) : Match.find_by_name( params[:id] )
     else
       Match.new # params[:match]?
     end
