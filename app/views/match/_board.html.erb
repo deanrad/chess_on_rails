@@ -4,7 +4,7 @@
     <td class="label rank"><%= rank %></td>
     <% files.each_char do |file|
       position = "#{file}#{rank}" -%>
-      <td class="<%= position %>" id="<%= position %>">
+      <td class="piece_container <%= position %>" id="<%= position %>">
 
         <script>    Droppables.add('<%= position %>', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: '<%= position %>' } ); </script>
 
@@ -25,7 +25,7 @@
 	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
 	  %>
 
-          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[49,47]' ) if match.turn_of?(current_player) %> 
+          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if match.turn_of?(current_player) %> 
 
         <% else %>
           &nbsp;

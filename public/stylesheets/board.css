@@ -56,6 +56,13 @@ h1 { font-size: 14pt; font-weight: bold }
 .active_yours {background-color:black; color:white; font-weight:bold}
 .active_theirs {background-color:eee; color:bbb; font-weight:bold}
 
+.move_list {
+    float:left; 
+    width:180px; height:300px; 
+    border:solid 1px black; 
+    overflow:auto; 
+    font: Courier New 10pt}
+
 /*
 .just_moved {  background-color:afa;  }
 .just_moved_w_capture {  background-color:d44;  }
