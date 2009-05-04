@@ -4,10 +4,9 @@ class Move < ActiveRecord::Base
   include MoveNotation
 
   belongs_to :match
+  before_save :update_computed_fields
 
   attr_accessor :side
-
-  before_save :update_computed_fields
 
   def initialize( opts )
     super
@@ -31,6 +30,11 @@ class Move < ActiveRecord::Base
     @piece_moving = @board[from_coord]
     @piece_moved_upon = @board[to_coord]
   end
+
+  # Turns start at one and encompasss two moves each
+  def turn
+    @turn ||= (self.match.moves.index( self ) + 2) / 2
+  end  
 
   #fields like the notation and whether this was a castling are stored with the move
   def update_computed_fields
