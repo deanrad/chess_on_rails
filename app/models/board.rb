@@ -13,12 +13,10 @@ class Board < Hash
   alias :pieces	   :values
   alias :positions :keys
 
-  def initialize( *args )
-    if args.length == 1
-      _initialize_fen( args[0] )
-    else
-      Chess.initial_pieces.each{ |piece, pos| self[pos] = piece }
-    end
+  # Creates a board initialized at the default starting position, or from FEN if given
+  def initialize( start_pos = nil )
+    return _initialize_fen( start_pos ) if start_pos
+    Chess.initial_pieces.each{ |piece, pos| self[pos] = piece }
   end
 
   # TODO eliminate the string underpinnings of this class once callers use symbols / vectors

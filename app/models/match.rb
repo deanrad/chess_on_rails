@@ -1,25 +1,22 @@
 class Match < ActiveRecord::Base
   
-  has_many :gameplays do
-    def white
-      self[0]
-    end
-    def black
-      self[1]
-    end
-  end
-
-  has_many :players, :through => :gameplays
-
-  has_many :moves, :before_add => :refer_to_match_instance,
-                   :after_add => [:save_board,
-                                  :check_for_checkmate, 
-                                  :play_queued_moves]
+  has_many :players, :through    => :gameplays
+  has_many :moves,   :before_add => :refer_to_match_instance,
+                     :after_add  => [:save_board,
+                                      :check_for_checkmate, 
+                                      :play_queued_moves]
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 
   named_scope :active,    :conditions => { :active => true }
   named_scope :completed, :conditions => { :active => false }
+
+  # fetches the first and second joins to player, which are white,black respectively
+  has_many :gameplays do
+    def white; self[0]; end
+    def black; self[1]; end
+  end
+
   
   # the boards this match has known
   def boards
@@ -94,10 +91,6 @@ class Match < ActiveRecord::Base
     return :black if plyr == player2
   end
 
-  def opposite_side_of( plyr )
-    side_of(plyr) == :white ? :black : :white
-  end
-
   def lineup
     "#{player1.name} vs. #{player2.name}"
   end
@@ -152,7 +145,7 @@ class Match < ActiveRecord::Base
 
   private
   def boards_upto_current_move
-    boards = { 0 => Board.new }
+    boards = { 0 => Board.new( self[:start_pos] ) }
     moves.each_with_index do |mv, idx|
       board = boards[idx + 1] = Board.new
       0.upto(idx){ |i| board.play_move! moves[i] }
