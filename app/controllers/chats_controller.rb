@@ -1,5 +1,6 @@
 class ChatsController < ApplicationController
   before_filter :authorize
+  layout false
 
   def show
   end

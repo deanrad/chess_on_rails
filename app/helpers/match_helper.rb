@@ -30,6 +30,10 @@ module MatchHelper
     @ranks ||= (viewed_from_side == :black) ? Chess::Ranks : Chess::Ranks.reverse
   end
 
+  def chats
+    @chats ||= Chat.find_all_by_match_id( match.id )
+  end
+
   # checks for existance of .gif file in the current set's directory
   # if no .gif, uses .png extension
   def image_source_of( piece )
