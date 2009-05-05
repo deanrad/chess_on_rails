@@ -15,8 +15,8 @@ class Board < Hash
 
   #todo remove need for pieces
   def initialize( *args )
-    if args.length == 2
-      _initialize args[0], args[1]
+    if args.length > 1
+      _initialize *args
     elsif args.length == 1
       _initialize_fen( args[0] )
     end
@@ -27,7 +27,7 @@ class Board < Hash
     super(x.to_s)
   end
 
-  def _initialize(match, pieces_with_positions)
+  def _initialize(match, pieces_with_positions, no_replay = nil)
     #puts "initializing board"
     
     #initialize from the game's initial board, but replay moves...
@@ -38,7 +38,7 @@ class Board < Hash
     @match = match
     
     #replay the board to that position
-    @match.moves.each{ |m| play_move!(m) }
+    @match.moves.each{ |m| play_move!(m) } unless no_replay
     
   end
   

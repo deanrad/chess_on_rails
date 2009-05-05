@@ -25,7 +25,7 @@
 	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
 	  %>
 
-          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if match.turn_of?(current_player) %> 
+          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,41]' ) if match.turn_of?(current_player) %> 
 
         <% else %>
           &nbsp;

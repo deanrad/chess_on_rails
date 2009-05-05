@@ -27,6 +27,11 @@ class MatchController < ApplicationController
   def status 
   end
 
+  # provides the js of previous boards
+  def boards
+
+  end
+
   # GET /match/new
   def new
   end

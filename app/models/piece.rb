@@ -49,20 +49,20 @@ class Piece
     self.class.allowed_move?(vector, starting_rank)
   end
 
+  @moves_cache ||= {}
   # the set of squares on the board for which this piece answers allowed_move? == true
+  # TODO - this knowledge really belongs to the board - get rid of the pieceness of it
   def allowed_moves(board)
-    #quick dirty attempt at memoization
-    @moves_cache ||= {}
-    return @moves_cache[board] if @moves_cache[board]
+    # return @moves_cache[board] if @moves_cache[board]
+    moves = []
 
     mypos = board.index(self) 
-
-    returning( moves = [] ) do
-      board.each_square do |sq|
-        moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
-      end
-      @moves_cache[board] = moves
+    board.each_square do |sq|
+      moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
     end
+    #@moves_cache[board] = moves
+
+    moves
   end
 
   # Answers "Am I forbidden to move from [mypos] to the position specified by [vector], on this board" ?

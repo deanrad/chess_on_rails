@@ -18,10 +18,13 @@ function handle_release_of_piece(draggable, droparea){
    
 }
 
-function markup_piece( position, piece ){
+function markup_piece( position, piece, allowed_moves ){
     //TODO render template from piece['side'], piece['function'] 
-    //if (piece == null) return;
+    if (piece == null) return '&nbsp;';
 
-    var s = '<img alt="r" class="piece b8 c8 d8" id="q_rook_b" src="/images/sets/default/' + piece['function'] + '_' + piece['side'].subString(0,1) + '.png" />';
+    //TODO string template ? 
+    var s = '<img src="/images/sets/default/' + piece['function'] + '_' + piece['side'].substr(0,1)+ '.png" />';
+
+    //TODO 
     return s;
 }

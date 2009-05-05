@@ -1,15 +1,12 @@
 <script>
-//an example JSON'd board
-var magic_board = {"a7": {"side": "black", "function": "pawn", "discriminator": "a"}, "g2": {"side": "white", "function": "pawn", "discriminator": "g"}, "a8": {"side": "black", "function": "rook", "discriminator": "queens"}, "e1": {"side": "white", "function": "king", "discriminator": null}, "f2": {"side": "white", "function": "pawn", "discriminator": "f"}, "d1": {"side": "black", "function": "bishop", "discriminator": "queens"}, "c1": {"side": "white", "function": "bishop", "discriminator": "queens"}, "d2": {"side": "white", "function": "pawn", "discriminator": "d"}, "e4": {"side": "white", "function": "pawn", "discriminator": "e"}, "h7": {"side": "black", "function": "pawn", "discriminator": "h"}, "c2": {"side": "white", "function": "pawn", "discriminator": "c"}, "e5": {"side": "white", "function": "knight", "discriminator": "kings"}, "h8": {"side": "black", "function": "rook", "discriminator": "kings"}, "g7": {"side": "black", "function": "pawn", "discriminator": "g"}, "a1": {"side": "white", "function": "rook", "discriminator": "queens"}, "b2": {"side": "white", "function": "pawn", "discriminator": "b"}, "d5": {"side": "white", "function": "knight", "discriminator": "queens"}, "f7": {"side": "white", "function": "bishop", "discriminator": "kings"}, "g8": {"side": "black", "function": "knight", "discriminator": "kings"}, "a2": {"side": "white", "function": "pawn", "discriminator": "a"}, "e7": {"side": "black", "function": "king", "discriminator": null}, "d6": {"side": "black", "function": "pawn", "discriminator": "d"}, "f8": {"side": "black", "function": "bishop", "discriminator": "kings"}, "c6": {"side": "black", "function": "knight", "discriminator": "queens"}, "d8": {"side": "black", "function": "queen", "discriminator": null}, "c7": {"side": "black", "function": "pawn", "discriminator": "c"}, "h1": {"side": "white", "function": "rook", "discriminator": "kings"}, "b7": {"side": "black", "function": "pawn", "discriminator": "b"}, "h2": {"side": "white", "function": "pawn", "discriminator": "h"}};
-
-//alert(magic_board["h2"]["side"]);
 
 // clears out the contents of each square on the board, and inserts anew from JSON
 function set_board(move){
   $$('td.piece_container').each( 
      function( elem ){ 
        try{
-         elem.innerHTML = '&nbsp;';
+         //LEFTOFF: pass the allowed moves
+         elem.update( markup_piece( elem.id, all_boards[move][elem.id], null ) );
        }
        catch(ex){
          alert(ex);
@@ -17,7 +14,8 @@ function set_board(move){
      }
   );
 
-  alert('TODO - restore board from JSON. Refresh page to continue.');
+  // alert('TODO - restore board from JSON. Refresh page to continue.');
+ 
 }
 
 

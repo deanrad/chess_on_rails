@@ -23,6 +23,26 @@ class Match < ActiveRecord::Base
   def board
     @board ||= init_board
   end
+
+  # fetches a board by move number (starting at 0)
+  def get_board(num)
+    @all_boards ||= {}
+    return @all_boards[num] if @all_boards[num]
+
+    board = nil
+
+    if @all_boards.has_key?(num-1)
+      board = @all_boards[num-1].dup
+      board.play_move! moves.last
+    else
+      board = Board.new( self, Chess.initial_pieces, :no_replay )
+      0.upto(num) do |idx|
+        board.play_move!(moves[idx])
+      end
+    end
+
+    @all_boards[num] = board
+  end
   
   def initialize( opts={} )
     white = opts.delete(:white) if opts[:white]

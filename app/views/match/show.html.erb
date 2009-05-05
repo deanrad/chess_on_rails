@@ -1,5 +1,6 @@
 <h1><%= "#{match.name}" %></h1>
 
+<script src="<%= url_for( :action => 'boards', :format => 'js' ) %>"></script>
 <script>
    // this url will be polled for updates, and when a move has been made, this url
    // will be replaced by the new url to poll for updates
