@@ -5,7 +5,6 @@ match.moves.each_with_index do |mv, idx|
   page << "all_boards[#{idx+1}] = #{match.boards[idx+1].to_json}"
 end
 
-
 if match.turn_of?(current_player)
   match.board.each do |pos, piece|
     page << "current_allowed_moves['#{pos}'] = \"#{piece.allowed_moves(match.board).join(' ')}\""

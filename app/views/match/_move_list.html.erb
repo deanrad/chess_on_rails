@@ -22,7 +22,7 @@ function set_board(move){
 
 </script>
 
-<div class="move_list">
+<div id="move_list" class="move_list">
 <% match.moves.each_with_index do |m, i| -%>
   <%if (i%2)==0 %>
     <div class="move_w" onclick="set_board(<%= i+1 %>)">
