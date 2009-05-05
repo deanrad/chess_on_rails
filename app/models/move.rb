@@ -7,13 +7,18 @@ class Move < ActiveRecord::Base
   before_save :update_computed_fields
 
   attr_accessor :side
-
+  attr_reader   :board
+ 
   def initialize( opts )
     super
     if self[:notation].blank? == ( self[:from_coord].blank? && self[:to_coord].blank? )
       raise 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
     end
   end
+
+  # The board this move is being made against - set and read for validations
+  def board; @board ||= match.board; end
+  private :board
 
   def before_validation
     @board = match.board
