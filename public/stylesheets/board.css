@@ -5,7 +5,6 @@ body {font-family: Arial; font-size: 10pt;}
 #new_move_form { font-size: 10pt; }
 #match_ender { font-size: 10pt; }
 #move_indicator { font-family: Times New Roman, serif; font-size: 12pt; }
-#move_error { color: #ff4444 }
 #board_table { border-width: 1px; border-style:solid; border-color:black; }
 
 #board_table .rank {width:20px; }
@@ -32,6 +31,17 @@ h1 { font-size: 14pt; font-weight: bold }
 
 .move_creator_parent { clear: all; float: left; }
 .instructions { display:none }
+#move_error { color: #ff4444 }
+
+.move_list {
+    float:left; 
+    width:180px; height:300px; 
+    border:solid 1px black; 
+    overflow:auto; 
+    font-family: sans-serif;
+}
+.move_w{ float:left; clear:left; width: 85px }
+.move_b{ float:left; width: 85px}
 
 #a2, #a4, #a6, #a8,
 #b1, #b3, #b5, #b7,
@@ -56,12 +66,6 @@ h1 { font-size: 14pt; font-weight: bold }
 .active_yours {background-color:black; color:white; font-weight:bold}
 .active_theirs {background-color:eee; color:bbb; font-weight:bold}
 
-.move_list {
-    float:left; 
-    width:180px; height:300px; 
-    border:solid 1px black; 
-    overflow:auto; 
-    font: Courier New 10pt}
 
 /*
 .just_moved {  background-color:afa;  }

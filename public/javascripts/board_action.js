@@ -22,9 +22,12 @@ function markup_piece( position, piece, allowed_moves ){
     //TODO render template from piece['side'], piece['function'] 
     if (piece == null) return '&nbsp;';
 
-    //TODO string template ? 
-    var s = '<img src="/images/sets/default/' + piece['function'] + '_' + piece['side'].substr(0,1)+ '.png" />';
+    img_base = piece['function'] + '_' + piece['side'].substr(0,1);
+    board_id = (piece['discriminator'] ? piece['discriminator'].substr(0,1)+'_' : '') + img_base;
 
-    //TODO 
-    return s;
+    var img = '<img id="' + board_id + '" class="piece ' + allowed_moves + 
+	    '" src="/images/sets/default/' + img_base + '.png" />';
+
+    var scr = '<scr' + 'ipt>new Draggable("' + board_id + '", {revert:true, snap:[42,42]})</scr' + 'ipt>';
+    return img + scr;
 }

@@ -25,7 +25,7 @@
 	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
 	  %>
 
-          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,41]' ) if match.turn_of?(current_player) %> 
+          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if match.turn_of?(current_player) %> 
 
         <% else %>
           &nbsp;
@@ -34,7 +34,7 @@
     <% end %>
     </tr>
     
-    <% if rank==ranks[7] %>
+    <% if rank==ranks[7..8] %>
       <tr>
         <td>&nbsp;</td>
         <% files.each_char do |file| -%>

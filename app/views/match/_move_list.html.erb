@@ -6,7 +6,8 @@ function set_board(move){
      function( elem ){ 
        try{
          //LEFTOFF: pass the allowed moves
-         elem.update( markup_piece( elem.id, all_boards[move][elem.id], null ) );
+         allowed_moves = (current_allowed_moves.length > 0 && move == all_boards.length-1) ? current_allowed_moves[elem.id] : ""
+         elem.update( markup_piece( elem.id, all_boards[move][elem.id], allowed_moves ) );
        }
        catch(ex){
          alert(ex);
@@ -24,14 +25,13 @@ function set_board(move){
 <div class="move_list">
 <% match.moves.each_with_index do |m, i| -%>
   <%if (i%2)==0 %>
-    <span onclick="set_board(<%= i %>)">
+    <div class="move_w" onclick="set_board(<%= i+1 %>)">
       <%= ( ((i+2)/2).to_s + ". " + m.notation ).ljust(10) -%>
-    </span>
+    </div>
   <%else%>
-    <span onclick="set_board(<%= i %>)">
+    <div class="move_b" onclick="set_board(<%= i+1 %>)">
       <%= "#{m.notation}\n" -%>
-    </span>
-    <br/>
+    </div>
   <% end %>
 <% end %>
 </div>
