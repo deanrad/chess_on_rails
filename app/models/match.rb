@@ -11,7 +11,9 @@ class Match < ActiveRecord::Base
 
   has_many :players, :through => :gameplays
 
-  has_many :moves, :after_add => [:recalc_board_and_check_for_checkmate, 
+  has_many :moves, :before_add => :refer_to_match_instance,
+                   :after_add => [:save_board,
+                                  :check_for_checkmate, 
                                   :play_queued_moves]
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
@@ -19,31 +21,16 @@ class Match < ActiveRecord::Base
   named_scope :active,    :conditions => { :active => true }
   named_scope :completed, :conditions => { :active => false }
   
-  attr_reader :board
+  # the boards this match has known
+  def boards
+    @boards ||= boards_upto_current_move
+  end
+
+  # the most recent board known
   def board
-    @board ||= init_board
+    boards[ boards.keys.max ]
   end
 
-  # fetches a board by move number (starting at 0)
-  def get_board(num)
-    @all_boards ||= {}
-    return @all_boards[num] if @all_boards[num]
-
-    board = nil
-
-    if @all_boards.has_key?(num-1)
-      board = @all_boards[num-1].dup
-      board.play_move! moves.last
-    else
-      board = Board.new( self, Chess.initial_pieces, :no_replay )
-      0.upto(num) do |idx|
-        board.play_move!(moves[idx])
-      end
-    end
-
-    @all_boards[num] = board
-  end
-  
   def initialize( opts={} )
     white = opts.delete(:white) if opts[:white]
     black = opts.delete(:black) if opts[:black]
@@ -65,27 +52,22 @@ class Match < ActiveRecord::Base
     self[:name] || lineup
   end
 
-  def recalc_board_and_check_for_checkmate(last_move)
-    # i thought this was being done for me, but just in case...
-    # raise ActiveRecord::RecordInvalid.new( self ) unless last_move.errors.empty?
-
-    #update internal representation of the board
-    board.play_move! last_move
-    
-    other_guy = (last_move.side == :black ? :white : :black)
-
-    checkmate_by( last_move.side ) if @board.in_checkmate?( other_guy )
-  end
-    
-  # Runs the first time initialization of the board for a match
-  def init_board
-    if self[:start_pos].blank?
-      Board.new( self, Chess.initial_pieces ) 
-    else
-      Board.new( self[:start_pos] )
-    end
+  # ensure that the match object instance used is ourselves
+  def refer_to_match_instance( move )
+    move.match = self
   end
 
+  # cache this board and make it the most recent one
+  def save_board( last_move )
+    recent = boards[boards.keys.max]
+    @boards[ @boards.keys.max + 1 ] = recent.dup.play_move!( last_move )
+  end
+
+  def check_for_checkmate(last_move)
+    me, other_guy =  last_move.side == :black ? [:black, :white] : [:white, :black]
+    #checkmate_by( me ) if board.in_checkmate?( other_guy )
+  end
+    
   # for purposes of move validation it's handy to have access to such a variable
   def current_player
     next_to_move == :black ? gameplays.black.player : gameplays.white.player
@@ -166,6 +148,16 @@ class Match < ActiveRecord::Base
     # call it back
     play_queued_moves(response_move)
     
+  end
+
+  private
+  def boards_upto_current_move
+    boards = { 0 => Board.new }
+    moves.each_with_index do |mv, idx|
+      board = boards[idx + 1] = Board.new
+      0.upto(idx){ |i| board.play_move! moves[i] }
+    end
+    boards
   end
 
 end

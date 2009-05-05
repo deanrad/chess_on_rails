@@ -13,33 +13,17 @@ class Board < Hash
   alias :pieces	   :values
   alias :positions :keys
 
-  #todo remove need for pieces
   def initialize( *args )
-    if args.length > 1
-      _initialize *args
-    elsif args.length == 1
+    if args.length == 1
       _initialize_fen( args[0] )
+    else
+      Chess.initial_pieces.each{ |piece, pos| self[pos] = piece }
     end
   end
 
   # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
   def [] x
     super(x.to_s)
-  end
-
-  def _initialize(match, pieces_with_positions, no_replay = nil)
-    #puts "initializing board"
-    
-    #initialize from the game's initial board, but replay moves...
-    pieces_with_positions.each do | piece, pos |
-      self[pos] = piece
-    end
-
-    @match = match
-    
-    #replay the board to that position
-    @match.moves.each{ |m| play_move!(m) } unless no_replay
-    
   end
   
   def each_square &block
@@ -152,7 +136,7 @@ class Board < Hash
   #contrast with more intelligent Capture/Block/Evade strategy
   def in_checkmate?( side )
 
-    return false unless in_check?( side )
+    return false #unless in_check?( side )
     
     way_out = false
     each_pair do |pos, piece|

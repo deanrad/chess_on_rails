@@ -1,4 +1,4 @@
 page << "var all_boards = [];"
 match.moves.each_with_index do |mv, idx|
-  page << "all_boards[#{idx}] = #{match.get_board(idx).to_json}"
+  page << "all_boards[#{idx}] = #{match.boards[idx+1].to_json}"
 end
