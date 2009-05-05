@@ -6,7 +6,7 @@ module MoveNotation
 
   # available to move model, sets fields on self based on self[:notation]
   def infer_coordinates_from_notation
-    
+
     #expand the castling notation
     if self[:notation].include?('O-O')
       new_notation = 'K' + (self[:notation].include?('O-O-O') ? 'c' : 'g')
@@ -16,10 +16,10 @@ module MoveNotation
 
     self[:to_coord] =  notation.to_s[-2,2]
     function = NOTATION_TO_FUNCTION_MAP[ notation[0,1] ] || :pawn
-    @possible_movers = @board.select do |pos, piece| 
+    @possible_movers = board.select do |pos, piece| 
       piece.side == match.next_to_move && 
       piece.function == function && 
-      piece.allowed_moves(@board).include?( self[:to_coord].to_sym )
+      piece.allowed_moves(board).include?( self[:to_coord].to_sym )
     end
 
     self[:from_coord] = @possible_movers[0][0] and return if @possible_movers.length == 1

@@ -1,28 +1,3 @@
-<script>
-
-// clears out the contents of each square on the board, and inserts anew from JSON
-function set_board(move){
-  $$('td.piece_container').each( 
-     function( elem ){ 
-       try{
-         //LEFTOFF: pass the allowed moves
-         allowed_moves = (current_allowed_moves.length > 0 && move == all_boards.length-1) ? current_allowed_moves[elem.id] : ""
-         elem.update( markup_piece( elem.id, all_boards[move][elem.id], allowed_moves ) );
-       }
-       catch(ex){
-         alert(ex);
-       }
-     }
-  );
-
-  // alert('TODO - restore board from JSON. Refresh page to continue.');
- 
-}
-
-
-</script>
-
-<div id="move_list" class="move_list">
 <% match.moves.each_with_index do |m, i| -%>
   <%if (i%2)==0 %>
     <div class="move_w" onclick="set_board(<%= i+1 %>)">
@@ -34,4 +9,8 @@ function set_board(move){
     </div>
   <% end %>
 <% end %>
-</div>
+
+<script language="javascript">
+var objDiv = document.getElementById("move_list");
+if(objDiv) objDiv.scrollTop = objDiv.scrollHeight;
+</script>

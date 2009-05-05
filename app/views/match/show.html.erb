@@ -38,7 +38,9 @@
 
 <div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">  
 
-  <%= render :partial => 'move_list' %>
+  <div id="move_list" class="move_list">
+    <%= render :partial => 'move_list' %>
+  </div>
   
   <% if match.side_of(current_player) %>
   <div id="chat_container" style="float:left;">

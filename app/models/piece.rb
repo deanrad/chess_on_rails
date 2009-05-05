@@ -4,7 +4,7 @@ class Piece
   attr_accessor :side 
   attr_accessor :function
   attr_accessor :discriminator # eg queens, kings, promoted, a, b (for pawns)
-
+  
   class << self
     attr_accessor :move_vectors, :moves_unlimited
   end
@@ -90,6 +90,14 @@ class Piece
     return false
   end
 
+
+  # side abbreviated
+  def s; @side.to_s[0,1]; end
+  # discriminator, abbreviated or empty string
+  def d; @discriminator ? @discriminator.to_s[0,1] : '' end
+  # function abbreviated
+  def f; @function.to_s; end
+
   # when rendered the client id uniquely specifies an individual piece within a board
   # example: f_pawn_w
   def board_id
@@ -102,6 +110,10 @@ class Piece
     "#{@function}_#{@side.to_s[0,1]}"
   end
     
+  def to_json(*args)
+    %q(["%s","%s","%s"]) % [self.s, self.d, self.f]
+  end
+
   # for FEN like situations
   def abbrev
     letter = case @function 

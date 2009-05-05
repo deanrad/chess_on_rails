@@ -8,8 +8,10 @@ if status_has_changed
   page << "next_move_url = '#{url_for( :action => :status, :move => match.moves.length + 1 ) }';"
 
   page.replace_html 'move_list', :partial => 'match/move_list'
-  page.replace_html 'move_indicator_parent', :partial => 'match/move_indicator', :locals => {:your_turn => your_turn}
-  page.replace_html 'board_parent', :partial => "match/board", :locals => { :ranks => ranks, :files => files, :board => board }
+  page.replace_html 'move_indicator_parent', :partial => 'match/move_indicator'
+  page.replace_html 'board_parent', :partial => 'match/board'
+  page << "$('move_notation').clear();"
+
   page['move_submit_btn'].disabled = ! your_turn
 
   page.visual_effect(
