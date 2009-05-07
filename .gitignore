@@ -7,7 +7,6 @@
 log/*
 tmp/*
 coverage/*
-doc/app/*
 doc/plugins/*
 *database.yml*
 /tmp/spec_server.pid
