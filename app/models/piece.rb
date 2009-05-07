@@ -1,17 +1,33 @@
 # The base class of all pieces - contains behaviors common to all pieces
 class Piece  
 
+  # the side - eg white or black
   attr_accessor :side 
+
+  # the role, or 'function' performed, or type of piece - eg pawn, knight, queen
   attr_accessor :function
+
+
+  # for pieces like 'pawn' which there are many instances of, the discriminator
+  # distinguishes each instance - eg a pawn, queens knight
   attr_accessor :discriminator # eg queens, kings, promoted, a, b (for pawns)
   
+  # a class configures its chess behavior by invoking these class methods,
+  # allowing piece instances to answer ask their class whether their move
+  # vectors allow them to make a given move.
   class << self
-    attr_accessor :move_vectors, :moves_unlimited
+    # the vectors a piece is allowed to move in, eg [1,0],[0,1]
+    attr_accessor :move_vectors
+
+    # boolean, true if instances can move until blocked, ie false for pawns
+    attr_accessor :moves_unlimited
   end
 
   # Allows a subclass to declare its moves
   # These are stored in instance variables on the class invoking this
-  # Example:  move_directions :straight, :limit => none
+  #   move_directions :straight, :limit => none
+  # will store [1,0],[-1,0],[0,1],[0,-1] in the class instance variable 
+  # @move_vectors and true into @moves_unlimited
   # http://martinfowler.com/bliki/ClassInstanceVariable.html
   def self.move_directions(*args)
     @move_vectors = args.include?(:straight) ? [[1,0],[-1,0],[0,1],[0,-1]] : []
@@ -23,18 +39,20 @@ class Piece
     @side, @function, @discriminator = side, function, discriminator
   end
 
-  # default implementation, has no knowledge of capturability
+  # without respect to any other pieces, can the piece move the given vector
+  # (length and direction) from that place
   def self.allowed_move?(vector, starting_rank = nil)
     return false if vector == [0,0] #cant move to self
     return move_vectors.include?(vector) unless moves_unlimited
 
-    #likely_vector = move_vectors.detect do |mv| 
+    # A possible optimization ? 
+    # likely_vector = move_vectors.detect do |mv| 
     #  (vector[0] == 0 && mv[0] == 0 ) || 
     #  (vector[1] == 0 && mv[1] == 0) ||
     #  (vector[0] / mv[0] == vector[1] / mv[1])
-    #end
+    # end
+    # return likely_vector != nil
 
-    #return likely_vector != nil
     move_vectors.each do |dir|
       1.upto(8).each do |multiple|
         return true if vector == [ dir[0]*multiple, dir[1]*multiple ]
@@ -50,8 +68,8 @@ class Piece
   end
 
   @moves_cache ||= {}
-  # the set of squares on the board for which this piece answers allowed_move? == true
-  # TODO - this knowledge really belongs to the board - get rid of the pieceness of it
+
+  # The set of squares on the board for which this piece answers allowed_move? == true
   def allowed_moves(board)
     # return @moves_cache[board] if @moves_cache[board]
     moves = []
