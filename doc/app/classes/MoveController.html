@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: MoveController</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">MoveController</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/app/controllers/move_controller_rb.html">
+                app/controllers/move_controller.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="ApplicationController.html">
+                ApplicationController
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000036">create</a>&nbsp;&nbsp;
+      <a href="#M000037">create_respond</a>&nbsp;&nbsp;
+      <a href="#M000038">display_error</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000036" class="method-detail">
+        <a name="M000036"></a>
+
+        <div class="method-heading">
+          <a href="#M000036" class="method-signature">
+          <span class="method-name">create</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+accessible via get or post but should be idempotent on 2x get
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000036-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000036-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/move_controller.rb, line 9</span>
+ 9:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create</span>
+10:     <span class="ruby-ivar">@match</span> = <span class="ruby-identifier">current_player</span>.<span class="ruby-identifier">matches</span>.<span class="ruby-identifier">find</span>( <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:match_id</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:move</span>][<span class="ruby-identifier">:match_id</span>] )
+11: 
+12:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;You are trying to move on a match you either don't own or is not active&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@match</span>
+13:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;It is your not your turn to move yet&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">turn_of?</span>( <span class="ruby-identifier">current_player</span> )
+14: 
+15:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:move</span>]
+16:       <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">moves</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@move</span> = <span class="ruby-constant">Move</span>.<span class="ruby-identifier">new</span>( <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:move</span>] )
+17:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:notation</span>]
+18:       <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">moves</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@move</span> = <span class="ruby-constant">Move</span>.<span class="ruby-identifier">new</span>( <span class="ruby-identifier">:notation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">:notation</span>] )
+19:     <span class="ruby-keyword kw">end</span>
+20:     
+21:     <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">save!</span> <span class="ruby-comment cmt">#only here to trigger validation</span>
+22: 
+23:     <span class="ruby-comment cmt">#unceremonious way of saying you just ended the game </span>
+24:     <span class="ruby-identifier">redirect_to</span>( <span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'match'</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'index'</span> ) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">active</span>
+25:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+26:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span>{ <span class="ruby-identifier">create_respond</span> }
+27:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">fbml</span>{ <span class="ruby-identifier">create_respond</span> }
+28:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">text</span>{
+29:         <span class="ruby-identifier">render</span> <span class="ruby-identifier">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">board</span>.<span class="ruby-identifier">to_s</span>( <span class="ruby-ivar">@viewed_from_side</span><span class="ruby-operator">==</span><span class="ruby-identifier">:black</span> )
+30:       }
+31:     <span class="ruby-keyword kw">end</span>
+32:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Protected Instance methods</h3>
+
+      <div id="method-M000037" class="method-detail">
+        <a name="M000037"></a>
+
+        <div class="method-heading">
+          <a href="#M000037" class="method-signature">
+          <span class="method-name">create_respond</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000037-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000037-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/move_controller.rb, line 35</span>
+35:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_respond</span>
+36:     <span class="ruby-comment cmt">#back to the match if non-ajax</span>
+37:     <span class="ruby-identifier">redirect_to</span>( <span class="ruby-identifier">match_path</span>(<span class="ruby-ivar">@match</span>) ) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">xhr?</span> 
+38:     
+39:     <span class="ruby-comment cmt">#otherwise do a normal status update to refresh UI</span>
+40:     <span class="ruby-identifier">render</span> <span class="ruby-identifier">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'match/status'</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span>
+41:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000038" class="method-detail">
+        <a name="M000038"></a>
+
+        <div class="method-heading">
+          <a href="#M000038" class="method-signature">
+          <span class="method-name">display_error</span><span class="method-args">(ex)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000038-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000038-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/move_controller.rb, line 43</span>
+43:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">display_error</span>(<span class="ruby-identifier">ex</span>)
+44:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">ArgumentError</span>)
+45:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:move_error</span>] = <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">to_s</span>
+46:     <span class="ruby-keyword kw">else</span>
+47:       <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">:move_error</span>] = <span class="ruby-identifier">ex</span>.<span class="ruby-identifier">record</span>.<span class="ruby-identifier">moves</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>[<span class="ruby-value">1</span>]}.<span class="ruby-identifier">join</span> <span class="ruby-value str">&quot;&lt;br/&gt;\n&quot;</span>
+48:     <span class="ruby-keyword kw">end</span>
+49:     
+50:     <span class="ruby-comment cmt">#if request.xhr?</span>
+51:     <span class="ruby-comment cmt">#  set_match_status_instance_variables</span>
+52:     <span class="ruby-comment cmt">#  render :template =&gt; 'match/status' and return</span>
+53:     <span class="ruby-comment cmt">#end</span>
+54: 
+55:     <span class="ruby-identifier">redirect_to</span>( <span class="ruby-identifier">match_url</span>(<span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>) ) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@match</span>
+56:     
+57:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

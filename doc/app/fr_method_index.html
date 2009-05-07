@@ -1,0 +1,143 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--
+
+    Methods
+
+  -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Methods</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="rdoc-style.css" type="text/css" />
+  <base target="docwin" />
+</head>
+<body>
+<div id="index">
+  <h1 class="section-bar">Methods</h1>
+  <div id="index-entries">
+    <a href="classes/Board.html#M000078">[] (Board)</a><br />
+    <a href="classes/Fen.html#M000096">_initialize_fen (Fen)</a><br />
+    <a href="classes/Piece.html#M000076">abbrev (Piece)</a><br />
+    <a href="classes/Pawn.html#M000091">advance_direction (Pawn)</a><br />
+    <a href="classes/Piece.html#M000067">allowed_move? (Piece)</a><br />
+    <a href="classes/Piece.html#M000066">allowed_move? (Piece)</a><br />
+    <a href="classes/Pawn.html#M000094">allowed_move? (Pawn)</a><br />
+    <a href="classes/Piece.html#M000068">allowed_moves (Piece)</a><br />
+    <a href="classes/ApplicationController.html#M000060">authorize (ApplicationController)</a><br />
+    <a href="classes/SetsHelper.html#M000095">available_sets (SetsHelper)</a><br />
+    <a href="classes/Move.html#M000031">before_validation (Move)</a><br />
+    <a href="classes/Match.html#M000040">black (Match)</a><br />
+    <a href="classes/MatchHelper.html#M000108">board (MatchHelper)</a><br />
+    <a href="classes/Match.html#M000042">board (Match)</a><br />
+    <a href="classes/Piece.html#M000073">board_id (Piece)</a><br />
+    <a href="classes/MatchController.html#M000021">boards (MatchController)</a><br />
+    <a href="classes/Match.html#M000041">boards (Match)</a><br />
+    <a href="classes/SetsController.html#M000012">change (SetsController)</a><br />
+    <a href="classes/MatchHelper.html#M000115">chats (MatchHelper)</a><br />
+    <a href="classes/Match.html#M000049">check_for_checkmate (Match)</a><br />
+    <a href="classes/Match.html#M000057">checkmate_by (Match)</a><br />
+    <a href="classes/Board.html#M000081">consider_move (Board)</a><br />
+    <a href="classes/ChatsController.html#M000017">create (ChatsController)</a><br />
+    <a href="classes/MatchController.html#M000024">create (MatchController)</a><br />
+    <a href="classes/MoveController.html#M000036">create (MoveController)</a><br />
+    <a href="classes/MoveController.html#M000037">create_respond (MoveController)</a><br />
+    <a href="classes/User.html#M000009">create_with_player (User)</a><br />
+    <a href="classes/Match.html#M000050">current_player (Match)</a><br />
+    <a href="classes/Piece.html#M000071">d (Piece)</a><br />
+    <a href="classes/MoveController.html#M000038">display_error (MoveController)</a><br />
+    <a href="classes/Board.html#M000079">each_square (Board)</a><br />
+    <a href="classes/Board.html#M000086">en_passant_capture? (Board)</a><br />
+    <a href="classes/Piece.html#M000072">f (Piece)</a><br />
+    <a href="classes/Player.html#M000014">facebook_id (Player)</a><br />
+    <a href="classes/MatchHelper.html#M000113">files (MatchHelper)</a><br />
+    <a href="classes/Match.html#M000052">first_to_move (Match)</a><br />
+    <a href="classes/MatchHelper.html#M000117">gif_file_exists? (MatchHelper)</a><br />
+    <a href="classes/Pawn.html#M000092">home_rank (Pawn)</a><br />
+    <a href="classes/MatchHelper.html#M000116">image_source_of (MatchHelper)</a><br />
+    <a href="classes/Piece.html#M000074">img_name (Piece)</a><br />
+    <a href="classes/Board.html#M000085">in_check? (Board)</a><br />
+    <a href="classes/Board.html#M000087">in_checkmate? (Board)</a><br />
+    <a href="classes/MatchController.html#M000019">index (MatchController)</a><br />
+    <a href="classes/MoveNotation.html#M000106">infer_coordinates_from_notation (MoveNotation)</a><br />
+    <a href="classes/Chess.html#M000026">initial_pieces (Chess)</a><br />
+    <a href="classes/Board.html#M000089">inspect (Board)</a><br />
+    <a href="classes/Fen.html#M000099">is_fen? (Fen)</a><br />
+    <a href="classes/PGN.html#M000006">is_pgn? (PGN)</a><br />
+    <a href="classes/MatchHelper.html#M000111">last_move (MatchHelper)</a><br />
+    <a href="classes/Match.html#M000055">lineup (Match)</a><br />
+    <a href="classes/AuthenticationController.html#M000003">login (AuthenticationController)</a><br />
+    <a href="classes/AuthenticationController.html#M000004">logout (AuthenticationController)</a><br />
+    <a href="classes/Piece.html#M000064">move_directions (Piece)</a><br />
+    <a href="classes/Gameplay.html#M000028">move_queue (Gameplay)</a><br />
+    <a href="classes/Gameplay.html#M000029">move_queue= (Gameplay)</a><br />
+    <a href="classes/Fbuser.html#M000063">name (Fbuser)</a><br />
+    <a href="classes/Match.html#M000046">name (Match)</a><br />
+    <a href="classes/Fbuser.html#M000062">name= (Fbuser)</a><br />
+    <a href="classes/Bishop.html#M000061">new (Bishop)</a><br />
+    <a href="classes/Match.html#M000043">new (Match)</a><br />
+    <a href="classes/MatchController.html#M000022">new (MatchController)</a><br />
+    <a href="classes/King.html#M000027">new (King)</a><br />
+    <a href="classes/Pawn.html#M000090">new (Pawn)</a><br />
+    <a href="classes/Board.html#M000077">new (Board)</a><br />
+    <a href="classes/Piece.html#M000065">new (Piece)</a><br />
+    <a href="classes/Queen.html#M000015">new (Queen)</a><br />
+    <a href="classes/Rook.html#M000013">new (Rook)</a><br />
+    <a href="classes/Fen/FenString.html#M000102">new (Fen::FenString)</a><br />
+    <a href="classes/PGN.html#M000005">new (PGN)</a><br />
+    <a href="classes/Move.html#M000030">new (Move)</a><br />
+    <a href="classes/MoveQueue.html#M000010">new (MoveQueue)</a><br />
+    <a href="classes/Knight.html#M000035">new (Knight)</a><br />
+    <a href="classes/Match.html#M000053">next_to_move (Match)</a><br />
+    <a href="classes/Fen.html#M000101">next_to_move (Fen)</a><br />
+    <a href="classes/MoveNotation.html#M000107">notate (MoveNotation)</a><br />
+    <a href="classes/Piece.html#M000069">obstructed? (Piece)</a><br />
+    <a href="classes/Match.html#M000058">opp (Match)</a><br />
+    <a href="classes/Fen.html#M000100">place_piece (Fen)</a><br />
+    <a href="classes/Board.html#M000080">play_move! (Board)</a><br />
+    <a href="classes/Match.html#M000059">play_queued_moves (Match)</a><br />
+    <a href="classes/PGN.html#M000008">playback_against (PGN)</a><br />
+    <a href="classes/Match.html#M000044">player1 (Match)</a><br />
+    <a href="classes/Match.html#M000045">player2 (Match)</a><br />
+    <a href="classes/Board.html#M000082">previous_board (Board)</a><br />
+    <a href="classes/Pawn.html#M000093">promotion_rank (Pawn)</a><br />
+    <a href="classes/MatchHelper.html#M000114">ranks (MatchHelper)</a><br />
+    <a href="classes/Fen/FenString.html#M000103">ranks (Fen::FenString)</a><br />
+    <a href="classes/Match.html#M000047">refer_to_match_instance (Match)</a><br />
+    <a href="classes/AuthenticationController.html#M000002">register (AuthenticationController)</a><br />
+    <a href="classes/Match.html#M000056">resign (Match)</a><br />
+    <a href="classes/MatchController.html#M000023">resign (MatchController)</a><br />
+    <a href="classes/Piece.html#M000070">s (Piece)</a><br />
+    <a href="classes/Match.html#M000048">save_board (Match)</a><br />
+    <a href="classes/ChatsController.html#M000016">show (ChatsController)</a><br />
+    <a href="classes/MatchController.html#M000018">show (MatchController)</a><br />
+    <a href="classes/Board.html#M000083">side_occupying (Board)</a><br />
+    <a href="classes/Match.html#M000054">side_of (Match)</a><br />
+    <a href="classes/Board.html#M000084">sister_piece_of (Board)</a><br />
+    <a href="classes/MatchController.html#M000020">status (MatchController)</a><br />
+    <a href="classes/MatchHelper.html#M000112">status_has_changed (MatchHelper)</a><br />
+    <a href="classes/AuthenticationController.html#M000001">tag (AuthenticationController)</a><br />
+    <a href="classes/Fen.html#M000097">to_fen (Fen)</a><br />
+    <a href="classes/Piece.html#M000075">to_json (Piece)</a><br />
+    <a href="classes/Fen/Piece.html#M000105">to_piece (Fen::Piece)</a><br />
+    <a href="classes/Fen/FenString.html#M000104">to_s (Fen::FenString)</a><br />
+    <a href="classes/Board.html#M000088">to_s (Board)</a><br />
+    <a href="classes/MoveQueue.html#M000011">to_s (MoveQueue)</a><br />
+    <a href="classes/Move.html#M000032">turn (Move)</a><br />
+    <a href="classes/Match.html#M000051">turn_of? (Match)</a><br />
+    <a href="classes/Move.html#M000033">update_computed_fields (Move)</a><br />
+    <a href="classes/PGN.html#M000007">valid? (PGN)</a><br />
+    <a href="classes/Chess.html#M000025">valid_position? (Chess)</a><br />
+    <a href="classes/Move.html#M000034">validate (Move)</a><br />
+    <a href="classes/Fen.html#M000098">validate! (Fen)</a><br />
+    <a href="classes/MatchHelper.html#M000109">viewed_from_side (MatchHelper)</a><br />
+    <a href="classes/Match.html#M000039">white (Match)</a><br />
+    <a href="classes/MatchHelper.html#M000110">your_turn (MatchHelper)</a><br />
+  </div>
+</div>
+</body>
+</html>
