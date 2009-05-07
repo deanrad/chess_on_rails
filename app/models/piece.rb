@@ -93,11 +93,13 @@ class Piece
   end
 
 
-  # side abbreviated
+  # the first character of the side: w or b
   def s; @side.to_s[0,1]; end
-  # discriminator, abbreviated or empty string
+
+  # the first character of the discriminator, or ''
   def d; @discriminator ? @discriminator.to_s[0,1] : '' end
-  # function abbreviated
+
+  # the first, lower-case character of the function - p q, etc
   def f; @function.to_s; end
 
   # when rendered the client id uniquely specifies an individual piece within a board
