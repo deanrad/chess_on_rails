@@ -148,6 +148,7 @@ class Match < ActiveRecord::Base
     boards = { 0 => Board.new( self[:start_pos] ) }
     moves.each_with_index do |mv, idx|
       board = boards[idx + 1] = Board.new
+      board.match = self
       0.upto(idx){ |i| board.play_move! moves[i] }
     end
     boards
