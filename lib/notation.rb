@@ -1,17 +1,22 @@
 module Notation; end # unconfuse rails' easily confused loader 
 
+# Provides notation services when included in Move class. 
+# Kept separately somewhat in vain - they are highly interdependent
+# source code files..
 module MoveNotation
 
-  NOTATION_TO_FUNCTION_MAP = { 'R' => :rook, 'N' => :knight, 'B' => :bishop, 'Q' => :queen, 'K' => :king }
+  NOTATION_TO_FUNCTION_MAP = { 'K' => :king, 'Q' => :queen,
+                               'R' => :rook, 'N' => :knight, 'B' => :bishop  }
 
   # available to move model, sets fields on self based on self[:notation]
+  # temporarily expands the castling notation to Kg2 
+  # - if g2 is in K's allowed move list from it's from_coord then we're good
   def infer_coordinates_from_notation
 
-    #expand the castling notation
     if self[:notation].include?('O-O')
-      new_notation = 'K' + (self[:notation].include?('O-O-O') ? 'c' : 'g')
-      new_notation += (match.next_to_move == :white) ? '1' : '8'
-      self[:notation] = new_notation
+      file = self[:notation].include?('O-O-O') ? 'c' : 'g'
+      rank = match.next_to_move == :white ? '1' : '8'
+      self[:notation] = "K#{file}#{rank}"
     end
 
     self[:to_coord] =  notation.to_s[-2,2]
