@@ -1,3 +1,4 @@
+# move_directions :diagonal, :limit => :none
 class Bishop < Piece
   move_directions :diagonal, :limit => :none
 

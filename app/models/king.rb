@@ -1,3 +1,4 @@
+# The Daddy-O, move_directions :diagonal, :straight, :limit => 1
 class King < Piece
   move_directions :diagonal, :straight, :limit => 1
 
