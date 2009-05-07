@@ -44,7 +44,7 @@ class Move < ActiveRecord::Base
   #fields like the notation and whether this was a castling are stored with the move
   def update_computed_fields
     #enpassant
-    if @board.is_en_passant_capture?( from_coord, to_coord )
+    if @board.en_passant_capture?( from_coord, to_coord )
       self[:captured_piece_coord] = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
     end
 
