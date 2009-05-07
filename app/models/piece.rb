@@ -69,6 +69,7 @@ class Piece
   # Returns yes when blocked by your own piece, etc..
   # - No piece can obstruct a knight move
   # - A pawns sideways move is obstructed by space or his own side
+  #   - Except when en passant capture is allowed
   # - We walk along a piece's attack-line looking for obstructions
   # - If you hit a piece along the attack-line, but not at the end, you're blocked
   # - At the end of the attack-line, you're blocked only if by your own piece
@@ -78,7 +79,8 @@ class Piece
 
     if @function==:pawn && vector[0] != 0 
       dest_piece = board[ mypos ^ vector ]
-      return true unless dest_piece && dest_piece.side != self.side
+      return false if (mypos ^ vector)==board.en_passant_square
+      return true  unless dest_piece && dest_piece.side != self.side
     end
 
     vector.walk do |step|
