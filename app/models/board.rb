@@ -77,11 +77,17 @@ class Board < Hash
   # # get the board for future consideration
   # new = board.consider_move( Move.new(...) )
   def consider_move(m, &block)
-    considered_board = self.dup # Marshal::load(Marshal.dump(self)) #deep copy to decouple pieces array
-    considered_board.play_move!(m)
+    considered = self.dup 
+    considered.play_move!(m)
+    return considered unless block_given?
+    yield  considered
+  end
 
-    return considered_board unless block
-    yield(considered_board)
+  def previous_board
+    return nil if match.nil?
+    
+    return self if (idx = match.boards.index(self))==0
+    match.boards[ idx - 1 ]
   end
 
   def side_occupying(pos)
@@ -112,29 +118,21 @@ class Board < Hash
     !! assassin
   end
 
-  def is_en_passant_capture?( from_coord, to_coord ) 
-
-    to_rank, to_file = to_coord[1].chr, to_coord[0].chr
-    return false unless p = self[ from_coord ]
-
-    capture_rank, advanced_pawn_rank, original_pawn_rank = (p.side==:white) ? %w{ 6 5 7 } : %w{ 3 4 2 }
-    possible_advanced_pawn = self[ to_file + advanced_pawn_rank ]
-
-    #if behind a pawn
-    if (to_rank == capture_rank) && possible_advanced_pawn && (possible_advanced_pawn.function==:pawn) 
-      #and that pawn was doubly (not singly) advanced
-      @match.moves.find_by_from_coord_and_to_coord( ( to_file + original_pawn_rank ) , to_file + advanced_pawn_rank ) != nil
-    else
-      return false
+  # Says whether you are a pawn moving sideways onto an empty square
+  #  when an enpassant capture is available
+  def en_passant_capture?( from_coord, to_coord ) 
+    with ( self[from_coord] ) do |pawn|
+      return false unless pawn.function == :pawn
+      return false unless self.en_passant_square
+      return (from_coord.file != to_coord.file) && (self[to_coord]==nil)
     end
-
   end
 
   #simplest logic here - if theres a move you're allowed which gets you out of check, you're not in checkmate
   #contrast with more intelligent Capture/Block/Evade strategy
   def in_checkmate?( side )
 
-    return false #unless in_check?( side )
+    return false unless in_check?( side )
     
     way_out = false
     each_pair do |pos, piece|

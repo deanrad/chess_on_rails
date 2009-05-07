@@ -8,6 +8,10 @@ class Object
   def with(arg)
     yield arg
   end
+
+  def try(meth, *args)
+    self.send(meth, *args) if self.respond_to?(meth)
+  end
 end
 
 #for ruby < 1.9 to use ruby 1.9 each_char unicode safe syntax

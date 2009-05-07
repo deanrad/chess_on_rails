@@ -54,7 +54,7 @@ module MoveNotation
       end
     end
         
-    if @piece_moved_upon && (@piece_moving.side != @piece_moved_upon.side) || @board.is_en_passant_capture?( from_coord, to_coord )
+    if @piece_moved_upon && (@piece_moving.side != @piece_moved_upon.side) || @board.en_passant_capture?( from_coord, to_coord )
       mynotation += 'x' 
       captured = true
     end
