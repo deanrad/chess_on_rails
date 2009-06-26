@@ -25,6 +25,8 @@ class Match < ActiveRecord::Base
 
   # the most recent board known
   def board
+    # dont know why we end up with nil values but they're toxic so destroy them !
+    boards.delete_if{ |k,v| v.nil? } 
     boards[ boards.keys.max ]
   end
 
@@ -123,19 +125,18 @@ class Match < ActiveRecord::Base
     queue = opponent.move_queue
     return unless queue.length > 1
 
+    queue = MoveQueue.new(queue) unless MoveQueue === queue
+
     expected, response = queue.shift(2)
     
     if expected != m.notation
-      logger.debug "Pruning move queue due to incorrect prediction"
       opponent.update_attribute(:move_queue, nil) and return 
     end
 
-    logger.debug "Making queued move #{response}"
     # and make the response move - because we go direct, we can't rely on
     # automatic calling of the callback to continue evaluating queues - bumr !
     response_move = Move.create(:match_id => self.id, :notation => response)
 
-    logger.debug "Writing back remainder of move queue: #{queue.to_s}"
     opponent.update_attribute(:move_queue, queue.to_s)
 
     # call it back
