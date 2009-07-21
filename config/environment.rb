@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '= 2.2.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '>= 2.2.2' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -59,5 +59,7 @@ Rails::Initializer.run do |config|
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
 
-
+  # At one point facebooker support worked. It's listed here as a gem, though I think a git
+  # submodule might be the proper way to go. Don't worry about it unless you need facebook auth.
+  config.gem "mmangino-facebooker", :lib => "facebooker", :source => 'http://gems.github.com' 
 end

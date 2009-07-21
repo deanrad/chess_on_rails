@@ -21,5 +21,5 @@ config.action_controller.allow_forgery_protection    = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
-require 'ruby-debug'
-require 'ruby-prof'
+config.gem "ruby-debug"
+config.gem "ruby-prof"
