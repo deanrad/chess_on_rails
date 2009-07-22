@@ -1,3 +1,10 @@
+require 'piece/king'
+require 'piece/queen'
+require 'piece/knight'
+require 'piece/rook'
+require 'piece/bishop'
+require 'piece/pawn'
+
 class Chess 	
 
   Files = "abcdefgh"
