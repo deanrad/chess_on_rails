@@ -96,13 +96,16 @@ class Board < Hash
     return p.side
   end
 
-  def sister_piece_of( a_piece, sitting_here )
+  # look for a piece of the same type which also could have moved to this square
+  # returns either [position, piece] or [nil, nil]
+  def sister_piece_of( a_piece )
+    sitting_at = index(a_piece)
     pos, piece = select do |pos, piece| 
       piece.side == a_piece.side && 
       piece.function == a_piece.function && 
-      pos != sitting_here
-    end
-    piece
+      pos != sitting_at
+    end.flatten 
+    [pos, piece]
   end
   
   def in_check?( side )

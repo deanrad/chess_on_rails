@@ -49,10 +49,7 @@ module MoveNotation
     if( @piece_moving.function==:rook) || (@piece_moving.function==:knight)
       mynotation = mynotation.file
 
-      # look for a piece of the same type which also could have moved 
-      sister_piece_pos, sister_piece = @board.consider_move(self) do |b|
-          b.sister_piece_of(@piece_moving, from_coord)
-      end
+      sister_piece_pos, sister_piece = @board.sister_piece_of(@piece_moving)
 
       if( sister_piece != nil && sister_piece.allowed_moves(@board).include?(to_coord.to_sym) )
         mynotation += ( from_coord.file != sister_piece_pos.file) ? from_coord.file : from_coord.rank.to_s
