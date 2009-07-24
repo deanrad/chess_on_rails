@@ -1,4 +1,5 @@
-# Manages the addition and updating of players and their information
+# Manages the set of pieces displayed for this user
+# Currently not shown in UI, TODO move to options
 class SetsController < ApplicationController
 
   def change

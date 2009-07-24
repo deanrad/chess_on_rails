@@ -43,6 +43,12 @@ describe Match do
     m.name.should == "The Immortal Match (Anderssen vs. Kieseritzky, 1851)"
   end
 
+  it 'should have a board' do
+    m = matches(:queenside_castled)
+    m.board.should_not be_nil
+    m.boards.count.should == 9 
+  end
+
   describe 'resignation' do
 
     it 'should make a match inactive' do

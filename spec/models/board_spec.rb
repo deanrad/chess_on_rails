@@ -139,6 +139,8 @@ describe Board do
     board['a4'].should     be_nil
   end 
 
+  it 'should return the sister piece of a knight'
+
   it 'can output board in string format' do
     match = matches(:unstarted_match)
     board = match.board

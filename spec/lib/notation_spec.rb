@@ -3,29 +3,30 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe 'Notation' do
 
   it 'should notate king K' do
-    King.new.notation.upcase.should == 'K'
+    King.new(:white).abbrev.upcase.should == 'K'
   end
   it 'should notate queen Q' do
-    Queen.new.notation.upcase.should == 'Q'
+    Queen.new(:white).abbrev.upcase.should == 'Q'
   end
   it 'should notate rook R' do
-    Rook.new.notation.upcase.should == 'R'
+    Rook.new(:white).abbrev.upcase.should == 'R'
   end
   it 'should notate knight N' do
-    Knight.new.notation.upcase.should == 'N'
+    Knight.new(:white).abbrev.upcase.should == 'N'
   end
   it 'should notate bishop B' do
-    Bishop.new.notation.upcase.should == 'B'
+    Bishop.new(:white).abbrev.upcase.should == 'B'
   end
 
   it 'should notate a pawn for the file it is on' do
+    pending('havent found how to do this yet')
     p = Pawn.new(:black)
     p.notation('b').should == 'b'
     p.notation('c').should == 'c'
   end
 
   it 'should not notate a pawn without its file' do
-    p = Pawn.new
+    p = Pawn.new(:white)
     lambda{ p.notation.should == 'p' }.should raise_error
   end
 
