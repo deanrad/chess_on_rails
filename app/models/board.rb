@@ -7,7 +7,14 @@ class Board < Hash
 
   include Fen
 
+  # if true, this board instance is used for computation only, otherwise it is
+  # or was an actual state of the game - defaults to nil
+  attr_accessor :hypothetical
+
+  # the match of which this board takes part
   attr_accessor :match	
+
+  # flags whether an en_passant move is available (inferred from match)
   attr_accessor :en_passant_square
   
   alias :pieces	   :values
@@ -36,6 +43,8 @@ class Board < Hash
   # Dereferences any existing piece we're moving onto or capturing enpassant
   # Updates our EP square or nils it out
   def play_move!( m )
+    $stderr.puts "Recording move #{m.from_coord}->#{m.to_coord} on board instance #{self.object_id}" unless self.hypothetical
+
     self.delete_if { |pos, piece| pos == m.to_coord || pos == m.captured_piece_coord }
 
     piece_moved = self.delete(m.from_coord)
@@ -63,8 +72,6 @@ class Board < Hash
     if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
       self.delete(m.to_coord)
       self[m.to_coord] = Queen.new(piece_moved.side, :promoted)
-      #puts self.to_s if m.to_coord == 'a8'
-      #debugger if m.to_coord == 'a8'
     end
     
     self
@@ -77,7 +84,9 @@ class Board < Hash
   # # get the board for future consideration
   # new = board.consider_move( Move.new(...) )
   def consider_move(m, &block)
-    considered = self.dup 
+    considered = self.dup
+
+    considered.hypothetical = true
     considered.play_move!(m)
     return considered unless block_given?
     yield  considered

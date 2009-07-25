@@ -37,7 +37,6 @@ promote_crazy, b8, a6, Na6
 promote_crazy, c5, c6, c6
 promote_crazy, e8, e7, Ke7
 promote_crazy, c6, b7, cxb7
-promote_crazy, d7, d6, d6 
 legal, e2, e4, e4
 legal, e7, e5, e5
 legal, g1, f3, Nf3
