@@ -17,13 +17,17 @@ class Move < ActiveRecord::Base
   end
 
   # The board this move is being made against - set and read for validations
-  def board; @board ||= match.board; end
+  def board
+    @board ||= match.board
+  end
   private :board
 
   def before_validation
     return true unless new_record? #may have already been called by the association
 
-    @board = match.board
+    # Because of the stupid rails double-validation bug, we have to make sure we dont
+    # validate against a future board. Instance-caching hopes to fix this
+    @board ||= match.board
 
     #strip off to the move queue any portion of notation
     split_off_move_queue
@@ -84,18 +88,18 @@ class Move < ActiveRecord::Base
     end
 
     #verify allowability of the move
-    raise "Move #{from_coord} to #{to_coord} didn't move a piece, " + caller.join("\n") unless @piece_moving
     errors.add_to_base "No piece present at #{from_coord} on this board" and return unless @piece_moving
 
     unless @piece_moving.allowed_moves(@board).include?( to_coord.to_sym ) 
+      puts @piece_moving.allowed_moves(@board).map(&:to_s).join "\n"
       errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" 
     end
 
     #can not leave your king in check at end of a move
-    #new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
-    #if new_board.in_check?( @piece_moving.side )
-    #  errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
-    #end
+    new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
+    if new_board.in_check?( @piece_moving.side )
+      errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
+    end
 
   end
 

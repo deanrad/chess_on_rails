@@ -16,6 +16,14 @@ class Board < Hash
 
   # flags whether an en_passant move is available (inferred from match)
   attr_accessor :en_passant_square
+
+  # flags true initially, and becomes false for this and future boards in the match
+  # if king or kings rook is moved. Other castling rules still apply
+  attr_accessor :kingside_castle_available
+
+  # flags true initially, and becomes false for this and future boards in the match
+  # if king or queens rook is moved. Other castling rules still apply
+  attr_accessor :queenside_castle_available
   
   alias :pieces	   :values
   alias :positions :keys
@@ -24,6 +32,8 @@ class Board < Hash
   def initialize( start_pos = nil )
     return _initialize_fen( start_pos ) if start_pos
     Chess.initial_pieces.each{ |piece, pos| self[pos] = piece }
+    self.kingside_castle_available  = true
+    self.queenside_castle_available = true
   end
 
   # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
@@ -43,7 +53,7 @@ class Board < Hash
   # Dereferences any existing piece we're moving onto or capturing enpassant
   # Updates our EP square or nils it out
   def play_move!( m )
-    $stderr.puts "Recording move #{m.from_coord}->#{m.to_coord} on board instance #{self.object_id}" unless self.hypothetical
+    #$stderr.puts "Recording move #{m.from_coord}->#{m.to_coord} on board instance #{self.object_id}" unless self.hypothetical
 
     self.delete_if { |pos, piece| pos == m.to_coord || pos == m.captured_piece_coord }
 
@@ -59,6 +69,15 @@ class Board < Hash
 	   self["#{new_rook_file}#{castling_rank}"] = rook
 	end
       end
+    end
+
+    # prevent future castling once kings moved
+    case piece_moved.function 
+    when :king
+      self.kingside_castle_available  = false
+      self.queenside_castle_available = false
+    when :rook
+      self.send("%side_castle_available=" % piece_moved.discriminator, false)
     end
     
     #TODO investigate why this method is getting called multiply per moves << Move.new
@@ -103,6 +122,15 @@ class Board < Hash
     p = self[pos]
     return nil if !p 
     return p.side
+  end
+
+  # flags whether the :white, :queens castling squares are empty, for example
+  def castling_squares_empty?(side, flank)
+    files = case flank when :queens then %w{b c d} else %w{f g} end
+    occupied = files.inject(false) do |res, file| 
+      res ||= self.has_key?(:"#{file}#{side.back_rank}")
+    end
+    !occupied
   end
 
   # look for a piece of the same type which also could have moved to this square
