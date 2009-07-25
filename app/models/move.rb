@@ -66,8 +66,6 @@ class Move < ActiveRecord::Base
     self[:notation] = notate
   end
 
-  #stuff here depends on knowledge of the board's position prior to the move being committed
-  # this should be considered a before-save function and maybe validate is not exactly the best place
   def validate
     # Got burned REAL bad by this bug. Just gonna fix cheap with this early exit. Don't want to make Match
     #   look look like :has_many :moves, :validate => false. But it really does matter in my case when

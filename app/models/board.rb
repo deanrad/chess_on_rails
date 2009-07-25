@@ -83,7 +83,7 @@ class Board < Hash
     #TODO investigate why this method is getting called multiply per moves << Move.new
     return unless piece_moved
     ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
-    @en_passant_square = ( piece_moved.function == :pawn &&
+    self.en_passant_square = ( piece_moved.function == :pawn &&
                            m.from_coord.rank == ep_from_rank && 
                            m.to_coord.rank == ep_to_rank ) ? m.from_coord.file + ep_rank.to_s : nil
 
@@ -199,7 +199,6 @@ class Board < Hash
     ranks.each do |rank|
       files.each do |file|
         piece = self[ file + rank ]
-        #output << file+rank
         output << (piece ? piece.abbrev : ' ')
         output << (file != last_file ? ' ' : "\n")
       end
