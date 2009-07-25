@@ -67,10 +67,16 @@ describe Board do
     match.board.en_passant_square.should be_nil
   end
 
-  it 'should record the en_passant square once a pawn has made that move' do
+  it 'should record the en_passant square for a duration of one move' do
     match = matches(:unstarted_match)
     match.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
     match.board.en_passant_square.should == 'e3'
+
+    match.moves << Move.new(:from_coord => 'e7', :to_coord => 'e5')
+    match.board.en_passant_square.should == 'e6'
+
+    match.moves << Move.new(:notation => 'Nc3')
+    match.board.en_passant_square.should == nil
   end
 
   it 'should allow pawn to capture en passant' do
