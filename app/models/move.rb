@@ -9,7 +9,10 @@ class Move < ActiveRecord::Base
   attr_accessor :side
   attr_reader   :board
  
+  # Creates a new move, either the Rails way with a named hash, or a shorthand of the notation
   def initialize( opts )
+    return super( :notation => "#{opts}" ) if String === opts || Symbol === opts
+
     super
     if self[:notation].blank? == ( self[:from_coord].blank? && self[:to_coord].blank? )
       raise 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
@@ -91,8 +94,7 @@ class Move < ActiveRecord::Base
     errors.add_to_base "No piece present at #{from_coord} on this board" and return unless @piece_moving
 
     unless @piece_moving.allowed_moves(@board).include?( to_coord.to_sym ) 
-      puts @piece_moving.allowed_moves(@board).map(&:to_s).join "\n"
-      errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" 
+      errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" and return
     end
 
     #can not leave your king in check at end of a move

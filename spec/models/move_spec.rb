@@ -71,6 +71,7 @@ describe Move do
     match = matches(:dean_vs_paul)
 
     #models can raise errors, controllers ultimately should not
+    puts match.board
     assert_raises ActiveRecord::RecordInvalid do
       match.moves << Move.new( :notation => 'Bb3' )
     end
@@ -79,10 +80,8 @@ describe Move do
   it 'should detect an illegal move' do
     match = matches(:unstarted_match)
     m = nil
-    assert_raises ActiveRecord::RecordInvalid do
-      match.moves << m = Move.new( :from_coord => 'b1', :to_coord => 'd1' ) #Nd1 ??
-      # match.moves << m = Move.new( :from_coord => 'b3', :to_coord => 'b4' ) # ??
-    end
+    match.moves << move = Move.new( :from_coord => 'b1', :to_coord => 'd1' )
+    move.should_not be_valid
   end
   
   it 'should notate which knight moved if ambiguous' do
