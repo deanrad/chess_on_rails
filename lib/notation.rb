@@ -66,7 +66,6 @@ module MoveNotation
     mynotation += to_coord
         
     #castling 3 O's if queenside otherwise 2 O's
-    debugger
     if castled == 1
       mynotation = 'O-O' + ((to_coord.file=='c') ? '-O' : '' ) 
     end

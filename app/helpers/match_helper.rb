@@ -22,12 +22,12 @@ module MatchHelper
 
   # the files, in order from the viewed_from_side for rendering
   def files
-    @files ||= (viewed_from_side == :black) ? Chess::Files.reverse : Chess::Files
+    @files ||= (viewed_from_side == :black) ? Chess::FILES.reverse : Chess::FILES
   end
 
   # the ranks, in order from the viewed_from_side for rendering
   def ranks
-    @ranks ||= (viewed_from_side == :black) ? Chess::Ranks : Chess::Ranks.reverse
+    @ranks ||= (viewed_from_side == :black) ? Chess::RANKS : Chess::RANKS.reverse
   end
 
   def chats
