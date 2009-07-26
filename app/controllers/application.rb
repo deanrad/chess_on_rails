@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
     unless self.current_player
       flash[:notice] = "Login is required in order to take this action."
       session[:original_uri] = request.request_uri
-      redirect_to is_facebook? ? register_url : login_url
     end
   end
 

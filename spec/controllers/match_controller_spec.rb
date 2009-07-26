@@ -47,10 +47,7 @@ describe MatchController do
   end
   
   it 'should show any current move queue in the page' do
-    #TODO default the format to html not fbml !
     get :show, {:id => matches(:dean_vs_paul).id, :format => 'html'}, {:player_id => players(:dean).id }
-
-    #TODO get this so the proxy returns the unique (first) gameplay per scope
 
     response.should have_tag("div#this_move_queue", :text => 'Nc4 b5')
   end

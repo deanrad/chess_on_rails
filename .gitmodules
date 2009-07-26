@@ -1,3 +1,0 @@
-[submodule "vendor/plugins/facebooker"]
-	path = vendor/plugins/facebooker
-	url = git://github.com/mmangino/facebooker.git

@@ -8,8 +8,6 @@ class AuthenticationController < ApplicationController
 
   # a tagged visitor can be prompted to register, and their tag will be 
   # saved with them, along with any name and password info they have chosen
-  # The point of registering, for a facebook user, is so they can have their nickname
-  # and a way to login outside of facebook
   def register
     return unless request.post? 
 
