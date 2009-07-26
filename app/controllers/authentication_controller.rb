@@ -17,14 +17,6 @@ class AuthenticationController < ApplicationController
 
     u = User.create_with_player( params[:user], params[:player] ) 
 
-    if is_facebook?
-      fbu = Fbuser.find_or_create_by_facebook_user_id( params[:fb_sig_user] )
-      if fbu.new_record?
-        fbu.playing_as = u.playing_as
-        fbu.save
-      end
-    end
-
     session[:player_id] = u.playing_as.id
     # current_player = u.playing_as
     redirect_to match_index_url

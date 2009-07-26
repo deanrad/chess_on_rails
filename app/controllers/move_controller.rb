@@ -23,8 +23,12 @@ class MoveController < ApplicationController
     #unceremonious way of saying you just ended the game 
     redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
     respond_to do |format|
-      format.html{ create_respond }
-      format.fbml{ create_respond }
+      format.html{ 
+        redirect_to( match_path(@match) ) and return unless request.xhr? 
+        
+        #otherwise do a normal status update to refresh UI
+        render :template => 'match/status'
+      }
       format.text{
         render :text => @match.board.to_s( @viewed_from_side==:black )
       }
@@ -32,14 +36,6 @@ class MoveController < ApplicationController
   end
   
 protected
-  def create_respond
-    #back to the match if non-ajax
-    redirect_to( match_path(@match) ) and return unless request.xhr? 
-    
-    #otherwise do a normal status update to refresh UI
-    render :template => 'match/status' and return
-  end
-
   def display_error(ex)
     if ex.kind_of?(ArgumentError)
       flash[:move_error] = ex.to_s

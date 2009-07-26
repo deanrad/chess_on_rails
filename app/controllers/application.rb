@@ -4,16 +4,12 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
-  helper_attr :current_fbuser  #attr_accessor and helper_method
   attr_accessor :current_player
   helper_method :current_player
 
-  #only use layout if not a facebook request - todo - standardize the 'is_facebook' test
-  # layout proc{ |c| c.params[:fb_sig] ? false : 'application' }
-
   # descendant controllers call authorize to ensure player is logged in, or redirect them to login
   def authorize
-    self.current_player ||= player_in_session || player_in_facebook || player_in_cookie || player_over_http
+    self.current_player ||= player_in_session || player_in_cookie || player_over_http
 
     unless self.current_player
       flash[:notice] = "Login is required in order to take this action."
@@ -25,25 +21,10 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # if this request is coming from facebook- its been seen while testing match_controller_fb_spec
-  # that sometimes facebook_session is nil in test mode. We'll extend the definition for now to
-  # also allow for hacked-on fb_sig_user as well
-  def is_facebook?
-    !! ( facebook_session || params[:fb_sig_user] )
-  end
-
   # an already logged in player
   def player_in_session
     return nil unless session[:player_id] 
     Player.find(session[:player_id])
-  end
-
-  # if accessed over facebook, the player referenced
-  def player_in_facebook
-    fb_id = facebook_session ? facebook_session.user.id : params[:fb_sig_user]
-    return unless fb_id
-    fbuser = Fbuser.find_by_facebook_user_id(fb_id)
-    return fbuser.playing_as if fbuser
   end
 
   # authenticates from a stored md5 hash in a cookie
