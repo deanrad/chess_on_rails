@@ -9,7 +9,10 @@ class Move < ActiveRecord::Base
   attr_accessor :side
   attr_reader   :board
  
+  # Creates a new move, either the Rails way with a named hash, or a shorthand of the notation
   def initialize( opts )
+    return super( :notation => "#{opts}" ) if String === opts || Symbol === opts
+
     super
     if self[:notation].blank? == ( self[:from_coord].blank? && self[:to_coord].blank? )
       raise 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
@@ -17,11 +20,17 @@ class Move < ActiveRecord::Base
   end
 
   # The board this move is being made against - set and read for validations
-  def board; @board ||= match.board; end
+  def board
+    @board ||= match.board
+  end
   private :board
 
   def before_validation
-    @board = match.board
+    return true unless new_record? #may have already been called by the association
+
+    # Because of the stupid rails double-validation bug, we have to make sure we dont
+    # validate against a future board. Instance-caching hopes to fix this
+    @board ||= match.board
 
     #strip off to the move queue any portion of notation
     split_off_move_queue
@@ -30,10 +39,12 @@ class Move < ActiveRecord::Base
     infer_coordinates_from_notation if !self[:notation].blank? && (from_coord.blank? || to_coord.blank?)
 
     # validations will get us later
-    return unless from_coord
+    return false unless from_coord
 
     @piece_moving = @board[from_coord]
     @piece_moved_upon = @board[to_coord]
+    
+    true
   end
 
   # Turns start at one and encompasss two moves each
@@ -55,9 +66,13 @@ class Move < ActiveRecord::Base
     self[:notation] = notate
   end
 
-  #stuff here depends on knowledge of the board's position prior to the move being committed
-  # this should be considered a before-save function and maybe validate is not exactly the best place
   def validate
+    # Got burned REAL bad by this bug. Just gonna fix cheap with this early exit. Don't want to make Match
+    #   look look like :has_many :moves, :validate => false. But it really does matter in my case when
+    #   validation is called, because the board is different. Damn you DHH !
+    # 
+    # https://rails.lighthouseapp.com/projects/8994/tickets/483-automatic-validation-on-has_many-should-not-be-performed-twice
+    return unless new_record?
 
     if self[:from_coord].blank? && @possible_movers && @possible_movers.length > 1
       errors.add :notation, "Ambiguous move #{notation}. Clarify as in Ngf3 or R2d4, for example"
@@ -74,18 +89,17 @@ class Move < ActiveRecord::Base
     end
 
     #verify allowability of the move
-    
-    errors.add_to_base "No piece present at #{from_coord} on this board" and return if !@piece_moving
+    errors.add_to_base "No piece present at #{from_coord} on this board" and return unless @piece_moving
 
     unless @piece_moving.allowed_moves(@board).include?( to_coord.to_sym ) 
-      errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" 
+      errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" and return
     end
 
     #can not leave your king in check at end of a move
-    #new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
-    #if new_board.in_check?( @piece_moving.side )
-    #  errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
-    #end
+    new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
+    if new_board.in_check?( @piece_moving.side )
+      errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
+    end
 
   end
 

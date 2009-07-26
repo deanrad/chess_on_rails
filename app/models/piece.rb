@@ -67,18 +67,15 @@ class Piece
     self.class.allowed_move?(vector, starting_rank)
   end
 
-  @moves_cache ||= {}
-
   # The set of squares on the board for which this piece answers allowed_move? == true
+  # Overridden by king for example to allow castling
   def allowed_moves(board)
-    # return @moves_cache[board] if @moves_cache[board]
     moves = []
 
     mypos = board.index(self) 
     board.each_square do |sq|
       moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
     end
-    #@moves_cache[board] = moves
 
     moves
   end
@@ -97,7 +94,10 @@ class Piece
 
     if @function==:pawn && vector[0] != 0 
       dest_piece = board[ mypos ^ vector ]
+
+      #TODO Pawn#allowed_moves(board) should provide this case
       return false if (mypos ^ vector)==board.en_passant_square
+
       return true  unless dest_piece && dest_piece.side != self.side
     end
 

@@ -41,6 +41,24 @@ end
 class Symbol
   def rank; self.to_s.rank ; end
   def file; self.to_s.file ; end
+  def back_rank
+    @back_rank ||= case self
+      when :white then '1'
+      when :black then '8'
+    end
+  end
+  def front_rank
+    @front_rank ||= case self
+      when :white then '2'
+      when :black then '7'
+    end
+  end
+  def castling_file
+    @castling_file ||= case self
+      when :queens then 'c'
+      when :kings  then 'g'
+    end
+  end
 end
 
 class Fixnum

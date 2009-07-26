@@ -62,7 +62,6 @@ describe AuthenticationController do
     end
 
     it 'should not overwrite an existing cookie'
-    it 'should not do tagging for facebook sessions (unless proven harmless)'
 
   end
 
@@ -84,12 +83,6 @@ describe AuthenticationController do
       session[:player_id].should_not be_nil
     end
 
-    it 'should associate their facebook info with a new player' do
-      Fbuser.expects(:create).returns()
-
-      post :register, { :player => {:name => 'x'}, :fb_sig_user => 2001,
-        :user=>{:security_phrase => 'xx', :email => 'foo@foo.com'} }
-    end
   end
 
 end

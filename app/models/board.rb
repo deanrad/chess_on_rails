@@ -7,8 +7,23 @@ class Board < Hash
 
   include Fen
 
+  # if true, this board instance is used for computation only, otherwise it is
+  # or was an actual state of the game - defaults to nil
+  attr_accessor :hypothetical
+
+  # the match of which this board takes part
   attr_accessor :match	
+
+  # flags whether an en_passant move is available (inferred from match)
   attr_accessor :en_passant_square
+
+  # flags true initially, and becomes false for this and future boards in the match
+  # if king or kings rook is moved. Other castling rules still apply
+  attr_accessor :kingside_castle_available
+
+  # flags true initially, and becomes false for this and future boards in the match
+  # if king or queens rook is moved. Other castling rules still apply
+  attr_accessor :queenside_castle_available
   
   alias :pieces	   :values
   alias :positions :keys
@@ -17,6 +32,8 @@ class Board < Hash
   def initialize( start_pos = nil )
     return _initialize_fen( start_pos ) if start_pos
     Chess.initial_pieces.each{ |piece, pos| self[pos] = piece }
+    self.kingside_castle_available  = true
+    self.queenside_castle_available = true
   end
 
   # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
@@ -36,6 +53,8 @@ class Board < Hash
   # Dereferences any existing piece we're moving onto or capturing enpassant
   # Updates our EP square or nils it out
   def play_move!( m )
+    #$stderr.puts "Recording move #{m.from_coord}->#{m.to_coord} on board instance #{self.object_id}" unless self.hypothetical
+
     self.delete_if { |pos, piece| pos == m.to_coord || pos == m.captured_piece_coord }
 
     piece_moved = self.delete(m.from_coord)
@@ -51,11 +70,20 @@ class Board < Hash
 	end
       end
     end
+
+    # prevent future castling once kings moved
+    case piece_moved.function 
+    when :king
+      self.kingside_castle_available  = false
+      self.queenside_castle_available = false
+    when :rook
+      self.send("%side_castle_available=" % piece_moved.discriminator, false)
+    end
     
     #TODO investigate why this method is getting called multiply per moves << Move.new
     return unless piece_moved
     ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
-    @en_passant_square = ( piece_moved.function == :pawn &&
+    self.en_passant_square = ( piece_moved.function == :pawn &&
                            m.from_coord.rank == ep_from_rank && 
                            m.to_coord.rank == ep_to_rank ) ? m.from_coord.file + ep_rank.to_s : nil
 
@@ -63,8 +91,6 @@ class Board < Hash
     if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
       self.delete(m.to_coord)
       self[m.to_coord] = Queen.new(piece_moved.side, :promoted)
-      #puts self.to_s if m.to_coord == 'a8'
-      #debugger if m.to_coord == 'a8'
     end
     
     self
@@ -77,7 +103,9 @@ class Board < Hash
   # # get the board for future consideration
   # new = board.consider_move( Move.new(...) )
   def consider_move(m, &block)
-    considered = self.dup 
+    considered = self.dup
+
+    considered.hypothetical = true
     considered.play_move!(m)
     return considered unless block_given?
     yield  considered
@@ -94,6 +122,15 @@ class Board < Hash
     p = self[pos]
     return nil if !p 
     return p.side
+  end
+
+  # flags whether the :white, :queens castling squares are empty, for example
+  def castling_squares_empty?(side, flank)
+    files = case flank when :queens then %w{b c d} else %w{f g} end
+    occupied = files.inject(false) do |res, file| 
+      res ||= self.has_key?(:"#{file}#{side.back_rank}")
+    end
+    !occupied
   end
 
   # look for a piece of the same type which also could have moved to this square
@@ -162,7 +199,6 @@ class Board < Hash
     ranks.each do |rank|
       files.each do |file|
         piece = self[ file + rank ]
-        #output << file+rank
         output << (piece ? piece.abbrev : ' ')
         output << (file != last_file ? ' ' : "\n")
       end

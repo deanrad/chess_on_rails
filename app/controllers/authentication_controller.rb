@@ -8,22 +8,12 @@ class AuthenticationController < ApplicationController
 
   # a tagged visitor can be prompted to register, and their tag will be 
   # saved with them, along with any name and password info they have chosen
-  # The point of registering, for a facebook user, is so they can have their nickname
-  # and a way to login outside of facebook
   def register
     return unless request.post? 
 
     params[:user][:auth_token] = cookies[:auth_token]
 
     u = User.create_with_player( params[:user], params[:player] ) 
-
-    if is_facebook?
-      fbu = Fbuser.find_or_create_by_facebook_user_id( params[:fb_sig_user] )
-      if fbu.new_record?
-        fbu.playing_as = u.playing_as
-        fbu.save
-      end
-    end
 
     session[:player_id] = u.playing_as.id
     # current_player = u.playing_as

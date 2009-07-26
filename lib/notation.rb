@@ -72,13 +72,19 @@ module MoveNotation
 
     #promotion
     if @piece_moving.function == :pawn && to_coord.to_s.rank == @piece_moving.promotion_rank
-      mynotation += "=#{promotion_choice || 'Q'}"
+      self.promotion_choice ||= 'Q'
+      mynotation += "=#{promotion_choice}"
     end
     
     #check/mate
-    mynotation += '+' if @board.consider_move(self) do |b|
-      b.in_check?( @piece_moving.side==:white ? :black : :white )
+    in_check = false
+    @board.consider_move(self) do |b|
+      in_check = b.in_check?( @piece_moving.side==:white ? :black : :white )
     end
+
+    mynotation += '+' if in_check
+    # debugger
+    #raise "Move id #{id} #{from_coord}->#{to_coord} in Notation#notate"
 
     return mynotation
   end

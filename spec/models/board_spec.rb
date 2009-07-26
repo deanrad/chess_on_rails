@@ -67,10 +67,16 @@ describe Board do
     match.board.en_passant_square.should be_nil
   end
 
-  it 'should record the en_passant square once a pawn has made that move' do
+  it 'should record the en_passant square for a duration of one move' do
     match = matches(:unstarted_match)
     match.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
     match.board.en_passant_square.should == 'e3'
+
+    match.moves << Move.new(:from_coord => 'e7', :to_coord => 'e5')
+    match.board.en_passant_square.should == 'e6'
+
+    match.moves << Move.new(:notation => 'Nc3')
+    match.board.en_passant_square.should == nil
   end
 
   it 'should allow pawn to capture en passant' do
@@ -104,23 +110,22 @@ describe Board do
     b[:e5].allowed_moves(b).should_not include(:e5)
   end	
 
-  #LEFTOFF restoring promotion
   it 'should promote automatically to queen' do
 
     m = matches(:promote_crazy)
-    puts "\n"+m.board.to_s
-    m.moves << promo = Move.new( :from_coord => 'b7', :to_coord => 'a8' )
-    promo.should be_valid
+    
+    m.moves << promo = Move.new( :from_coord => 'b7', :to_coord => 'b8' )
+    promo.should be_valid 
 
-    puts m.board.to_s
-    m.moves.last.notation.should == 'bxa8=Q'
-    m.board[:a8].function.should == :queen
+    m.moves.last.notation.should == 'b8=Q'
+    m.board[:b8].function.should == :queen
   end
 
   it 'can promote to knight' do
     m = matches(:promote_crazy)
     m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8', :promotion_choice => 'N' )
-    pending 'foo'
+    m.moves.last.notation.should == 'bxa8=N'
+    m.board[:a8].function.should == :queen
   end
 
   # consider yields a copy of the board on which the move has occurred
@@ -138,8 +143,6 @@ describe Board do
     board['a2'].should_not be_nil
     board['a4'].should     be_nil
   end 
-
-  it 'should return the sister piece of a knight'
 
   it 'can output board in string format' do
     match = matches(:unstarted_match)

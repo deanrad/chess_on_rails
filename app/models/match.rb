@@ -1,10 +1,12 @@
 class Match < ActiveRecord::Base
   
   has_many :players, :through    => :gameplays
-  has_many :moves,   :before_add => :refer_to_match_instance,
-                     :after_add  => [:save_board,
-                                      :check_for_checkmate, 
-                                      :play_queued_moves]
+
+  # The moves of this match. Before we add one, we ensure that it has a direct 
+  # reference to this match instance, so it can use our history to validate.
+  # After adding we store the new board instance, check for checkmate, and store any move queue
+  has_many :moves,   :before_add => Proc.new{ |m, mv| mv.match = m },
+                     :after_add  => [:save_board, :check_for_checkmate, :play_queued_moves]
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 
@@ -17,6 +19,9 @@ class Match < ActiveRecord::Base
     def black; self[1]; end
   end
 
+  def << move_opts
+    self.moves << Move.new(move_opts)
+  end
   
   # the boards this match has known
   def boards
@@ -49,11 +54,6 @@ class Match < ActiveRecord::Base
 
   def name
     self[:name] || lineup
-  end
-
-  # ensure that the match object instance used is ourselves
-  def refer_to_match_instance( move )
-    move.match = self
   end
 
   # cache this board and make it the most recent one

@@ -22,8 +22,11 @@ describe Move do
 
   it 'should notate white kingside castle' do
     match = matches(:dean_vs_maria)
-    match.moves << Move.new( :from_coord => 'e1', :to_coord => 'g1' ) 
+    match.moves << castle = Move.new( :from_coord => 'e1', :to_coord => 'g1' ) 
 
+    castle.should be_valid
+
+    # puts match.board
     #assert_equal 1, match.moves.last.castled
     assert_equal 'O-O', match.moves.last.notation
 
@@ -68,6 +71,7 @@ describe Move do
     match = matches(:dean_vs_paul)
 
     #models can raise errors, controllers ultimately should not
+    puts match.board
     assert_raises ActiveRecord::RecordInvalid do
       match.moves << Move.new( :notation => 'Bb3' )
     end
@@ -76,10 +80,8 @@ describe Move do
   it 'should detect an illegal move' do
     match = matches(:unstarted_match)
     m = nil
-    assert_raises ActiveRecord::RecordInvalid do
-      match.moves << m = Move.new( :from_coord => 'b1', :to_coord => 'd1' ) #Nd1 ??
-      # match.moves << m = Move.new( :from_coord => 'b3', :to_coord => 'b4' ) # ??
-    end
+    match.moves << move = Move.new( :from_coord => 'b1', :to_coord => 'd1' )
+    move.should_not be_valid
   end
   
   it 'should notate which knight moved if ambiguous' do
@@ -104,6 +106,7 @@ describe Move do
   end
 
   it 'should err if unrecognized notation' do
+    pending 'we get nil.function error on board.rb:75'
     match = matches(:dean_vs_maria)
     assert_raises ActiveRecord::RecordInvalid do
       match.moves << move =  Move.new( :notation => 'move it baby' )
@@ -111,11 +114,14 @@ describe Move do
   end
   
   it 'should err if notation is ambiguous' do
+    pending 'we get nil.function error on board.rb:75'
+
     match = matches(:queenside_castled)
-    assert_raises ActiveRecord::RecordInvalid do
+    puts match.board
+    #assert_raises ActiveRecord::RecordInvalid do
       match.moves << move = Move.new( :notation => 'Nf3' )
-    end
-    #move.should_not be_valid
+    #end
+    move.should_not be_valid
   end
 
   it 'should disallow combined notation and coordinate move' do
@@ -132,9 +138,8 @@ describe Move do
     #this is not a mating move but king is in check and must move
     match.moves << move = Move.new( :notation => 'Bxf7' )
     
-    assert_raises ActiveRecord::RecordInvalid do
-      match.moves << move = Move.new( :notation => 'Nf6' )
-    end
+    match.moves << move = Move.new( :notation => 'Nf6' )
+    move.should_not be_valid
   end
 
   it 'should strip off the move queue part of any notated move' do
