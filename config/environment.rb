@@ -59,7 +59,4 @@ Rails::Initializer.run do |config|
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
 
-  # At one point facebooker support worked. It's listed here as a gem, though I think a git
-  # submodule might be the proper way to go. Don't worry about it unless you need facebook auth.
-  config.gem "mmangino-facebooker", :lib => "facebooker", :source => 'http://gems.github.com' 
 end
