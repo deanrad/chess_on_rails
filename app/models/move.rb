@@ -4,11 +4,12 @@ class Move < ActiveRecord::Base
   include MoveNotation
 
   belongs_to :match
-  before_save :update_computed_fields
+  before_save Proc.new{|me| raise ActiveRecord::ReadOnlyRecord unless me.new_record?}, 
+              :update_computed_fields
 
   attr_accessor :side
   attr_reader   :board
- 
+
   # Creates a new move, either the Rails way with a named hash, or a shorthand of the notation
   def initialize( opts )
     return super( :notation => "#{opts}" ) if String === opts || Symbol === opts
