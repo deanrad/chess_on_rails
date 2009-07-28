@@ -1,4 +1,5 @@
 set :application, "Chess On Rails"
+set :use_sudo, false
 
 #############################################################
 #	SCM (Git)
