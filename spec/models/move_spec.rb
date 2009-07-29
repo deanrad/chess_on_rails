@@ -41,8 +41,8 @@ describe Move do
 
   it 'should notate check if no intervening piece blocks check' do
     match = matches(:dean_vs_paul)
-    match.moves << Move.new( :from_coord => 'f8', :to_coord => 'b4' ) 
-    assert_equal 'Bb4+', match.moves.last.notation
+    match.moves << move = Move.new( :from_coord => 'f8', :to_coord => 'b4' ) 
+    assert_equal 'Bb4+', move.notation
   end
 
   it 'should not notate check if an intervening piece blocks check' do
