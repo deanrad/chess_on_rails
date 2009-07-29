@@ -77,14 +77,9 @@ module MoveNotation
     end
     
     #check/mate
-    in_check = false
     @board.consider_move(self) do |b|
-      in_check = b.in_check?( @piece_moving.side==:white ? :black : :white )
+      mynotation += '+' if b.in_check?( @piece_moving.side.opposite )
     end
-
-    mynotation += '+' if in_check
-    # debugger
-    #raise "Move id #{id} #{from_coord}->#{to_coord} in Notation#notate"
 
     return mynotation
   end
