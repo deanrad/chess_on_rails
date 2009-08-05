@@ -38,7 +38,12 @@ class ApplicationController < ActionController::Base
       User.find_by_email_and_security_phrase(username, password).playing_as
     end
   end
-  
+
+  def downlevel?
+    @downlevel ||= request.user_agent.downcase.include? 'berry'
+  end
+  helper_method :'downlevel?'
+
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery :secret => '81ef9321d36cc23a2671126d90eed60f'
