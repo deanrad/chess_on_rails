@@ -36,6 +36,12 @@ class String
     file, rank = (self[0]+vector[0]).chr, (self[1]+vector[1]).chr
     "#{file}#{rank}"
   end
+
+  # black for a1 and b2, white for a8, etc..
+  def square_color
+    offset = (self[0]+self[1]) % 2
+    offset == 0 ? :black : :white
+  end
 end
 
 require 'chess_symbol_extensions'

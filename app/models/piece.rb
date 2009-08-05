@@ -54,7 +54,7 @@ class Piece
     # return likely_vector != nil
 
     move_vectors.each do |dir|
-      1.upto(8).each do |multiple|
+      1.upto(8) do |multiple|
         return true if vector == [ dir[0]*multiple, dir[1]*multiple ]
       end
     end
