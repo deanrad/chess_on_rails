@@ -14,8 +14,6 @@ var current_allowed_moves = [];
       position = "#{file}#{rank}" -%>
       <td class="piece_container <%= position %>" id="<%= position %>">
 
-        <script>    Droppables.add('<%= position %>', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: '<%= position %>' } ); </script>
-
         <% #indexing the helper-returned variable board doesnt work unless called through self.board
 	   p = self.board[position] 
 	   capture_class = case last_move && last_move.to_coord == position

@@ -1,9 +1,9 @@
 <html>
   <head>
     <title>EnPassant</title>
+    <% unless downlevel? %>
     <%= stylesheet_link_tag "board" %>
     <%= javascript_include_tag :defaults %>
-    <%= javascript_include_tag 'board_action' %>
     <script>
       PeriodicalExecuter.prototype.registerCallback = function() {
         this.intervalID = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
@@ -13,8 +13,10 @@
         clearInterval(this.intervalID);
       }
     </script>
+    <% end %>
   </head>
   <body>
     <%= yield %>
+    <%= javascript_include_tag 'board_action' unless downlevel? %>
   </body>
 </html>
