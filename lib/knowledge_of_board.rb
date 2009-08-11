@@ -18,13 +18,24 @@ module KnowledgeOfBoard
   # the to, from, and enpassant ranks for each side
   EN_PASSANT_CONFIG = {:white => [2, 4, 3], :black => [7, 5, 6] }
 
-  #Gets all_positions, optionally seen from black's side, passing :black or true (memoized)
-  def all_positions side=:white
-    side==:white ? POSITIONS.flatten : POSITIONS.dup.reverse.map(&:reverse!)
+  def self.included base
+    super
+    base.extend(ClassMethods)
   end
 
-  def valid_position? pos
-    pos = pos.to_sym unless Symbol===pos
-    all_positions.include? pos.to_sym
+  module ClassMethods
+    extend ActiveSupport::Memoizable
+    
+    #Gets all_positions, optionally seen from black's side, passing :black or true (memoized)
+    def all_positions side=:white
+      side==:white ? POSITIONS.flatten : POSITIONS.dup.reverse.map(&:reverse!)
+    end
+    memoize :all_positions
+    
+    def valid_position? pos
+      pos = pos.to_sym unless Symbol===pos
+      all_positions.include? pos.to_sym
+    end
+    memoize :valid_position?
   end
 end

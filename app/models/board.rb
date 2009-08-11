@@ -3,9 +3,7 @@ require 'piece'
 # whose keys are positions and whose values are the pieces at those positions
 class Board < Hash
 
-  extend ActiveSupport::Memoizable
   include KnowledgeOfBoard
-  memoize :all_positions
 
   # bring in the ability to notate boards as Forsyth-Edwards notation
   include Fen
@@ -43,6 +41,10 @@ class Board < Hash
   def [] pos
     pos = pos.to_sym unless Symbol===pos
     super(pos)
+  end
+  def []= pos, val
+    pos = pos.to_sym unless Symbol===pos
+    super(pos, val)
   end
 
   # Resets the board to initial position
@@ -124,17 +126,16 @@ class Board < Hash
     yield  considered
   end
 
+  # The board prior to this move being played
   def previous_board
     return nil if match.nil?
-    
     return self if (idx = match.boards.index(self))==0
     match.boards[ idx - 1 ]
   end
 
+  # The side of a piece on this position, or nil if the position is empty
   def side_occupying(pos)
-    p = self[pos]
-    return nil if !p 
-    return p.side
+    self[pos] && self[pos].side
   end
 
   # flags whether the :white, :queens castling squares are empty, for example
@@ -146,8 +147,8 @@ class Board < Hash
     !occupied
   end
 
-  # look for a piece of the same type which also could have moved to this square
-  # returns either [position, piece] or [nil, nil]
+  # Looks for a piece of the same function (rook, etc..) as the piece given, returning
+  # either [position, piece] or [nil, nil]
   def sister_piece_of( a_piece )
     sitting_at = index(a_piece)
     pos, piece = select do |pos, piece| 
@@ -182,8 +183,8 @@ class Board < Hash
     end
   end
 
-  #simplest logic here - if theres a move you're allowed which gets you out of check, you're not in checkmate
-  #contrast with more intelligent Capture/Block/Evade strategy
+  # Employs the logic that if theres a move you're allowed which gets you out of check, you're not in checkmate,
+  # otherwise you are. Contrast with more intelligent Capture/Block/Evade strategy
   def in_checkmate?( side )
 
     return false unless in_check?( side )
@@ -203,7 +204,7 @@ class Board < Hash
     return !way_out
   end
 
-  #provides a format for tracing
+  # Provides a format for tracing.
   def to_s( for_black = false )
     output = '' # ' ' * (8 * 8 * 2) #spaces or newlines after each 
     ranks  = %w{ 8 7 6 5 4 3 2 1 }
@@ -218,6 +219,11 @@ class Board < Hash
       end
     end  
     output + "\n"
+  end
+
+  # Two boards hash to the same value if their fen strings are identical.
+  def hash
+    self.to_fen.hash
   end
 
   def inspect; "\n" + to_s; end

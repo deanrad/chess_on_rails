@@ -86,7 +86,7 @@ class Move < ActiveRecord::Base
     
     #ensure the validity of the coordinates we have whether specified or inferred
     [from_coord, to_coord].each do |coord|
-      errors.add_to_base "#{coord} is not a valid coordinate" and return false unless @board.valid_position?( coord )
+      errors.add_to_base "#{coord} is not a valid coordinate" and return false unless Board.valid_position?( coord )
     end
 
     #verify allowability of the move

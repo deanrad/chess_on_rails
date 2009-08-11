@@ -73,7 +73,7 @@ class Piece
     moves = []
 
     mypos = board.index(self) 
-    board.all_positions.each do |sq|
+    Board.all_positions.each do |sq|
       moves << sq if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
     end
 

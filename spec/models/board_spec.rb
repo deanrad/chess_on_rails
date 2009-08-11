@@ -4,11 +4,11 @@ describe Board do
   it 'should know a valid position by notation' do
     match = matches(:unstarted_match)
     board = match.board
-    board.valid_position?(:a1).should == true
-    board.valid_position?(:n9).should == false
-    board.valid_position?(:a9).should == false
-    board.valid_position?('1a').should == false
-    board.valid_position?('a1').should == true
+    Board.valid_position?(:a1).should == true
+    Board.valid_position?(:n9).should == false
+    Board.valid_position?(:a9).should == false
+    Board.valid_position?('1a').should == false
+    Board.valid_position?('a1').should == true
   end
   
   it 'a pawn on its home square can move one or two' do
@@ -144,6 +144,13 @@ describe Board do
     board['a2'].should_not be_nil
     board['a4'].should     be_nil
   end 
+
+  it 'should have a different hash code per board configuration' do
+    b = Board.new
+    lambda{
+      b.play_move!( Move.new(:from_coord=>'d2', :to_coord=>'d4') )
+    }.should change{ b.hash }
+  end
 
   it 'can output board in string format' do
     match = matches(:unstarted_match)
