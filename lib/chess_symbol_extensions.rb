@@ -25,6 +25,14 @@ module ChessSymbolExtensions
       when :black then :white
     end
   end
+  # Lets you do d2 - d1 and get [0, -1]
+  def - other
+    self.to_s - other.to_s
+  end
+  # Lets you do d1 ^ [0, 1] and get d2
+  def ^ other
+    (self.to_s ^ other).to_sym
+  end
 end
 
 Symbol.send(:include, ChessSymbolExtensions) unless Symbol.ancestors.include?(ChessSymbolExtensions)

@@ -46,7 +46,7 @@ describe Match do
   it 'should have a board' do
     m = matches(:queenside_castled)
     m.board.should_not be_nil
-    m.boards.count.should == 9 
+    m.boards.size.should == 9 
   end
 
   describe 'resignation' do

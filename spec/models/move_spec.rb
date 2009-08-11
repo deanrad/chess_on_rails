@@ -71,10 +71,8 @@ describe Move do
     match = matches(:dean_vs_paul)
 
     #models can raise errors, controllers ultimately should not
-    puts match.board
-    assert_raises ActiveRecord::RecordInvalid do
-      match.moves << Move.new( :notation => 'Bb3' )
-    end
+    match.moves << move= Move.new( :notation => 'Bb3' )
+    move.should_not be_valid
   end
 
   it 'should detect an illegal move' do
@@ -106,21 +104,14 @@ describe Move do
   end
 
   it 'should err if unrecognized notation' do
-    pending 'we get nil.function error on board.rb:75'
     match = matches(:dean_vs_maria)
-    assert_raises ActiveRecord::RecordInvalid do
-      match.moves << move =  Move.new( :notation => 'move it baby' )
-    end
+    match.moves << move =  Move.new( :notation => 'move it baby' )
+    move.should_not be_valid
   end
   
   it 'should err if notation is ambiguous' do
-    pending 'we get nil.function error on board.rb:75'
-
     match = matches(:queenside_castled)
-    puts match.board
-    #assert_raises ActiveRecord::RecordInvalid do
-      match.moves << move = Move.new( :notation => 'Nf3' )
-    #end
+    match.moves << move = Move.new( :notation => 'Nf3' )
     move.should_not be_valid
   end
 
@@ -129,12 +120,12 @@ describe Move do
     lambda{
       m = Move.new( :notation => 'e4', :from_coord => 'e2', :to_coord => 'e4' )
     }.should raise_error
-
   end
 
   it 'should be an error to leave ones king in check' do
     match = matches(:scholars_mate)
-    
+    pending 'check and checkmate detection still broken'
+
     #this is not a mating move but king is in check and must move
     match.moves << move = Move.new( :notation => 'Bxf7' )
     

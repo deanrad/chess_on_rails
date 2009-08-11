@@ -77,29 +77,30 @@ class Move < ActiveRecord::Base
 
     if self[:from_coord].blank? && @possible_movers && @possible_movers.length > 1
       errors.add :notation, "Ambiguous move #{notation}. Clarify as in Ngf3 or R2d4, for example"
-      return 
+      return false
     end
 
     if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
-      errors.add :notation, "The notation #{notation} doesn't specify a valid move" and return 
+      errors.add :notation, "The notation #{notation} doesn't specify a valid move" and return false
     end
     
     #ensure the validity of the coordinates we have whether specified or inferred
     [from_coord, to_coord].each do |coord|
-      errors.add_to_base "#{coord} is not a valid coordinate" unless Chess.valid_position?( coord )
+      errors.add_to_base "#{coord} is not a valid coordinate" and return false unless @board.valid_position?( coord )
     end
 
     #verify allowability of the move
-    errors.add_to_base "No piece present at #{from_coord} on this board" and return unless @piece_moving
+    errors.add_to_base "No piece present at #{from_coord} on this board" and return false unless @piece_moving
 
     unless @piece_moving.allowed_moves(@board).include?( to_coord.to_sym ) 
-      errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" and return
+      errors.add_to_base "#{@piece_moving.function} not allowed to move to #{to_coord}" and return false
     end
 
     #can not leave your king in check at end of a move
     new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
     if new_board.in_check?( @piece_moving.side )
       errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
+      return false
     end
 
   end

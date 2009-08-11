@@ -1,12 +1,14 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Board do
-  
   it 'should know a valid position by notation' do
-    assert    Chess.valid_position?('a1')
-    assert  ! Chess.valid_position?('n9')
-    assert  ! Chess.valid_position?('a9')
-    assert  ! Chess.valid_position?('1a')
+    match = matches(:unstarted_match)
+    board = match.board
+    board.valid_position?(:a1).should == true
+    board.valid_position?(:n9).should == false
+    board.valid_position?(:a9).should == false
+    board.valid_position?('1a').should == false
+    board.valid_position?('a1').should == true
   end
   
   it 'a pawn on its home square can move one or two' do
@@ -17,8 +19,7 @@ describe Board do
     Pawn.should === pawn
     pawn.allowed_move?([0,1], 2).should == true
     pawn.allowed_move?([0,2], 2).should == true
-
-    pawn.allowed_moves(board).should == [:d3, :d4]
+    pawn.allowed_moves(board).should == [:d4, :d3]
   end
 
   it 'a bishop can not move if it is obstructed' do
@@ -70,10 +71,10 @@ describe Board do
   it 'should record the en_passant square for a duration of one move' do
     match = matches(:unstarted_match)
     match.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
-    match.board.en_passant_square.should == 'e3'
+    match.board.en_passant_square.should == :e3
 
     match.moves << Move.new(:from_coord => 'e7', :to_coord => 'e5')
-    match.board.en_passant_square.should == 'e6'
+    match.board.en_passant_square.should == :e6
 
     match.moves << Move.new(:notation => 'Nc3')
     match.board.en_passant_square.should == nil
@@ -91,10 +92,10 @@ describe Board do
 
     board.en_passant_square.to_sym.should == :d6
     
+    assert board.en_passant_capture?( :e5, :d6 )
+    # pending 'reenable en_passant!'
     board[:e5].allowed_moves(board).should include(:d6, :e6)
     
-    assert board.en_passant_capture?( 'e5', 'd6' )
-
     match.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
     
     assert_equal 'd5', match.moves.last.captured_piece_coord
@@ -103,8 +104,8 @@ describe Board do
 
   it 'en_passant should not be possible for single stepped opponent pawn' do
     m = matches(:unstarted_match)
-    m.moves << Move.new(:notation => 'e4') << Move.new(:notation => 'd6')
-    m.moves << Move.new(:notation => 'e5') << Move.new(:notation => 'd5')
+    m << 'e4'; m << 'd6'
+    m << 'e5'; m << 'd5'
 
     b = m.board
     b[:e5].allowed_moves(b).should_not include(:e5)

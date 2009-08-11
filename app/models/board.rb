@@ -1,10 +1,13 @@
+require 'piece'
 # A Board is a snapshot of a match at a moment in time, implemented as a hash
 # whose keys are positions and whose values are the pieces at those positions
 class Board < Hash
 
-  # the to, from, and enpassant ranks for each side
-  EN_PASSANT_CONFIG = {:white => [2, 4, 3], :black => [7, 5, 6] }
+  extend ActiveSupport::Memoizable
+  include KnowledgeOfBoard
+  memoize :all_positions
 
+  # bring in the ability to notate boards as Forsyth-Edwards notation
   include Fen
 
   # if true, this board instance is used for computation only, otherwise it is
@@ -31,42 +34,52 @@ class Board < Hash
   # Creates a board initialized at the default starting position, or from FEN if given
   def initialize( start_pos = nil )
     return _initialize_fen( start_pos ) if start_pos
-    Chess.initial_pieces.each{ |piece, pos| self[pos] = piece }
+    reset!
     self.kingside_castle_available  = true
     self.queenside_castle_available = true
   end
 
   # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
-  def [] x
-    super(x.to_s)
+  def [] pos
+    pos = pos.to_sym unless Symbol===pos
+    super(pos)
   end
-  
-  def each_square &block
-    "12345678".each_char do |rank|
-      "abcdefgh".each_char do |file|
-        yield "#{file}#{rank}"
+
+  # Resets the board to initial position
+  def reset!
+    PAWN_RANKS.each do |rank, side|
+      POSITIONS[8 - rank].each do |pos|
+        self[pos] = Pawn.new(side)
+      end
+    end
+
+    HOME_RANKS.each do |rank, side|
+      POSITIONS[8 - rank].each_with_index do |pos, file_idx|
+        disc, func = HOME_LINEUP[file_idx]
+        self[pos] = ::Piece.class_for(func).new(side, disc)
       end
     end
   end
 
+  
   # updates internals with a given move played
   # Dereferences any existing piece we're moving onto or capturing enpassant
   # Updates our EP square or nils it out
   def play_move!( m )
     #$stderr.puts "Recording move #{m.from_coord}->#{m.to_coord} on board instance #{self.object_id}" unless self.hypothetical
+    from_coord, to_coord, captured_piece_coord = [m.from_coord.to_sym, m.to_coord.to_sym, m.captured_piece_coord && m.captured_piece_coord.to_sym]
+    self.delete_if { |pos, piece| pos == to_coord || pos == captured_piece_coord }
 
-    self.delete_if { |pos, piece| pos == m.to_coord || pos == m.captured_piece_coord }
-
-    piece_moved = self.delete(m.from_coord)
-    self[m.to_coord] = piece_moved
+    piece_moved = self.delete(from_coord)
+    self[to_coord] = piece_moved
 
     if m.castled==1
-      castling_rank = m.to_coord.rank.to_s
+      castling_rank = to_coord.rank.to_s
       [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, new_rook_file, orig_rook_file|
         #update the position of the rook corresponding to the square the king landed on
-	if m.to_coord.file == king_file 
+	if to_coord.file == king_file 
 	   rook = self.delete("#{orig_rook_file}#{castling_rank}")
-	   self["#{new_rook_file}#{castling_rank}"] = rook
+	   self[:"#{new_rook_file}#{castling_rank}"] = rook
 	end
       end
     end
@@ -85,7 +98,7 @@ class Board < Hash
     ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
     self.en_passant_square = ( piece_moved.function == :pawn &&
                            m.from_coord.rank == ep_from_rank && 
-                           m.to_coord.rank == ep_to_rank ) ? m.from_coord.file + ep_rank.to_s : nil
+                           m.to_coord.rank == ep_to_rank ) ? (m.from_coord.file + ep_rank.to_s).to_sym : nil
 
     #reflect promotion
     if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
@@ -145,6 +158,7 @@ class Board < Hash
     [pos, piece]
   end
   
+  # Answers whether the side argument passed (:white or :black) is in check.
   def in_check?( side )
     king_pos, king  = detect do |pos, piece| 
       piece && piece.function==:king && piece.side == side 
@@ -205,7 +219,7 @@ class Board < Hash
     end  
     output + "\n"
   end
-  
+
   def inspect; "\n" + to_s; end
 
 end

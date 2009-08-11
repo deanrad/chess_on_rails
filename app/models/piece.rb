@@ -73,8 +73,8 @@ class Piece
     moves = []
 
     mypos = board.index(self) 
-    board.each_square do |sq|
-      moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
+    board.all_positions.each do |sq|
+      moves << sq if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
     end
 
     moves
@@ -96,7 +96,7 @@ class Piece
       dest_piece = board[ mypos ^ vector ]
 
       #TODO Pawn#allowed_moves(board) should provide this case
-      return false if (mypos ^ vector)==board.en_passant_square
+      return false if board.en_passant_square && (mypos ^ vector)==board.en_passant_square.to_sym
 
       return true  unless dest_piece && dest_piece.side != self.side
     end
@@ -146,5 +146,15 @@ class Piece
     return letter.send( @side==:white ? :upcase : :downcase )
   end
 
+  # maps the function to the Ruby class instance
+  def self.class_for function
+    self.const_get(function.to_s.titleize)
+  end
 end
 
+require 'piece/king'
+require 'piece/queen'
+require 'piece/knight'
+require 'piece/rook'
+require 'piece/bishop'
+require 'piece/pawn'

@@ -59,7 +59,7 @@ class Match < ActiveRecord::Base
   # cache this board and make it the most recent one
   def save_board( last_move )
     recent = boards[boards.keys.max]
-    @boards[ @boards.keys.max + 1 ] = recent.dup.play_move!( last_move )
+    #@boards[ @boards.keys.max + 1 ] = recent.dup.play_move!( last_move )
   end
 
   def check_for_checkmate(last_move)
@@ -127,7 +127,7 @@ class Match < ActiveRecord::Base
 
     queue = MoveQueue.new(queue) unless MoveQueue === queue
 
-    expected, response = queue.shift(2)
+    expected, response = queue.shift, queue.shift
     
     if expected != m.notation
       opponent.update_attribute(:move_queue, nil) and return 
@@ -150,7 +150,7 @@ class Match < ActiveRecord::Base
     moves.each_with_index do |mv, idx|
       board = boards[idx + 1] = Board.new
       board.match = self
-      0.upto(idx){ |i| board.play_move! moves[i] }
+      0.upto(idx){ |i| board.play_move! moves[i] if moves[i].valid? }
     end
     boards
   end

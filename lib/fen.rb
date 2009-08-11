@@ -28,7 +28,8 @@ module Fen
     fen = ''
     consec_space = 0; this_file = 1
 
-    self.each_square do |pos|
+    # from whites lower left, across each file in ascending order, then in ascending rank
+    Board::POSITIONS.reverse.flatten.each do |pos|
       piece = self[pos]
       if piece
         fen << (consec_space > 0 ? consec_space.to_s : '') << piece.abbrev and consec_space=0 
@@ -71,7 +72,7 @@ module Fen
     end
     @pieces << piece.to_piece
     # piece.position = "#{(current_file+96).chr}#{rank+1}"
-    self["#{(current_file+96).chr}#{rank+1}"] = piece.to_piece
+    self["#{(current_file+96).chr}#{rank+1}".to_sym] = piece.to_piece
   end
   
   # if we have a fen string, whatever that fen string says
@@ -111,19 +112,9 @@ module Fen
     attr_accessor :role
     attr_accessor :side 
 
-    # yes, i know this is less a property of the piece than the board. It's
-    # handy to tote the position around with the piece for now.
-    attr_accessor :position 
-
-    # converts to the Piece object of our app with its crazy 'type' field
+    # Converts to the Fen::Piece object to a descendant of ::Piece
     def to_piece
-      type = case role
-        when :pawn then :a_pawn
-        when :queen then :queen
-        when :king  then :king
-        else :"kings_#{role}"
-      end
-      ::Piece.new( side, type )
+      Kernel.const_get(@role.to_s.classify).new( @side )
     end
   end
 end
