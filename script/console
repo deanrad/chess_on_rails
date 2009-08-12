@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 require File.dirname(__FILE__) + '/../config/boot'
-require 'commands/console'
+#require 'commands/console'
+#puts $: * "\n"
+require 'lib/console_with_dsl' # will this pull in our module *inside* the irb shell ?
