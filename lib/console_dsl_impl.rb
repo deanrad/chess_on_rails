@@ -17,7 +17,7 @@ EOF
     base.instance_eval do
       # for initial capital letter notation moves Nc4
       def const_missing(name)
-        #puts "Eventually we will handle this, and it'll be beautiful, but for now... "
+        puts "Eventually we will handle this, and it'll be beautiful, but for now... "
         move name
       end
       # see later in the module where the method_missing definition is more normally pulled in
@@ -49,10 +49,10 @@ EOF
 
   ######## methods to allow notation typing #########
   # delegate things typed to the move method
-  def method_missing(name, *args)
+  #def method_missing(name, *args)
     #super unless name.grep(/[1-8]/)
-    move name
-  end
+  #  move name
+  #end
 
   # returns a lambda to be called in the scope of the caller ???
   def move name
