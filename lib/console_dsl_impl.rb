@@ -26,7 +26,12 @@ EOF
   end
 
   ######## user interaction methods #########
-  attr_accessor :current_match
+  def current_match
+    $current_match
+  end
+  def current_match= m
+    $current_match = m
+  end
   
   def set match
     self.current_match = match
