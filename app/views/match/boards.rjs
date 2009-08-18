@@ -7,6 +7,7 @@ end
 
 if match.turn_of?(current_player)
   match.board.each do |pos, piece|
+    next unless piece
     page << "current_allowed_moves['#{pos}'] = \"#{piece.allowed_moves(match.board).join(' ')}\""
   end
 end
