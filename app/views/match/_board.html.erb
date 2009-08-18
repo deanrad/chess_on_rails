@@ -2,6 +2,7 @@
 <!-- allowed moves -->
 var current_allowed_moves = [];
 <%  match.board.each do |pos, piece| -%>
+<%  next unless piece %>
 <%= %Q{current_allowed_moves['#{pos}'] = '#{piece.allowed_moves(match.board).join(' ')}';} %>
 <%  end -%>
 
