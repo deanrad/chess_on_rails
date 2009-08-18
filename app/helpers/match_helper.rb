@@ -25,9 +25,9 @@ module MatchHelper
     @files ||= Board.files(viewed_from_side)
   end
 
-  # the ranks, in order from the viewed_from_side for rendering
+  # the ranks, in order from the viewed_from_side for rendering (and reversed for HTML doc ordering)
   def ranks
-    @ranks ||= Board.ranks(viewed_from_side)
+    @ranks ||= Board.ranks(viewed_from_side).reverse
   end
 
   def chats
