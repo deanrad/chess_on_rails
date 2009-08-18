@@ -32,6 +32,18 @@ module KnowledgeOfBoard
     end
     memoize :all_positions
     
+    def ranks side=:white
+      white_ranks = POSITIONS.reverse.map{ |rank| rank[0].to_s[1..1] }
+      side==:white ? white_ranks : white_ranks.reverse
+    end
+    memoize :ranks
+
+    def files side=:white
+      white_files = POSITIONS[0].map{ |pos| pos.to_s[0..0] }
+      side==:white ? white_files : white_files.reverse
+    end
+    memoize :files
+
     def valid_position? pos
       pos = pos.to_sym unless Symbol===pos
       all_positions.include? pos.to_sym
