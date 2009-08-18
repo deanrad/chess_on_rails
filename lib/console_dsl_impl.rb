@@ -32,17 +32,33 @@ EOF
   def current_match= m
     $current_match = m
   end
+  def m
+    match = current_match
+    def match.inspect
+      board.inspect
+    end
+    match
+  end
+  alias :board :m
   
   def set match
     self.current_match = match
     puts current_match.board.to_s
   end
 
-  # returns the 
+  # returns the match object that the passed identifier argument represents
+  # parameters: ident - if a Match, returns the match, if :new, saves and returns
+  # a new Match, if a Fixnum or Symbol invokes Match.find, or if a string, invokes Match.find_by_name
   def match ident
     case ident
+      when Match
+        ident
       when Fixnum, Symbol
-        Match.find(ident)
+        if ident == :new
+          Match.create!(:white => Player.find(:first), :black => Player.find(:first) )
+        else
+          Match.find(ident)
+        end
       when String
         Match.find_by_name(ident)
     end

@@ -18,6 +18,7 @@ module KnowledgeOfBoard
   # the to, from, and enpassant ranks for each side
   EN_PASSANT_CONFIG = {:white => [2, 4, 3], :black => [7, 5, 6] }
 
+  # Endows the includer (Board) with methods defined in our ClassMethods module
   def self.included base
     super
     base.extend(ClassMethods)

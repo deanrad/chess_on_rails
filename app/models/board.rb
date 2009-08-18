@@ -80,7 +80,7 @@ class Board < Hash
       [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, new_rook_file, orig_rook_file|
         #update the position of the rook corresponding to the square the king landed on
 	if to_coord.file == king_file 
-	   rook = self.delete("#{orig_rook_file}#{castling_rank}")
+	   rook = self.delete(:"#{orig_rook_file}#{castling_rank}")
 	   self[:"#{new_rook_file}#{castling_rank}"] = rook
 	end
       end

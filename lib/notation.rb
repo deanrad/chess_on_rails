@@ -13,13 +13,16 @@ module MoveNotation
   # - if g2 is in K's allowed move list from it's from_coord then we're good
   def infer_coordinates_from_notation
 
-    if self[:notation].include?('O-O')
-      file = self[:notation].include?('O-O-O') ? 'c' : 'g'
+    if notation.include?('O-O')
+      file = notation.include?('O-O-O') ? 'c' : 'g'
       rank = match.next_to_move == :white ? '1' : '8'
-      self[:notation] = "K#{file}#{rank}"
+      self.notation = "K#{file}#{rank}"
     end
 
-    self[:to_coord] =  notation.to_s[-2,2]
+    self.to_coord = notation.gsub( /[#x!?]/, "")[-2,2]
+
+    logger.info "infer_coordinates_from_notation: Inferred a move to #{to_coord} from notation: #{notation}"
+
     function = NOTATION_TO_FUNCTION_MAP[ notation[0,1] ] || :pawn
     @possible_movers = board.select do |pos, piece| 
       piece.side == match.next_to_move && 

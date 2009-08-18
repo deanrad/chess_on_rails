@@ -59,7 +59,7 @@ class Match < ActiveRecord::Base
   # cache this board and make it the most recent one
   def save_board( last_move )
     recent = boards[boards.keys.max]
-    #@boards[ @boards.keys.max + 1 ] = recent.dup.play_move!( last_move )
+    @boards[ @boards.keys.max + 1 ] = recent.dup.play_move!( last_move )
   end
 
   def check_for_checkmate(last_move)
