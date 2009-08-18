@@ -7,7 +7,7 @@ end
 
 if match.turn_of?(current_player)
   match.board.each do |pos, piece|
-    next unless piece
+    next unless piece # TODO find out why we need this now - it used to be boards didnt yield positions that didnt have pieces
     page << "current_allowed_moves['#{pos}'] = \"#{piece.allowed_moves(match.board).join(' ')}\""
   end
 end
