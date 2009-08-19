@@ -11,16 +11,17 @@
 	<meta name="robots" content="index, follow" />
 	
 	<!-- JavaScript -->
-	<script type="text/javascript" src="js/prototype.js"></script>
-	<script type="text/javascript" src="js/effects.js"></script>
-	<script type="text/javascript" src="js/stereotabs.js"></script>
+	<script type="text/javascript" src="javascripts/prototype.js"></script>
+	<script type="text/javascript" src="javascripts/effects.js"></script>
+	<script type="text/javascript" src="javascripts/stereotabs.js"></script>
 
 	<script type="text/javascript">
 	//<![CDATA[
 	Event.observe(window, 'load', loadTabs, false);
 
   function loadTabs() {
-    var tabs = new tabset('container'); // name of div to crawl for tabs and panels
+    var tabs = new tabset('container');   // name of div to crawl for tabs and panels
+    tabs.effects = false;
     tabs.autoActivate($('tab_features')); // name of tab to auto-select if none exists in the url
   }
   
