@@ -22,6 +22,8 @@ body {font-family: Arial; font-size: 10pt;}
 .hoverActive { background-color: #00ff00; }
 */
 
+/* TODO should migrate inline styles to stylesheet, and css should mirror markup structure */
+
 h1 { font-size: 14pt; font-weight: bold }
 .board_table td{
   width:40px; height:40px;
@@ -29,6 +31,8 @@ h1 { font-size: 14pt; font-weight: bold }
   margin:0px; padding: 0px;
  }
 
+
+#peripheral_to_board{ margin: 0 0 0 20px; padding: 8px; position:relative; left: 12px; }
 .move_creator_parent { clear: all; float: left; }
 .instructions { display:none }
 #move_error { color: #ff4444 }
@@ -37,12 +41,12 @@ h1 { font-size: 14pt; font-weight: bold }
 .board_table .rank {width: 20px}
 .board_table .file {height: 20px}
 
-#chat {text-align: left; padding-left: 10px}
+#chat {text-align: left; padding-left: 10px; overflow:auto; border:solid 1px black; height: 220px; width: 180px;}
 .chat_line{ font-family: sans-serif; font-size: smaller }
 
 .move_list {
     float:left; 
-    width:180px; height:300px; 
+    width:180px; height:220px; 
     border:solid 1px black; 
     overflow:auto; 
     font-family: sans-serif;

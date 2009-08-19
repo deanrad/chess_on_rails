@@ -37,23 +37,22 @@
 </script>
 </div>
 
-<!-- TODO better visuals for this - paul -->
-<span id="move_indicator_parent" style="float:left">
-<%= render :partial => "move_indicator" %> 
-</span>
-
 <div id="board_parent" style="float:left; clear:left;">
-<%= render :partial => "board" %>
+  <!-- TODO better visuals for move_indicator - paul -->
+  <span id="move_indicator_parent" style="float:left">
+    <%= render :partial => "move_indicator" %> 
+  </span>
+
+  <%= render :partial => "board" %>
 </div>
 
+<div id="peripheral_to_board">  
 <% if match.side_of(current_player) %>
-<div id="move_creator_parent" style="float:left;">
+<div id="move_creator_parent" >
   <%= render :partial => "move/create" %>
   <%= render :partial => "match/actions" %>
 </div>
 <% end %>
-
-<div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">  
 
   <div id="move_list" class="move_list">
     <%= render :partial => 'move_list' %>
@@ -62,7 +61,7 @@
   <% if match.side_of(current_player) %>
   <div id="chat_container" style="float:left;">
     <%= periodically_call_remote( :url => match_chat_url(match), :method => :get, :frequency => 7, :update => 'chat') %>
-    <div id="chat" style="overflow:auto; border:solid 1px black; height: 300px; width: 180px;">
+    <div id="chat">
       Chat loading..
     </div>
     <div id="chat_form" style="float:left;">
