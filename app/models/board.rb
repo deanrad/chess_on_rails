@@ -20,11 +20,11 @@ class Board < Hash
 
   # flags true initially, and becomes false for this and future boards in the match
   # if king or kings rook is moved. Other castling rules still apply
-  attr_accessor :kingside_castle_available
+  attr_accessor :white_kingside_castle_available, :white_queenside_castle_available
+  attr_accessor :black_kingside_castle_available, :black_queenside_castle_available
 
   # flags true initially, and becomes false for this and future boards in the match
   # if king or queens rook is moved. Other castling rules still apply
-  attr_accessor :queenside_castle_available
   
   alias :pieces	   :values
   alias :positions :keys
@@ -33,8 +33,10 @@ class Board < Hash
   def initialize( start_pos = nil )
     return _initialize_fen( start_pos ) if start_pos
     reset!
-    self.kingside_castle_available  = true
-    self.queenside_castle_available = true
+    self.white_kingside_castle_available  = true
+    self.white_queenside_castle_available = true
+    self.black_kingside_castle_available  = true
+    self.black_queenside_castle_available = true
   end
 
   # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
@@ -89,10 +91,11 @@ class Board < Hash
     # prevent future castling once kings moved
     case piece_moved.function 
     when :king
-      self.kingside_castle_available  = false
-      self.queenside_castle_available = false
+      self.send("#{piece_moved.side}_kingside_castle_available=", false)
+      self.send("#{piece_moved.side}_queenside_castle_available=", false)
     when :rook
-      self.send("%side_castle_available=" % piece_moved.discriminator, false)
+      flank = piece_moved.discriminator.to_s.singularize
+      self.send("#{piece_moved.side}_#{flank}side_castle_available=", false)
     end
     
     #TODO investigate why this method is getting called multiply per moves << Move.new

@@ -1,7 +1,7 @@
 # Extends a board to allow round-tripping from Forsyth-Edwards (FEN) notation
 module Fen
 
-  # called by Board.initialize to populate the pieces array
+  # Called by Board.initialize to populate itself.
   def _initialize_fen str
     @pieces = []  
 
@@ -22,8 +22,7 @@ module Fen
     end
   end
 
-  # spits out the current state of the board
-  # TODO also spit out the en_passant_square now that we know to save it 
+  # Returns the current state of the board as a string of FEN.
   def to_fen
     fen = ''
     consec_space = 0; this_file = 1
@@ -44,7 +43,25 @@ module Fen
       end
     end
 
-     fen.chop
+    fen.chop
+
+    # field 2 - the next to move 
+    if match
+      fen << " %s" % match.next_to_move.to_s[0..0]
+    end
+
+    # field 3 - castlings available
+    castle_codes = [[:white_kingside, 'K'], [:white_queenside, 'Q'], [:black_kingside, 'k'], [:black_queenside, 'q']]
+    open_castles = castle_codes.inject("") do |c, (sym, cd) |
+      c << cd if self.send("#{sym}_castle_available")
+      c
+    end
+    fen << " %s" % (open_castles.blank? ? "-" : open_castles)
+
+    # field 4 - en passant square
+    fen << " %s" % (self.en_passant_square || "-")
+
+    fen
   end
 
   # verifies validity or throws error

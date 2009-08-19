@@ -11,7 +11,7 @@ class King < Piece
     all_moves = super
 
     [:queens, :kings].each do |flank|
-      if board.send("#{flank}ide_castle_available") && 
+      if board.send("#{self.side}_#{flank}ide_castle_available") && 
          board.castling_squares_empty?(self.side, flank)
          
          all_moves << "#{flank.castling_file}#{side.back_rank}".to_sym
