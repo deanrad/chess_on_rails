@@ -1,6 +1,6 @@
 
 <% form_for :move, :html => {:id => 'new_move_form'}, :url => create_match_moves_path(match.id)  do |f| %>
-    Notation: <%= f.text_field :notation  %> or... <br/>
+    Notation: <%= f.text_field :notation, :title => 'Enter a single move, or a list of several moves, separated by space to create a move queue. If the notation of your opponents move matches your prediction, then your next move will be played automatically.'  %> or... <br/>
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
     <%= f.hidden_field :match_id, :value => match.id %><br/>
