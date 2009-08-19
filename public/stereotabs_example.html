@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Stereotabs: Prototype Scriptaculous Tabs Made Easy</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="prototype tabs, javascript tabs, scriptaculous" />
+	<meta name="description" content="Tiny javascript for creating tabs using prototype.js and scriptaculous" />
+
+	<meta name="robots" content="index, follow" />
+	
+	<!-- JavaScript -->
+	<script type="text/javascript" src="js/prototype.js"></script>
+	<script type="text/javascript" src="js/effects.js"></script>
+	<script type="text/javascript" src="js/stereotabs.js"></script>
+
+	<script type="text/javascript">
+	//<![CDATA[
+	Event.observe(window, 'load', loadTabs, false);
+
+  function loadTabs() {
+    var tabs = new tabset('container'); // name of div to crawl for tabs and panels
+    tabs.autoActivate($('tab_features')); // name of tab to auto-select if none exists in the url
+  }
+  
+	//]]>
+	</script>
+	<style type="text/css" >
+    body {
+      color:#444444;
+      font-family:'Lucida Grande',Verdana,Arial;
+      font-size:12px;
+    }
+	  ul#tabnav {
+	    background-color:#C8CFAD;
+      border-bottom:2px solid #B1BA8D;
+      border-top:2px solid #B1BA8D;
+      height:35px;
+      margin:0pt;
+      padding:0pt;
+	    display:block;
+      line-height:35px;
+	  }
+	  ul#tabnav li {
+	    margin:0;
+	    padding:0;
+	    float:left;
+      height:35px;
+      list-style-type:none;
+      position:relative;
+	  }
+	  ul#tabnav li a {
+      color:#4D5431;
+      font-size:16px;
+      font-weight:bold;
+      line-height:35px;
+      text-decoration:none;
+      display:block;
+      float:left;
+      height:35px;
+      margin:0pt 0pt 0pt 5px;
+      padding:0pt 6px;
+      position:relative;
+	  }
+	  ul#tabnav li a:hover, ul#tab li a.active {
+	    background:#FFFFFF none repeat scroll 0%;
+	  }
+	  .panel {
+	    background:#EAE6C9 none repeat scroll 0%;
+      display:block;
+	  }
+	  .content {
+	    line-height:15px;
+      padding:13px 35px 15px 15px;
+      text-align:left;
+	  }
+	  
+	  /* non-tab related styles */
+	  pre.code {
+      border:1px solid #999999;
+      margin-top:2ex;
+      overflow:auto;
+      padding:10px;
+      width:80%;
+      background-color:#EEEEEE;
+      clear:both;
+      color:#000000;
+    }
+    code, pre.code {
+      font-family:'Courier New',Courier,Fixed;
+      font-size:1.1em;
+    }
+	</style>
+</head>
+
+<body>
+<h1>Stereotabs: Simple Tabs Using Prototype.js</h1>
+
+<div id="container">
+  <ul id="tabnav">
+    <li><a href="#features" id="tab_features" class="tab">Features</a></li>
+    <li><a href="#setup" id="tab_setup" class="tab">Setup</a></li>
+    <li><a href="#configuration" id="tab_configuration" class="tab">Configuration</a></li>
+  </ul>
+  <a name="features"></a>
+  <div id="panel_features" class="panel">
+    <div class="content">
+      <h1>Features</h1>
+      <p>Stereotabs is a small and lightweight script that allows you to easily add interactive tabs to your web pages.
+        <ul>
+          <li>Unobtrusive &raquo; All behaviors are added after page load and don't muck up your html. Visitors without javascript will see all of your content.</li>
+          <li>Simple &raquo; You can add it to your existing pages quickly with just a few lines.</li>
+          <li>Small &raquo; Uncompressed the source is 82 lines long. 2k! 
+          <li>It Remembers &raquo; Your tabs are actually links to page anchors. Reload the page and the same tab will remain active.</li> 
+        </ul>
+    </div>
+  </div>
+  <a name="setup"></a>
+  <div id="panel_setup" class="panel">
+    <div class="content">
+      <h1>Setup</h1>
+      <p><strong>Download the code.</strong><br />
+        Stereotabs requires prototype.js and effects.js (part of the scriptaculous library). If you don't want the fade-in / fade-out effect, you can do without effects.js</p>
+      <p><strong>Include the source files.</strong><br />
+        <pre class="code"><code>
+&lt;script type=&quot;text/javascript&quot; src=&quot;js/prototype.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;js/effects.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;js/stereotabs.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+      </p>
+      
+      <p><strong>Initialize the tabs.</strong><br />
+        <pre class="code"><code>
+&lt;script type=&quot;text/javascript&quot;&gt;
+//&lt;![CDATA[
+Event.observe(window, &apos;load&apos;, loadTabs, false);
+function loadTabs() {
+  var tabs = new tabset(&apos;container&apos;); // name of div to crawl for tabs and panels
+  tabs.autoActivate($(&apos;tab_first&apos;)); // name of tab to auto-select if none exists in the url
+}
+//]]&gt;
+&lt;/script&gt;
+</code></pre></p>
+
+    <p><strong>Create your tabs.</strong><br />
+      <pre class="code"><code>
+&lt;div id=&quot;container&quot;&gt;
+  &lt;ul id=&quot;tabnav&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;#first&quot; id=&quot;tab_first&quot; class=&quot;tab&quot;&gt;Tab One&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;#second&quot; id=&quot;tab_second&quot; class=&quot;tab&quot;&gt;Tab Two&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;#third&quot; id=&quot;tab_third&quot; class=&quot;tab&quot;&gt;Tab Three&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div id=&quot;panel_first&quot; class=&quot;panel&quot;&gt;
+    Here is the content for the first tab.
+  &lt;/div&gt;
+  &lt;div id=&quot;panel_second&quot; class=&quot;panel&quot;&gt;
+    Here is the content for the second tab.
+  &lt;/div&gt;
+  &lt;div id=&quot;panel_third&quot; class=&quot;panel&quot;&gt;
+    Here is the content for the third tab.
+  &lt;/div&gt;     
+&lt;/div&gt;
+    </code></pre>
+    </p>
+
+
+    </div>
+  </div>
+  <a name="configuration"></a>
+  <div id="panel_configuration" class="panel">
+    <div class="content">
+      <h1>Configuration</h1>
+      <p>You can create a tab set and pass it a few options to customize it to your current page structure. By default, the code will search for tabs by using the class name "tab", and tab content using the class name "panel". It also will apply the class name "selected" to the currently selected tab.</p>
+      <p>You may also have noticed that the id attributes for the tags and tag content started with either "tab_" or "panel_". This is a way to link a tab with its specific content while still keeping the ids unique. You can change these in the configuration as well.</p>
+      <p>Finally, if you wanted, you can turn off the fade effect, and also change the event that triggers the tab activation.</p>
+      <p>Below is an example of how you can pass options to your tab set.</p>
+        <pre class="code"><code>
+var tabs = new tabset(&apos;container&apos;, {
+  classNames: {
+    tab:        &apos;tab&apos;,      // class name used to identify the tabs
+    panel:      &apos;panel&apos;,    // class name used to identify the tab content
+    tabActive:  &apos;selected&apos;  // class name added to the active tab
+  },                        
+  ids: {                    
+    tab:        &apos;tab_&apos;,     // what to strip off the tab id to get the tab name
+    panel:      &apos;panel_&apos;    // what to strip off the tab content id to get the tab name
+  },                        
+  onEvent:      &apos;click&apos;,    // perhaps you want to activate on mouseover? not recommended
+  effects:      true        // set this to false if you do not want to include effects.js
+});
+      </code></pre>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
