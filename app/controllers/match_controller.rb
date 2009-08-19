@@ -1,6 +1,4 @@
 class MatchController < ApplicationController
-  include MatchHelper
-
   before_filter :authorize
   
   # GET /match/1
@@ -74,5 +72,10 @@ class MatchController < ApplicationController
     end
   end
   helper_method :match #, :board, :your_turn, :files, :ranks, :last_move, :status_has_changed
+
+  def gameplay
+    @gameplay = match.gameplays.send( :white )
+  end
+  helper_method :gameplay
 
 end

@@ -1,13 +1,23 @@
 module MatchHelper
 
+  def self.extended base
+    self.methods.each do |mymeth|
+      base.class_eval <<-"EOF"
+        attr_accessor :#{mymeth}      
+        helper_method :#{mymeth}      
+      EOF
+    end
+  end
+
   def board
     @board ||= match.board
   end
 
+  # TODO this should explicitly deal with non-logged in users
   def viewed_from_side
     @viewed_from_side ||= (current_player == match.player1) ? :white : :black
   end
-
+  
   def your_turn
     @your_turn ||= match.turn_of?( current_player )
   end
