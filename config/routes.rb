@@ -14,9 +14,12 @@ ActionController::Routing::Routes.draw do |map|
   map.create_move 'match/:match_id/moves/:notation', :controller => 'move', :action => 'create', :defaults => { :notation => nil }
 
   map.resources :match , :except => [:delete], :shallow => true, :collection => { :create => :post } do |match|
-    match.resources :moves, :controller => :move, :collection => { :create => :post }
-    match.resource :chat
+    match.resources :moves, :controller => :move, :only => [:create], :collection => { :create => :post }
+    match.resource :chat #TODO limit routes to those needed, :only => [:create, :index, :chat]
   end
+
+  #allow updating of gameplays via REST
+  map.resources :gameplays, :only => [:show, :update]
 
   #sets controller courtesy of Sean
   map.resource :set, :member => {:change => :post}
