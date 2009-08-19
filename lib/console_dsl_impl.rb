@@ -15,11 +15,12 @@ EOF
     
     # put handlers in place to allow arbitrary typing of moves at the prompt
     base.instance_eval do
+      # TODO - allow const_missing moves agian- maybe with alias method chain ?
       # for initial capital letter notation moves Nc4
-      def const_missing(name)
-        puts "Eventually we will handle this, and it'll be beautiful, but for now... "
-        move name
-      end
+      #def const_missing(name)
+      #  puts "Eventually we will handle this, and it'll be beautiful, but for now... "
+      #  move name
+      #end
       # see later in the module where the method_missing definition is more normally pulled in
     end
 
@@ -40,6 +41,7 @@ EOF
     match
   end
   alias :board :m
+  def last; :last ;end
   
   def set match
     self.current_match = match
