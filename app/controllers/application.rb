@@ -4,8 +4,6 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 
-  include MatchHelper # ....even this one...
-
   # who's authenticated, visible to controllers and views
   attr_accessor :current_player
   helper_method :current_player
@@ -17,6 +15,7 @@ class ApplicationController < ActionController::Base
     unless self.current_player
       flash[:notice] = "Login is required in order to take this action."
       session[:original_uri] = request.request_uri
+      redirect_to :controller => 'authentication' and return false
     end
   end
 

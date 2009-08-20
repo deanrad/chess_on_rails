@@ -21,7 +21,6 @@ class Move < ActiveRecord::Base
   def board
     @board ||= match.board
   end
-  private :board
 
   def before_validation
     return true unless new_record? #may have already been called by the association
@@ -34,7 +33,7 @@ class Move < ActiveRecord::Base
     split_off_move_queue
 
     #determine coordinates from notation
-    infer_coordinates_from_notation if !self[:notation].blank? && (from_coord.blank? || to_coord.blank?)
+    infer_coordinates_from_notation if !notation.blank? && (from_coord.blank? || to_coord.blank?)
 
     # validations will get us later
     return false unless from_coord
@@ -122,10 +121,11 @@ class Move < ActiveRecord::Base
     logger.info "infer_coordinates_from_notation: Inferred a move to #{to_coord} from notation: #{notation}"
 
     function = NOTATION_TO_FUNCTION_MAP[ notation[0,1] ] || :pawn
-    @possible_movers = self.send(:board).select do |pos, piece| 
+
+    @possible_movers = @board.select do |pos, piece| 
       piece.side == match.next_to_move && 
       piece.function == function && 
-      piece.allowed_moves(board).include?( self[:to_coord].to_sym )
+      piece.allowed_moves(@board).include?( self[:to_coord].to_sym )
     end
 
     self[:from_coord] = @possible_movers[0][0].to_s and return if @possible_movers.length == 1
@@ -134,7 +134,6 @@ class Move < ActiveRecord::Base
     movers = @possible_movers.select { |pos, piece| matcher.match(pos.to_s) }
 
     self[:from_coord] = movers[0][0].to_s and return if movers.length == 1
-
   end
 
   # Returns the notation for a given move - depends on alot of things - whether check was given, a capture made, etc..

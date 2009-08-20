@@ -72,7 +72,7 @@ class MatchController < ApplicationController
       Match.new # params[:match]?
     end
   end
-  helper_method :match #, :board, :your_turn, :files, :ranks, :last_move, :status_has_changed
+  helper_method :match
 
   def gameplay
     @gameplay = match.gameplays.send( :white )
