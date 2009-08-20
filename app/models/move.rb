@@ -1,7 +1,4 @@
-require 'notation'
-
 class Move < ActiveRecord::Base
-  include MoveNotation
 
   belongs_to :match
   before_save Proc.new{|me| raise ActiveRecord::ReadOnlyRecord unless me.new_record?}, 
@@ -24,7 +21,6 @@ class Move < ActiveRecord::Base
   def board
     @board ||= match.board
   end
-  private :board
 
   def before_validation
     return true unless new_record? #may have already been called by the association
@@ -37,7 +33,7 @@ class Move < ActiveRecord::Base
     split_off_move_queue
 
     #determine coordinates from notation
-    infer_coordinates_from_notation if !self[:notation].blank? && (from_coord.blank? || to_coord.blank?)
+    infer_coordinates_from_notation if !notation.blank? && (from_coord.blank? || to_coord.blank?)
 
     # validations will get us later
     return false unless from_coord
@@ -103,6 +99,89 @@ class Move < ActiveRecord::Base
       return false
     end
 
+  end
+
+### notation methods ###
+  NOTATION_TO_FUNCTION_MAP = { 'K' => :king, 'Q' => :queen,
+                               'R' => :rook, 'N' => :knight, 'B' => :bishop  }
+
+  # available to move model, sets fields on self based on self[:notation]
+  # temporarily expands the castling notation to Kg2 
+  # - if g2 is in K's allowed move list from it's from_coord then we're good
+  def infer_coordinates_from_notation
+
+    if notation.include?('O-O')
+      file = notation.include?('O-O-O') ? 'c' : 'g'
+      rank = match.next_to_move == :white ? '1' : '8'
+      self.notation = "K#{file}#{rank}"
+    end
+
+    self.to_coord = notation.gsub( /[#x!?]/, "")[-2,2]
+
+    logger.info "infer_coordinates_from_notation: Inferred a move to #{to_coord} from notation: #{notation}"
+
+    function = NOTATION_TO_FUNCTION_MAP[ notation[0,1] ] || :pawn
+
+    @possible_movers = @board.select do |pos, piece| 
+      piece.side == match.next_to_move && 
+      piece.function == function && 
+      piece.allowed_moves(@board).include?( self[:to_coord].to_sym )
+    end
+
+    self[:from_coord] = @possible_movers[0][0].to_s and return if @possible_movers.length == 1
+    disambiguator = notation[-3,1]
+    matcher = (disambiguator =~ /[1-8]/) ? Regexp.new( "^.#{disambiguator}$" ) : Regexp.new( "^#{disambiguator}.$" )
+    movers = @possible_movers.select { |pos, piece| matcher.match(pos.to_s) }
+
+    self[:from_coord] = movers[0][0].to_s and return if movers.length == 1
+  end
+
+  # Returns the notation for a given move - depends on alot of things - whether check was given, a capture made, etc..
+  # - Prefer using file to disambiguate but use rank if file insufficient
+  # - Most pieces have their piecetype abbreviation ( N for knight ), pawns have their file
+  def notate
+    # allow calling outside of activerecord lifecycle
+    analyze_board_position unless @board
+
+    mynotation = @piece_moving.abbrev.upcase.sub('P', from_coord.file)
+    
+    # disambiguate which piece moved if a 'sister_piece' could have moved there as well
+    if( @piece_moving.function==:rook) || (@piece_moving.function==:knight)
+      mynotation = mynotation.file
+
+      sister_piece_pos, sister_piece = @board.sister_piece_of(@piece_moving)
+
+      if( sister_piece != nil && sister_piece.allowed_moves(@board).include?(to_coord.to_sym) )
+        mynotation += ( from_coord.file != sister_piece_pos.file) ? from_coord.file : from_coord.rank.to_s
+      end
+    end
+        
+    if @piece_moved_upon && (@piece_moving.side != @piece_moved_upon.side) || @board.en_passant_capture?( from_coord, to_coord )
+      mynotation += 'x' 
+      captured = true
+    end
+
+    #notate the destination square - a straight append except for noncapturing pawns
+    mynotation = '' if( (@piece_moving.function==:pawn) && !captured )
+    mynotation += to_coord
+        
+    #castling 3 O's if queenside otherwise 2 O's
+    if castled == 1
+      mynotation = 'O-O' + ((to_coord.file=='c') ? '-O' : '' ) 
+    end
+
+    #promotion
+    if @piece_moving.function == :pawn && to_coord.to_s.rank == @piece_moving.promotion_rank
+      self.promotion_choice ||= 'Q'
+      mynotation += "=#{promotion_choice}"
+    end
+    
+    #check/mate
+    @board.consider_move(self) do |b|
+      mynotation += '+' if b.in_check?( @piece_moving.side.opposite )
+    end
+
+    return mynotation
   end
 
 private

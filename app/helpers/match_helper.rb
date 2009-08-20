@@ -1,14 +1,5 @@
 module MatchHelper
 
-  def self.extended base
-    self.methods.each do |mymeth|
-      base.class_eval <<-"EOF"
-        attr_accessor :#{mymeth}      
-        helper_method :#{mymeth}      
-      EOF
-    end
-  end
-
   def board
     @board ||= match.board
   end

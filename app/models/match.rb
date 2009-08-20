@@ -144,7 +144,6 @@ class Match < ActiveRecord::Base
     
   end
 
-  private
   def boards_upto_current_move
     boards = { 0 => Board.new( self[:start_pos] ) }
     moves.each_with_index do |mv, idx|
