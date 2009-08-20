@@ -53,7 +53,7 @@ class Board < Hash
   def reset!
     PAWN_RANKS.each do |rank, side|
       POSITIONS[8 - rank].each do |pos|
-        self[pos] = Pawn.new(side)
+        self[pos] = Pawn.new(side, pos.to_s[0..1])
       end
     end
 
