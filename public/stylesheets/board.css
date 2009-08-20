@@ -46,7 +46,7 @@ h1 { font-size: 14pt; font-weight: bold }
 
 .move_list {
     float:left; 
-    width:180px; height:220px; 
+    width:190px; height:220px; 
     border:solid 1px black; 
     overflow:auto; 
     font-family: sans-serif;

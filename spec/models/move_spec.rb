@@ -55,6 +55,15 @@ describe Move do
     match.gameplays.white.move_queue.should be_blank
   end
 
+  it 'should allow a wildcard character (*) in the queue' do
+    match = matches(:unstarted_match)
+    match.moves << m = Move.new( :notation => 'e4 * d4' )
+    match.moves << m = Move.new( :notation => 'e5' )
+    match.reload ; match.moves.reload
+
+    match.moves.count.should == 3
+  end
+
   it 'should invalidate the move queue if an invalid prediction was made' do
     match = matches(:unstarted_match)
     match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc3 Nc6' )

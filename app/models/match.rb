@@ -127,19 +127,18 @@ class Match < ActiveRecord::Base
 
     queue = MoveQueue.new(queue) unless MoveQueue === queue
 
-    expected, response = queue.shift, queue.shift
-    
-    if expected != m.notation
+    unless queue.hit?(actual = m)
       opponent.update_attribute(:move_queue, nil) and return 
     end
 
     # and make the response move - because we go direct, we can't rely on
     # automatic calling of the callback to continue evaluating queues - bumr !
+    expected, response = queue.shift, queue.shift
     response_move = Move.create(:match_id => self.id, :notation => response)
 
     opponent.update_attribute(:move_queue, queue.to_s)
 
-    # call it back
+    # call it back from other side (continues until queue.hit? returns false)
     play_queued_moves(response_move)
     
   end
