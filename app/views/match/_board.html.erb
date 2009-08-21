@@ -1,4 +1,41 @@
 <script type="text/javascript" >
+      //opponent_view is set via server script at page-load-time..
+      var opponent_view = false;
+
+      var rows_stack    = []; //FILO for reversing
+      var squares_stack = []; //FILO for reversing
+      
+      function toggleBoardView(){
+        da_board = $('board_table');
+        for(i=0; i<8; i++){
+          rows_stack.push( $$('.row_container')[0].remove() );
+        }
+
+        bottom_labels = $$('.bottom_labels')[0].remove();
+
+        for(r=0; r<8; r++){    //row
+          for(c=1; c<9; c++){  //column
+            squares_stack.push( rows_stack[r].select('.piece_container')[0].remove() );
+          }
+          for(c=1; c<9; c++){  //column
+            rows_stack[r].insert( squares_stack.pop() );
+          }
+        }
+
+        //we want bottom labels processed by the reversal as well
+        for(c=1; c<9; c++){  //column
+          squares_stack.push( bottom_labels.select('.label')[0].remove() );
+        }
+        for(c=1; c<9; c++){  //column
+          bottom_labels.insert( squares_stack.pop() );
+        }
+
+        for(i=0; i<8; i++){
+          da_board.insert( rows_stack.pop() );
+        }
+        da_board.insert( bottom_labels );
+      }
+
 <!-- allowed moves -->
 var current_allowed_moves = [];
 <%  match.board.each do |pos, piece| -%>
@@ -7,9 +44,10 @@ var current_allowed_moves = [];
 <%  end -%>
 
 </script>
-<table class="board_table" cellpadding="0" cellspacing="0">
+<table id="board_table" class="board_table" cellpadding="0" cellspacing="0">
+  <tbody>
   <% ranks.each do |rank| -%>
-    <tr>
+    <tr class="row_container">
     <td class="label rank"><%= rank %></td>
     <% files.each do |file|
       position = "#{file}#{rank}" -%>
@@ -42,7 +80,7 @@ var current_allowed_moves = [];
     </tr>
     
     <% if rank==ranks[7] %>
-      <tr>
+      <tr class="bottom_labels">
         <td class="rank file">&nbsp;</td>
         <% files.each do |file| -%>
           <td class="label file"><%= file %></td>	
@@ -50,4 +88,6 @@ var current_allowed_moves = [];
       </tr>
     <% end %>
   <% end %>
+  </tbody>
 </table>
+<input type="button" value="Switch View" onclick="toggleBoardView()"/>
