@@ -30,7 +30,7 @@ function markup_piece( position, piece, allowed_moves ){
     var img = '<img id="' + board_id + '" class="piece ' + (allowed_moves ? allowed_moves : '') + 
 	    '" src="/images/sets/default/' + img_base + '.png" />';
 
-    var scr = '<scr' + 'ipt>new Draggable("' + board_id + '", {revert:true, snap:[42,42]})</scr' + 'ipt>';
+    var scr = '<scr' + 'ipt type="text/javascript">new Draggable("' + board_id + '", {revert:true, snap:[42,42]})</scr' + 'ipt>';
     return img + scr;
 }
 

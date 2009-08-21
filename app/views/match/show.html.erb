@@ -11,8 +11,8 @@
 </span>
 </h1>
 
-<script src="<%= url_for( :action => 'boards', :format => 'js' ) %>"></script>
-<script>
+<script type="text/javascript" src="<%= url_for( :action => 'boards', :format => 'js' ) %>"></script>
+<script type="text/javascript">
    // this url will be polled for updates, and when a move has been made, this url
    // will be replaced by the new url to poll for updates
    // TODO its clear this will only allow one match to be tracked per DOM 
@@ -20,7 +20,7 @@
    var next_move_url = '<%= url_for( :action => :status, :move => match.moves.length + 1 ) %>';
 </script>
 <div id="updater_div">
-<script>
+<script type="text/javascript" >
   //<![CDATA[
 
 <% if ! your_turn %>
