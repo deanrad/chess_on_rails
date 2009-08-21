@@ -37,13 +37,15 @@
 </script>
 </div>
 
-<div id="board_parent" style="float:left; clear:left;">
-  <!-- TODO better visuals for move_indicator - paul -->
-  <span id="move_indicator_parent" style="float:left">
-    <%= render :partial => "move_indicator" %> 
-  </span>
+<div id="board_side">
+  <div id="move_indicator_parent" style="float:left">
+    <div id="your_move"  class="<%=  your_turn ? 'active_mover' : '' %> inactive_mover">Yours</div>
+    <div id="their_move" class="<%= !your_turn ? 'active_mover' : '' %> inactive_mover">Theirs</div>
+  </div>
 
-  <%= render :partial => "board" %>
+  <div id="board_parent" style="float:left; clear:left;">
+    <%= render :partial => "board" %>
+  </div>
 </div>
 
 <div id="peripheral_to_board">  
@@ -83,12 +85,6 @@
   Takebacks are not enabled. Have fun !
 </div>
 
-
-<!-- 
-<div id="select_set_div" style=" ">
-  <%= render :partial => "sets/select_set" %>
-</div>
--->
 
 
 

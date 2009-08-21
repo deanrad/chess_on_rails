@@ -8,7 +8,6 @@ if status_has_changed
   page << "next_move_url = '#{url_for( :action => :status, :move => match.moves.length + 1 ) }';"
 
   page.replace_html 'move_list', :partial => 'match/move_list'
-  page.replace_html 'move_indicator_parent', :partial => 'match/move_indicator'
   page << "$('move_notation').clear();"
 
   page['move_submit_btn'].disabled = ! your_turn
@@ -19,6 +18,14 @@ if status_has_changed
     :startcolor => (last_move.notation.include?('x') ? 'ff0000' : '00ff00'), 
     :duration => 10
   )
+
+  if your_turn
+    page['your_move' ].addClassName('active_mover');
+    page['their_move'].removeClassName('active_mover');
+  else
+    page['their_move'].addClassName('active_mover');
+    page['your_move' ].removeClassName('active_mover');
+  end
 
 
   page << "all_boards[#{match.moves.count}] = #{match.board.to_json}"
