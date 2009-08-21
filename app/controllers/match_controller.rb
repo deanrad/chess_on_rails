@@ -75,7 +75,7 @@ class MatchController < ApplicationController
   helper_method :match
 
   def gameplay
-    @gameplay = match.gameplays.send( :white )
+    @gameplay = match.gameplays.send( match.side_of(current_player) )
   end
   helper_method :gameplay
 
