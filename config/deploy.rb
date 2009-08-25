@@ -25,13 +25,22 @@ role :db, domain, :primary => true
 set :user, 'chicagogrooves'
 
 #############################################################
-#	Passenger
+#	Custom Actions - restarting, db files...
 #############################################################
  
+namespace :configure do
+  task :db do
+    run "rm -f #{release_path}/config/database.yml"
+    run "ln -s #{shared_path}/chess_on_rails_database.yml #{release_path}/config/database.yml"
+  end
+end
+
 namespace :deploy do
   desc "Restarting mod_rails with restart.txt"
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "touch #{current_path}/tmp/restart.txt"
   end
+
+  after "deploy:update_code", "configure:db"
 end
 
