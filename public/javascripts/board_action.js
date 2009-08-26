@@ -34,18 +34,24 @@ function markup_piece( position, piece, allowed_moves ){
     return img + scr;
 }
 
-// clears out the contents of each square on the board, and inserts anew from JSON
+// clears out the contents of each square on the board, and inserts anew from JSON, restoring the set of allowed_moves
 function set_board(move_num, allowed_moves){
+  log('setting board to move ' + move_num);
+  //try updating the move indicator to show what you're displaying
+  try{
+    $$('.move_list_currently_displayed').each( function( elem ){ elem.removeClassName('move_list_currently_displayed'); } );
+    $('move_' + move_num).addClassName('move_list_currently_displayed');
+  }
+  catch(ex){
+    log(ex);
+  }
   $$('td.piece_container').each( 
      function( elem ){ 
        try{
-	   //console.log( "allwed moves at a1 are " + allowed_moves['a1'] );
-	   //console.log( "current allwed moves at a1 are " + current_allowed_moves['a1'] );
-	   // allowed_moves = (current_allowed_moves.length > 0) ? current_allowed_moves[elem.id] : ""
 	 elem.update( markup_piece( elem.id, all_boards[move_num][elem.id], allowed_moves[elem.id] ) );
        }
        catch(ex){
-	   alert(ex); return;
+	   log(ex.description); return;
        }
      }
   );

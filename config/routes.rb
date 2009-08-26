@@ -14,8 +14,9 @@ ActionController::Routing::Routes.draw do |map|
   map.create_move 'match/:match_id/moves/:notation', :controller => 'move', :action => 'create', :defaults => { :notation => nil }
 
   map.resources :match , :except => [:delete], :shallow => true, :collection => { :create => :post } do |match|
+    # TODO match route for resign must be POST since destructive 
     match.resources :moves, :controller => :move, :only => [:create], :collection => { :create => :post }
-    match.resource :chat #TODO limit routes to those needed, :only => [:create, :index, :chat]
+    match.resource :chat #TODO limit chat routes to those needed, :only => [:create, :index, :chat]
   end
 
   #allow updating of gameplays via REST

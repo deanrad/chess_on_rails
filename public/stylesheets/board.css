@@ -1,67 +1,66 @@
 /* TODO should migrate inline styles to stylesheet, and css should mirror markup structure */
 
+/* BEGIN match/show view, the big daddy */
 h1 { font-size: 14pt; font-weight: bold }
-.board_table td{
-  width:40px; height:40px;
-  border-width: 1px; border-style:solid; border-color:#333;
-  margin:0px; padding: 0px;
- }
 
+/* BEGIN BOARD STYLES */
+#board_region{ float:left; clear:left; width:400px; /* should be 420 lol :) */ }
+  #move_indicators { }
+  .move_indicator{ background-color:eee }
+    .next_to_move  { background-color:black; color:white; font-weight:bold}
+    #move_indicator_yours{ float:left; width:42px; margin-right:275px;}
+    #move_indicator_theirs{ }
 
-#peripheral_to_board{ margin: 0 0 0 20px; padding: 8px; position:relative; left: 12px; }
-.move_creator_parent { clear: all; float: left; }
-.instructions { display:none }
-#move_error { color: #ff4444 }
+  #board_table td{
+    width:40px; height:40px;
+    border-width: 1px; border-style:solid; border-color:#333;
+    margin:0px; padding: 0px;
+   }
+  .label {background-color:gray; color:white; font-family:Arial; font-size:smaller; text-align:center; font-weight:bold}
+  #board_table .rank {width: 20px}
+  #board_table .file {height: 20px}
 
-.label {background-color:gray; color:white; font-family:Arial; font-size:smaller; text-align:center; font-weight:bold}
+  #a2, #a4, #a6, #a8, #b1, #b3, #b5, #b7,
+  #c2, #c4, #c6, #c8, #d1, #d3, #d5, #d7,
+  #e2, #e4, #e6, #e8, #f1, #f3, #f5, #f7,
+  #g2, #g4, #g6, #g8, #h1, #h3, #h5, #h7 {background-color:#fff}
 
-#board_side {float:left; clear:left;}
-  .board_table .rank {width: 20px}
-  .board_table .file {height: 20px}
+  #a1, #a3, #a5, #a7, #b2, #b4, #b6, #b8,
+  #c1, #c3, #c5, #c7, #d2, #d4, #d6, #d8,
+  #e1, #e3, #e5, #e7, #f2, #f4, #f6, #f8,
+  #g1, #g3, #g5, #g7, #h2, #h4, #h6, #h8 {background-color:#dfdfdf}
 
+/* BEGIN ACTIONS AND NON-BOARD FORM ELEMENT STYLES */
 
-#chat {text-align: left; padding-left: 10px; overflow:auto; border:solid 1px black; height: 220px; width: 180px;}
-.chat_line{ font-family: sans-serif; font-size: smaller }
+#actions_region { width: 400px; float:left;}
+  #notation_links ul {}
+  #notation_links li { list-style-type: none; padding-right: 8px; float:left; }
 
-.move_list {
-    float:left; 
-    width:190px; height:220px; 
+  #move_creator_parent { clear:left; }
+    #move_error { color: #ff4444 }
+
+  #gameplay_editor{}
+  #game_actions{}
+
+  .status_tab{ float:left; width:190px; height:220px;  }
+  #move_list {
     border:solid 1px black; 
     overflow:auto; 
     font-family: sans-serif;
     font-size: smaller;
-}
-.move_w{ float:left; clear:left; width: 85px }
-.move_b{ float:left; width: 85px}
+  }
+  .move_w{ float:left; clear:left; width: 85px }
+  .move_b{ float:left; width: 85px}
+  .move_list_most_recent{ border: solid 1px black; }
+  .move_list_currently_displayed{ background-color: #ddd }
 
-#a2, #a4, #a6, #a8,
-#b1, #b3, #b5, #b7,
-#c2, #c4, #c6, #c8,
-#d1, #d3, #d5, #d7,
-#e2, #e4, #e6, #e8,
-#f1, #f3, #f5, #f7,
-#g2, #g4, #g6, #g8,
-#h1, #h3, #h5, #h7
-{background-color:#fff}
+  #chat_container{ float:left; }
+  #chat_form{ float:left; }
+  
+  #chat {text-align: left; padding-left: 10px; overflow:auto; border:solid 1px black; height: 220px; width: 180px;}
+   .chat_line{ font-family: sans-serif; font-size: smaller }
 
-#a1, #a3, #a5, #a7,
-#b2, #b4, #b6, #b8,
-#c1, #c3, #c5, #c7,
-#d2, #d4, #d6, #d8,
-#e1, #e3, #e5, #e7,
-#f2, #f4, #f6, #f8,
-#g1, #g3, #g5, #g7,
-#h2, #h4, #h6, #h8
-{background-color:#dfdfdf}
+  .instructions { display:none }
 
-#move_indicator_parent {width:100%; padding-bottom:5px}
-#your_move             {float:left;}
-#their_move            {float:right;}
-.active_mover   {background-color:black; color:white; font-weight:bold}
-.inactive_mover {}
-
-
-/*
-.just_moved {  background-color:afa;  }
-.just_moved_w_capture {  background-color:d44;  }
-*/
+/* BEGIN OTHER, LESS CRITICAL PAGES */
+#start_pos {width:300px;}
