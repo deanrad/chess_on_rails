@@ -1,12 +1,12 @@
-<% move_count = match.moves.count %>
 <% match.moves.each_with_index do |m, i| -%>
+  <% extra_styles = (i==move_count-1) ? "move_list_most_recent move_list_currently_displayed" : "" %>
   <%if (i%2)==0 %>
-    <div class="move_w" onclick="set_board(<%= i+1 %>, <%= i+1 == move_count ? 'current_allowed_moves' : '[]' %>)">
+   <div id="move_<%= i+1 %>" class="move_w <%= extra_styles %>" onclick="set_board(<%= i+1 %>, <%= i+1 == move_count ? 'current_allowed_moves' : '[]' %>); document.location.href='#<%= i + 1%>'">
       <%= ( ((i+2)/2).to_s + ". " + m.notation ).ljust(10) -%>
     </div>
   <%else%>
-    <div class="move_b" onclick="set_board(<%= i+1 %>, <%= i+1 == move_count ? 'current_allowed_moves' : '[]' %>)">
-      <%= "#{m.notation}\n" -%>
+  <div id="move_<%= i+1 %>" class="move_b <%= extra_styles %>" onclick="set_board(<%= i+1 %>, <%= i+1 == move_count ? 'current_allowed_moves' : '[]' %>); document.location.href='#<%= i + 1%>'">
+     <%= "#{m.notation}\n" -%>
     </div>
   <% end %>
 <% end %>

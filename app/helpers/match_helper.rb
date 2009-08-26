@@ -17,6 +17,10 @@ module MatchHelper
     @last_move ||= match.moves.last
   end
 
+  def move_count
+    @move_count ||= match.moves.count
+  end
+
   def status_has_changed
     @status_has_changed ||= ( params[:move].to_i <= match.moves.length)
   end

@@ -1,4 +1,4 @@
-<script type="text/javascript" >
+<script type="text/javascript" id="flip_board">
       //opponent_view is set via server script at page-load-time..
       var opponent_view = false;
 
@@ -35,18 +35,19 @@
         }
         da_board.insert( bottom_labels );
       }
+</script>
+<script id="current_allowed_moves" type="text/javascript">
+// Here is the likely cause of 5 second rendering culprit, non-memoization of piece#allowed_moves(board) when rendering 
+// board and allowed moves in separate loops. TODO revisit how many times we need to iterate in order to create our markup, and lastly memoize if necessary
 
-<!-- allowed moves -->
 var current_allowed_moves = [];
 <%  match.board.each do |pos, piece| -%>
 <%  next unless piece %>
 <%= %Q{current_allowed_moves['#{pos}'] = '#{piece.allowed_moves(match.board).join(' ')}';} %>
 <%  end -%>
-
 </script>
-<table id="board_table" class="board_table" cellpadding="0" cellspacing="0">
-  <tbody>
-  <% ranks.each do |rank| -%>
+<table id="board_table" cellpadding="0" cellspacing="0">
+ <% ranks.each do |rank| -%>
     <tr class="row_container">
     <td class="label rank"><%= rank %></td>
     <% files.each do |file|
@@ -88,6 +89,5 @@ var current_allowed_moves = [];
       </tr>
     <% end %>
   <% end %>
-  </tbody>
 </table>
 <input type="button" value="Switch View" onclick="toggleBoardView()"/>
