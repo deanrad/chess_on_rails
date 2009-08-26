@@ -67,10 +67,11 @@ var current_allowed_moves = [];
 	  <%= 
 	    image_tag image_source_of(p), 
 	      :id => p.board_id, 
-	      :alt => p.abbrev,
+	      :alt => p.abbrev + "your_turn#{your_turn}",
 	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
 	  %>
 
+          <%= "<!-- not draggable, not your turn -->" unless your_turn %>
           <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn %> 
 
         <% else %>

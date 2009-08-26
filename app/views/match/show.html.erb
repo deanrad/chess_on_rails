@@ -37,27 +37,26 @@
 </div>
 
 <div id="actions_region">  
-<ul id="notation_links">
-  <li><%= link_to "PGN", 
-    match_url(@match, :format=>'pgn'), 
-    :title => 'PGN is the most common notation for a game, consisting of a formatted list of every move that has occurred, in algebraic notation.' %></li>
-
-  <li><%= link_to "FEN", 
-    match_url(@match, :format=>'fen'), 
-    :title => 'FEN is an alternative notation for the state of a game, where the move history may not be known, but all information necessary to resume the game is in the FEN description.' %></li>
-</ul>
-
 <% if match.side_of(current_player) %>
-<div id="move_creator_parent" >
-  <%= render :partial => "move_maker" %>
-</div>
-<div id="game_actions">
-Actions: 
-<%= link_to "Resign", 
+  <div id="move_creator_parent" >
+    <%= render :partial => "move_maker" %>
+  </div>
+  <div id="game_actions">
+  Actions: 
+  <%= link_to "Resign", 
     url_for(:action => 'resign'), 
     :confirm => 'Are you truly ready to accept disgrace and sulk back
 to the rock from under which you came ?' %>
-<!-- TODO allow Offer Draw, Claim Checkmate, Concede Mate, etc.. -->
+  <!-- TODO allow Offer Draw, Claim Checkmate, Concede Mate, etc.. -->
+  <ul id="notation_links">
+    <li><%= link_to "PGN", 
+      match_url(@match, :format=>'pgn'), 
+      :title => 'PGN is the most common notation for a game, consisting of a formatted list of every move that has occurred, in algebraic notation.' %></li>
+
+    <li><%= link_to "FEN", 
+      match_url(@match, :format=>'fen'), 
+      :title => 'FEN is an alternative notation for the state of a game, where the move history may not be known, but all information necessary to resume the game is in the FEN description.' %></li>
+  </ul>
 </div>
 <% end %>
 

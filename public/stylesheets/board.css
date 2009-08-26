@@ -6,7 +6,7 @@ h1 { font-size: 14pt; font-weight: bold }
 /* BEGIN BOARD STYLES */
 #board_region{ float:left; clear:left; width:400px; /* should be 420 lol :) */ }
   #move_indicators { }
-  .move_indicator{ background-color:eee }
+  .move_indicator{ background-color: #eee }
     .next_to_move  { background-color:black; color:white; font-weight:bold}
     #move_indicator_yours{ float:left; width:42px; margin-right:275px;}
     #move_indicator_theirs{ }
@@ -33,14 +33,14 @@ h1 { font-size: 14pt; font-weight: bold }
 /* BEGIN ACTIONS AND NON-BOARD FORM ELEMENT STYLES */
 
 #actions_region { width: 400px; float:left;}
-  #notation_links ul {}
-  #notation_links li { list-style-type: none; padding-right: 8px; float:left; }
-
   #move_creator_parent { clear:left; }
+  #move_notation {width: 100px;}
     #move_error { color: #ff4444 }
 
-  #gameplay_editor{}
-  #game_actions{}
+  #gameplay_editor{margin-top: 20px;}
+  #game_actions{margin-top: 20px;}
+  #notation_links { display:inline; padding-left: 0; margin-left: 0;}
+  #notation_links li { list-style-type: none; display:inline; width: 40px;  }
 
   .status_tab{ float:left; width:190px; height:220px;  }
   #move_list {
