@@ -8,7 +8,7 @@ h1 { font-size: 14pt; font-weight: bold }
   #move_indicators { }
   .move_indicator{ background-color:eee }
     .next_to_move  { background-color:black; color:white; font-weight:bold}
-    #move_indicator_yours{ float:left; width:42px; margin-right:275px;}
+    #move_indicator_yours{ float:left; width:52px; margin-right:265px;}
     #move_indicator_theirs{ }
 
   #board_table td{
