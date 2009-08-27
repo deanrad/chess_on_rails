@@ -1,6 +1,5 @@
 class ChatsController < ApplicationController
   before_filter :authorize
-  before_save   :rewrite_chat
   layout false
 
   def show
@@ -26,6 +25,4 @@ class ChatsController < ApplicationController
   end
   helper_method :chats
 
-  def rewrite_chat
-  end
 end
