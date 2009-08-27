@@ -1,5 +1,10 @@
 class Match < ActiveRecord::Base
   
+  # Chats are messages said by one party or the other during the match.
+  has_many :chats 
+
+  # A gameplay record is a (eventually versioned) players' personal stash of data about the match
+  # This includes their move_queue, their offers to draw, etc..
   has_many :players, :through    => :gameplays
 
   # The moves of this match. Before we add one, we ensure that it has a direct 

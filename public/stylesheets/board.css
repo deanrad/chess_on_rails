@@ -51,6 +51,7 @@ h1 { font-size: 14pt; font-weight: bold }
   }
   .move_w{ float:left; clear:left; width: 85px }
   .move_b{ float:left; width: 85px}
+  .move_list_item{ } #marker class 
   .move_list_most_recent{ border: solid 1px black; }
   .move_list_currently_displayed{ background-color: #ddd }
 

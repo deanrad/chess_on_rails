@@ -1,5 +1,6 @@
 class ChatsController < ApplicationController
   before_filter :authorize
+  before_save   :rewrite_chat
   layout false
 
   def show
@@ -24,4 +25,7 @@ class ChatsController < ApplicationController
     @chats ||= Chat.find_all_by_match_id( params[:match_id] )
   end
   helper_method :chats
+
+  def rewrite_chat
+  end
 end
