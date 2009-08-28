@@ -56,7 +56,45 @@ function set_board(move_num, allowed_moves){
      }
   );
 }
+/* board flipping logic */
+      //opponent_view will in future be set by server (if we store this setting, which we dont currently)
+      var opponent_view = false;
 
+      var rows_stack    = []; //FILO for reversing
+      var squares_stack = []; //FILO for reversing
+      
+      function toggleBoardView(){
+        da_board = $('board_table');
+        for(i=0; i<8; i++){
+          rows_stack.push( $$('.row_container')[0].remove() );
+        }
+
+        bottom_labels = $$('.bottom_labels')[0].remove();
+
+        for(r=0; r<8; r++){    //row
+          for(c=1; c<9; c++){  //column
+            squares_stack.push( rows_stack[r].select('.piece_container')[0].remove() );
+          }
+          for(c=1; c<9; c++){  //column
+            rows_stack[r].insert( squares_stack.pop() );
+          }
+        }
+
+        //we want bottom labels processed by the reversal as well
+        for(c=1; c<9; c++){  //column
+          squares_stack.push( bottom_labels.select('.label')[0].remove() );
+        }
+        for(c=1; c<9; c++){  //column
+          bottom_labels.insert( squares_stack.pop() );
+        }
+
+        for(i=0; i<8; i++){
+          da_board.insert( rows_stack.pop() );
+        }
+        da_board.insert( bottom_labels );
+      }
+
+/* each square must always be present as a droppable */
 Droppables.add('a1', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: 'a1' } );
 Droppables.add('a2', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: 'a2' } );
 Droppables.add('a3', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: 'a3' } );

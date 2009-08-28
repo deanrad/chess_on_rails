@@ -11,6 +11,7 @@ h1 { font-size: 14pt; font-weight: bold }
     #move_indicator_yours{ float:left; width:52px; margin-right:265px;}
     #move_indicator_theirs{ }
 
+  #js_updatable_board{ float:left; clear:left; }
   #board_table td{
     width:40px; height:40px;
     border-width: 1px; border-style:solid; border-color:#333;
