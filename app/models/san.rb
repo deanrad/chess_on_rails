@@ -1,31 +1,29 @@
 # An instance of Standard Algebraic Notation
 class SAN
-  REGEXP = /([RNBQK]|[a-h](?=x))?(x)?([a-h][1-8])(=([RNBQ]))?([+?!\#])?/
+  REGEXP = /(?:([RNBQK]|[a-h](?=x))?(x)?([a-h][1-8])(=([RNBQ]))?([+?!\#])?|(O-O(?:-O)?))/
 
   attr_accessor :original_text
-  attr_accessor :role, :capture, :destination, :promo, :qualifier, :annotation  # "
+  attr_accessor :role, :capture, :destination, :promo, :qualifier, :annotation, :castle, :castle_side
 
-  # Mimics String.scan to return an instance of SAN for each SAN::REGEXP match in str.
+  # Mimics String.scan to return an array of instances of SAN for each SAN::REGEXP match in str.
   def self.scan(str) 
-    matches = str.scan REGEXP
-    # $stderr.puts matches.inspect
-    matches.map{|m| self.new(m) }
+    returning(Array.new) do |matches|
+      str.gsub(REGEXP){|m| matches.unshift self.new(m) }
+    end
   end
 
-  # Lets you pass a string, or array of parts [@role, @capture, @destination, @promo, @qualifier, @annotation]
-  def initialize(str_or_matches)
-    if Array === str_or_matches
-      @role, @capture, @destination, @promo, @qualifier, @annotation = *str_or_matches
-      return
-    end
+  # Creates a SAN from a string
+  def initialize(str)
     self.original_text = str
 
     if m = REGEXP.match(str)
-      @role         = m.groups[1] 
-      @capture      = !! m.groups[2]
-      @destination  = m.groups[3]
-      @promo        = m.groups[5] || nil
-      @qualifier    = m.groups[6] || nil
+      @role         = m[1] 
+      @capture      = !! m[2]
+      @destination  = m[3]
+      @promo        = m[5]
+      @qualifier    = m[6]
+      @castle       = !! m[7]
+      @castle_side  = m[7].length > 3 ? :queenside : :kingside if m[7]
 
       if @destination && @role.blank?
         @role = :pawn 
@@ -48,7 +46,6 @@ class SAN
         when "K"; :king
       end
 
-      $stderr.puts "SAN::Created San object from #{str}: #{self.inspect}"
     else
       $stderr.puts "SAN::Unrecognized notation #{str}"
     end
