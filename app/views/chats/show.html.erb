@@ -1,5 +1,6 @@
 <% chats.each do |chat| %>
-  <div class='chat_line'><b title="<%= chat.created_at.strftime("%a %H:%M") %>"><%= chat.player.name %>: </b><%= chat.text %></div>
+  <div class="chat_line" title="<%= chat.created_at.strftime('%a %H:%M') %>">
+    <b><%= chat.player.name %>: </b><%= link_notations(chat.text) %></div>
 <% end %>
 
 <script type="text/javascript">

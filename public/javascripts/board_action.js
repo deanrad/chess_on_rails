@@ -95,6 +95,7 @@ function set_board(move_num, allowed_moves){
       }
 
 /* each square must always be present as a droppable */
+
 Droppables.add('a1', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: 'a1' } );
 Droppables.add('a2', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: 'a2' } );
 Droppables.add('a3', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: 'a3' } );
