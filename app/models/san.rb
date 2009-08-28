@@ -1,9 +1,9 @@
 # An instance of Standard Algebraic Notation
 class SAN
-  REGEXP = /(?:([RNBQK]|[a-h](?=x))?(x)?([a-h][1-8])(=([RNBQ]))?([+?!\#])?|(O-O(?:-O)?))/
+  REGEXP = /(?:([RNBQK]|[a-h](?=x))?([a-h1-8])*?(x)?([a-h][1-8])(=([RNBQ]))?([+?!\#])?|(O-O(?:-O)?))/
 
   attr_accessor :original_text
-  attr_accessor :role, :capture, :destination, :promo, :qualifier, :annotation, :castle, :castle_side
+  attr_accessor :role, :disambiguator, :capture, :destination, :promo, :qualifier, :castle, :castle_side
 
   # Mimics String.scan to return an array of instances of SAN for each SAN::REGEXP match in str.
   def self.scan(str) 
@@ -17,13 +17,14 @@ class SAN
     self.original_text = str
 
     if m = REGEXP.match(str)
-      @role         = m[1] 
-      @capture      = !! m[2]
-      @destination  = m[3]
-      @promo        = m[5]
-      @qualifier    = m[6]
-      @castle       = !! m[7]
-      @castle_side  = m[7].length > 3 ? :queenside : :kingside if m[7]
+      @role         =    m[1] 
+      @disambiguator=    m[2]
+      @capture      = !! m[3]
+      @destination  =    m[4]
+      @promo        =    m[6]
+      @qualifier    =    m[7]
+      @castle       = !! m[8]
+      @castle_side  =    m[8].length > 3 ? :queenside : :kingside    if m[8]
 
       if @destination && @role.blank?
         @role = :pawn 
@@ -52,5 +53,5 @@ class SAN
   end
 
   # Whether this instance notates that check occurred
-  def check?; @check ||= !!(@qualifier =~ /\+/); end
+  def check?; @check ||= !!(@qualifier =~ /[+#]/); end
 end
