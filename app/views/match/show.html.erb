@@ -1,5 +1,7 @@
 <h1><%= "#{match.name}" %></h1>
 
+<% unless downlevel? %>
+<script id="include_board_actions" src="/javascripts/board_action.js"></script>
 <script id="define_all_boards_till_now_as_JS_objects" src="<%= url_for( :action => 'boards', :format => 'js' ) %>" type="text/javascript"></script>
 <script id="next_move_url" type="text/javascript">
   // this url will be polled for updates, and when a move has been made, this url
@@ -23,6 +25,7 @@
 <% end %>
 //]]>
 </script>
+<% end %>
 
 <div id="board_region">
   <!-- TODO better visuals for move_indicator - paul -->
@@ -37,15 +40,6 @@
 </div>
 
 <div id="actions_region">  
-<ul id="notation_links">
-  <li><%= link_to "PGN", 
-    match_url(@match, :format=>'pgn'), 
-    :title => 'PGN is the most common notation for a game, consisting of a formatted list of every move that has occurred, in algebraic notation.' %></li>
-
-  <li><%= link_to "FEN", 
-    match_url(@match, :format=>'fen'), 
-    :title => 'FEN is an alternative notation for the state of a game, where the move history may not be known, but all information necessary to resume the game is in the FEN description.' %></li>
-</ul>
 
 <% if match.side_of(current_player) %>
 <div id="move_creator_parent" >
@@ -53,10 +47,18 @@
 </div>
 <div id="game_actions">
 Actions: 
-<%= link_to "Resign", 
+  <%= link_to "Resign", 
     url_for(:action => 'resign'), 
     :confirm => 'Are you truly ready to accept disgrace and sulk back
 to the rock from under which you came ?' %>
+  <%= link_to "PGN", 
+    match_url(@match, :format=>'pgn'), 
+    :title => 'PGN is the most common notation for a game, consisting of a formatted list of every move that has occurred, in algebraic notation.' %>
+
+  <%= link_to "FEN", 
+    match_url(@match, :format=>'fen'), 
+    :title => 'FEN is an alternative notation for the state of a game, where the move history may not be known, but all information necessary to resume the game is in the FEN description.' %>
+</span>
 <!-- TODO allow Offer Draw, Claim Checkmate, Concede Mate, etc.. -->
 </div>
 <% end %>
@@ -91,11 +93,8 @@ to the rock from under which you came ?' %>
 </div>
 
 
-<% content_for :page_end_javascripts do %>
-    <%= javascript_include_tag 'board_action' unless downlevel? %>
-<% end %>
-
 <% content_for :autoexec_javascripts do %>
+
   //allow hash notation (match/N#something) to refer to a specific move by number, counting from 1
   move_wanted = document.location.hash.substr(1);
   if(move_wanted){

@@ -15,7 +15,6 @@ var current_allowed_moves = [];
     <% files.each do |file|
       position = "#{file}#{rank}" -%>
       <td class="piece_container <%= position %>" id="<%= position %>">
-
         <% #indexing the helper-returned variable board doesnt work unless called through self.board
 	   p = self.board[position] 
 	   capture_class = case last_move && last_move.to_coord == position
@@ -25,19 +24,16 @@ var current_allowed_moves = [];
                 ''
 	   end
            if p                                       -%>
-
 	  <%= 
 	    image_tag image_source_of(p), 
 	      :id => p.board_id, 
 	      :alt => p.abbrev,
 	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
 	  %>
-
           <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn %> 
-
-        <% else %>
+        <% else -%>
           &nbsp;
-        <% end %>
+        <% end -%>
       </td>	
     <% end %>
     </tr>
@@ -53,3 +49,10 @@ var current_allowed_moves = [];
   <% end %>
 </table>
 <input type="button" value="Switch View" onclick="toggleBoardView()"/>
+
+<script type="text/javascript" id="rebind_droppables">
+$$('.piece_container').each( function(item){
+  Droppables.add(item.identify(), {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: item.identify() } );
+  }
+);
+</script>
