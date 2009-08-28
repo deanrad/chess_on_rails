@@ -1,17 +1,26 @@
-<% match.moves.each_with_index do |m, i| -%>
-  <% extra_styles = (i==move_count-1) ? "move_list_most_recent move_list_currently_displayed" : "" %>
+<%    move_count = match.moves.count %>
+<%    match.moves.each_with_index do |m, i| -%>
+  <%  extra_styles = (i==move_count-1) ? "move_list_most_recent move_list_currently_displayed" : "" 
+     allowed_moves = (i==move_count-1) ? "current_allowed_moves" : "[]"
+  %>
   <%if (i%2)==0 %>
-   <div id="move_<%= i+1 %>" class="move_list_item move_w <%= extra_styles %>" onclick="set_board(<%= i+1 %>, <%= i+1 == move_count ? 'current_allowed_moves' : '[]' %>); document.location.href='#<%= i + 1%>'">
+    <div id="move_<%= i+1 %>" 
+	 title="<%= m.created_at.strftime('%a %H:%M') %>"
+	 class="move_list_item move_w <%= extra_styles %>" 
+	 onclick="set_board(<%= i+1 %>, <%= allowed_moves %>); document.location.href='#<%= i+1 %>'">
       <%= ( ((i+2)/2).to_s + ". " + m.notation ).ljust(10) -%>
     </div>
   <%else%>
-  <div id="move_<%= i+1 %>" class="move_list_item move_b <%= extra_styles %>" onclick="set_board(<%= i+1 %>, <%= i+1 == move_count ? 'current_allowed_moves' : '[]' %>); document.location.href='#<%= i + 1%>'">
+    <div id="move_<%= i+1 %>"
+	 title="<%= m.created_at.strftime('%a %H:%M') %>"
+	 class="move_list_item move_b <%= extra_styles %>"
+	 onclick="set_board(<%= i+1 %>, <%= allowed_moves %>); document.location.href='#<%= i+1 %>'">
      <%= "#{m.notation}\n" -%>
     </div>
   <% end %>
 <% end %>
 
-<script type="text/javascript">
-var objDiv = document.getElementById("move_list");
-if(objDiv) objDiv.scrollTop = objDiv.scrollHeight;
+<script type="text/javascript" id="moves_scroller">
+  var objDiv = document.getElementById("move_list");
+  if(objDiv) objDiv.scrollTop = objDiv.scrollHeight;
 </script>
