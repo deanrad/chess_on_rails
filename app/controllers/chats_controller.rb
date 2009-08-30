@@ -24,4 +24,5 @@ class ChatsController < ApplicationController
     @chats ||= Chat.find_all_by_match_id( params[:match_id] )
   end
   helper_method :chats
+
 end

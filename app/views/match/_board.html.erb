@@ -1,41 +1,3 @@
-<script type="text/javascript" id="flip_board">
-      //opponent_view is set via server script at page-load-time..
-      var opponent_view = false;
-
-      var rows_stack    = []; //FILO for reversing
-      var squares_stack = []; //FILO for reversing
-      
-      function toggleBoardView(){
-        da_board = $('board_table');
-        for(i=0; i<8; i++){
-          rows_stack.push( $$('.row_container')[0].remove() );
-        }
-
-        bottom_labels = $$('.bottom_labels')[0].remove();
-
-        for(r=0; r<8; r++){    //row
-          for(c=1; c<9; c++){  //column
-            squares_stack.push( rows_stack[r].select('.piece_container')[0].remove() );
-          }
-          for(c=1; c<9; c++){  //column
-            rows_stack[r].insert( squares_stack.pop() );
-          }
-        }
-
-        //we want bottom labels processed by the reversal as well
-        for(c=1; c<9; c++){  //column
-          squares_stack.push( bottom_labels.select('.label')[0].remove() );
-        }
-        for(c=1; c<9; c++){  //column
-          bottom_labels.insert( squares_stack.pop() );
-        }
-
-        for(i=0; i<8; i++){
-          da_board.insert( rows_stack.pop() );
-        }
-        da_board.insert( bottom_labels );
-      }
-</script>
 <script id="current_allowed_moves" type="text/javascript">
 // Here is the likely cause of 5 second rendering culprit, non-memoization of piece#allowed_moves(board) when rendering 
 // board and allowed moves in separate loops. TODO revisit how many times we need to iterate in order to create our markup, and lastly memoize if necessary
@@ -53,7 +15,6 @@ var current_allowed_moves = [];
     <% files.each do |file|
       position = "#{file}#{rank}" -%>
       <td class="piece_container <%= position %>" id="<%= position %>">
-
         <% #indexing the helper-returned variable board doesnt work unless called through self.board
 	   p = self.board[position] 
 	   capture_class = case last_move && last_move.to_coord == position
@@ -63,20 +24,17 @@ var current_allowed_moves = [];
                 ''
 	   end
            if p                                       -%>
-
 	  <%= 
 	    image_tag image_source_of(p), 
 	      :id => p.board_id, 
 	      :alt => p.abbrev + "your_turn#{your_turn}",
 	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
 	  %>
-
-          <%= "<!-- not draggable, not your turn -->" unless your_turn %>
-          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn %> 
-
-        <% else %>
+         <%= "<!-- not draggable, not your turn -->" unless your_turn %>
+         <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn %> 
+        <% else -%>
           &nbsp;
-        <% end %>
+        <% end -%>
       </td>	
     <% end %>
     </tr>
@@ -92,3 +50,10 @@ var current_allowed_moves = [];
   <% end %>
 </table>
 <input type="button" value="Switch View" onclick="toggleBoardView()"/>
+
+<script type="text/javascript" id="rebind_droppables">
+$$('.piece_container').each( function(item){
+  Droppables.add(item.identify(), {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: item.identify() } );
+  }
+);
+</script>

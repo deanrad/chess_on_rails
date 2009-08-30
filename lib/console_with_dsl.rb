@@ -6,6 +6,7 @@ options = { :sandbox => false, :irb => irb }
 OptionParser.new do |opt|
   opt.banner = "Usage: console [environment] [options]"
   opt.on('-s', '--sandbox', 'Rollback database modifications on exit.') { |v| options[:sandbox] = v }
+  opt.on('-n', '--nodsl', 'Do not include DSL extensions to make chess match management easier.') { |v| options[:nodsl] = v }
   opt.on("--irb=[#{irb}]", 'Invoke a different irb.') { |v| options[:irb] = v }
   opt.on("--debugger", 'Enable ruby-debugging for the console.') { |v| options[:debugger] = v }
   opt.parse!(ARGV)
@@ -18,10 +19,12 @@ libs << " -r console_sandbox" if options[:sandbox]
 libs << " -r console_with_helpers"
 
 # HACK - pull in models and my own DSL (which could break the loading of alot of things, since it overrides const_missing)
-Dir.glob("#{RAILS_ROOT}/app/models/**/*.rb") do |m|
-  libs << " -r #{m}"
+unless options[:nodsl]
+  Dir.glob("#{RAILS_ROOT}/app/models/**/*.rb") do |m|
+    libs << " -r #{m}"
+  end
+  libs << " -r console_dsl"
 end
-libs << " -r console_dsl"
 
 if options[:debugger]
   begin
