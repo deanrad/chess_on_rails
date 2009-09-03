@@ -1,0 +1,9 @@
+<% chats.each do |chat| %>
+  <div class="chat_line" title="<%= chat.created_at.strftime('%a %H:%M') %>">
+    <b><%= chat.player.name %>: </b><%= link_notations(chat.text) %></div>
+<% end %>
+
+<script type="text/javascript">
+var objDiv = document.getElementById("chat");
+if(objDiv) objDiv.scrollTop = objDiv.scrollHeight;
+</script>
