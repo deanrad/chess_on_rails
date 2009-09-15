@@ -49,6 +49,7 @@ function set_board(move_num, allowed_moves){
      function( elem ){ 
        try{
 	 elem.update( markup_piece( elem.id, all_boards[move_num][elem.id], allowed_moves[elem.id] ) );
+	 elem.removeClassName('just_moved'); //no way to restore this once you've clicked away, oh well
        }
        catch(ex){
 	   log(ex.description); return;

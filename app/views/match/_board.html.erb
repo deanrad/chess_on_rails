@@ -13,22 +13,24 @@ var current_allowed_moves = [];
     <tr class="row_container">
     <td class="label rank"><%= rank %></td>
     <% files.each do |file|
-      position = "#{file}#{rank}" -%>
-      <td class="piece_container <%= position %>" id="<%= position %>">
+       position = "#{file}#{rank}" 
+       capture_class = ''
+       capture_class = case last_move && (last_move.to_coord == position || last_move.from_coord == position)
+         when true
+	   " just_moved#{last_move && last_move.notation.include?('x') ? '_w_capture' : '' }"
+	 else
+           ""
+       end
+    -%>
+      <td class="piece_container <%= position %> <%= capture_class %>" id="<%= position %>">
         <% #indexing the helper-returned variable board doesnt work unless called through self.board
 	   p = self.board[position] 
-	   capture_class = case last_move && last_move.to_coord == position
-	     when true
-	        " just_moved#{last_move && last_move.notation.include?('x') ? '_w_capture' : '' }"
-	     else
-                ''
-	   end
            if p                                       -%>
 	  <%= 
 	    image_tag image_source_of(p), 
 	      :id => p.board_id, 
 	      :alt => p.abbrev,
-	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
+	      :class => 'piece ' + p.allowed_moves(self.board).join(' ')
 	  %>
           <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn %> 
         <% else -%>
