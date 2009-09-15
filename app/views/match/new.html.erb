@@ -2,8 +2,21 @@
 
 <% form_for(:match, :url => create_match_path ) do |f| %>
 <div>
-Opponent: [Dean]<input type="hidden" name="opponent_id" value="1" /> <!-- hard-coded till opponent-chooser ready -->
+Opponent: 
+  <!-- [Dean]<input type="hidden" name="opponent_name" value="1" /> hard-coded till opponent-chooser ready -->
+  <%= f.text_field :opponent_name, :autocomplete => "off" %>
+
+  <div class="auto_complete" id="opponent_name_auto_complete"></div>
 </div>
+
+<script type="text/javascript">
+new Ajax.Autocompleter('match_opponent_name', 'opponent_name_auto_complete', '/match/N/auto_complete_for_player_name', {
+    method:'get',
+    paramName:'match[opponent_name]',
+    minChars: 2
+});
+</script>
+
 <div>
 <label for="ck_opp_on_white">
   <input type="checkbox" value="1" name="opp_on_white" id="ck_opp_on_white"/>

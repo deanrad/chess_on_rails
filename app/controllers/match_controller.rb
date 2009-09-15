@@ -43,11 +43,15 @@ class MatchController < ApplicationController
   # POST /match/create
   def create
     return unless request.post?
+
+    @opponent = Player.find_by_name( params[:match][:opponent_name] )
+    flash[:error] = "Player #{params[:match][:opponent_name]} not found" and return unless @opponent
+
     attrs = {}
     if params[:opponent_side] == 'black'
-      attrs = {:white => current_player, :black => Player.find( params[:opponent_id] )}
+      attrs = {:white => current_player, :black => @opponent }
     else
-      attrs = {:black => current_player, :white => Player.find( params[:opponent_id] )}
+      attrs = {:black => current_player, :white => @opponent }
     end
     setup = params[:start_pos]
     
@@ -61,6 +65,14 @@ class MatchController < ApplicationController
     end
 
     redirect_to match_url(@match.id) if @match
+  end
+
+  def auto_complete_for_player_name
+    @players = Player.find(:all)
+    player_text = @players.inject("") do |txt, p|
+      txt << "  <li>#{p.name}</li>\n"
+    end
+    render :text => "<ul>\n" + player_text + "</ul>"
   end
 
   private 
