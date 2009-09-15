@@ -67,7 +67,7 @@ body{ font-family:sans-serif; font-size:11pt; }
 #start_pos {width:300px;}
 
 #board_table .just_moved{ border: dashed 1px #000; }
-#board_table .just_moved_w_capture{ border: dashed 1px #000; }
+#board_table .just_moved_w_capture{ border: dashed 1px #f33; }
 
 div.auto_complete {
   width: 350px;

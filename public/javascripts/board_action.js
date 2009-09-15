@@ -49,7 +49,20 @@ function set_board(move_num, allowed_moves){
      function( elem ){ 
        try{
 	 elem.update( markup_piece( elem.id, all_boards[move_num][elem.id], allowed_moves[elem.id] ) );
-	 elem.removeClassName('just_moved'); //no way to restore this once you've clicked away, oh well
+	 if( move_num != all_boards.length - 1 ){
+	   //no way to restore this once you've clicked away (yet), oh well
+	   elem.removeClassName('just_moved'); 
+	   elem.removeClassName('just_moved_w_capture'); 
+         }
+	 else{
+	     //reapply highlights if you're at the last move
+	     if( elem.id == current_last_move_from || elem.id == current_last_move_to ){
+		 move_capture_class = 'just_moved';
+                 if( (elem.id == current_last_move_to) && current_last_move_was_x )
+		     move_capture_class += '_w_capture';
+                 elem.addClassName(move_capture_class);
+	     }
+	 }
        }
        catch(ex){
 	   log(ex.description); return;
