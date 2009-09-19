@@ -1,5 +1,8 @@
 page << "var all_boards = [];"
 page << "var current_allowed_moves = [];"
+page << "var current_last_move_from  = '#{last_move.from_coord}';"
+page << "var current_last_move_to    = '#{last_move.to_coord}';"
+page << "var current_last_move_was_x = '#{last_move.notation.include?('x')}';"
 
 match.moves.each_with_index do |mv, idx|
   page << "all_boards[#{idx+1}] = #{match.boards[idx+1].to_json}"

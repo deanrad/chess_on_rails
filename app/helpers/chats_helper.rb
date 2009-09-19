@@ -3,7 +3,7 @@ module ChatsHelper
   # to the moves they represented, or leaves them unreplaced
   # aware of: match.moves, SAN, JS:set_board(move, allowed_moves)
   def link_notations( txt )
-    match_moves = Match.find( params[:match_id] ).moves.reverse
+    match_moves = match.moves.reverse
     move_count  = match_moves.count
 
     txt.gsub(SAN::REGEXP) do |notation| 

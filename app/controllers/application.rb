@@ -3,6 +3,7 @@
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
+  include MatchHelper
 
   # who's authenticated, visible to controllers and views
   attr_accessor :current_player

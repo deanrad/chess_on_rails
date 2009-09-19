@@ -70,7 +70,7 @@ to the rock from under which you came ?' %>
   <div id="chat_container" class="status_tab">
     <%= periodically_call_remote( :url => match_chat_url(match), :method => :get, :frequency => 7, :update => 'chat') %>
     <div id="chat">
-      Chat loading..
+      <%= render :partial => 'chats/chats', :locals => { :chats => chats } %>
     </div>
     <div id="chat_form">
       <% remote_form_for( Chat.new, :url => match_chat_path(match), :update => 'chat' ) do |f| %>
