@@ -10,7 +10,6 @@ describe Move do
   
   it 'should be an error to leave ones king in check' do
     match = matches(:scholars_mate)
-    pending 'check and checkmate detection still broken'
 
     #this is not a mating move but king is in check and must move
     match.moves << move = Move.new( :notation => 'Bxf7' )

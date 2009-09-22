@@ -168,7 +168,7 @@ class Board < Hash
       piece && piece.function==:king && piece.side == side 
     end
 
-    assassin = self.detect do |position, attacker|
+    assassin_pos, assassin = self.detect do |position, attacker|
       attacker && (attacker.side != side) &&
       attacker.allowed_moves(self).include?(king_pos.to_sym)
     end
