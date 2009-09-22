@@ -40,18 +40,17 @@
 </div>
 
 <div id="actions_region">  
-
 <% if match.side_of(current_player) %>
-<div id="move_creator_parent" >
-  <%= render :partial => "move_maker" %>
-</div>
-<div id="game_actions">
-Actions: 
-  <%= link_to "Resign", 
+  <div id="move_creator_parent" >
+    <%= render :partial => "move_maker" %>
+  </div>
+  <div id="game_actions">
+  Actions: 
+ <%= link_to "Resign", 
     url_for(:action => 'resign'), 
     :confirm => 'Are you truly ready to accept disgrace and sulk back
 to the rock from under which you came ?' %>
-  <%= link_to "PGN", 
+ <%= link_to "PGN", 
     match_url(@match, :format=>'pgn'), 
     :title => 'PGN is the most common notation for a game, consisting of a formatted list of every move that has occurred, in algebraic notation.' %>
 
