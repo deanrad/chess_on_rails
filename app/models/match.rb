@@ -63,6 +63,7 @@ class Match < ActiveRecord::Base
 
   # cache this board and make it the most recent one
   def save_board( last_move )
+    return false unless last_move.valid?
     recent = boards[boards.keys.max]
     @boards[ @boards.keys.max + 1 ] = recent.dup.play_move!( last_move )
   end
