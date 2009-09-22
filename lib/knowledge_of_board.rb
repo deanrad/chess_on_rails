@@ -1,3 +1,6 @@
+# Confers upon the includer knowledge of the chess board - its positions, sides, etc..
+# As a side effect and performance boost, adds memoization support for class methods,
+# and memoizes them.
 module KnowledgeOfBoard
   # Array of arrays of symbols representing white's view of the board
   POSITIONS = [ [:a8, :b8, :c8, :d8, :e8, :f8, :g8, :h8],
