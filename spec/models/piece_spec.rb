@@ -81,7 +81,7 @@ describe 'Piece' do
       m = matches(:unstarted_match)
       m.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
 
-      m.board[:f1].allowed_moves(m.board).should == [:e2, :d3, :c4, :b5, :a6]
+      m.board[:f1].allowed_moves(m.board).should == [:a6, :b5, :c4, :d3, :e2]
     end
   end
 end

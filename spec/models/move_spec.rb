@@ -87,13 +87,6 @@ describe Move do
       Bishop.new(:white).abbrev.upcase.should == 'B'
     end
 
-    it 'should notate a pawn for the file it is on' do
-      pending('havent found how to do this yet')
-      p = Pawn.new(:black)
-      p.notation('b').should == 'b'
-      p.notation('c').should == 'c'
-    end
-
     it 'should not notate a pawn without its file' do
       p = Pawn.new(:white)
       lambda{ p.notation.should == 'p' }.should raise_error
@@ -125,6 +118,7 @@ describe Move do
       match.moves << move =  Move.new( :notation => 'move it baby' )
       move.should_not be_valid
     end
+
     it 'should err if notation is ambiguous' do
       match = matches(:queenside_castled)
       match.moves << move = Move.new( :notation => 'Nf3' )
@@ -175,8 +169,10 @@ describe Move do
     
     it 'should notate check if no intervening piece blocks check' do
       match = matches(:dean_vs_paul)
-      match.moves << move = Move.new( :from_coord => 'f8', :to_coord => 'b4' ) 
-      move.notation.should == 'Bb4+'
+      lambda{
+        match.moves << move = Move.new( :from_coord => 'f8', :to_coord => 'b4' ) 
+        move.reload.notation.should == 'Bb4+'
+      }.should change{match.moves.count}.by(1)
     end
 
     it 'should not notate check if an intervening piece blocks check' do

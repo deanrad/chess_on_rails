@@ -49,12 +49,11 @@ function set_board(move_num, allowed_moves){
      function( elem ){ 
        try{
 	 elem.update( markup_piece( elem.id, all_boards[move_num][elem.id], allowed_moves[elem.id] ) );
-	 if( move_num != all_boards.length - 1 ){
-	   //no way to restore this once you've clicked away (yet), oh well
-	   elem.removeClassName('just_moved'); 
-	   elem.removeClassName('just_moved_w_capture'); 
-         }
-	 else{
+
+	 //remove highlights, reapplying if its the last-move you're repainting 
+         elem.removeClassName('just_moved'); 
+	 elem.removeClassName('just_moved_w_capture'); 
+	 if( move_num == all_boards.length - 1 ){
 	     //reapply highlights if you're at the last move
 	     if( elem.id == current_last_move_from || elem.id == current_last_move_to ){
 		 move_capture_class = 'just_moved';
