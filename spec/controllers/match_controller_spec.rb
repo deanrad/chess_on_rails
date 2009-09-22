@@ -11,7 +11,7 @@ describe MatchController do
   end
   
   it 'should allow POST creation of a match between two player_ids' do
-    post :create, {:opponent_id => 3, :opponent_side => 'black'}, {:player_id => players(:dean).id }
+    post :create, {:match => {:opponent_name => 'Paul'}, :opponent_side => 'black'}, {:player_id => players(:dean).id }
 
     match = assigns[:match]
 
@@ -49,7 +49,7 @@ describe MatchController do
   it 'should show any current move queue in the page' do
     get :show, {:id => matches(:dean_vs_paul).id, :format => 'html'}, {:player_id => players(:dean).id }
 
-    response.should have_tag("div#this_move_queue", :text => 'Nc4 b5')
+    response.should have_tag("input#gameplay_move_queue", :value => 'Nc4 b5')
   end
 
   describe '- status updating' do
@@ -59,7 +59,7 @@ describe MatchController do
     # /match/5/status?move=8, white queries if the 8th move has been made by black yet
     it 'should detect that the client does not need updating if it sends current value of move param' do
       @match = matches(:castled) #paul white, dean black, dean to move
-      get :status, { :id => @match.id, :move => @match.moves.length + 1 }, { :player_id => players(:paul).id }
+      get :status, { :id => @match.id, :move => @match.moves.length - 1 }, { :player_id => players(:paul).id }
       assigns(:status_has_changed).should be_false
     end
 
