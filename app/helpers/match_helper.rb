@@ -13,25 +13,40 @@ module MatchHelper
     @board ||= match.board
   end
 
-  # TODO this should explicitly deal with non-logged in users
   def viewed_from_side
     @viewed_from_side ||= (current_player == match.player1) ? :white : :black
   end
+
+  def side_of(plyr)
+    return :white if plyr == match.player1
+    return :black if plyr == match.player2
+  end
   
   def your_turn
-    @your_turn ||= match.turn_of?( current_player )
+    @your_turn ||= case side_of(current_player)
+      when :white 
+        move_count % 1 == 0
+      when :black
+        move_count % 1 == 1
+      else
+        nil
+    end
   end
 
   def last_move
-    @last_move ||= match.moves.last
+    @last_move ||= match.moves[ move_count - 1]
   end
 
   def move_count
     @move_count ||= match.moves.count
   end
 
+  def gameplay
+    @gameplay = match.gameplays.send( side_of(current_player) )
+  end
+
   def status_has_changed
-    @status_has_changed ||= ( params[:move].to_i != match.moves.length-1)
+    @status_has_changed ||= ( params[:move].to_i != move_count-1)
   end
 
   # the files, in order from the viewed_from_side for rendering
@@ -46,6 +61,10 @@ module MatchHelper
 
   def chats
     @chats ||= Chat.find_all_by_match_id( match.id )
+  end
+
+  def board
+    @board ||= match.board
   end
 
   # checks for existance of .gif file in the current set's directory

@@ -4,6 +4,7 @@ module ChatsHelper
   # aware of: match.moves, SAN, JS:set_board(move, allowed_moves)
   def link_notations( txt )
     match_moves = match.moves.reverse
+=begin
     move_count  = match_moves.count
 
     txt.gsub(SAN::REGEXP) do |notation| 
@@ -15,6 +16,7 @@ module ChatsHelper
         notation
       end
     end
+=end
   end
 
 end

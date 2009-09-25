@@ -78,11 +78,6 @@ class Match < ActiveRecord::Base
     next_to_move == :black ? gameplays.black.player : gameplays.white.player
   end
   
-  def turn_of?( plyr )	
-    #return true #HACK
-    self.next_to_move == side_of(plyr)
-  end
-
   # as long as the game starts at the beginning, white goes first
   def first_to_move
     return :white if self[:start_pos].blank?
@@ -90,14 +85,9 @@ class Match < ActiveRecord::Base
   end
 
   # the next_to_move alternates sides each move (technically every half-move)
-  def next_to_move
-    moves.count.even? ? first_to_move : opp(first_to_move)
-  end
-
-  def side_of( plyr ) 
-    return :white if plyr == player1
-    return :black if plyr == player2
-  end
+  #def next_to_move
+  #  moves.count.even? ? first_to_move : opp(first_to_move)
+  #end
 
   def lineup
     "#{player1.name} vs. #{player2.name}"

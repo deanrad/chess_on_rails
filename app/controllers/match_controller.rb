@@ -75,11 +75,4 @@ class MatchController < ApplicationController
     render :text => "<ul>\n" + player_text + "</ul>"
   end
 
-  private 
-
-  def gameplay
-    @gameplay = match.gameplays.send( match.side_of(current_player) )
-  end
-  helper_method :gameplay
-
 end

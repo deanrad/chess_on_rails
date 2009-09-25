@@ -1,65 +1,23 @@
-<script id="current_allowed_moves" type="text/javascript">
-// Here is the likely cause of 5 second rendering culprit, non-memoization of piece#allowed_moves(board) when rendering 
-// board and allowed moves in separate loops. TODO revisit how many times we need to iterate in order to create our markup, and lastly memoize if necessary
-
-var current_allowed_moves = [];
-var current_last_move_from =  '<%= last_move && last_move.from_coord %>';
-var current_last_move_to =    '<%= last_move && last_move.to_coord %>';
-var current_last_move_was_x = '<%= last_move && last_move.notation.include?('x') %>';
-
-<%  match.board.each do |pos, piece| -%>
-<%  next unless piece %>
-<%= %Q{current_allowed_moves['#{pos}'] = '#{piece.allowed_moves(match.board).join(' ')}';} %>
-<%  end -%>
-</script>
+<!-- 
+<%= board.to_json %>
+-->
 <table id="board_table" cellpadding="0" cellspacing="0">
- <% ranks.each do |rank| -%>
+  <% ranks.each do |rank| %>
     <tr class="row_container">
-    <td class="label rank"><%= rank %></td>
-    <% files.each do |file|
-       position = "#{file}#{rank}" 
-       move_capture_class = ''
-       if last_move && (last_move.to_coord == position || last_move.from_coord == position)
-         move_capture_class = 'just_moved'
-         if last_move.notation.include?('x') && last_move.to_coord == position
-           move_capture_class << '_w_capture' 
-         end
-       end
-    -%>
-      <td class="piece_container <%= position %> <%= move_capture_class %>" id="<%= position %>">
-        <% #indexing the helper-returned variable board doesnt work unless called through self.board
-	   p = self.board[position] 
-           if p                                       -%>
-	  <%= 
-	    image_tag image_source_of(p), 
-	      :id => p.board_id, 
-	      :alt => p.abbrev,
-	      :class => 'piece ' + p.allowed_moves(self.board).join(' ')
-	  %>
-         <%= "<!-- not draggable, not your turn -->" unless your_turn %>
-         <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn %> 
-        <% else -%>
-          &nbsp;
-        <% end -%>
+      <td class="label rank"><%= rank %></td>
+      <% files.each do |file| %>
+      <% position = "#{file}#{rank}" %>
+      <td class="piece_container" id="<%= position %>">
       </td>	
-    <% end %>
+      <% end # files.each %> 
     </tr>
-    
-    <% if rank==ranks[7] %>
-      <tr class="bottom_labels">
-        <td class="rank file">&nbsp;</td>
-        <% files.each do |file| -%>
-          <td class="label file"><%= file %></td>	
-        <% end %>
-      </tr>
-    <% end %>
   <% end %>
+    
+    <tr class="bottom_labels">
+      <td class="rank file">&nbsp;</td>
+      <% files.each do |file| -%>
+        <td class="label file"><%= file %></td>	
+      <% end %>
+    </tr>
 </table>
 <input type="button" value="Switch View" onclick="toggleBoardView()"/>
-
-<script type="text/javascript" id="rebind_droppables">
-$$('.piece_container').each( function(item){
-  Droppables.add(item.identify(), {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: item.identify() } );
-  }
-);
-</script>
