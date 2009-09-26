@@ -3,12 +3,6 @@ class MatchController < ApplicationController
   
   # GET /match/1
   def show    
-    respond_to do |format|
-      format.html { render :template => 'match/result' and return if match.active == 0 }
-      format.text { render :text => match.board.to_s(viewed_from_side==:black) }
-      format.pgn  { render :partial => 'match/move_list' }
-      format.fen  { render :text => match.board.to_fen }
-    end
   end
 
   # GET /match/ 
@@ -44,24 +38,28 @@ class MatchController < ApplicationController
   def create
     return unless request.post?
 
-    @opponent = Player.find_by_name( params[:match][:opponent_name] )
-    flash[:error] = "Player #{params[:match][:opponent_name]} not found" and return unless @opponent
+    if params[:match]
+      @opponent = Player.find_by_name( params[:match][:opponent_name] )
+    elsif params[:opponent_id] # some tests use this format
+      @opponent = Player.find(params[:opponent_id])
+    end
 
-    attrs = {}
+    flash[:error] = "Player not found ! (#{params.inspect})" and return unless @opponent
+
     if params[:opponent_side] == 'black'
       attrs = {:white => current_player, :black => @opponent }
     else
       attrs = {:black => current_player, :white => @opponent }
     end
-    setup = params[:start_pos]
+    start_pos = params[:start_pos]
     
-    attrs[:start_pos] = setup if setup and Fen::is_fen?( setup )
+    attrs[:start_pos] = start_pos if start_pos and Fen::is_fen?( start_pos )
     @match = Match.create( attrs )
     
-    if setup and PGN::is_pgn?( setup )
-      pgn = PGN.new( setup )
+    if start_pos && PGN::is_pgn?( start_pos )
+      pgn = PGN.new( start_pos )
       pgn.playback_against( @match )
-      logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{setup}" if pgn.playback_errors
+      logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{start_pos}" if pgn.playback_errors
     end
 
     redirect_to match_url(@match.id) if @match

@@ -57,14 +57,21 @@ describe MatchController do
     response.should have_tag("input#gameplay_move_queue", :value => 'Nc4 b5')
   end
 
+  unless RUBY_PLATFORM =~ /w(in)?32/i
+    it 'should allow curl-based fetching of a board' do
+      # curl -u chicagogrooves@gmail.com:9 -H "Accept: text/plain" http://localhost:3000/match/526254980.txt
+      # Cant't test w/o server running ... hmm...
+    end
+  end
+
   describe '- status updating' do
     before(:all) do 
     end
 
-    # /match/5/status?move=8, white queries if the 8th move has been made by black yet
+    # /match/5/status?move=8 - white queries if the 8th move has been made by black yet
     it 'should detect that the client does not need updating if it sends current value of move param' do
       @match = matches(:castled) #paul white, dean black, dean to move
-      get :status, { :id => @match.id, :move => @match.moves.length - 1 }, { :player_id => players(:paul).id }
+      get :status, { :id => @match.id, :move => @match.moves.length + 1 }, { :player_id => players(:paul).id }
       assigns(:status_has_changed).should be_false
     end
 

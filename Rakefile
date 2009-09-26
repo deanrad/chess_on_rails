@@ -16,6 +16,8 @@ require 'tasks/rails'
 # as opposed to hacking within a for-loop
 # 
 
+task :test => [:spec]
+
 #namespace :analyze do
 
   desc "Report statistics (lines, lines of ERB, etc) about the views in this application"

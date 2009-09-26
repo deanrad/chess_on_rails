@@ -21,18 +21,9 @@ class MoveController < ApplicationController
     @match.save! #only here to trigger validation
 
     #unceremonious way of saying you just ended the game 
-    redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
-    respond_to do |format|
-      format.html{ 
-        redirect_to( match_path(@match) ) and return unless request.xhr? 
-        
-        #otherwise do a normal status update to refresh UI
-        render :template => 'match/status'
-      }
-      format.text{
-        render :text => @match.board.to_s( @viewed_from_side==:black )
-      }
-    end
+    #redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
+
+    redirect_to( match_path(@match) ) and return unless request.xhr? 
   end
   
 protected
