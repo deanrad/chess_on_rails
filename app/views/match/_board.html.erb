@@ -3,6 +3,10 @@
 // board and allowed moves in separate loops. TODO revisit how many times we need to iterate in order to create our markup, and lastly memoize if necessary
 
 var current_allowed_moves = [];
+var current_last_move_from =  '<%= last_move && last_move.from_coord %>';
+var current_last_move_to =    '<%= last_move && last_move.to_coord %>';
+var current_last_move_was_x = '<%= last_move && last_move.notation.include?('x') %>';
+
 <%  match.board.each do |pos, piece| -%>
 <%  next unless piece %>
 <%= %Q{current_allowed_moves['#{pos}'] = '#{piece.allowed_moves(match.board).join(' ')}';} %>

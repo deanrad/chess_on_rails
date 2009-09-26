@@ -10,6 +10,11 @@ describe MatchController do
     @response   = ActionController::TestResponse.new
   end
   
+  it 'should successfully render a brand new match' do
+    get :show, {:id => matches(:unstarted_match).id}, {:player_id => players(:dean).id }
+    response.should be_success
+  end
+
   it 'should allow POST creation of a match between two player_ids' do
     post :create, {:match => {:opponent_name => 'Paul'}, :opponent_side => 'black'}, {:player_id => players(:dean).id }
 
