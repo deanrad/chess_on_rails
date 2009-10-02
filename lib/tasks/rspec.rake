@@ -15,10 +15,13 @@ end
 task :default => :spec
 task :stats => "spec:statsetup"
 
-desc "Run all specs in spec directory (excluding plugin specs)"
+desc "Run all specs in spec directory (excluding plugin specs). \
+\nTarget individual specfile with FILE=spec/models/foo_spec.rb, \
+\nor individual example with EXAMPLE='should baz'"
 Spec::Rake::SpecTask.new(:spec => spec_prereq) do |t|
   t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
-  t.spec_files = FileList['spec/**/*_spec.rb']
+  t.spec_opts.unshift( '-e', "'#{ENV['EXAMPLE']}'" ) unless ENV['EXAMPLE'].blank?
+  t.spec_files = (ENV['FILE'].blank?) ? FileList['spec/**/*_spec.rb'] : FileList[ENV['FILE']]
 end
 
 # BEGIN HACK to allow daisy-chaining of rake tasks - eg supplement rake test
