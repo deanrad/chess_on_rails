@@ -149,4 +149,14 @@ class Match < ActiveRecord::Base
     boards
   end
 
+  # A string declaring what state this game is in. Combines the notion
+  # of what move it is with other effects such as resignation, draw offer, etc..
+  def gamestate
+    with("#{moves.length}") do |gs|
+      gs << "_r" if self.active == 0 && self.result == 'Resigned'
+      gs << "_m" if self.active == 0 && self.result == 'Checkmate'
+      gs
+    end
+  end
+
 end

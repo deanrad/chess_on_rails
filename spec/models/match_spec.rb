@@ -98,5 +98,14 @@ describe Match do
     end
   end
 
+  describe 'gamestate' do
+    it 'should have a gamestate of 0 for the initial match' do
+      matches(:unstarted_match).gamestate.should == "0"
+    end
+
+    it 'should have a gamestate of 1_r for a match resigned after first move'
+
+    # ...
+  end
 end
   
