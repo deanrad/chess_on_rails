@@ -128,8 +128,7 @@ class Match < ActiveRecord::Base
   # for now requires exact match on the notation
   def play_queued_moves( m )
     opponent = m.match.gameplays.send( m.match.next_to_move )
-    queue = opponent.move_queue
-    return unless queue.length > 1
+    return unless opponent && opponent.move_queue.length > 1
 
     queue = MoveQueue.new(queue) unless MoveQueue === queue
 
