@@ -94,15 +94,12 @@ describe Match do
 
     it 'should reflect the piece location FEN indicates, not the initial board' do
       m = matches(:e4)
-      m.board['e2'].should be_nil
-      m.board['e4'].should_not be_nil
+      m.board[:e2].should be_nil
+      m.board[:e4].should_not be_nil
     end
   end
 
   it 'should instantiate a pgn fixture' do
-    # pending 'need to make some rails hacks to make this possible'
-    # lambda{ matches(:first_pgn) }.should_not raise_error
-    #debugger;
     m = matches(:castling_problem)
     m.moves.first.notation.should == 'd4'
     m.moves.length.should > 16

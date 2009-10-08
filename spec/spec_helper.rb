@@ -34,7 +34,6 @@ module PgnFixtures
   def matches_with_pgn_fixtures *args
     matches_without_pgn_fixtures *args
     rescue
-    pgn_text = 
     pgn = PGN.new `cat #{RAILS_ROOT}/test/fixtures/matches/#{args.first}.pgn`
     pgn.playback_against( Match.new )
   end
