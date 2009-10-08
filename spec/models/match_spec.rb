@@ -100,9 +100,10 @@ describe Match do
   end
 
   it 'should instantiate a pgn fixture' do
-    m = matches(:castling_problem)
+    m = matches(:pgn_playback_problem)
+    m.moves.length.should == 23
     m.moves.first.notation.should == 'd4'
-    m.moves.length.should > 16
+    m.moves.last.notation.should == 'O-O'
   end
 end
   

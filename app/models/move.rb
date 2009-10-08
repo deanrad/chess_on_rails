@@ -12,9 +12,6 @@ class Move < ActiveRecord::Base
     return super( :notation => "#{opts}" ) if String === opts || Symbol === opts
 
     super
-    if self[:notation].blank? == ( self[:from_coord].blank? && self[:to_coord].blank? )
-      raise 'Please only attempt to specify a notation, or a from/to coordinate pair.' 
-    end
   end
 
   # The board this move is being made against - set and read for validations
@@ -63,6 +60,7 @@ class Move < ActiveRecord::Base
     self[:notation] = notate
   end
 
+  # Active Record callback to ensure validity of this chess move at this point in the game
   def validate
     # Got burned REAL bad by this bug. Just gonna fix cheap with this early exit. Don't want to make Match
     #   look look like :has_many :moves, :validate => false. But it really does matter in my case when
@@ -109,14 +107,14 @@ class Move < ActiveRecord::Base
   # temporarily expands the castling notation to Kg2 
   # - if g2 is in K's allowed move list from it's from_coord then we're good
   def infer_coordinates_from_notation
-
     if notation.include?('O-O')
       file = notation.include?('O-O-O') ? 'c' : 'g'
       rank = match.next_to_move == :white ? '1' : '8'
       self.notation = "K#{file}#{rank}"
     end
 
-    self.to_coord = notation.gsub( /[#x!?]/, "")[-2,2]
+    nofrills = notation.gsub('+','').gsub(/=./, '')
+    self.to_coord = nofrills.gsub( /[#x!?]/, "")[-2,2]
 
     logger.info "infer_coordinates_from_notation: Inferred a move to #{to_coord} from notation: #{notation}"
 

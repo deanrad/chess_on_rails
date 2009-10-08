@@ -1,4 +1,12 @@
 # Parses PGN files. My own quick dirty reinvention of the wheel.
+# Note - the scanning regex produces some wierd results, thus the hack
+# code needed in the initialize method. Heres what it looks like at runtime:
+#>> "11. Ne2 Nd7 12. O-O".scan(NOTATION){ |n| puts n.to_a.inspect unless n.blank? }
+# [nil, nil, nil, nil, nil, nil, nil, nil, nil]
+# ["Ne2", "N", "", "", "e2", nil, "", nil, nil]
+# ["Nd7", "N", "", "", "d7", nil, "", nil, nil]
+# [nil, nil, nil, nil, nil, nil, nil, "O-O", nil]
+
 class PGN
   attr_accessor :tags
   attr_accessor :notations
@@ -19,10 +27,12 @@ class PGN
     end
 
     movetext = str #TODO split off the movetext section alone for parsing
-    movetext.scan( NOTATION ) do |notation|
-      @notations << notation[0]
+    movetext.scan( NOTATION ) do |n|
+      sorted_submatches = n.to_a.reject(&:nil?).uniq.sort{|a,b| a.length <=> b.length}
+      @notations << sorted_submatches.last unless sorted_submatches.last.blank?
     end
 
+    # $stderr.puts "PGN detected notations #{@notations.join(',')} in movetext:\n#{movetext}" 
     @errors[:moves] = 'No moves were detected in this PGN file.' unless @notations.length > 1
   end
 
@@ -41,6 +51,7 @@ class PGN
     notations.each do |notation|
       match.moves << last_move = Move.new( :notation => notation )
       unless last_move.valid?
+        puts "PGN Error on notation: '#{notation}' " + last_move.errors.to_a.join(',')
         # raise ArgumentError, last_move.errors.to_a 
         @playback_errors = last_move.errors
         break;
