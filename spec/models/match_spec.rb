@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Match do
+  include PgnFixtures
 
   it 'should have player1 be the first to move' do
     m1 = matches(:unstarted_match)
@@ -98,5 +99,13 @@ describe Match do
     end
   end
 
+  it 'should instantiate a pgn fixture' do
+    # pending 'need to make some rails hacks to make this possible'
+    # lambda{ matches(:first_pgn) }.should_not raise_error
+    #debugger;
+    m = matches(:castling_problem)
+    m.moves.first.notation.should == 'd4'
+    m.moves.length.should > 16
+  end
 end
   

@@ -46,6 +46,7 @@ class PGN
         break;
       end
     end
+    match
   end
 
 end
