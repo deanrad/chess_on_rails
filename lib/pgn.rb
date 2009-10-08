@@ -51,9 +51,9 @@ class PGN
     notations.each do |notation|
       match.moves << last_move = Move.new( :notation => notation )
       unless last_move.valid?
-        puts "PGN Error on notation: '#{notation}' " + last_move.errors.to_a.join(',')
+        # puts "PGN Error on notation: '#{notation}' " + last_move.errors.to_a.uniq.join(',')
         # raise ArgumentError, last_move.errors.to_a 
-        @playback_errors = last_move.errors
+        (@playback_errors ||= []) << last_move.errors.to_a.uniq
         break;
       end
     end

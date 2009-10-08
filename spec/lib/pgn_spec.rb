@@ -53,6 +53,8 @@ describe PGN do
   it 'should scan in spite of comments' do
     pgn = PGN.new(PGNExamples::WITH_COMMENTS)
     pgn.notations.length.should == 20
+    pgn.notations[8].should == 'O-O'
+    pgn.notations[9].should == 'Be7'
   end
 
   it 'should know that a FEN is not a PGN' do
@@ -74,6 +76,18 @@ describe PGN do
 
     pgn.playback_errors.should be_blank
     m.moves.length.should == 2
+  end
+
+  # TODO - just run all pgn fixtures as separate examples !!!
+  it 'should be able to playback PGN against a match part 2' do
+    Board.any_instance.stubs('in_check?').returns false
+
+    m = matches(:unstarted_match)
+    pgn = PGN.new(PGNExamples::WITH_COMMENTS)
+    pgn.playback_against(m)
+
+    pgn.playback_errors.should be_blank
+    m.moves.length.should == 20
   end
 
   it 'should save playback errors' do

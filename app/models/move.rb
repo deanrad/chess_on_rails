@@ -131,7 +131,11 @@ class Move < ActiveRecord::Base
     matcher = (disambiguator =~ /[1-8]/) ? Regexp.new( "^.#{disambiguator}$" ) : Regexp.new( "^#{disambiguator}.$" )
     movers = @possible_movers.select { |pos, piece| matcher.match(pos.to_s) }
 
-    self[:from_coord] = movers[0][0].to_s and return if movers.length == 1
+    if movers.length == 1
+      self[:from_coord] = movers[0][0].to_s
+    else
+      errors.add_to_base "No piece capable of moving to #{to_coord} on this board"
+    end
   end
 
   # Returns the notation for a given move - depends on alot of things - whether check was given, a capture made, etc..
