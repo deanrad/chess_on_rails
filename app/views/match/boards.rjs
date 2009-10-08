@@ -1,3 +1,26 @@
+# Boards.rjs : Emits javascript to give client side access to the history of boards
+# through which this match has progressed.
+# Declared Client-side variables:
+#   board obj  : hash of position to array of piece info
+#                Example: {"c5": ["w","q","bishop"] ... }
+#
+#   all_boards : array of boards, keyed on move number, starting from 1 
+#   current_allowed_moves: hash of positions to space-delimited list of allowed 
+#                positions to move to *
+# 
+# Note: This file is sourced in by the match/show view and gets the client caught up
+#     on history so that they can replay the match on their side (currently by 
+#     clicking on moves in the move list). After the initial load, periodic executer
+#     calls to status.rjs get the incremental javascript needed to update to the 
+#     current gamestate. 
+#
+# TODO: refactor client more cleanly side JS into
+#      variable definitions - loaded once
+#      status updates       - polled for constantly to advise of moves, resignations, draw offers
+#                             some, like draw offers can be cancelled by a future update, others
+#                             like board states, can not
+#      catch-up script      - loaded at page load/refresh time in case status updates not 
+
 page << "var all_boards = [];"
 page << "var current_allowed_moves = [];"
 
