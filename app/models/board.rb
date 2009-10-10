@@ -41,12 +41,10 @@ class Board < Hash
 
   # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
   def [] pos
-    pos = pos.to_sym unless Symbol===pos
-    super(pos)
+    super(Symbol===pos ? pos : pos.to_sym)
   end
   def []= pos, val
-    pos = pos.to_sym unless Symbol===pos
-    super(pos, val)
+    super(Symbol===pos ? pos : pos.to_sym, val)
   end
 
   # Resets the board to initial position
