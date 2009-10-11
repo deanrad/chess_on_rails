@@ -73,8 +73,8 @@ class Piece
 
   # Returns those positions for which this piece allows the move and it is not obstructed on this board
   # Overridden by king for example to allow castling
-  def allowed_moves(b=nil)
-    board = b || self.board or raise ArgumentError, "A board is necessary to ask a piece its allowed moves"
+  def allowed_moves(board)
+    #board = b || self.board or raise ArgumentError, "A board is necessary to ask a piece its allowed moves"
     mypos = board.index(self) 
 
     Board.all_positions.select do |sq|

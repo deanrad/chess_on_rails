@@ -1,5 +1,7 @@
 class Move < ActiveRecord::Base
 
+  include MoveNotation
+
   ######### ActiveRecord Hooks  ##############################################
 
   belongs_to :match
@@ -11,6 +13,7 @@ class Move < ActiveRecord::Base
   # evaluation of the later methods. Default error keys are the method, prepended
   # with err_
   VALIDATIONS = [
+     :coords_must_be_valid,
      :piece_must_be_present,
      :piece_must_allow_move,
   ]
@@ -53,6 +56,9 @@ class Move < ActiveRecord::Base
   # The function (knight, rook, etc..) of the piece that is moving.
   def function; piece ? piece.function : "piece" ; end
 
+  def capture?
+    !! self[:captured_piece_coord]
+  end
 
   ######### Before-validation methods  #######################################
   def only_create
@@ -67,6 +73,12 @@ class Move < ActiveRecord::Base
     end
   end
 
+  def coords_must_be_valid
+    [:from_coord, :to_coord].each do |coord|
+      add_error coord, :"#{coord}_must_be_valid" unless Board.valid_position?( send(coord) )
+    end
+  end
+
   def piece_must_be_present
     add_error(:from_coord, :piece_must_be_present) unless piece
   end
@@ -76,6 +88,7 @@ class Move < ActiveRecord::Base
       piece.allowed_moves(self.board).include? self.to_coord.to_sym
     end
   end
+
 
   ######### Before-save Methods ##############################################
   def update_computed_fields

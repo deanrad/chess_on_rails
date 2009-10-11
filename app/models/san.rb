@@ -1,6 +1,17 @@
 # An instance of Standard Algebraic Notation
 class SAN
+
+  # The regular expression for parsing a SAN string (a work-in-progress!)
   REGEXP = /(?:([RNBQK]|[a-h](?=x))?([a-h1-8])*?(x)?([a-h][1-8])(=([RNBQ]))?([+?!\#])?|(O-O(?:-O)?))/
+
+
+  # A map of roles (rook, knight, etc) to their abbreviations
+  ROLE_TO_ABBREV = {:rook => "R", :knight => "N", :bishop => "B", :queen => "Q", :king => "K" }.freeze
+
+  # A map of abbrevations to roles, also mapping a-h to pawn.
+  ABBREV_TO_ROLE = ROLE_TO_ABBREV.invert.update( 
+     %w( a b c d e f g h ).inject({}){|h,k| h[k] = :pawn; h } 
+  ).freeze
 
   attr_accessor :original_text
   attr_accessor :role, :disambiguator, :capture, :destination, :promo, :qualifier, :castle, :castle_side
@@ -29,26 +40,30 @@ class SAN
       if @destination && @role.blank?
         @role = :pawn 
       else
-        @role = case @role
-          when "R"; :rook
-          when "N"; :knight
-          when "B"; :bishop
-          when "Q"; :queen
-          when "K"; :king
-          when "a","b","c","d","e","f","g","h"; :pawn
-        end
+        @role = ABBREV_TO_ROLE[ @role ]
       end
 
-      @promo = case @promo
-        when "R"; :rook
-        when "N"; :knight
-        when "B"; :bishop
-        when "Q"; :queen
-        when "K"; :king
-      end
+      @promo = ABBREV_TO_ROLE[ @promo ]
 
     else
       $stderr.puts "SAN::Unrecognized notation #{str}"
+    end
+  end
+
+  # Returns the SAN for the move passed
+  def self.from_move(m)
+    returning("") do |n|
+      if m.piece.function == :pawn
+        n << m.from_coord.file if m.capture?
+      else
+        n << ROLE_TO_ABBREV[m.piece.function]
+      end
+
+      if m.capture?
+        n << "x"
+      end
+
+      n << "#{m.to_coord}"
     end
   end
 

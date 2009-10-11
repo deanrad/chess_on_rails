@@ -1,18 +1,33 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Move do
+  
+  before(:each) do 
+    @match = matches(:unstarted_match) #overridable
+  end
+  attr_accessor :match
+
   #it 'should be creatable but not updatable' do
   #  match = matches(:scholars_mate)
   #  m = match.moves.last
   #  pending 'WTF with AR lifecycle- ugh !'
   #  lambda{ m.to_coord='xy'; m.save! }.should raise_error(ActiveRecord::ReadOnlyRecord)
   #end
+  describe 'life cycle' do
+    it 'should save a valid move' do
+      match.moves << move = Move.new(:from_coord => 'd2', :to_coord => 'd4')
+      #debugger unless move.valid?
+      move.should be_valid
+      match.reload.moves.count.should == 1
+    end
+  end
 
   describe 'Validations with known to and from coordinates' do
-    attr_accessor :match
 
-    before(:each) do 
-      @match = matches(:unstarted_match) #overridable
+    it 'should disallow a move with nonsensical coordinates' do
+      match.moves << move = Move.new(:from_coord => '4d', :to_coord => 'd4')
+      move.should_not be_valid
+      move.errors[:from_coord].should == t( :err_from_coord_must_be_valid, move )
     end
 
     it 'should disallow a move where no piece is on the from coordinate' do
@@ -33,6 +48,18 @@ describe Move do
       move.errors[:to_coord].should == t( :err_piece_must_allow_move, move )
     end
   end # describe 'Validations with known to and from coordinates'
+
+  describe 'Notation life cycle' do
+    it 'should notate a move when saved' do
+      match.moves << move = Move.new(:from_coord => 'd2', :to_coord => 'd4')
+      move.should be_valid
+      move.notation.should == 'd4'
+    end
+  end # describe 'Notation life cycle'
+
+  describe 'Notation validation' do
+  end # describe 'Notation validation'
+
 
   
   #it 'should be an error to leave ones king in check' do
