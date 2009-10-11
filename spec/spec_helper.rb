@@ -43,3 +43,17 @@ module PgnFixtures
     }
   end
 end
+
+# Translates the key provided, and uses the model given to provide its attributes
+# and any custom methods named in its ERROR_FIELDS constant to I18n interpolation
+def t key, model = nil
+  return I18n.t key unless model
+
+  h = model.attributes.symbolize_keys
+  if model.class.const_defined? :ERROR_FIELDS
+    model.class.const_get(:ERROR_FIELDS).each do |f|
+      h[f] = model.send(f)
+    end
+  end
+  I18n.t key, h
+end

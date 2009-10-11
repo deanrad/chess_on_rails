@@ -1,75 +1,51 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Move do
-  it 'should detect an illegal move' do
-    match = matches(:unstarted_match)
-    m = nil
-    match.moves << move = Move.new( :from_coord => 'b1', :to_coord => 'd1' )
-    move.should_not be_valid
-  end
+  #it 'should be creatable but not updatable' do
+  #  match = matches(:scholars_mate)
+  #  m = match.moves.last
+  #  pending 'WTF with AR lifecycle- ugh !'
+  #  lambda{ m.to_coord='xy'; m.save! }.should raise_error(ActiveRecord::ReadOnlyRecord)
+  #end
+
+  describe 'Validations with known to and from coordinates' do
+    attr_accessor :match
+
+    before(:each) do 
+      @match = matches(:unstarted_match) #overridable
+    end
+
+    it 'should disallow a move where no piece is on the from coordinate' do
+      match.moves << move = Move.new(:from_coord => 'd3', :to_coord => 'd4')
+      move.should_not be_valid
+      move.errors[:from_coord].should == t( :err_piece_must_be_present, move )
+    end
+
+    it 'should disallow a move to a square not allowed by that piece' do
+      match.moves << move = Move.new( :from_coord => 'b1', :to_coord => 'd1' )
+      move.should_not be_valid
+      move.errors[:to_coord].should == t( :err_piece_must_allow_move, move )
+    end
+
+    it 'should disallow a move to a square not allowed by that piece (uses stubbing to allow no moves)' do
+      Pawn.any_instance.stubs(:allowed_moves).returns([])
+      match.moves << move = Move.new( :from_coord => 'd2', :to_coord => 'd3' )
+      move.errors[:to_coord].should == t( :err_piece_must_allow_move, move )
+    end
+  end # describe 'Validations with known to and from coordinates'
+
   
-  it 'should be an error to leave ones king in check' do
-    match = matches(:scholars_mate)
+  #it 'should be an error to leave ones king in check' do
+  #  match = matches(:scholars_mate)
 
     #this is not a mating move but king is in check and must move
-    match.moves << move = Move.new( :notation => 'Bxf7' )
+  #  match.moves << move = Move.new( :notation => 'Bxf7' )
     
-    match.moves << move = Move.new( :notation => 'Nf6' )
-    move.should_not be_valid
-  end
+  #  match.moves << move = Move.new( :notation => 'Nf6' )
+  #  move.should_not be_valid
+  #end
 
-  it 'should strip off the move queue part of any notated move' do
-    match = matches(:unstarted_match)
-    match.moves << m = Move.new( :notation => 'e4 e5 d4' )
-    m.notation.should == 'e4'
-  end
-
-  it 'should store the move queue part of any notated move' do
-    match = matches(:unstarted_match)
-    match.moves << m = Move.new( :notation => 'e4 e5 d4' )
-    m.match.gameplays.white.move_queue.to_s.should == 'e5 d4'
-  end
-
-  it 'should play the next move in the move queue if the notation matches' do
-    match = matches(:unstarted_match)
-    match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc6 Nc3' )
-    match.moves << m = Move.new( :notation => 'e5' )
-
-    match.reload
-    match.moves.count.should == 3
-    match.moves.reload.last.notation.should == 'd4'
-  end
-
-  it 'should keep playing from each move queue in turn' do
-    match = matches(:unstarted_match)
-    match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc6 Nc3' )
-    match.moves << m = Move.new( :notation => 'e5 d4 Nc6' )
-
-    match.reload ; match.moves.reload
-    match.moves[1].notation.should == 'e5'
-    match.moves[2].notation.should == 'd4'
-    match.moves[3].notation.should == 'Nc6'
-    match.moves[4].notation.should == 'Nc3'
-
-    match.gameplays.white.move_queue.should be_blank
-  end
-
-  it 'should allow a wildcard character (*) in the queue' do
-    match = matches(:unstarted_match)
-    match.moves << m = Move.new( :notation => 'e4 * d4' )
-    match.moves << m = Move.new( :notation => 'e5' )
-    match.reload ; match.moves.reload
-
-    match.moves.count.should == 3
-  end
-
-  it 'should invalidate the move queue if an invalid prediction was made' do
-    match = matches(:unstarted_match)
-    match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc3 Nc6' )
-    match.moves << m = Move.new( :notation => 'd5' )
-    match.gameplays.white.move_queue.should be_blank
-  end
-
+=begin
   describe 'Notation' do
     it 'should notate king K' do
       King.new(:white).abbrev.upcase.should == 'K'
@@ -208,6 +184,52 @@ describe Move do
       match.moves << move= Move.new( :notation => 'Bb3' )
       move.should_not be_valid
     end
+  end # describe 'Notation'
 
-  end
+=end
+
+=begin
+  describe 'Move Queue' do
+    it 'should play the next move in the move queue if the notation matches' do
+      match = matches(:unstarted_match)
+      match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc6 Nc3' )
+      match.moves << m = Move.new( :notation => 'e5' )
+      
+      match.reload
+      match.moves.count.should == 3
+      match.moves.reload.last.notation.should == 'd4'
+    end
+    
+    it 'should keep playing from each move queue in turn' do
+      match = matches(:unstarted_match)
+      match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc6 Nc3' )
+      match.moves << m = Move.new( :notation => 'e5 d4 Nc6' )
+      
+      match.reload ; match.moves.reload
+      match.moves[1].notation.should == 'e5'
+      match.moves[2].notation.should == 'd4'
+      match.moves[3].notation.should == 'Nc6'
+      match.moves[4].notation.should == 'Nc3'
+      
+      match.gameplays.white.move_queue.should be_blank
+    end
+    
+    it 'should allow a wildcard character (*) in the queue' do
+      match = matches(:unstarted_match)
+      match.moves << m = Move.new( :notation => 'e4 * d4' )
+      match.moves << m = Move.new( :notation => 'e5' )
+      match.reload ; match.moves.reload
+      
+      match.moves.count.should == 3
+    end
+
+    it 'should invalidate the move queue if an invalid prediction was made' do
+      match = matches(:unstarted_match)
+      match.moves << m = Move.new( :notation => 'e4 e5 d4 Nc3 Nc6' )
+      match.moves << m = Move.new( :notation => 'd5' )
+      match.gameplays.white.move_queue.should be_blank
+    end
+  end # describe 'MoveQueue'
+=end
+
 end

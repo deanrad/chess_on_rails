@@ -1,17 +1,21 @@
-# The base class of all pieces - contains behaviors common to all pieces
+# The base class of all pieces - contains behaviors common to all pieces.
 class Piece  
 
-  # the side - eg white or black
+  # The side - eg white or black.
   attr_accessor :side 
 
-  # the role, or 'function' performed, or type of piece - eg pawn, knight, queen
+  # The role, or 'function' performed, or type of piece - eg pawn, knight, queen.
   attr_accessor :function
 
 
-  # for pieces like 'pawn' which there are many instances of, the discriminator
-  # distinguishes each instance - eg a pawn, queens knight
+  # For pieces like 'pawn' which there are many instances of, the discriminator
+  # distinguishes each instance - eg a pawn, queens knight.
   attr_accessor :discriminator # eg queens, kings, promoted, a, b (for pawns)
-  
+
+  # For convenience, the call to Piece#allowed_moves(board) can be shortened
+  # to Piece#allowed_moves if the board property is set on the piece at creation.
+  attr_accessor :board
+
   # a class configures its chess behavior by invoking these class methods,
   # allowing piece instances to answer ask their class whether their move
   # vectors allow them to make a given move.
@@ -67,17 +71,15 @@ class Piece
     self.class.allowed_move?(vector, starting_rank)
   end
 
-  # The set of squares on the board for which this piece answers allowed_move? == true
+  # Returns those positions for which this piece allows the move and it is not obstructed on this board
   # Overridden by king for example to allow castling
-  def allowed_moves(board)
-    moves = []
-
+  def allowed_moves(b=nil)
+    board = b || self.board or raise ArgumentError, "A board is necessary to ask a piece its allowed moves"
     mypos = board.index(self) 
-    Board.all_positions.each do |sq|
-      moves << sq if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
-    end
 
-    moves
+    Board.all_positions.select do |sq|
+      allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
+    end
   end
 
   # Answers "Am I forbidden to move from [mypos] to the position specified by [vector], on this board" ?

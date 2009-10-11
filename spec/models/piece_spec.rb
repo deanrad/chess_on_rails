@@ -81,7 +81,22 @@ describe 'Piece' do
       m = matches(:unstarted_match)
       m.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
 
-      m.board[:f1].allowed_moves(m.board).should == [:e2, :d3, :c4, :b5, :a6]
+      m.board[:f1].allowed_moves(m.board).should == [:a6, :b5, :c4, :d3, :e2]
+    end
+
+    it 'should raise exception if allowed_moves called with no board' do
+      p = matches(:unstarted_match).board[:d4]
+      p.stubs(:board).returns(nil)
+      lambda{ p.allowed_moves }.should raise_error
+    end
+
+    it 'should not require the board be passed to allowed moves if #board is set' do
+      m = matches(:unstarted_match)
+      m.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
+
+      p = m.board[:f1]
+      p.board = m.board
+      p.allowed_moves.should == p.allowed_moves(m.board)
     end
   end
 end

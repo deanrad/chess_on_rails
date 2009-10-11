@@ -18,25 +18,30 @@ class Match < ActiveRecord::Base
   named_scope :active,    :conditions => { :active => true }
   named_scope :completed, :conditions => { :active => false }
 
-  # fetches the first and second joins to player, which are white,black respectively
+  # Defines the relations between the players involved, and this match, 
+  # which are white and black, respectively.
   has_many :gameplays do
     def white; self[0]; end
     def black; self[1]; end
   end
 
-  def << move_opts
-    self.moves << Move.new(move_opts)
-  end
-  
-  # the boards this match has known
+  # The series of boards this match has been played through, a hash keyed on the move number.
   def boards
-    @boards ||= boards_upto_current_move
+    return @boards if @boards
+
+    @boards = { 0 => Board.new( self[:start_pos] ) }
+    moves.each_with_index do |mv, idx|
+      with( @boards[idx + 1] = Board.new ) do |board|
+        board.match = self
+        0.upto(idx){ |i| board.play_move! moves[i] if moves[i].valid? }
+      end
+    end
+    @boards
+
   end
 
-  # the most recent board known
+  # The current board of this match.
   def board
-    # dont know why we end up with nil values but they're toxic so destroy them !
-    boards.delete_if{ |k,v| v.nil? } 
     boards[ boards.keys.max ]
   end
 
@@ -57,18 +62,20 @@ class Match < ActiveRecord::Base
     @player2 ||= gameplays.black.player
   end
 
+  # The friendly name of this match, Player1 vs. Player2 by default.
   def name
-    self[:name] || lineup
+    self[:name] || "#{player1.name} vs. #{player2.name}"
   end
 
-  # cache this board and make it the most recent one
+  # Cache this board and make it the most recent one
   def save_board( last_move )
-    return false unless last_move.valid?
-    recent = boards[boards.keys.max]
-    @boards[ @boards.keys.max + 1 ] = recent.dup.play_move!( last_move )
+    # while rewriting validations, dont worry about this
+    # return false unless last_move.valid?
+    # self.boards.store( @boards.keys.max + 1, self.board.dup.play_move!( last_move ) )
   end
 
   def check_for_checkmate(last_move)
+    return 
     me, other_guy =  last_move.side == :black ? [:black, :white] : [:white, :black]
     #checkmate_by( me ) if board.in_checkmate?( other_guy )
   end
@@ -97,10 +104,6 @@ class Match < ActiveRecord::Base
   def side_of( plyr ) 
     return :white if plyr == player1
     return :black if plyr == player2
-  end
-
-  def lineup
-    "#{player1.name} vs. #{player2.name}"
   end
 
   def resign( plyr )
@@ -146,16 +149,6 @@ class Match < ActiveRecord::Base
     # call it back from other side (continues until queue.hit? returns false)
     play_queued_moves(response_move)
     
-  end
-
-  def boards_upto_current_move
-    boards = { 0 => Board.new( self[:start_pos] ) }
-    moves.each_with_index do |mv, idx|
-      board = boards[idx + 1] = Board.new
-      board.match = self
-      0.upto(idx){ |i| board.play_move! moves[i] if moves[i].valid? }
-    end
-    boards
   end
 
 end
