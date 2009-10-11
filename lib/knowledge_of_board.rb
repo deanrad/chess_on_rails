@@ -49,6 +49,7 @@ module KnowledgeOfBoard
     memoize :files
 
     def valid_position? pos
+      return false unless pos
       pos = pos.to_sym unless Symbol===pos
       all_positions.include? pos.to_sym
     end

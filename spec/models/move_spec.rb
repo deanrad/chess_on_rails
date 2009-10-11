@@ -61,6 +61,19 @@ describe Move do
   end # describe 'Notation life cycle'
 
   describe 'Notation validation' do
+    it 'should err if two pieces of the same type could move to destination' do
+      board= returning(Board.new) do |b|
+        b.clear
+        b[:b1] = Knight.new(:white)
+        b[:d1] = Knight.new(:white)
+      end
+      match.stubs(:board).returns(board)
+      match.moves << move = Move.new(:notation => 'Nc3')
+      move.should_not be_valid
+      $stderr.puts "Spec errors: (#{move.errors.object_id}) #{move.errors.full_messages.join}"
+      pending 'Why is validation being called twice, and errors added here forgotten ?'
+      move.errors.on(:notation).should == t( :err_notation_ambiguous, move )
+    end
   end # describe 'Notation validation'
 
 

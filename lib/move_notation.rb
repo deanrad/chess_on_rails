@@ -4,7 +4,7 @@
 module MoveNotation
   def self.included(move_klass)
     move_klass.class_eval do
-      before_validation :infer_coordinates_from_notation
+      validate :infer_coordinates_from_notation
       before_save :notate_move
     end
   end
@@ -27,7 +27,6 @@ module MoveNotation
     # the easy part
     self[:to_coord] = san.destination
 
-
     possible_movers = board.select do |pos, piece| 
       piece.function == san.role && 
       piece.allowed_moves(board).include?( san.destination.to_sym )
@@ -35,9 +34,13 @@ module MoveNotation
 
     case possible_movers.length
       when 1
-        self[:from_coord] = possible_movers[0][0].to_s
+        self[:from_coord] = possible_movers.flatten.first.to_s
+      when 0
+        add_error(:notation, :notation_destination_invalid)
+      else
+        add_error(:notation, :notation_ambiguous)
     end
 
-    add_error(:notation, :invalid_notation) if (to_coord.blank? || from_coord.blank?)
+    $stderr.puts "Infer errors: (#{errors.object_id}) " + errors.full_messages.join
   end
 end

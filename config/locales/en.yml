@@ -4,3 +4,5 @@ en:
   err_piece_must_be_present: "No piece present on {{from_coord}}."
   err_piece_must_allow_move: "{{to_coord}} is not an allowed move for the {{function}} at {{from_coord}}."
   err_invalid_notation: "{{notation}} failed to specify a valid move."
+  err_notation_destination_invalid: "No piece may move to {{to_coord}} on this board."
+  err_notation_ambiguous: "Notation {{notation}} fails to distinguish between more than one {{function}} that can move to {{to_coord}}. Please specify, as in Ncf6."

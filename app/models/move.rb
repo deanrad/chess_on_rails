@@ -51,7 +51,7 @@ class Move < ActiveRecord::Base
   end  
 
   # The lazily-fetched piece involved in this move.
-  def piece;    @piece ||= self.board[ self.from_coord ]; end
+  def piece;    @piece ||= self.from_coord && self.board[ self.from_coord ]; end
 
   # The function (knight, rook, etc..) of the piece that is moving.
   def function; piece ? piece.function : "piece" ; end
@@ -68,6 +68,11 @@ class Move < ActiveRecord::Base
   ######### Validation Methods ###############################################
   # Invokes through our methods, but short-circuits if one returns false
   def all_validations #:nodoc:
+    # debugger;
+    # $stderr.puts "all_validations: errors (#{errors.object_id}) empty ? #{errors.empty?}, new_record? #{new_record?}"
+
+    send(:infer_coordinates_from_notation)
+
     return false unless errors.empty?
     VALIDATIONS.each do |v|
       result = send(v) ; return false unless errors.empty?
