@@ -3,3 +3,4 @@ en:
   err_to_coord_must_be_valid: "{{to_coord}} is not a valid position."
   err_piece_must_be_present: "No piece present on {{from_coord}}."
   err_piece_must_allow_move: "{{to_coord}} is not an allowed move for the {{function}} at {{from_coord}}."
+  err_invalid_notation: "{{notation}} failed to specify a valid move."

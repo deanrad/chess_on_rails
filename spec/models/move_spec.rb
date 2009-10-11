@@ -7,17 +7,11 @@ describe Move do
   end
   attr_accessor :match
 
-  #it 'should be creatable but not updatable' do
-  #  match = matches(:scholars_mate)
-  #  m = match.moves.last
-  #  pending 'WTF with AR lifecycle- ugh !'
-  #  lambda{ m.to_coord='xy'; m.save! }.should raise_error(ActiveRecord::ReadOnlyRecord)
-  #end
   describe 'life cycle' do
     it 'should save a valid move' do
-      match.moves << move = Move.new(:from_coord => 'd2', :to_coord => 'd4')
-      #debugger unless move.valid?
-      move.should be_valid
+      move = Move.new(:from_coord => 'd2', :to_coord => 'd4')
+      move.stubs(:valid?).returns(true)
+      match.moves << move
       match.reload.moves.count.should == 1
     end
   end
@@ -50,6 +44,15 @@ describe Move do
   end # describe 'Validations with known to and from coordinates'
 
   describe 'Notation life cycle' do
+
+    it 'should infer coordinates from notation before validation' do
+      match.moves << move = Move.new(:notation => 'd4')
+      #move.infer_coordinates_from_notation
+      move.should be_valid
+
+      move.from_coord.should == 'd2'
+      move.to_coord.should == 'd4'
+    end
     it 'should notate a move when saved' do
       match.moves << move = Move.new(:from_coord => 'd2', :to_coord => 'd4')
       move.should be_valid

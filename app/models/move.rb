@@ -68,6 +68,7 @@ class Move < ActiveRecord::Base
   ######### Validation Methods ###############################################
   # Invokes through our methods, but short-circuits if one returns false
   def all_validations #:nodoc:
+    return false unless errors.empty?
     VALIDATIONS.each do |v|
       result = send(v) ; return false unless errors.empty?
     end
@@ -102,7 +103,7 @@ class Move < ActiveRecord::Base
   # provides interpolation options a hash of :to_coord => 'f2' for example
   def t key, *args #:nodoc:
     # I18n.t key, (ERROR_FIELDS.inject({}){ |h,v| h[v] = self.send(v) }
-    I18n.t key, ERROR_FIELDS.inject({}){ |h,v| h[v] = self.send(v); h }
+    I18n.t key, ERROR_FIELDS.inject({}){ |h,v| h[v] = self.send(v) rescue ''; h }
   end
 
   # invokes errors.add and evaluates to false

@@ -32,7 +32,7 @@ class Match < ActiveRecord::Base
     @boards = { 0 => Board.new( self[:start_pos] ) }
     moves.each_with_index do |mv, idx|
       with( @boards[idx + 1] = Board.new ) do |board|
-        board.match = self
+        # board.match = self
         0.upto(idx){ |i| board.play_move! moves[i] if moves[i].valid? }
       end
     end
