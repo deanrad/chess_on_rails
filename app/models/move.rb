@@ -68,10 +68,7 @@ class Move < ActiveRecord::Base
   ######### Validation Methods ###############################################
   # Invokes through our methods, but short-circuits if one returns false
   def all_validations #:nodoc:
-    # debugger;
     # $stderr.puts "all_validations: errors (#{errors.object_id}) empty ? #{errors.empty?}, new_record? #{new_record?}"
-
-    send(:infer_coordinates_from_notation)
 
     return false unless errors.empty?
     VALIDATIONS.each do |v|

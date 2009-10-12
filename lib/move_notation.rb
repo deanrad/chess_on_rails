@@ -4,6 +4,7 @@
 module MoveNotation
   def self.included(move_klass)
     move_klass.class_eval do
+      # gets called prior to Move#all_validations 
       validate :infer_coordinates_from_notation
       before_save :notate_move
     end
@@ -41,6 +42,5 @@ module MoveNotation
         add_error(:notation, :notation_ambiguous)
     end
 
-    $stderr.puts "Infer errors: (#{errors.object_id}) " + errors.full_messages.join
   end
 end

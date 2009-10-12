@@ -69,9 +69,11 @@ describe Move do
       end
       match.stubs(:board).returns(board)
       match.moves << move = Move.new(:notation => 'Nc3')
-      move.should_not be_valid
-      $stderr.puts "Spec errors: (#{move.errors.object_id}) #{move.errors.full_messages.join}"
-      pending 'Why is validation being called twice, and errors added here forgotten ?'
+
+      # do not call valid? or be_valid - it retriggers validation all over !
+      # move.valid?.should == false # fail 
+
+      move.errors.empty?.should == false
       move.errors.on(:notation).should == t( :err_notation_ambiguous, move )
     end
   end # describe 'Notation validation'
