@@ -76,6 +76,10 @@ describe Move do
       move.errors.empty?.should == false
       move.errors.on(:notation).should == t( :err_notation_ambiguous, move )
     end
+
+    it "should not be an err if two pieces of the same type could move to destination,
+        but one of them would be an illegal move"
+
   end # describe 'Notation validation'
 
 

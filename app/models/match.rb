@@ -69,9 +69,8 @@ class Match < ActiveRecord::Base
 
   # Cache this board and make it the most recent one
   def save_board( last_move )
-    # while rewriting validations, dont worry about this
-    # return false unless last_move.valid?
-    # self.boards.store( @boards.keys.max + 1, self.board.dup.play_move!( last_move ) )
+    return false unless last_move.errors.empty?
+    self.boards.store( @boards.keys.max + 1, self.board.dup.play_move!( last_move ) )
   end
 
   def check_for_checkmate(last_move)
