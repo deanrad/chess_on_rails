@@ -1,6 +1,7 @@
 # Confers upon the includer knowledge of the chess board - its positions, sides, etc..
 # As a side effect and performance boost, adds memoization support for class methods,
 # and memoizes them.
+# TODO eliminate duplicately stored information in this file
 module KnowledgeOfBoard
   # Array of arrays of symbols representing white's view of the board
   POSITIONS = [ [:a8, :b8, :c8, :d8, :e8, :f8, :g8, :h8],
@@ -56,3 +57,61 @@ module KnowledgeOfBoard
     memoize :valid_position?
   end
 end
+
+#Spread some knowledge around ! 
+class String
+
+  # black for a1 and b2, white for a8, etc..
+  def square_color
+    offset = (self[0]+self[1]) % 2
+    offset == 0 ? :black : :white
+  end
+
+  def rank
+    self[1..1].to_i
+  end
+
+  def file
+    self[0..0]
+  end
+
+end # end monkeypatch String
+
+module ChessSymbolExtensions
+  def rank; @rank ||= self.to_s.rank ; end
+  def file; @file ||= self.to_s.file ; end
+  def back_rank
+    @back_rank ||= case self
+      when :white then '1'
+      when :black then '8'
+    end
+  end
+  def front_rank
+    @front_rank ||= case self
+      when :white then '2'
+      when :black then '7'
+    end
+  end
+  def castling_file
+    @castling_file ||= case self
+      when :queens then 'c'
+      when :kings  then 'g'
+    end
+  end
+  def opposite
+    @opposite ||= case self
+      when :white then :black
+      when :black then :white
+    end
+  end
+  # Lets you do d2 - d1 and get [0, -1]
+  def - other
+    self.to_s - other.to_s
+  end
+  # Lets you do d1 ^ [0, 1] and get d2
+  def ^ other
+    (self.to_s ^ other).to_sym
+  end
+end
+
+Symbol.send(:include, ChessSymbolExtensions) unless Symbol.ancestors.include?(ChessSymbolExtensions)

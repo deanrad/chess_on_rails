@@ -19,12 +19,6 @@ class String
   def each_char
     (0..self.length-1).each { |place| yield self[place..place] }
   end
-  def rank
-    self[1..1].to_i
-  end
-  def file
-    self[0..0]
-  end
 
   # Lets you do d2 - d1 and get [0, -1]
   def - other
@@ -36,15 +30,7 @@ class String
     file, rank = (self[0]+vector[0]).chr, (self[1]+vector[1]).chr
     "#{file}#{rank}"
   end
-
-  # black for a1 and b2, white for a8, etc..
-  def square_color
-    offset = (self[0]+self[1]) % 2
-    offset == 0 ? :black : :white
-  end
 end
-
-require 'chess_symbol_extensions'
 
 class Fixnum
   def sign; self == 0 ? 0 : self < 0 ? -1 : 1 ; end
