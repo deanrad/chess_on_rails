@@ -1,9 +1,7 @@
 class MoveController < ApplicationController
 
-  rescue_from ArgumentError, :with => :display_error
-  rescue_from ActiveRecord::RecordInvalid, :with => :display_error
-  
   before_filter :authorize
+  rescue_from ArgumentError, :with => :display_error
 
   #accessible via get or post but should be idempotent on 2x get
   def create
@@ -12,13 +10,16 @@ class MoveController < ApplicationController
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
     raise ArgumentError, "It is your not your turn to move yet" unless @match.turn_of?( current_player )
 
-    if params[:move]
-      @match.moves << @move = Move.new( params[:move] )
-    elsif params[:notation]
-      @match.moves << @move = Move.new( :notation => params[:notation] )
-    end
+    # support a shorter means of passing a notation parameter
+    params[:move][:notation] = params[:notation] if params[:move] && !params[:notation].blank?
+
+    return unless params[:move]
+
+    @match.moves << @move = Move.new( params[:move] ) # saves automatically
     
-    @match.save! #only here to trigger validation
+    unless @move.errors.empty?
+      flash[:move_error] = @move.errors.messages
+    end
 
     #unceremonious way of saying you just ended the game 
     #redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
@@ -28,19 +29,8 @@ class MoveController < ApplicationController
   
 protected
   def display_error(ex)
-    if ex.kind_of?(ArgumentError)
-      flash[:move_error] = ex.to_s
-    else
-      flash[:move_error] = ex.record.moves.last.errors.to_a.map{|e| e[1]}.join "<br/>\n"
-    end
-    
-    #if request.xhr?
-    #  set_match_status_instance_variables
-    #  render :template => 'match/status' and return
-    #end
-
+    flash[:move_error] = Exception === ex ? ex.message : ex.to_s
     redirect_to( match_url(@match.id) ) and return if @match
-    
   end
 
 end

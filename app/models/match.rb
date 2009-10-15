@@ -31,9 +31,8 @@ class Match < ActiveRecord::Base
 
     @boards = { 0 => Board.new( self[:start_pos] ) }
     moves.each_with_index do |mv, idx|
-      with( @boards[idx + 1] = Board.new ) do |board|
-        # board.match = self
-        0.upto(idx){ |i| board.play_move! moves[i] if moves[i].valid? }
+      with( @boards[idx + 1] = Board.new ) do |b|
+        0.upto(idx){ |i| b.play_move! moves[i] if moves[i].errors.empty? }
       end
     end
     @boards
@@ -61,6 +60,7 @@ class Match < ActiveRecord::Base
   def player2
     @player2 ||= gameplays.black.player
   end
+  alias :white :player1;  alias :black :player2
 
   # The friendly name of this match, Player1 vs. Player2 by default.
   def name

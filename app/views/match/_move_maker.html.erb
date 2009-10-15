@@ -1,6 +1,6 @@
 
 <% form_for :move, :html => {:id => 'new_move_form'}, :url => create_match_moves_path(match.id)  do |f| %>
-    Notation: <%= f.text_field :notation, :title => 'Enter a single move, or a list of several moves, separated by space to create a move queue. If the notation of your opponents move matches your prediction, then your next move will be played automatically.'  %> or... <br/>
+    Notation: <%= f.text_field :notation, :title => 'Enter a single move, such as Nc3' %> or... <br/>
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
     <%= f.hidden_field :match_id, :value => match.id %><br/>
@@ -9,18 +9,18 @@
     <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
 
- <% remote_form_for (gameplay, :html => {:id => 'gameplay_editor'}) do |f| %>
+<% remote_form_for (gameplay, :html => {:id => 'gameplay_editor'}) do |f| %>
   Set Move Queue:
-     <%= f.text_field :move_queue, :style => 'width: 80px' %>
-      <%= f.submit "Save" %>
-    <% end %>
+  <%= f.text_field :move_queue, :style => 'width: 80px' %>
+  <%= f.submit "Save" %>
+<% end %>
 
 <div id="move_error">
-	<%= flash[:move_error] %>
+  <%= flash[:move_error] %>
 </div>
 
 <% content_for :autoexec_javascripts do %>
- $('move_notation').focus();
+  $('move_notation').focus();
 <% end %>
 
 
