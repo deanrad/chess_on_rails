@@ -207,19 +207,13 @@ class Board < Hash
 
   # Provides a format for tracing.
   def to_s( for_black = false )
-    output = '' # ' ' * (8 * 8 * 2) #spaces or newlines after each 
-    ranks  = %w{ 8 7 6 5 4 3 2 1 }
-    files  = %w{ a b c d e f g h } 
-    (ranks.reverse! and files.reverse!) if for_black
-    last_file = files[7]
-    ranks.each do |rank|
-      files.each do |file|
-        piece = self[ file + rank ]
-        output << (piece ? piece.abbrev : ' ')
-        output << (file != last_file ? ' ' : "\n")
+    returning("") do |output|
+      Board.all_positions( for_black ? :black : :white ).each_slice(8) do |row|
+        output << row.map do |sq| 
+          (p=self[sq]) && p.abbrev || ' '
+        end.join(' ') + "\n"
       end
-    end  
-    output + "\n"
+    end + "\n"
   end
 
   # Two boards hash to the same value if their fen strings are identical.
@@ -229,4 +223,13 @@ class Board < Hash
 
   def inspect; "\n" + to_s; end
 
+  # Emits a client-side representations of self starting at a1
+  def to_json
+    @json ||= returning("{") do |json|
+      POSITIONS.reverse.flatten.each do |pos|
+        json << %Q|"#{pos}":#{self[pos].to_json},\n| if self[pos]
+      end
+      json.chop!.chop! << "}"
+    end
+  end
 end

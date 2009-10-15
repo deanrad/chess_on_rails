@@ -152,7 +152,7 @@ describe Board do
     }.should change{ b.hash }
   end
 
-  it 'can output board in string format' do
+  it 'have a nice string format' do
     match = matches(:unstarted_match)
     board = match.board
     board.to_s.should == <<-DaBoard
