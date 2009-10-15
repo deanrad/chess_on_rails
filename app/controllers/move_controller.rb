@@ -11,14 +11,14 @@ class MoveController < ApplicationController
     raise ArgumentError, "It is your not your turn to move yet" unless @match.turn_of?( current_player )
 
     # support a shorter means of passing a notation parameter
-    params[:move][:notation] = params[:notation] if params[:move] && !params[:notation].blank?
+    params[:move][:notation] = params.delete(:notation) if (params[:move] ||= {}) && !params[:notation].blank?
 
     return unless params[:move]
 
     @match.moves << @move = Move.new( params[:move] ) # saves automatically
     
     unless @move.errors.empty?
-      flash[:move_error] = @move.errors.messages
+      flash[:move_error] = @move.errors.full_messages * "\n"
     end
 
     #unceremonious way of saying you just ended the game 

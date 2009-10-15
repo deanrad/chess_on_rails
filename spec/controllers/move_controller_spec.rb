@@ -53,6 +53,7 @@ describe MoveController do
   it 'should end the game when a checkmating move posted' do
     m = matches(:scholars_mate)	
 
+    pending 'HOW BEST TO DO THIS?'
     post :create, { :match_id => m.id, :move => { :notation => 'Qf7' } }, {:player_id => players(:dean).id }		
 
     m.reload.winning_player.should_not be_nil
