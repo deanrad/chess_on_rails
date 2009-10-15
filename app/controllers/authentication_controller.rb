@@ -41,7 +41,7 @@ class AuthenticationController < ApplicationController
     redirect_to session[:original_uri] and return if session[:original_uri]
     
     #or their homepage
-    redirect_to match_index_url and return
+    redirect_to matches_path and return
   end
   
   def logout

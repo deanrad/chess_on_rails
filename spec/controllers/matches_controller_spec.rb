@@ -1,11 +1,11 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe MatchController do
+describe MatchesController do
 
   integrate_views
 
   before(:all) do
-    @controller = MatchController.new
+    @controller = MatchesController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
@@ -32,7 +32,7 @@ describe MatchController do
 
   it 'should render a form for a new match' do
     get :new, {},  {:player_id => players(:dean).id }
-    pending{ assigns[:match].should be_a_new_record }
+    response.should be_success
   end
 
   it 'should populate the start position for a new match if FEN given' do
@@ -55,6 +55,30 @@ describe MatchController do
     get :show, {:id => matches(:dean_vs_paul).id, :format => 'html'}, {:player_id => players(:dean).id }
 
     response.should have_tag("input#gameplay_move_queue", :value => 'Nc4 b5')
+  end
+
+  describe 'Routes' do
+    it 'should have helpers' do
+      @controller.instance_eval{ create_move_path(25) }.should == '/matches/25/moves'
+      @controller.instance_eval{ match_path(24) }.should == '/matches/24'
+    end
+
+    it 'should route match/N to the show action' do
+      params_from(:get, '/match/25').should == { 
+        :controller    => 'matches', 
+        :action        => 'show',
+        :id            => '25'
+      }
+    end
+
+    it 'should allow move creation via post at matches/25/moves' do
+      puts @controller.instance_eval{ create_move_path(25) }
+      params_from(:post, '/matches/25/moves').should == {
+        :controller    => 'matches', 
+        :action        => 'create_move',
+        :match_id      => '25'
+      }
+    end
   end
 
   unless RUBY_PLATFORM =~ /w(in)?32/i

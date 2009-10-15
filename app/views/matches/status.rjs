@@ -16,13 +16,13 @@ if status_has_changed
   end
 
   #TODO just execute the JS- remove the partial rendering from the loop
-  page.replace_html 'js_updatable_board', :partial => 'match/board'
+  page.replace_html 'js_updatable_board', :partial => 'board'
 
   page << "$('move_notation').clear();"
   page['move_submit_btn'].disabled = ! your_turn
 
   #TODO just execute the JS- remove the partial rendering from the loop
-  page.replace_html 'move_list', :partial => 'match/move_list'
+  page.replace_html 'move_list', :partial => 'move_list'
 
   page.visual_effect(
     :highlight, 

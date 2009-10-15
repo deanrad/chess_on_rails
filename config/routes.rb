@@ -3,19 +3,14 @@ ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Default routes
-  map.root :controller => "authentication", :conditions => {:canvas => false}
-
-  map.auth       'authentication/:action',  :controller => 'authentication'
-  map.login      'authentication/login',    :controller => 'authentication', :action => 'login'
-  map.logout     'authentication/logout',   :controller => 'authentication', :action => 'logout'
-  map.register   'authentication/register', :controller => 'authentication', :action => 'register'
+  map.root :controller => "authentication"
 
   #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
-  map.create_move 'match/:match_id/moves/:notation', :controller => 'move', :action => 'create', :defaults => { :notation => nil }
+  map.create_move 'matches/:match_id/moves/:notation', :controller => 'matches', :action => 'create_move', :defaults => { :notation => nil }
 
-  map.resources :match , :except => [:delete], :shallow => true, :collection => { :create => :post } do |match|
+  map.resources :matches , :except => [:delete], :collection => { :create => :post } do |match|
+    match.resource :moves, :only => [:create]
     # TODO match route for resign must be POST since destructive 
-    match.resources :moves, :controller => :move, :only => [:create], :collection => { :create => :post }
     match.resource :chat #TODO limit chat routes to those needed, :only => [:create, :index, :chat]
   end
 
@@ -24,6 +19,12 @@ ActionController::Routing::Routes.draw do |map|
 
   #sets controller courtesy of Sean
   map.resource :set, :member => {:change => :post}
+
+  # allow shorthand for recognition but make sure helpers emit the real thing
+  map.connect 'match/:id',         :controller => 'matches', :action => 'show'
+  map.connect 'match/:id/:action', :controller => 'matches'
+
+  map.connect 'authentication/:action', :controller => 'authentication'
 
   # Install the default routes as the lowest priority.
   map.connect ':controller/:id/:action'

@@ -6,7 +6,7 @@
   You must login below to use this app.
 <% end -%>
 
-<% form_tag(login_path) do %>
+<% form_tag :action => :login do %>
   <p>
     <label for="email">Email:</label>
     <%= text_field_tag :email, params[:email] %>	

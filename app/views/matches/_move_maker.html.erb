@@ -1,5 +1,5 @@
 
-<% form_for :move, :html => {:id => 'new_move_form'}, :url => create_match_moves_path(match.id)  do |f| %>
+<% form_for :move, :html => {:id => 'new_move_form'}, :url => create_move_path(match.id)  do |f| %>
     Notation: <%= f.text_field :notation, :title => 'Enter a single move, such as Nc3' %> or... <br/>
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
