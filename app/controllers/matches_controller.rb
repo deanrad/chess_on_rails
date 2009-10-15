@@ -1,4 +1,4 @@
-class MatchController < ApplicationController
+class MatchesController < ApplicationController
   before_filter :authorize
   
   # GET /match/1
