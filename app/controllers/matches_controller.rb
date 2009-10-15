@@ -1,11 +1,10 @@
 class MatchesController < ApplicationController
   before_filter :authorize
   
-  # GET /match/1
-  def show    
-  end
+  # Shows a match in progress to its players.
+  def show; end    
 
-  # GET /match/ 
+  # Shows which matches the current_player has open.
   def index
     # shows active matches
     @matches = current_player.matches.active
@@ -16,15 +15,12 @@ class MatchesController < ApplicationController
   # javascript to update the board, and will 304 after the first request. Once that
   # move has been made, though, future requests will return JS to update the board
   # and the URL that the client polls for.
-  def status 
-  end
+  def status; end
 
-  # provides the js of previous boards
-  def boards
+  # Provides the js of previous boards
+  def boards; end
 
-  end
-
-  # GET /match/new
+  # Shows a form allowing a player to create a new match with another.
   def new; end
 
   def resign
@@ -33,10 +29,11 @@ class MatchesController < ApplicationController
     redirect_to :action => 'index'
   end
 
-  # POST /match/create
+  # Recieves the POST to create a new match
   def create
     return unless request.post?
 
+    # find out who they're playing against
     if params[:match]
       @opponent = Player.find_by_name( params[:match][:opponent_name] )
     elsif params[:opponent_id] # some tests use this format
@@ -45,22 +42,26 @@ class MatchesController < ApplicationController
 
     flash[:error] = "Player not found ! (#{params.inspect})" and return unless @opponent
 
-    if params[:opponent_side] == 'black'
-      attrs = {:white => current_player, :black => @opponent }
-    else
-      attrs = {:black => current_player, :white => @opponent }
-    end
+    # set up players
+    contestants = [current_player, @opponent]
+    contestants.reverse! if params[:opponent_side] == 'black'
+    attrs = {:players => contestants }
+
+    # add start position of game if applicable
     start_pos = params[:start_pos]
-    
     attrs[:start_pos] = start_pos if start_pos and Fen::is_fen?( start_pos )
+
+    # save..
     @match = Match.create( attrs )
-    
+
+    # and set up if necessary
     if start_pos && PGN::is_pgn?( start_pos )
       pgn = PGN.new( start_pos )
       pgn.playback_against( @match )
       logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{start_pos}" if pgn.playback_errors
     end
 
+    # they're off !
     redirect_to match_url(@match.id) if @match
   end
 
@@ -72,12 +73,6 @@ class MatchesController < ApplicationController
     render :text => "<ul>\n" + player_text + "</ul>"
   end
 
-  def gameplay
-    @gameplay = match.gameplays.send( match.side_of(current_player) )
-  end
-  helper_method :gameplay
-
-
 
 ### MoveController code below ### 
   rescue_from ArgumentError, :with => :display_error
@@ -87,7 +82,7 @@ class MatchesController < ApplicationController
     @match = current_player.matches.find( params[:match_id] || params[:move][:match_id] )
 
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
-    raise ArgumentError, "It is your not your turn to move yet" unless @match.turn_of?( current_player )
+    raise ArgumentError, "It is your not your turn to move yet" unless your_turn
 
     # support a shorter means of passing a notation parameter
     params[:move][:notation] = params.delete(:notation) if (params[:move] ||= {}) && !params[:notation].blank?

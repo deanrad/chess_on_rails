@@ -13,13 +13,17 @@ module MatchHelper
     @board ||= match.board
   end
 
+  def gameplay
+    @gameplay = match.gameplays.send( viewed_from_side )
+  end
+
   # TODO this should explicitly deal with non-logged in users
   def viewed_from_side
     @viewed_from_side ||= (current_player == match.player1) ? :white : :black
   end
   
   def your_turn
-    @your_turn ||= match.turn_of?( current_player )
+    @your_turn ||= match.send( match.next_to_move ) == current_player
   end
 
   def last_move

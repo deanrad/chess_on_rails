@@ -96,13 +96,13 @@ class Board < Hash
       self.send("#{piece_moved.side}_#{flank}side_castle_available=", false)
     end
     
-    #TODO investigate why this method is getting called multiply per moves << Move.new
     return unless piece_moved
-    ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
-    self.en_passant_square = ( piece_moved.function == :pawn &&
-                           m.from_coord.rank == ep_from_rank && 
-                           m.to_coord.rank == ep_to_rank ) ? (m.from_coord.file + ep_rank.to_s).to_sym : nil
 
+    ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
+
+    @is_ep = piece_moved.function == :pawn && [ep_from_rank, ep_to_rank] == [m.from_coord.rank, m.to_coord.rank]
+    self.en_passant_square = @is_ep ? (m.from_coord.file + ep_rank.to_s).to_sym : nil
+      
     #reflect promotion
     if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
       self.delete(m.to_coord)
@@ -172,16 +172,6 @@ class Board < Hash
     end
 
     !! assassin
-  end
-
-  # Says whether you are a pawn moving sideways onto an empty square
-  #  when an enpassant capture is available
-  def en_passant_capture?( from_coord, to_coord ) 
-    with ( self[from_coord] ) do |pawn|
-      return false unless pawn.function == :pawn
-      return false unless self.en_passant_square
-      return (from_coord.file != to_coord.file) && (self[to_coord]==nil)
-    end
   end
 
   # Employs the logic that if theres a move you're allowed which gets you out of check, you're not in checkmate,

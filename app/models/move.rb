@@ -99,6 +99,12 @@ class Move < ActiveRecord::Base
   ######### Before-save Methods ##############################################
   def update_computed_fields
     self[:castled] = 1 if (piece.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
+
+    # If an enpassant capture is available, andd you are a pawn moving
+    # sideways onto an empty square...
+    if board.en_passant_square && piece.function == :pawn && (from_coord.file != to_coord.file) && ! board[to_coord]
+      self[:captured_piece_coord] = "#{to_coord.file}#{to_coord.rank - piece.advance_direction}"
+    end
   end
 
   ######### After-save Methods ###############################################

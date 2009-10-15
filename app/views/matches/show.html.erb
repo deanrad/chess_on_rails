@@ -41,7 +41,7 @@
 
 <div id="actions_region">  
 
-  <% if match.side_of(current_player) %>
+  <% if your_turn %>
   <div id="move_creator_parent" >
     <%= render :partial => "move_maker" %>
   </div>
@@ -66,7 +66,7 @@
     <%= render :partial => 'move_list' %>
   </div>
   
-  <% if match.side_of(current_player) %>
+  <% if your_turn %>
   <div id="chat_container" class="status_tab">
     <%= periodically_call_remote( :url => match_chat_url(match), :method => :get, :frequency => 7, :update => 'chat') %>
     <div id="chat">

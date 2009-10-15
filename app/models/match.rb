@@ -11,7 +11,7 @@ class Match < ActiveRecord::Base
   # reference to this match instance, so it can use our history to validate.
   # After adding we store the new board instance, check for checkmate, and store any move queue
   has_many :moves,   :before_add => Proc.new{ |m, mv| mv.match = m },
-                     :after_add  => [:save_board, :check_for_checkmate, :play_queued_moves]
+                     :after_add  => [:save_board, :play_queued_moves]
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 
@@ -25,6 +25,27 @@ class Match < ActiveRecord::Base
     def black; self[1]; end
   end
 
+  # Shortcut method for making move in console: m << "Nc5"
+  def << notation; self.moves << Move.new(:notation => notation); end
+
+  #################### Instance Methods #############
+  def initialize( opts={} )
+    white, black = opts.delete(:players) if opts[:players]
+    super
+    # saving of self triggered by below
+    gameplays << Gameplay.new(:player_id => white.id, :black => false) if white
+    gameplays << Gameplay.new(:player_id => black.id, :black => true ) if black
+  end
+
+  def player1;  @player1 ||= gameplays.white.player  ;end
+  def player2;  @player2 ||= gameplays.black.player  ;end
+  alias :white :player1;  alias :black :player2
+
+  # The current board of this match.
+  def board
+    boards[ boards.keys.max ]
+  end
+
   # The series of boards this match has been played through, a hash keyed on the move number.
   def boards
     return @boards if @boards
@@ -36,31 +57,7 @@ class Match < ActiveRecord::Base
       end
     end
     @boards
-
   end
-
-  # The current board of this match.
-  def board
-    boards[ boards.keys.max ]
-  end
-
-  def initialize( opts={} )
-    white = opts.delete(:white) if opts[:white]
-    black = opts.delete(:black) if opts[:black]
-    super
-    save!
-    gameplays << Gameplay.new(:player_id => white.id) if white
-    gameplays << Gameplay.new(:player_id => black.id, :black => true) if black
-  end
-
-  def player1
-    @player1 ||= gameplays.white.player
-  end
-
-  def player2
-    @player2 ||= gameplays.black.player
-  end
-  alias :white :player1;  alias :black :player2
 
   # The friendly name of this match, Player1 vs. Player2 by default.
   def name
@@ -73,22 +70,6 @@ class Match < ActiveRecord::Base
     self.boards.store( @boards.keys.max + 1, self.board.dup.play_move!( last_move ) )
   end
 
-  def check_for_checkmate(last_move)
-    return 
-    me, other_guy =  last_move.side == :black ? [:black, :white] : [:white, :black]
-    #checkmate_by( me ) if board.in_checkmate?( other_guy )
-  end
-    
-  # for purposes of move validation it's handy to have access to such a variable
-  def current_player
-    next_to_move == :black ? gameplays.black.player : gameplays.white.player
-  end
-  
-  def turn_of?( plyr )	
-    #return true #HACK
-    self.next_to_move == side_of(plyr)
-  end
-
   # as long as the game starts at the beginning, white goes first
   def first_to_move
     return :white if self[:start_pos].blank?
@@ -97,12 +78,7 @@ class Match < ActiveRecord::Base
 
   # the next_to_move alternates sides each move (technically every half-move)
   def next_to_move
-    moves.count.even? ? first_to_move : opp(first_to_move)
-  end
-
-  def side_of( plyr ) 
-    return :white if plyr == player1
-    return :black if plyr == player2
+    moves.count.even? ? first_to_move : first_to_move.opposite
   end
 
   def resign( plyr )
@@ -116,14 +92,6 @@ class Match < ActiveRecord::Base
     self.result, self.active = ['Checkmate', 0]
     self.winning_player = (side == :white ? player1 : player2 )
     save!
-  end
-
-  # returns the opposite of a side, or nil
-  def opp( s )
-    case s
-      when :white; :black
-      when :black; :white
-    end
   end
 
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue

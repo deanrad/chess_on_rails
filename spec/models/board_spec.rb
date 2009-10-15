@@ -11,14 +11,11 @@ describe Board do
     Board.valid_position?('a1').should == true
   end
   
-  it 'a pawn on its home square can move one or two' do
+  it 'should allow a pawn on its home square to move one or two' do
     match = matches(:unstarted_match)
     board = match.board
 
-    pawn = board[:d2] #TODO we must do away with string access
-    Pawn.should === pawn
-    pawn.allowed_move?([0,1], 2).should == true
-    pawn.allowed_move?([0,2], 2).should == true
+    pawn = board[:d2] 
     pawn.allowed_moves(board).should == [:d4, :d3]
   end
 
@@ -76,7 +73,7 @@ describe Board do
     match.moves << Move.new(:from_coord => 'e7', :to_coord => 'e5')
     match.board.en_passant_square.should == :e6
 
-    match.moves << Move.new(:notation => 'Nc3')
+    match.moves << move = Move.new(:notation => 'Nc3')
     match.board.en_passant_square.should == nil
   end
 
@@ -92,17 +89,14 @@ describe Board do
 
     board.en_passant_square.to_sym.should == :d6
     
-    assert board.en_passant_capture?( :e5, :d6 )
-    # pending 'reenable en_passant!'
     board[:e5].allowed_moves(board).should include(:d6, :e6)
     
     match.moves << Move.new(:from_coord => 'e5', :to_coord => 'd6')
-    
     assert_equal 'd5', match.moves.last.captured_piece_coord
     assert_nil   match.board['d5'] 
   end	
 
-  it 'en_passant should not be possible for single stepped opponent pawn' do
+  it 'should prohibit en_passant when not available' do
     m = matches(:unstarted_match)
     m << 'e4'; m << 'd6'
     m << 'e5'; m << 'd5'
@@ -112,7 +106,7 @@ describe Board do
   end	
 
   it 'should promote automatically to queen' do
-
+    pending 'promotion'
     m = matches(:promote_crazy)
     
     m.moves << promo = Move.new( :from_coord => 'b7', :to_coord => 'b8' )
@@ -122,7 +116,8 @@ describe Board do
     m.board[:b8].function.should == :queen
   end
 
-  it 'can promote to knight' do
+  it 'should be able to promote to knight' do
+    pending 'promotion'
     m = matches(:promote_crazy)
     m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8', :promotion_choice => 'N' )
     m.moves.last.notation.should == 'bxa8=N'
@@ -130,7 +125,7 @@ describe Board do
   end
 
   # consider yields a copy of the board on which the move has occurred
-  it 'should considering_a_move_is_temporary' do
+  it 'should allow consideration of a move without altering the board' do
     match = matches(:unstarted_match)
     board = match.board
     board['a2'].side.should == :white
@@ -152,7 +147,7 @@ describe Board do
     }.should change{ b.hash }
   end
 
-  it 'have a nice string format' do
+  it 'should have a nice string format' do
     match = matches(:unstarted_match)
     board = match.board
     board.to_s.should == <<-DaBoard

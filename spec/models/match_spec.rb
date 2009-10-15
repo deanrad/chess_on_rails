@@ -3,35 +3,21 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Match do
   include PgnFixtures
 
-  it 'should have player1 be the first to move' do
-    m1 = matches(:unstarted_match)
-
-    m1.turn_of?(m1.player1).should be_true
-  end
-
-  it 'should be player2 the next to move' do
-    m1 = matches(:unstarted_match)
-    m1.moves << Move.new(:from_coord => 'b2', :to_coord => 'b4' )
-    
-    m1.turn_of?(m1.player2).should be_true
-  end
-
-  it 'should know current player via next to move' do
+  it 'should know which side is next to move' do
     m1 = matches(:paul_vs_dean)
     m1.next_to_move.should == :white
-    m1.current_player.should == players(:paul)
   end
       
   it 'should label player1 as white and player2 as black' do
     m1 = matches(:paul_vs_dean)
     
-    m1.side_of( players(:paul) ).should == :white
-    m1.side_of( players(:dean) ).should == :black
+    m1.white.should == players(:paul)
+    m1.black.should == players(:dean)
   end
 
-  it 'should display the lineup as player1 vs. player 2' do
-    matches(:paul_vs_dean).lineup.should == 'Paul vs. Dean'
-    matches(:dean_vs_paul).lineup.should == 'Dean vs. Paul'
+  it 'should display the match name as player1 vs. player 2 by default' do
+    matches(:paul_vs_dean).name.should == 'Paul vs. Dean'
+    matches(:dean_vs_paul).name.should == 'Dean vs. Paul'
   end
 
   it 'should be creatable with one player as white and another as black' do
