@@ -17,6 +17,10 @@ module MatchHelper
     @gameplay = match.gameplays.send( viewed_from_side )
   end
 
+  def chats
+    @chats ||= Chat.find_all_by_match_id( params[:match_id] )
+  end
+
   # TODO this should explicitly deal with non-logged in users
   def viewed_from_side
     @viewed_from_side ||= (current_player == match.player1) ? :white : :black

@@ -98,7 +98,11 @@ class MatchesController < ApplicationController
     #unceremonious way of saying you just ended the game 
     #redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
 
-    redirect_to( match_path(@match) ) and return unless request.xhr? 
+    if request.xhr? 
+      render :text => 'OK'
+    else
+      redirect_to( match_path(@match) )
+    end
   end
   
 protected
