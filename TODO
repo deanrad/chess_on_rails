@@ -1,8 +1,9 @@
 * action_mailer notifications
 * wildcard move_queue entries (and to_coord/from_coord matching)
-* turning of the board
+* do some cucumber features
+* get CI running at http://blog.runcoderun.com/
 ** move anchors http://fb.chessonrails.com/match/20#24
 ** board playback shows which move you're looking at
 *
-* Bug: PGN import for test/pgn/dean_craig* stops after 4 moves on match/new
+* PGN is safe for comments (test on rubinsteins immortal pgn fixture)
 
