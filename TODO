@@ -1,9 +1,13 @@
 * action_mailer notifications
-* wildcard move_queue entries (and to_coord/from_coord matching)
-* do some cucumber features
-* get CI running at http://blog.runcoderun.com/
-** move anchors http://fb.chessonrails.com/match/20#24
-** board playback shows which move you're looking at
-*
 * PGN is safe for comments (test on rubinsteins immortal pgn fixture)
 
+
+* move queue is stored obfuscated
+* move queue allows branching
+* provide navigation back to match page
+** preview images on match page ??
+*** image of match ? 
+** allow click-click move format in addition to dragdrop
+
+* do some cucumber features
+* get CI running at http://blog.runcoderun.com/
