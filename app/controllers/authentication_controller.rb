@@ -32,6 +32,7 @@ class AuthenticationController < ApplicationController
     @player = user.playing_as
     session[:player_id] = @player.id
 
+    debugger;
     unless user.auth_token
       user.update_attribute( :auth_token,  Digest::MD5.hexdigest(Time.now.to_s) )
     end
@@ -45,9 +46,7 @@ class AuthenticationController < ApplicationController
   end
   
   def logout
-    session[:player_id] = nil
-    cookies[:auth_token] = nil
-    redirect_to login_url
+    session[:player_id] = nil and redirect_to '/'
   end
 
 end

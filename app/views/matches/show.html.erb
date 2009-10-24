@@ -61,6 +61,12 @@
           match_url(@match, :format=>'fen'), 
           :title => 'FEN is an alternative notation for the state of a game, where the move history may not be known, but all information necessary to resume the game is in the FEN description.' 
     %>
+    &nbsp;&nbsp; 
+    Playback: 
+    |&lt;   
+    <a href="#" onclick="previous_board(); return false;"><b>&lt;</b></a>
+    <a href="#" onclick="next_board();     return false;"><b>&gt;</b></a> 
+    &gt;|
   </div>
   <% end %>
 

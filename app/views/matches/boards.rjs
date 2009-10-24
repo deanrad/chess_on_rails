@@ -23,6 +23,7 @@
 
 page << "var all_boards = [];"
 page << "var current_allowed_moves = [];"
+page << "current_board_move_num = #{move_count}";
 
 match.moves.each_with_index do |mv, idx|
   page << "all_boards[#{idx+1}] = #{match.boards[idx+1].to_json}"

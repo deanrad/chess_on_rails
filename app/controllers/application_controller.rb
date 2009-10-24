@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   # descendant controllers call authorize to ensure player is logged in, or redirect them to login
   def authorize
-    self.current_player ||= player_in_session || player_in_cookie || player_over_http
+    self.current_player ||= (player_in_session || player_in_cookie || player_over_http)
 
     unless self.current_player
       flash[:notice] = "Login is required in order to take this action."
@@ -19,9 +19,6 @@ class ApplicationController < ActionController::Base
       redirect_to :controller => 'authentication' and return false
     end
   end
-
-
-  private
 
   # an already logged in player
   def player_in_session
@@ -32,7 +29,8 @@ class ApplicationController < ActionController::Base
   # authenticates from a stored md5 hash in a cookie
   def player_in_cookie
     return nil unless cookies[:auth_token]
-    User.find_by_auth_token( cookies[:auth_token] ).playing_as
+    u = User.find_by_auth_token( cookies[:auth_token] )
+    u && u.playing_as
   end
 
   # provides basic auth for Curl/Wget functionality

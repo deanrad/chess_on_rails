@@ -34,9 +34,23 @@ function markup_piece( position, piece, allowed_moves ){
     return img + scr;
 }
 
+// global JS var for which board the client was last set to
+var current_board_move_num;
+
+function previous_board(){
+  set_board(current_board_move_num - 1, []);
+}
+function next_board(){
+  set_board(current_board_move_num + 1, []);
+}
+
 // clears out the contents of each square on the board, and inserts anew from JSON, restoring the set of allowed_moves
 function set_board(move_num, allowed_moves){
   log('setting board to move ' + move_num);
+  if( move_num >= all_boards.length || move_num < 1 ) return;
+
+  current_board_move_num = parseInt(move_num);
+
   //try updating the move indicator to show what you're displaying
   try{
     $$('.move_list_currently_displayed').each( function( elem ){ elem.removeClassName('move_list_currently_displayed'); } );
