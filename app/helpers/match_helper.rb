@@ -56,6 +56,10 @@ module MatchHelper
     @chats ||= Chat.find_all_by_match_id( match.id )
   end
 
+  def downlevel?
+    @downlevel ||= request.user_agent.downcase.include? 'berry'
+  end
+
   # checks for existance of .gif file in the current set's directory
   # if no .gif, uses .png extension
   def image_source_of( piece )
