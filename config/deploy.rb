@@ -11,7 +11,7 @@ set :scm, "git"
 set :branch, "master"
 ssh_options[:forward_agent] = true
 set :deploy_via, :remote_cache
-set :deploy_to, "/home/chicagogrooves/facebook_root/"
+set :deploy_to, "/home/chicagogrooves/www.chessonrails.com"
 
 #############################################################
 #	Servers
