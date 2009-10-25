@@ -5,9 +5,6 @@ class Board < Hash
 
   include KnowledgeOfBoard
 
-  # bring in the ability to notate boards as Forsyth-Edwards notation
-  include Fen
-
   # if true, this board instance is used for computation only, otherwise it is
   # or was an actual state of the game - defaults to nil
   attr_accessor :hypothetical
@@ -39,12 +36,12 @@ class Board < Hash
     self.black_queenside_castle_available = true
   end
 
-  # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
+  # Allow for indifferent string/sym access, though using symbols internally
   def [] pos
-    super(Symbol===pos ? pos : pos.to_sym)
+    super(pos.to_sym)
   end
   def []= pos, val
-    super(Symbol===pos ? pos : pos.to_sym, val)
+    super(pos.to_sym, val)
   end
 
   # Resets the board to initial position
@@ -204,11 +201,6 @@ class Board < Hash
         end.join(' ') + "\n"
       end
     end + "\n"
-  end
-
-  # Two boards hash to the same value if their fen strings are identical.
-  def hash
-    self.to_fen.hash
   end
 
   def inspect; "\n" + to_s; end

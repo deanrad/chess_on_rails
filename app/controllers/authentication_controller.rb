@@ -32,7 +32,6 @@ class AuthenticationController < ApplicationController
     @player = user.playing_as
     session[:player_id] = @player.id
 
-    debugger;
     unless user.auth_token
       user.update_attribute( :auth_token,  Digest::MD5.hexdigest(Time.now.to_s) )
     end

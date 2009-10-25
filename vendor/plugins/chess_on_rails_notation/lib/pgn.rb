@@ -49,6 +49,7 @@ class PGN
   def playback_against( match )
     last_move = nil
     notations.each do |notation|
+      # puts "Playing back #{notation}"
       match.moves << last_move = Move.new( :notation => notation )
       unless last_move.errors.blank?
         puts "PGN Error on notation: '#{notation}' " + last_move.errors.to_a.uniq.join(',')

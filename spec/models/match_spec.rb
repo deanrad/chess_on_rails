@@ -21,7 +21,7 @@ describe Match do
   end
 
   it 'should be creatable with one player as white and another as black' do
-    m = Match.new( :white => players(:maria), :black => players(:paul) )
+    m = Match.new( :players => [players(:maria), players(:paul)] )
     m.player2.should == players(:paul)
   end
 
@@ -57,7 +57,7 @@ describe Match do
     AFTER_E4 = 'RNBQKBNR/PPPP1PPP/4P3/8/8/8/pppppppp/rnbqkbnr b'
 
     it 'should have next_to_move black if FEN starts black (and even # of moves)' do
-      m = Match.new( :start_pos => AFTER_E4, :white => players(:dean), :black => players(:paul) )
+      m = Match.new( :start_pos => AFTER_E4, :players => [players(:dean), players(:paul)] )
       m.next_to_move.should == :black
     end
 

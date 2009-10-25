@@ -1,0 +1,1 @@
+The chess_on_rails main project provides a SAN class for Standard Algebraic Notation - other import/export functionality are factored out into plugins, which are encouraged to use the SAN class to simplify..
