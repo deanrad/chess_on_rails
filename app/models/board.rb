@@ -28,6 +28,9 @@ class Board < Hash
 
   # Creates a board initialized at the default starting position, or from FEN if given
   def initialize( start_pos = nil )
+    # allow initialization from a hash of position => piece
+    if Hash === start_pos; start_pos.each{ |k,v| self[k] =v }; return self; end
+
     return _initialize_fen( start_pos ) if start_pos
     reset!
     self.white_kingside_castle_available  = true
