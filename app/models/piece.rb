@@ -7,7 +7,6 @@ class Piece
   # The role, or 'function' performed, or type of piece - eg pawn, knight, queen.
   attr_accessor :function
 
-
   # For pieces like 'pawn' which there are many instances of, the discriminator
   # distinguishes each instance - eg a pawn, queens knight.
   attr_accessor :discriminator # eg queens, kings, promoted, a, b (for pawns)
@@ -72,12 +71,15 @@ class Piece
   end
 
   # Returns those positions for which this piece allows the move and it is not obstructed on this board
-  # Overridden by king for example to allow castling
+  # Overridden by king for example to allow castling.
+  # Remembered, and recalled, in the instance of the board passed
   def allowed_moves(board)
     #board = b || self.board or raise ArgumentError, "A board is necessary to ask a piece its allowed moves"
     mypos = board.index(self) 
-
-    Board.all_positions.select do |sq|
+    already_allowed = board.allowed_moves[mypos]
+    return already_allowed if already_allowed
+    
+    board.allowed_moves[mypos] = Board.all_positions.select do |sq|
       allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
     end
   end

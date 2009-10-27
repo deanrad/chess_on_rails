@@ -217,4 +217,10 @@ class Board < Hash
       json.chop!.chop! << "}"
     end
   end
+
+  # Allows for caching and emitting of allowed moves for this board
+  def allowed_moves
+    @allowed_moves_per_position ||= {}
+  end
+
 end
