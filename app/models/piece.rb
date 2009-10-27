@@ -11,10 +11,6 @@ class Piece
   # distinguishes each instance - eg a pawn, queens knight.
   attr_accessor :discriminator # eg queens, kings, promoted, a, b (for pawns)
 
-  # For convenience, the call to Piece#allowed_moves(board) can be shortened
-  # to Piece#allowed_moves if the board property is set on the piece at creation.
-  attr_accessor :board
-
   # a class configures its chess behavior by invoking these class methods,
   # allowing piece instances to answer ask their class whether their move
   # vectors allow them to make a given move.
@@ -72,9 +68,8 @@ class Piece
 
   # Returns those positions for which this piece allows the move and it is not obstructed on this board
   # Overridden by king for example to allow castling.
-  # Remembered, and recalled, in the instance of the board passed
+  # Remembered, and recalled, in the instance of the board passed.
   def allowed_moves(board)
-    #board = b || self.board or raise ArgumentError, "A board is necessary to ask a piece its allowed moves"
     mypos = board.index(self) 
     already_allowed = board.allowed_moves[mypos]
     return already_allowed if already_allowed
