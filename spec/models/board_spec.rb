@@ -2,8 +2,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Board do
   it 'should know a valid position by notation' do
-    match = matches(:unstarted_match)
-    board = match.board
     Board.valid_position?(:a1).should == true
     Board.valid_position?(:n9).should == false
     Board.valid_position?(:a9).should == false
@@ -20,10 +18,12 @@ describe Board do
   end
 
   it 'a bishop can not move if it is obstructed' do
-    match = matches(:unstarted_match)
-    board = match.board
-    bishop = board[:c1]
-    bishop.allowed_moves(board).should == []
+    board = Board.new( :c1 => bishop=Bishop.new(:white) )
+    bishop.allowed_moves(board).length.should > 0
+
+    # obstruct him - now he can go nowhere 
+    board[:b2] = board[:d2] = Pawn.new(:white)
+    bishop.allowed_moves(board).length.should == 0    
   end  
 
   it 'scholars mate capture with queen should be checkmate' do
