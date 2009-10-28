@@ -30,7 +30,9 @@ module MatchHelper
   def gameplay;   @gameplay = match.gameplays.send( current_player_side ); end
 
   # The chat text lines associated with this match.
-  def chats;      @chats ||= Chat.find_all_by_match_id( params[:match_id] ); end
+  def chats
+    @chats ||= Chat.find_all_by_match_id(params[:match_id], :include => :player)
+  end
 
   # The last move made in this match.
   def last_move;  @last_move ||= match.moves.last; end
