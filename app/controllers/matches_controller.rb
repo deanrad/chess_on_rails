@@ -15,7 +15,9 @@ class MatchesController < ApplicationController
   # javascript to update the board, and will 304 after the first request. Once that
   # move has been made, though, future requests will return JS to update the board
   # and the URL that the client polls for.
-  def status; end
+  def status
+    head :not_modified and return unless status_has_changed?
+  end
 
   # Provides the js of previous boards
   def boards; end

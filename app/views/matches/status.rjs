@@ -4,7 +4,7 @@
 # statelessly, adds a layer of tracability, and does not leak state into cookies or session
 # variables, allowing for future tracking of multiple matches at once.
 
-if status_has_changed
+if status_has_changed?
   page << "next_move_url = '#{url_for( :action => :status, :move => match.moves.length + 1 ) }';"
 
   if your_turn

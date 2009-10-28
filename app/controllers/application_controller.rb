@@ -9,6 +9,9 @@ class ApplicationController < ActionController::Base
   attr_accessor :current_player
   helper_method :current_player
 
+  # Dont know if we really like this, but better off with it, by default
+  protect_from_forgery
+
   # descendant controllers call authorize to ensure player is logged in, or redirect them to login
   def authorize
     self.current_player ||= (player_in_session || player_in_cookie || player_over_http)
@@ -40,7 +43,4 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # See ActionController::RequestForgeryProtection for details
-  # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery :secret => '81ef9321d36cc23a2671126d90eed60f'
 end
