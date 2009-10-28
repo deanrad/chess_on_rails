@@ -1,0 +1,85 @@
+<!-- No move has been made yet.. Clients submit requests for 1-based ordinals of moves (move_count+1) -->
+
+<!-- this form is never submitted, its a container for the action -->
+<div style="display:none">
+  <form id="next_move" method="GET" action="/match/1/moves/1" onsubmit="ajax_me(); return false;">
+
+  </form>
+  <form id="chatter_maker" method="POST" action="/match/1/chat" onsubmit="ajax_me(); return false;">
+       <!-- we may set the dialog_token so this chat can associate back to something the other player
+            initiated, for example, you are accepting their draw offer, you need to produce the same
+            token which with they initiated the offer.. -->
+       <!-- cancel move, cancel game, return to position, allow takeback, "Claim Checkmate" / "Offer Draw" / "Claim Cheat" / "Claim Forfeit" -->
+       <input type="hidden" name="dialog_action_type" value="draw_offer"/>
+       <input type="hidden" name="dialog_action_choices" value="accept;deny"/>
+       <input type="hidden" name="dialog_action_value" value="accept"/>
+       <input type="hidden" name="dialog_token" value="bfefa43..."/>
+  </form>
+</div>
+
+<!-- Draws are not actual events-  not modeled via urls or other states.. they are simply chat messages
+     with the property that when they are the most recent message in chat (for the recipient,not for the sender)
+     they invoke a function that idempotently (only once) fires an alert to take place outside of chat.
+     An example of this could be to raise a lightbox or JS alert function - do you accept you've been mated ..
+     We wouldn't want this to fire more than once, though - so some unique identifier for the (draw offer, mate
+     claim, etc..) would be loaded into the browser's JS memory space, the presence of which would prevent the
+     function from being called again if the set_alert function gets called again (say - because the JS libraries
+     we're using dont set If-Modified-Since or etags or other goodness). Thus if the browser is torn down and
+     set back up, and the draw offer is still the bottom-most one in chat, the lightboxing will return. Solution ?
+     answer these friggin things - an answer goes back into chat and prevents future appearances period, since 
+     chat is persisted. We don't do cookies since we actually want the sender of the message to get a reply - we'd 
+     prefer to force a reply through the server..
+
+     You don't poll for draws - they're part of the chat system. Likewise, if a mate occurs (if players agreed to
+     let the sytem judge for them), a message is put into chat. You poll for moves, and other events occur, mediated
+     through chat, actually out-of-band of the move channel. 
+
+     There needs to be sufficient distrust - the initiator will have a token generated for their draw offer, hashing
+     the time, the match, the type of dialog. If the recipients response contains the same token, then we'll accept 
+     their response as valid. We could put the token on fields of gameplay, or a releated table. The recipients response
+     will not visibly display the token
+-->
+
+<!-- match/1/moves/1 returns HEADS of 304 not modified until move 1 exists -->
+
+HTTP 1.1 GET /match/1/moves/1
+X-Requested-By: XMLHttpRequest #of course - real clients cant go here
+
+200 OK
+Last-modified: move:01 pm
+Etag: foo_that_identifies_the_move
+X-ChessOnRails-Action: Move made
+Content-type: text/javascript
+
+update_client( '[move,1]', move_list, <<move list>> )
+update_client( '[move,1]', board,    add_board(1, board_json) )
+update_client( '[move,1]', poll_url, 'match/1/moves/2' )
+EOF
+
+HTTP 1.1 GET /match/1/moves/2
+X-Requested-By: XMLHttpRequest #of course - real clients cant go here
+
+200 OK
+Last-modified: move:01 pm
+Etag: foo_that_identifies_the_move
+X-ChessOnRails-Action: Draw offerred
+Content-type: text/javascript
+
+update_client( '[move,1]', move_list, <<move list>> )
+update_client( '[move,1]', board,    add_board(1, board_json) )
+
+HTTP 1.1 GET /match/1/moves/2
+X-Requested-By: XMLHttpRequest #of course - real clients cant go here
+
+200 OK
+Last-modified: move:01 pm
+Etag: foo_that_identifies_the_move
+X-ChessOnRails-Action: Checkmate, fool !
+Content-type: text/javascript
+
+update_client( '[move,1]', move_list, <<move list>> )
+update_client( '[move,1]', board,    add_board(1, board_json) )
+
+
+
+
