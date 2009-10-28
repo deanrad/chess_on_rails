@@ -1,62 +1,44 @@
 module MatchHelper
 
+  # The match the user is viewing or participating in.
   def match
     match_id = params[:id] || params[:match_id]
     @match ||= if match_id
       match_id.to_i != 0 ? Match.find( match_id ) : Match.find_by_name( match_idx )
     else
-      Match.new # params[:match]?
+      Match.new    
     end
   end
 
-  def board
-    @board ||= match.board
+  # The side of the current player in this match, or nil if the viewer is not
+  # participating in this match.
+  def current_player_side
+    @current_player_side ||= (current_player == match.white) ? :white : :black
   end
 
-  def gameplay
-    @gameplay = match.gameplays.send( viewed_from_side )
-  end
+  # The side from which this board is being viewed - white, for non-participants.
+  def viewed_from_side; current_player_side || :white; end
 
-  def chats
-    @chats ||= Chat.find_all_by_match_id( params[:match_id] )
-  end
+  # Answers whether it is the turn of player watching to move next.
+  def your_turn;  @your_turn ||= match.next_to_move == current_player_side; end
 
-  # TODO this should explicitly deal with non-logged in users
-  def viewed_from_side
-    @viewed_from_side ||= (current_player == match.player1) ? :white : :black
-  end
-  
-  def your_turn
-    @your_turn ||= match.send( match.next_to_move ) == current_player
-  end
+  # The board of this match, cached per-request for faster access.
+  def board;      @board ||= match.board; end
 
-  def last_move
-    @last_move ||= match.moves.last
-  end
+  # For participants, the gameplay is the record associating them to this match,
+  # and on which the move queue is stored, for example. See Gameplay.
+  def gameplay;   @gameplay = match.gameplays.send( current_player_side ); end
 
-  def move_count
-    @move_count ||= match.moves.count
-  end
+  # The chat text lines associated with this match.
+  def chats;      @chats ||= Chat.find_all_by_match_id( params[:match_id] ); end
 
-  def status_has_changed
-    @status_has_changed ||= ( params[:move].to_i <= match.moves.length)
-  end
+  # The last move made in this match.
+  def last_move;  @last_move ||= match.moves.last; end
 
+  # The number of moves made so far in this match.
+  def move_count; @move_count ||= match.moves.count; end
 
-  # the files, in order from the viewed_from_side for rendering
-  def files
-    @files ||= Board.files(viewed_from_side)
-  end
-
-  # the ranks, in order from the viewed_from_side for rendering (and reversed for HTML doc ordering)
-  def ranks
-    @ranks ||= Board.ranks(viewed_from_side).reverse
-  end
-
-  def chats
-    @chats ||= Chat.find_all_by_match_id( match.id )
-  end
-
+  # Whether to render for downlevel browsers
   def downlevel?
     @downlevel ||= request.user_agent.downcase.include? 'berry'
   end

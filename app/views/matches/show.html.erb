@@ -37,13 +37,14 @@
  </div>
 
   <div id="js_updatable_board">
-  <%= render :partial => "board" %>
+    <%= render :partial => "board", :locals => {:ranks => Board.ranks(viewed_from_side), 
+                                                :files => Board.files(viewed_from_side) }  %>
    </div>
 </div>
 
 <div id="actions_region">  
 
-  <% if your_turn %>
+  <% if current_player_side %>
   <div id="move_creator_parent" >
     <%= render :partial => "move_maker" %>
   </div>
@@ -74,7 +75,7 @@
     <%= render :partial => 'move_list' %>
   </div>
   
-  <% if your_turn %>
+  <% if current_player_side %>
   <div id="chat_container" class="status_tab">
     <%= periodically_call_remote( :url => match_chat_url(match), :method => :get, :frequency => 7, :update => 'chat') %>
     <div id="chat">

@@ -15,7 +15,7 @@ module ChatsHelper
       view_text = I18n.t "chat_action_#{action}_text"
       chat.text = chat.text.gsub("/#{action}", view_text)
       if (current_player != chat.player) && is_last
-        chat.text += I18n.t "chat_action_#{action}_action"
+        chat.text = chat.text.gsub(view_text, view_text + I18n.t("chat_action_#{action}_action") )
       end
     end
     chat.text
