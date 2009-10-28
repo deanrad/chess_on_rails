@@ -1,13 +1,17 @@
 * action_mailer notifications
 * PGN is safe for comments (test on rubinsteins immortal pgn fixture)
 
-
+* move queue using http://wiki.github.com/madrobby/scriptaculous/ajax-inplaceeditor
 * move queue is stored obfuscated
 * move queue allows branching
-* provide navigation back to match page
+* move queue in plugin
 ** preview images on match page ??
 *** image of match ? 
 ** allow click-click move format in addition to dragdrop
+** allow setting of away
+** allow dialogs.."Claim Checkmate" / "Offer Draw" / "Request Undo" / "Claim Cheat" / "Claim Forfeit"
+** allow user settings (contact me ?)
+** allow match settings (refresh interval, ajaxy move making)
 
 * do some cucumber features
 * get CI running at http://blog.runcoderun.com/

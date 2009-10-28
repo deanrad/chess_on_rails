@@ -42,6 +42,7 @@ module MatchHelper
     @status_has_changed ||= ( params[:move].to_i <= match.moves.length)
   end
 
+
   # the files, in order from the viewed_from_side for rendering
   def files
     @files ||= Board.files(viewed_from_side)
