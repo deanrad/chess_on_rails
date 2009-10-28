@@ -5,7 +5,11 @@ class ChatsController < ApplicationController
   layout false 
 
   # Show this match's chats
-  def show; end
+  def show
+    # Note: automatic caching results in 304s when there are no new chats, but the browser
+    # still reapplies its cached document to the DOM. This results in any actions (board shaking,
+    # for example) happening again. 
+  end
 
   # Post a new chat to this match. It is sanitized, and moves mentioned in the
   # chat become hyperlinks upon showing the chat

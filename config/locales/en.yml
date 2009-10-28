@@ -7,4 +7,4 @@ en:
   err_notation_destination_invalid: "No piece may move to {{to_coord}} on this board."
   err_notation_ambiguous: "Notation {{notation}} fails to distinguish between more than one {{function}} that can move to {{to_coord}}. Please specify, as in Ncf6."
   chat_action_shake_text: "(shakes board)"
-  chat_action_shake_action: "<script>Effect.Shake('board_table');</script>"
+  chat_action_shake_action: "<script type='text/javascript'>Effect.Shake('board_table');</script>"

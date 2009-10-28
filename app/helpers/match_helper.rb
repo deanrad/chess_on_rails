@@ -43,6 +43,12 @@ module MatchHelper
     @downlevel ||= request.user_agent.downcase.include? 'berry'
   end
 
+  # Questionably implemented method comparing a state parameter the client sends
+  # to a known server state to see if 'the status has changed'
+  def status_has_changed
+    @status_has_changed ||= ( params[:move].to_i <= match.moves.length)
+  end
+
   # checks for existance of .gif file in the current set's directory
   # if no .gif, uses .png extension
   def image_source_of( piece )

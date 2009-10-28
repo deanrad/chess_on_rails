@@ -1,5 +1,6 @@
 * action_mailer notifications
 * PGN is safe for comments (test on rubinsteins immortal pgn fixture)
+* use proper etagging for chats (and status) to avoid generating what won't be sent
 
 * move queue using http://wiki.github.com/madrobby/scriptaculous/ajax-inplaceeditor
 * move queue is stored obfuscated

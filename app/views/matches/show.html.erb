@@ -77,7 +77,14 @@
   
   <% if current_player_side %>
   <div id="chat_container" class="status_tab">
-    <%= periodically_call_remote( :url => match_chat_url(match), :method => :get, :frequency => 7, :update => 'chat') %>
+    <script type="text/javascript" id="update_chat_periodically">
+      //<![CDATA[
+      new PeriodicalExecuter(
+        function() {
+          new Ajax.Updater('chat',
+	                   '<%= match_chat_url(match) %>', 
+                           {asynchronous:true, evalScripts:true, method:'get'})}, 7);
+    </script>
     <div id="chat">
       <%= render :partial => 'chats/chats', :locals => { :chats => chats } %>
     </div>
