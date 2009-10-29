@@ -68,11 +68,13 @@ class Piece
 
   # Returns those positions for which this piece allows the move and it is not obstructed on this board
   # Overridden by king for example to allow castling.
-  # Remembered, and recalled, in the instance of the board passed.
-  def allowed_moves(board)
+  # Remembered, and recalled, in the instance of the board passed, unless true passed as final argument.
+  def allowed_moves(board, force_recalc = false)
     mypos = board.index(self) 
-    already_allowed = board.allowed_moves[mypos]
-    return already_allowed if already_allowed
+    unless force_recalc
+      already_allowed = board.allowed_moves[mypos]
+      return already_allowed if already_allowed 
+    end
     
     board.allowed_moves[mypos] = Board.all_positions.select do |sq|
       allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )

@@ -90,13 +90,5 @@ describe 'Piece' do
       lambda{ p.allowed_moves }.should raise_error
     end
 
-    it 'should not require the board be passed to allowed moves if #board is set' do
-      m = matches(:unstarted_match)
-      m.moves << Move.new(:from_coord => 'e2', :to_coord => 'e4')
-
-      p = m.board[:f1]
-      p.board = m.board
-      p.allowed_moves.should == p.allowed_moves(m.board)
-    end
   end
 end
