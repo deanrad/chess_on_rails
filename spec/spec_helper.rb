@@ -14,7 +14,7 @@ Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
 
-  config.fixture_path = RAILS_ROOT + '/test/fixtures/'
+  config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
   config.global_fixtures = :all # :matches, :players, :moves, :users
 
   # == Mock Framework
@@ -35,7 +35,7 @@ module PgnFixtures
   def matches_with_pgn_fixtures *args
     matches_without_pgn_fixtures *args
     rescue
-    pgn = PGN.new( `cat #{RAILS_ROOT}/test/fixtures/matches/#{args.first}.pgn` )
+    pgn = PGN.new( `cat #{RAILS_ROOT}/spec/fixtures/matches/#{args.first}.pgn` )
     pgn.playback_against( Match.new )
   end
   def self.included(base)
