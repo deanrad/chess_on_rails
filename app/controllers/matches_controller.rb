@@ -90,10 +90,8 @@ class MatchesController < ApplicationController
     params[:move][:notation] = params.delete(:notation) if (params[:move] ||= {}) && !params[:notation].blank?
 
     return unless params[:move]
-$stderr.puts params[:move].inspect
-
-    @move = Move.new( params[:move] )
-    @match.moves <<  # saves automatically
+    
+    @match.moves << @move = Move.new( params[:move] ) # saves automatically
     
     unless @move.errors.empty?
       flash[:move_error] = @move.errors.full_messages * "\n"
