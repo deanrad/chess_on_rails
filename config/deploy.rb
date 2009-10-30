@@ -33,6 +33,10 @@ namespace :configure do
     run "rm -f #{release_path}/config/database.yml"
     run "ln -s #{shared_path}/chess_on_rails_database.yml #{release_path}/config/database.yml"
   end
+  task :env do
+    run "rm -f #{release_path}/config/environments/production.rb"
+    run "ln -s #{shared_path}/production.rb #{release_path}/config/environments/production.rb"
+  end
 end
 
 namespace :deploy do
@@ -41,6 +45,6 @@ namespace :deploy do
     run "touch #{current_path}/tmp/restart.txt"
   end
 
-  after "deploy:update_code", "configure:db"
+  after "deploy:update_code", "configure:db", "configure:env"
 end
 
