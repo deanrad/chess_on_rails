@@ -1,4 +1,6 @@
 class ChatsController < ApplicationController
+  unloadable # fixes copious errors per http://strd6.com/?p=250
+
   before_filter :authorize
 
   # This controller only serves the text of the chats, not navigation, etc..

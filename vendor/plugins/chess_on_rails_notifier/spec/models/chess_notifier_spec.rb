@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../../../../spec/spec_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../../../../../spec/spec_helper')
 
 describe ChessNotifier do
   before(:each) do
