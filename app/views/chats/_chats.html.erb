@@ -1,7 +1,7 @@
 <% last_chat_id = chats.blank? ? nil : chats[chats.length-1].id %>
 <% chats.each do |chat| %>
   <div class="chat_line" title="<%= chat.created_at.strftime('%a %H:%M') %>">
-    <b><%= chat.player.name %>: </b><%= process_chat(chat, chat.id == last_chat_id) %></div>
+    <b><%= chat.player.name %>: </b><%= chat.display_text(current_player, chat.id == last_chat_id) %></div>
 <% end %>
 
 <script type="text/javascript">

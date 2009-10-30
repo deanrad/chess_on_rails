@@ -65,8 +65,8 @@ describe MatchesController do
       m = matches(:paul_vs_dean)
       
       post :create_move, { :match_id => m.id, :move => {:from_coord => 'a2', :to_coord => 'a4'} }, {:player_id => m.player1.id}
-      assert_response 302
-      assert_nil flash[:move_error]
+      # assert_response 302 # will redirect to the match page
+      flash[:move_error].should == nil
 
       assert_equal 1, m.reload.moves.length
       assert_not_nil m.moves.last.notation
