@@ -1,11 +1,15 @@
+* create gameplays for matches that didnt' have them (in prod)
+* Board is flipped around ! write failing test, fix, submit
 * action_mailer notifications
-* PGN is safe for comments (test on rubinsteins immortal pgn fixture)
-* use proper client-side protocol for chats(like we did for status) to avoid generating what won't be sent
 
+* PGN is safe for comments (test on rubinsteins immortal pgn fixture)
+* extend chats to include answerable chats (questions / proposals / propositions)
+
+* relocate move queue to plugin
 * move queue using http://wiki.github.com/madrobby/scriptaculous/ajax-inplaceeditor
 * move queue is stored obfuscated
 * move queue allows branching
-* move queue in plugin
+
 ** preview images on match page ??
 *** image of match ? 
 ** allow click-click move format in addition to dragdrop

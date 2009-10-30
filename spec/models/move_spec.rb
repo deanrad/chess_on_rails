@@ -238,6 +238,7 @@ describe Move do
 =end
 
 =begin
+  # TODO relocate move queue specs (except high-level functional ones) to plugin
   describe 'Move Queue' do
     it 'should play the next move in the move queue if the notation matches' do
       match = matches(:unstarted_match)
