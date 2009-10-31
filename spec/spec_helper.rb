@@ -48,7 +48,7 @@ end
 # Translates the key provided, and uses the model given to provide its attributes
 # and any custom methods named in its ERROR_FIELDS constant to I18n interpolation
 def t key, model = nil
-  return I18n.t key unless model
+  return I18n.t(key) unless model
 
   h = model.attributes.symbolize_keys
   if model.class.const_defined? :ERROR_FIELDS
