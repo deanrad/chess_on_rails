@@ -35,7 +35,7 @@ namespace :configure do
   end
   task :env do
     run "rm -f #{release_path}/config/environments/production.rb"
-    run "ln -s #{shared_path}/production.rb #{release_path}/config/environments/production.rb"
+    run "ln -s #{shared_path}/chess_on_rails_production_environment.rb #{release_path}/config/environments/production.rb"
   end
 end
 

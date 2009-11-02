@@ -1,7 +1,7 @@
 class ChessNotifier < ActionMailer::Base
   self.template_root = File.join(File.dirname(__FILE__), '../views')
 
-  SENDER = ""
+  SENDER = "games@chessonrails.com"
 
   # notifies that the opponent made a move
   def opponent_moved(plyr, opp, mv)
