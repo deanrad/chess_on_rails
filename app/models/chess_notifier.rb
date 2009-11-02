@@ -1,6 +1,6 @@
 class ChessNotifier < ActionMailer::Base
 
-  SENDER = ""
+  SENDER = "ChessOnRails Games<games@chessonrails.com>"
 
   # notifies that the opponent made a move
   def opponent_moved(plyr, opp, mv)
