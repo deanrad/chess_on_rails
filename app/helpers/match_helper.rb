@@ -13,21 +13,32 @@ module MatchHelper
   # The side of the current player in this match, or nil if the viewer is not
   # participating in this match.
   def current_player_side
-    @current_player_side ||= (current_player == match.white) ? :white : :black
+    @current_player_side ||= case current_player
+      when match.white; :white
+      when match.black; :black
+      else nil
+    end
   end
 
   # The side from which this board is being viewed - white, for non-participants.
   def viewed_from_side; current_player_side || :white; end
 
   # Answers whether it is the turn of player watching to move next.
-  def your_turn;  @your_turn ||= match.next_to_move == current_player_side; end
+  def your_turn
+    @your_turn ||= match.next_to_move == current_player_side; 
+    rescue
+    logger.error "Error computing next to move: #{match.inspect}, #{current_player.inspect}" and return nil
+  end
+
+  # Idiomatic alias for your_turn.
+  alias :your_turn? :your_turn 
 
   # The board of this match, cached per-request for faster access.
   def board;      @board ||= match.board; end
 
   # For participants, the gameplay is the record associating them to this match,
   # and on which the move queue is stored, for example. See Gameplay.
-  def gameplay;   @gameplay = match.gameplays.send( current_player_side ); end
+  def gameplay;   @gameplay ||= match.gameplays[current_player_side]; end
 
   # The chat text lines associated with this match.
   def chats

@@ -6,7 +6,7 @@ Hi. Welcome, <%= current_player.name %>.
 <% current_player.matches.active.each do |m| %>
 	<li>
 		<%= link_to m.name, match_url(m)  %> 
-		<%=  '(Your move)' if m.turn_of?( current_player ) %>
+		<%=  '(Your move)' if your_turn? %>
 	</li>
 <% end%>
 </ul>	

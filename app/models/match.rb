@@ -19,10 +19,10 @@ class Match < ActiveRecord::Base
   named_scope :completed, :conditions => { :active => false }
 
   # Defines the relations between the players involved, and this match, 
-  # which are white and black, respectively.
   has_many :gameplays do
-    def white; self[0]; end
-    def black; self[1]; end
+    def[] sym
+      case sym when :white; self[0]; when :black; self[1]; else super; end
+    end
   end
 
   # Shortcut method for making move in console: m << "Nc5"
@@ -37,8 +37,9 @@ class Match < ActiveRecord::Base
     gameplays << Gameplay.new(:player_id => black.id, :black => true ) if black
   end
 
-  def player1;  @player1 ||= gameplays.white.player  ;end
-  def player2;  @player2 ||= gameplays.black.player  ;end
+  # The first gameplay record is player1 aka white, and the second is player2 aka black
+  def player1;  @player1 ||= gameplays[0].player  ;end
+  def player2;  @player2 ||= gameplays[1].player  ;end
   alias :white :player1;  alias :black :player2
 
   # The current board of this match.
@@ -97,7 +98,7 @@ class Match < ActiveRecord::Base
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue
   # for now requires exact match on the notation
   def play_queued_moves( m )
-    opponent = m.match.gameplays.send( m.match.next_to_move )
+    opponent = m.match.gameplays[ m.match.next_to_move == :white ? 1 : 0 ] 
     return unless opponent && opponent.move_queue.length > 1
 
     queue = MoveQueue.new(queue) unless MoveQueue === queue

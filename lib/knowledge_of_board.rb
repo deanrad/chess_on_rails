@@ -40,7 +40,7 @@ module KnowledgeOfBoard
     memoize :all_positions
     
     def ranks side=:white
-      white_ranks = POSITIONS.reverse.map{ |rank| rank[0].to_s[1..1] }
+      white_ranks = POSITIONS.map{ |rank| rank[0].to_s[1..1] }
       side==:white ? white_ranks : white_ranks.reverse
     end
     memoize :ranks
