@@ -12,9 +12,12 @@
 ActiveRecord::Schema.define(:version => 20090424042453) do
 
   create_table "chats", :force => true do |t|
-    t.integer  "match_id",   :null => false
-    t.integer  "player_id",  :null => false
+    t.integer  "match_id",              :null => false
+    t.integer  "player_id",             :null => false
     t.string   "text"
+    t.integer  "action_code"
+    t.integer  "responding_to_chat_id"
+    t.integer  "response_code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -4,7 +4,11 @@ class CreateChats < ActiveRecord::Migration
       t.integer :match_id, :null => false
       t.integer :player_id, :null => false
       t.string :text
-      t.datetime :created_at
+
+      # these fields extend chat so it can be used to convey actions like draw offers
+      t.integer :action_code
+      t.integer :responding_to_chat_id
+      t.integer :response_code
 
       t.timestamps
     end
