@@ -39,7 +39,7 @@ describe AuthenticationController do
 
   it 'should redirect to matches index page on successful login' do
     post :login, { :email => users(:dean).email, :security_phrase => users(:dean).security_phrase }
-    response.should redirect_to( match_index_url )
+    response.should redirect_to( matches_url )
   end
 
   it 'should clear the session player id on logout' do

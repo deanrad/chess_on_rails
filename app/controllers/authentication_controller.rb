@@ -17,7 +17,7 @@ class AuthenticationController < ApplicationController
 
     session[:player_id] = u.playing_as.id
     # current_player = u.playing_as
-    redirect_to match_index_url
+    redirect_to matches_url
   end
 
   # allows user to post the credentials they stored to initiate a session

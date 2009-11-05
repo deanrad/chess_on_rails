@@ -9,7 +9,7 @@ Move.class_eval do
 
   def notify_of_move_via_email
     # TODO move to configuration - dont send email if its been less than 1/24 of a day
-    return unless( self.created_at > match.moves.last.created_at + 1.hour )
+    return unless( match.moves.last && self.created_at > match.moves.last.created_at + 1.hour )
 
     # logger.warn "Notifying by email of move #{self.inspect}"
     mover = match.gameplays[self.side].player

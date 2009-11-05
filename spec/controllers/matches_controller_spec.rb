@@ -32,17 +32,6 @@ describe MatchesController do
     response.should be_success
   end
 
-  it 'should populate the start position for a new match if FEN given' do
-    post :create, {:opponent_id => 3, :opponent_side => 'black', :start_pos => 'R7/8/8/8/8/8/8/8'},  {:player_id => players(:dean).id }
-    assigns[:match].start_pos.should == 'R7/8/8/8/8/8/8/8'
-  end
-
-  it 'should create moves for a new match if PGN given' do
-    post :create, {:opponent_id => 3, :opponent_side => 'black', :start_pos => '1. e4'},  {:player_id => players(:dean).id }
-    assigns[:match].moves.count.should == 1
-    assigns[:match].moves[0].notation.should == 'e4'
-  end
-
   it 'should allow resignation via POST' do
     post :resign , {:id => matches(:dean_vs_paul).id},  {:player_id => players(:dean).id }
     assigns[:match].should_not be_active
@@ -50,7 +39,6 @@ describe MatchesController do
   
   it 'should show any current move queue in the page' do
     get :show, {:id => matches(:dean_vs_paul).id, :format => 'html'}, {:player_id => players(:dean).id }
-
     response.should have_tag("input#gameplay_move_queue", :value => 'Nc4 b5')
   end
 
@@ -62,26 +50,28 @@ describe MatchesController do
     end
     
     it 'should accept a move via coordinates' do 
-      m = matches(:paul_vs_dean)
+      m = matches(:unstarted_match)
       
       post :create_move, { :match_id => m.id, :move => {:from_coord => 'a2', :to_coord => 'a4'} }, {:player_id => m.player1.id}
       # assert_response 302 # will redirect to the match page
       flash[:move_error].should == nil
 
-      assert_equal 1, m.reload.moves.length
-      assert_not_nil m.moves.last.notation
+      m.reload.moves.length.should == 1
     end
 
     it 'should accept a move via notation' do 
-      m = matches(:paul_vs_dean)
-      post :create_move, { :match_id => m.id, :notation => 'a4' }, {:player_id => m.player1.id}
+      m = matches(:unstarted_match)
+      lambda{
+        post :create_move, { :match_id => m.id, :notation => 'a4' }, {:player_id => m.player1.id}
+      }.should change(Move, :count).by(1)
       assert_response 302
     end
 
     it 'should accept a move via ajax' do 
-      m = matches(:paul_vs_dean)
-      xhr :post, :create_move, { :match_id => m.id, :notation => 'a4' }, {:player_id => m.player1.id}
-      response.should be_success
+      m = matches(:unstarted_match)
+      lambda{
+        xhr :post, :create_move, { :match_id => m.id, :notation => 'a4' }, {:player_id => m.player1.id}
+      }.should change(Move, :count).by(1)
     end
     
     it 'should prohibit moving on a match you dont own' do
@@ -97,15 +87,6 @@ describe MatchesController do
       flash[:move_error].should_not be_nil
     end
 
-    it 'should end the game when a checkmating move posted' do
-      m = matches(:scholars_mate)	
-
-      pending 'HOW BEST TO DO THIS?'
-      post :create_move, { :match_id => m.id, :move => { :notation => 'Qf7' } }, {:player_id => players(:dean).id }		
-
-      m.reload.winning_player.should_not be_nil
-      m.active.should == 0
-    end
 
     it 'should redirect to match page (for non ajax move)' do 
       m = matches(:paul_vs_dean)
@@ -116,7 +97,7 @@ describe MatchesController do
 
   describe 'Routes' do
     it 'should have helpers' do
-      @controller.instance_eval{ create_move_path(25) }.should == '/matches/25/moves'
+      @controller.instance_eval{ create_move_path(25) }.should include('/matches/25/moves')
       @controller.instance_eval{ match_path(24) }.should == '/matches/24'
     end
 
