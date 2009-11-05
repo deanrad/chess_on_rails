@@ -106,9 +106,9 @@ describe Board do
   end	
 
   it 'should promote automatically to queen' do
-    pending 'promotion'
     m = matches(:promote_crazy)
-    
+    pending 'CSV Fixtures Bug !! Because ids for move records are generated from their hashes, they dont necessarily play back in the order in which they are listed in the fixture !'
+
     m.moves << promo = Move.new( :from_coord => 'b7', :to_coord => 'b8' )
     promo.should be_valid 
 

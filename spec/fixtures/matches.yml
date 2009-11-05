@@ -33,9 +33,6 @@ promote_crazy:
   name: Promotable
   active: 1
 
-e4: # a FEN notated match after 1. e4 
-  start_pos: RNBQKBNR/PPPP1PPP/8/4P3/8/8/pppppppp/rnbqkbnr b
-
 legal:
   name: Legal vs. St. Brie, 1750
 
