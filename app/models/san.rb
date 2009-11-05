@@ -59,6 +59,7 @@ class SAN
         n << ROLE_TO_ABBREV[m.piece.function]
       end
 
+      # BUG: Move#capture? only returns true for moves that populate the captured_piece_coord
       if m.capture?
         n << "x"
       end
