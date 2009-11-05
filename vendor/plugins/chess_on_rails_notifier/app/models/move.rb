@@ -7,11 +7,15 @@ Move.class_eval do
     self.created_at - match.moves[ match.moves.index(self) - 1 ].created_at
   end
 
+  # Sends an email notification if this is the first move, or its been
+  # long enough since the previous move
+  # TODO move time window to configuration or let player control
   def notify_of_move_via_email
-    # TODO move to configuration - dont send email if its been less than 1/24 of a day
-    return unless( match.moves.last && self.created_at > match.moves.last.created_at + 1.hour )
+    if ! match.moves.last.nil?
+      return if self.created_at < match.moves.last.created_at + 1.hour
+    end
 
-    # logger.warn "Notifying by email of move #{self.inspect}"
+    logger.warn "Notifying by email of move #{self.inspect}"
     mover = match.gameplays[self.side].player
     opponent = match.gameplays[self.side.opposite].player
     ChessNotifier.deliver_opponent_moved(opponent, mover, self)
