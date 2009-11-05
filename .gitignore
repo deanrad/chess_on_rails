@@ -3,6 +3,7 @@
 *#*
 *~
 *.cache
+TAGS
 .dotest/*
 log/*
 tmp/*

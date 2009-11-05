@@ -82,6 +82,9 @@ class Match < ActiveRecord::Base
     moves.count.even? ? first_to_move : first_to_move.opposite
   end
 
+  # the player next to move
+  def player_to_move; self.send(self.next_to_move); end
+
   def resign( plyr )
     self.result, self.active = ['Resigned', 0]
     self.winning_player = (plyr == player1) ? player2 : player1
