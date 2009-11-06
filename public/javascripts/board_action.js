@@ -107,3 +107,24 @@ function set_board(move_num, allowed_moves){
         }
         da_board.insert( bottom_labels );
       }
+
+function handleArrowKeys(evt) {
+    evt = (evt) ? evt : ((window.event) ? event : null);
+    if (evt) {
+        switch (evt.keyCode) {
+	    //left, up, right, down
+            case 37:
+	        previous_board();
+                break;    
+            case 38:
+                break;    
+            case 39:	
+                next_board();
+                break;    
+            case 40:
+                break;    
+         }
+    }
+}
+
+document.onkeyup = handleArrowKeys;
