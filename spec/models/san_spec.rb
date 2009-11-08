@@ -43,7 +43,13 @@ describe 'SAN' do
     end
 
     describe 'castling' do
-
+      it 'should notate a kingside castle as O-O' do
+        m = Move.new(:from_coord => 'e1', :to_coord => 'g1')
+        m.stubs(:board).returns( Board.new.delete_if{|k,v| [:f1, :g1].include?(k) } )
+        m.update_computed_fields
+        m.castled.should == 1
+        SAN.from_move(m).should == "O-O"
+      end
     end
   end # describe 'created from a move'
 

@@ -53,6 +53,11 @@ class SAN
   # Returns the SAN for the move passed
   def self.from_move(m)
     returning("") do |n|
+      if m.castled
+        return "O-O" if m.to_coord.file == "g"
+        return "O-O-O" if m.to_coord.file == "c"
+      end
+
       if m.piece.function == :pawn
         n << m.from_coord.file if m.capture?
       else

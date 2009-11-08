@@ -121,7 +121,8 @@ describe Board do
     m = matches(:promote_crazy)
     m.moves << Move.new( :from_coord => 'b7', :to_coord => 'a8', :promotion_choice => 'N' )
     m.moves.last.notation.should == 'bxa8=N'
-    m.board[:a8].function.should == :queen
+    pending 
+    m.board[:a8].function.should == :knight
   end
 
   # consider yields a copy of the board on which the move has occurred
@@ -139,6 +140,22 @@ describe Board do
     board['a2'].should_not be_nil
     board['a4'].should     be_nil
   end 
+
+  it 'should populate the captured piece coord when move is a capture' do
+    b= Board.new( :d4 => Pawn.new(:white), :e5 => Pawn.new(:black) )
+    m= Move.new( :from_coord=>'d4', :to_coord=>'e5')
+    old_b = b.dup
+
+    b.play_move!( m )
+    m.captured_piece_coord.should == 'e5'
+
+    # TODO these can be removed -they just allow notation to occur behind the AR lifecycle's back
+    # the board the move is validated against must be the board existing at the time of the move
+    m.stubs(:board).returns(old_b)
+    m.notate!
+    
+    m.notation.should == 'dxe5'
+  end
 
   it 'should have a different hash code per board configuration' do
     b = Board.new

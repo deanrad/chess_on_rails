@@ -9,43 +9,42 @@ class Board < Hash
   # or was an actual state of the game - defaults to nil
   attr_accessor :hypothetical
 
-  # the match of which this board takes part
+  # The match to which this board belongs.
   attr_accessor :match	
 
-  # flags whether an en_passant move is available (inferred from match)
+  # A flag for whether an en_passant move is available for the next move only.
   attr_accessor :en_passant_square
 
-  # flags true initially, and becomes false for this and future boards in the match
-  # if king or kings rook is moved. Other castling rules still apply
+  # Flags that are true initially, and become false for this and future boards in the match
+  # if king or kings rook is moved. Major contributors to whether castling is allowed.
   attr_accessor :white_kingside_castle_available, :white_queenside_castle_available
   attr_accessor :black_kingside_castle_available, :black_queenside_castle_available
 
-  # flags true initially, and becomes false for this and future boards in the match
-  # if king or queens rook is moved. Other castling rules still apply
-  
+  # An array of pieces which have bitten the dust during this match
+  attr_accessor :deleted_pieces
+  alias :graveyard :deleted_pieces
+
   alias :pieces	   :values
   alias :positions :keys
 
   # Creates a board initialized at the default starting position, or from FEN if given
   def initialize( start_pos = nil )
     # allow initialization from a hash of position => piece
-    if Hash === start_pos; start_pos.each{ |k,v| self[k] =v }; return self; end
-
-    return _initialize_fen( start_pos ) if start_pos
-    reset!
+    case start_pos
+      when Hash; start_pos.each{ |k,v| self[k] =v }
+      when String; return _initialize_fen( start_pos )
+      when nil; reset! 
+    end
     self.white_kingside_castle_available  = true
     self.white_queenside_castle_available = true
     self.black_kingside_castle_available  = true
     self.black_queenside_castle_available = true
+    self.deleted_pieces = []
   end
 
   # Allow for indifferent string/sym access, though using symbols internally
-  def [] pos
-    super(pos.to_sym)
-  end
-  def []= pos, val
-    super(pos.to_sym, val)
-  end
+  def [] pos;        super(pos.to_sym);       end
+  def []= pos, val;  super(pos.to_sym, val);  end
 
   # Resets the board to initial position
   def reset!
@@ -70,7 +69,14 @@ class Board < Hash
   def play_move!( m )
     #$stderr.puts "Recording move #{m.from_coord}->#{m.to_coord} on board instance #{self.object_id}" unless self.hypothetical
     from_coord, to_coord, captured_piece_coord = [m.from_coord.to_sym, m.to_coord.to_sym, m.captured_piece_coord && m.captured_piece_coord.to_sym]
-    self.delete_if { |pos, piece| pos == to_coord || pos == captured_piece_coord }
+    # If the move is already populated with a captured piece coordinate, use that to delete and be done
+    # Otherwise, delete whats at the to_coord and populate the moves captured piece coordinate.
+    if captured_piece_coord
+      deleted_pieces << self.delete(captured_piece_coord)
+    else
+      deleted_pieces << self.delete(to_coord)
+      m.captured_piece_coord ||= to_coord.to_s
+    end
 
     piece_moved = self.delete(from_coord)
     self[to_coord] = piece_moved

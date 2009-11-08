@@ -19,6 +19,7 @@ module MoveNotation
   def notate_move
     self[:notation] = SAN.from_move(self) if self.notation.blank?
   end
+  alias :notate! :notate_move
 
   # Updates self[:from_coord] and self[:to_coord] with the coordinates this
   # notation refers, to or if not possible, returns false to preempt further
