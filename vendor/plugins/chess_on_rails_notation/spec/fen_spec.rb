@@ -1,5 +1,7 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../../../spec/spec_helper')
+=begin
+# This file is nothing but test-suite noise until it gets fixed up
 
+require File.expand_path(File.dirname(__FILE__) + '/../../../../spec/spec_helper')
 describe 'Forsyth-Edwards (FEN) Notation' do
 
   INITIAL_BOARD = 'RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr'
@@ -27,7 +29,6 @@ describe 'Forsyth-Edwards (FEN) Notation' do
   end
   
   describe '- section layout' do
-
     it 'should have at least three fields separated by whitespace'
 
     it 'should have nothing but piece characters and digits 1-8 and slash in first field'
@@ -120,3 +121,4 @@ describe 'Forsyth-Edwards (FEN) Notation' do
   end
 
 end
+=end
