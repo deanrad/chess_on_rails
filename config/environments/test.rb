@@ -21,5 +21,13 @@ config.action_controller.allow_forgery_protection    = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
+# fscking nokogiri and their error messages !!
+I_KNOW_I_AM_USING_AN_OLD_AND_BUGGY_VERSION_OF_LIBXML2=1
+
 config.gem "ruby-debug"
 config.gem "ruby-prof"
+config.gem "thoughtbot-factory_girl",
+             :lib    => "factory_girl",
+             :source => "http://gems.github.com"
+
+HOST = "localhost"

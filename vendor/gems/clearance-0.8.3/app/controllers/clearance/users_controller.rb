@@ -23,6 +23,7 @@ class Clearance::UsersController < ApplicationController
   private
 
   def flash_notice_after_create
+debugger
     flash[:notice] = translate(:deliver_confirmation,
       :scope   => [:clearance, :controllers, :users],
       :default => "You will receive an email within the next few minutes. " <<

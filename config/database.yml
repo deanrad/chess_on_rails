@@ -7,7 +7,7 @@ development:
   username: chessonrails
   password: ch3550nrails
 
-test:
+test: &TEST
   #use either sqllite section or mysql 
   #adapter: sqlite3
   #database: ":memory:"
@@ -18,3 +18,6 @@ test:
   database: chessonrails_test
   username: chessonrails
   password: ch3550nrails
+
+cucumber:
+  <<: *TEST

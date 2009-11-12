@@ -65,3 +65,5 @@ config.gem "clearance",
   # config.active_record.default_timezone = :utc
 
 end
+
+DO_NOT_REPLY = "donotreply@chessonrails.com"

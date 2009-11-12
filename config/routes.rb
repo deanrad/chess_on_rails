@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Default routes
-  map.root :controller => "authentication"
+  map.root :controller => "welcome"
 
   #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
   map.create_move 'matches/:match_id/moves/:notation', :controller => 'matches', :action => 'create_move', :defaults => { :notation => nil }
@@ -23,8 +23,6 @@ ActionController::Routing::Routes.draw do |map|
   # allow shorthand for recognition but make sure helpers emit the real thing
   map.connect 'match/:id',         :controller => 'matches', :action => 'show'
   map.connect 'match/:id/:action', :controller => 'matches'
-
-  map.connect 'authentication/:action', :controller => 'authentication'
 
   # Install the default routes as the lowest priority.
   map.connect ':controller/:id/:action'
