@@ -25,7 +25,7 @@ class String
     [ self[0] - other[0], self[1] - other[1] ]
   end
 
-  # Lets you do d1 ^ [0, 1] and get d2
+  # Lets you do d1 ^ [0, 1] and get d2 (basic vector addition)
   def ^ vector
     file, rank = (self[0]+vector[0]).chr, (self[1]+vector[1]).chr
     "#{file}#{rank}"
@@ -99,12 +99,21 @@ class Symbol
       when :black then :white
     end
   end
+
   # Lets you do d2 - d1 and get [0, -1]
   def - other
     self.to_s - other.to_s
   end
-  # Lets you do d1 ^ [0, 1] and get d2
+  # Lets you do d1 ^ [0, 1] and get d2 (basic vector addition)
   def ^ other
     (self.to_s ^ other).to_sym
   end
+
+  alias :to_s_const :to_s
+  # Avoid creating String garbage objects when
+  # needing a read-only String representation of a Symbol.
+  def to_s_const
+    @to_s_const ||= to_s.freeze
+  end
+
 end
