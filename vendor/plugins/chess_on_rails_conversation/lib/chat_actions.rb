@@ -2,6 +2,8 @@
 # pairs of chat.
 module ChatActions
 
+  ACTION_LIST=[:shake, :offer_draw]
+
   # Modifies self.text and returns it so it has additional markup beyond the 
   # originally entered text. Each player may see this differently, pass the 
   # player viewing this display text to get.
@@ -12,9 +14,10 @@ module ChatActions
     @display_text
   end
 
-  # Iteration 0: a chat is canceled if its no longer the most recent chat in the match
+  # Iteration 1: A chat is canceled if another chat in that match lists it
+  # in its responding_to_chat_id. This may be best done by database?  
   def canceled?
-    match.chats.index(self) != match.chats.length-1
+    !! match.chats.detect{|c| c.responding_to_chat_id == self.id }
   end
 
   # Actions are IRC-style commands starting with slash "/" which get replaced
@@ -23,7 +26,7 @@ module ChatActions
   #   for sender becomes : (shakes board)
   #   for recip  becomes : (shakes board)<script>Effect.Shake('board_table')</script>
   def actify_actions(for_player)
-    ['shake'].each do |action|
+    ACTION_LIST.each do |action|
       view_text = I18n.t "chat_action_#{action}_text"
       # always display the text of the chat
       @display_text.gsub!("/#{action}", view_text)

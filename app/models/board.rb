@@ -32,7 +32,9 @@ class Board < Hash
     # allow initialization from a hash of position => piece
     case start_pos
       when Hash; start_pos.each{ |k,v| self[k] =v }
-      when String; return _initialize_fen( start_pos )
+      #since loading of the plugin that gives us the _initialize_fen method is
+      #screwy, leave it commented out for now
+      #when String; return _initialize_fen( start_pos )
       when nil; reset! 
     end
     self.white_kingside_castle_available  = true
