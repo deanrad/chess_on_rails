@@ -8,7 +8,7 @@ To use this console, first select a match:
 Then make moves
   >> a2  #or Nc3, etc...
     
-And enjoy !!
+And enjoy !! (If any problems, restart as script/console --nodsl [environment]
 
 EOF
     puts help_msg
