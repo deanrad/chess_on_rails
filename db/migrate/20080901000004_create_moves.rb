@@ -8,6 +8,10 @@ class CreateMoves < ActiveRecord::Migration
       t.column :from_coord, :string, :limit => 10
       t.column :to_coord, :string, :limit => 10
 
+      # a column that can be used for sorting moves in the order in which they were made
+      # this in addition and with a healthy taste of distrust for rails/dbs autopopulated columns
+      t.column :move_num, :integer, :default => 0
+
       #a notation summary of the move
       t.column :notation, :string, :limit => 10
 			

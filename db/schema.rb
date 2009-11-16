@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090424042453) do
+ActiveRecord::Schema.define(:version => 20080901000007) do
 
   create_table "chats", :force => true do |t|
     t.integer  "match_id",              :null => false
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20090424042453) do
     t.integer  "match_id"
     t.string   "from_coord",           :limit => 10
     t.string   "to_coord",             :limit => 10
+    t.integer  "move_num",                           :default => 0
     t.string   "notation",             :limit => 10
     t.integer  "castled"
     t.string   "captured_piece_coord", :limit => 10

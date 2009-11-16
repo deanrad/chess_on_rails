@@ -17,7 +17,12 @@ require 'tasks/rails'
 # 
 
 task :test => [:spec]
-
+# Backward compatibility with Test::Unit fixture loading style
+namespace :db do
+  namespace :fixtures do
+    task :load => [:"spec:db:fixtures:load"]
+  end
+end
 #namespace :analyze do
 
   desc "Report statistics (lines, lines of ERB, etc) about the views in this application"

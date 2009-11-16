@@ -7,8 +7,10 @@ class Match < ActiveRecord::Base
   # The moves of this match. Before we add one, we ensure that it has a direct 
   # reference to this match instance, so it can use our history to validate.
   # After adding we store the new board instance, check for checkmate, and store any move queue
-  has_many :moves,   :before_add => Proc.new{ |m, mv| mv.match = m },
+  has_many :moves,   :order => 'move_num',
+                     :before_add => Proc.new{ |m, mv| mv.match = m },
                      :after_add  => [:save_board, :play_queued_moves]
+                     
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 

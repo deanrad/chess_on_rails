@@ -5,6 +5,7 @@ class Move < ActiveRecord::Base
   ######### ActiveRecord Hooks  ##############################################
 
   belongs_to :match
+  acts_as_list :column => :move_num, :scope => :match
 
   # Invokes our master validator method.
   validate :all_validations
