@@ -5,6 +5,10 @@ class Board < Hash
 
   include KnowledgeOfBoard
 
+  class << self
+    attr_accessor_with_default :memoize_moves, true
+  end
+
   # if true, this board instance is used for computation only, otherwise it is
   # or was an actual state of the game - defaults to nil
   attr_accessor :hypothetical
@@ -14,6 +18,9 @@ class Board < Hash
 
   # A flag for whether an en_passant move is available for the next move only.
   attr_accessor :en_passant_square
+
+  # The piece just promoted
+  attr_accessor :promoted_piece
 
   # Flags that are true initially, and become false for this and future boards in the match
   # if king or kings rook is moved. Major contributors to whether castling is allowed.
@@ -52,7 +59,7 @@ class Board < Hash
   def reset!
     PAWN_RANKS.each do |rank, side|
       POSITIONS[8 - rank].each do |pos|
-        self[pos] = Pawn.new(side, pos.to_s[0..1])
+        self[pos] = Pawn.new(side, pos.file)
       end
     end
 
@@ -65,12 +72,13 @@ class Board < Hash
   end
 
   
-  # updates internals with a given move played
-  # Dereferences any existing piece we're moving onto or capturing enpassant
-  # Updates our EP square or nils it out
+  # Implements the rules of play on this Board instance, for the (presumably
+  # allowed) move given.
   def play_move!( m )
-    #$stderr.puts "Recording move #{m.from_coord}->#{m.to_coord} on board instance #{self.object_id}" unless self.hypothetical
-    from_coord, to_coord, captured_piece_coord = [m.from_coord.to_sym, m.to_coord.to_sym, m.captured_piece_coord && m.captured_piece_coord.to_sym]
+    from_coord = m.from_coord.to_sym
+    to_coord = m.to_coord.to_sym
+    captured_piece_coord = captured_piece_coord && m.captured_piece_coord.to_sym
+
     # If the move is already populated with a captured piece coordinate, use that to delete and be done
     # Otherwise, delete whats at the to_coord and populate the moves captured piece coordinate.
     if captured_piece_coord
@@ -82,11 +90,12 @@ class Board < Hash
 
     piece_moved = self.delete(from_coord)
     self[to_coord] = piece_moved
+    return unless piece_moved
 
+    # implement the switching of the king and rook if told to do so
     if m.castled==1
       castling_rank = to_coord.rank.to_s
       [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, new_rook_file, orig_rook_file|
-        #update the position of the rook corresponding to the square the king landed on
 	if to_coord.file == king_file 
 	   rook = self.delete(:"#{orig_rook_file}#{castling_rank}")
 	   self[:"#{new_rook_file}#{castling_rank}"] = rook
@@ -103,18 +112,22 @@ class Board < Hash
       flank = piece_moved.discriminator.to_s.singularize
       self.send("#{piece_moved.side}_#{flank}side_castle_available=", false)
     end
-    
-    return unless piece_moved
 
+    # publish whether this move created an en passant option for the opponent
     ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
 
-    @is_ep = piece_moved.function == :pawn && [ep_from_rank, ep_to_rank] == [m.from_coord.rank, m.to_coord.rank]
+    @is_ep = piece_moved.function == :pawn && 
+             ep_from_rank == m.from_coord.rank &&
+             ep_to_rank  == m.to_coord.rank
+
     self.en_passant_square = @is_ep ? (m.from_coord.file + ep_rank.to_s).to_sym : nil
       
     #reflect promotion
     if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
+      self.promoted_piece = Queen.new(piece_moved.side, :promoted) # TODO switch
+      m.promotion_choice = "Q"
       self.delete(m.to_coord)
-      self[m.to_coord] = Queen.new(piece_moved.side, :promoted)
+      self[m.to_coord] = promoted_piece
     end
     
     self

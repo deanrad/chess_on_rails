@@ -71,7 +71,7 @@ class Piece
   # Remembered, and recalled, in the instance of the board passed, unless true passed as final argument.
   def allowed_moves(board, force_recalc = false)
     mypos = board.index(self) 
-    unless force_recalc
+    unless force_recalc || Board.memoize_moves==false
       already_allowed = board.allowed_moves[mypos]
       return already_allowed if already_allowed 
     end

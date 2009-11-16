@@ -1,6 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Board do
+  before(:all) do
+    Board.memoize_moves = false
+  end
   it 'should know a valid position by notation' do
     Board.valid_position?(:a1).should == true
     Board.valid_position?(:n9).should == false
@@ -21,9 +24,11 @@ describe Board do
     board = Board.new( :c1 => bishop=Bishop.new(:white) )
     bishop.allowed_moves(board).length.should > 0
 
-    # obstruct him - now he can go nowhere 
+    # obstructed - now he can go nowhere 
     board[:b2] = board[:d2] = Pawn.new(:white)
+    # Or, with Board.memoize_moves set to true, pass true to recalc
     bishop.allowed_moves(board).length.should == 0    
+    # bishop.allowed_moves(board, true).length.should == 0    
   end  
 
   it 'scholars mate capture with queen should be checkmate' do
@@ -107,7 +112,6 @@ describe Board do
 
   it 'should promote automatically to queen' do
     m = matches(:promote_crazy)
-    pending 'CSV Fixtures Bug !! Because ids for move records are generated from their hashes, they dont necessarily play back in the order in which they are listed in the fixture !'
 
     m.moves << promo = Move.new( :from_coord => 'b7', :to_coord => 'b8' )
     promo.should be_valid 
