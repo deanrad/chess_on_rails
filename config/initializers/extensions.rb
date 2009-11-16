@@ -1,3 +1,15 @@
+#### AR aliases #####
+# Plurals, to support for example: Matches.count as well as Match.count
+Matches = Match
+Moves = Move
+
+# Indexers - allow for Match[1] alias for Match.find(1)
+class ActiveRecord::Base
+  def self.[] *args
+    self.find( *args ) 
+  end
+end
+
 ####### helper functions #########
 
 # An alternate syntax is to 'opening' up the class is to define a module and then
