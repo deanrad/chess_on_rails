@@ -1,20 +1,21 @@
 # SQL Server
 
 development:
-  adapter: mysql
-  host: localhost
-  database: chessonrails_development
-  username: chessonrails
-  password: ch3550nrails
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: 5
+  timeout: 5000
 
 test:
   #use either sqllite section or mysql 
-  #adapter: sqlite3
-  #database: ":memory:"
+  adapter: sqlite3
+  database: db/test.sqlite3  # or try ":memory:" for speed
+  pool: 5
+  timeout: 5000
   #verbosity: quiet
   
-  adapter: mysql
-  host: localhost
-  database: chessonrails_test
-  username: chessonrails
-  password: ch3550nrails
+  #adapter: mysql
+  #host: localhost
+  #database: chessonrails_test
+  #username: chessonrails
+  #password: ch3550nrails
