@@ -9,7 +9,7 @@ class Match < ActiveRecord::Base
   # After adding we store the new board instance, check for checkmate, and store any move queue
   has_many :moves,   :order => 'move_num',
                      :before_add => Proc.new{ |m, mv| mv.match = m },
-                     :after_add  => [:save_board, :play_queued_moves]
+                     :after_add  => [:save_board]
                      
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
@@ -40,6 +40,11 @@ class Match < ActiveRecord::Base
   def player1;  @player1 ||= gameplays[0].player  ;end
   def player2;  @player2 ||= gameplays[1].player  ;end
   alias :white :player1;  alias :black :player2
+
+  # Answers whether the argument is playing in this match
+  def is_playing? plyr
+    plyr == self.player1 || plyr == self.player2
+  end
 
   # The current board of this match.
   def board
@@ -80,9 +85,12 @@ class Match < ActiveRecord::Base
   def next_to_move
     moves.count.even? ? first_to_move : first_to_move.opposite
   end
+  alias :side_to_move :next_to_move
 
   # the player next to move
-  def player_to_move; self.send(self.next_to_move); end
+  def player_to_move
+    self.send(self.next_to_move)
+  end
 
   def resign( plyr )
     self.result, self.active = ['Resigned', 0]
@@ -90,15 +98,10 @@ class Match < ActiveRecord::Base
     save!
   end
 
-  def checkmate_by( side )
-    self.reload
-    self.result, self.active = ['Checkmate', 0]
-    self.winning_player = (side == :white ? player1 : player2 )
-    save!
-  end
-
+=begin
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue
   # for now requires exact match on the notation
+  # TODO this should move to plugin and be rewritten
   def play_queued_moves( m )
     opponent = m.match.gameplays[ m.match.next_to_move == :white ? 1 : 0 ] 
     return unless opponent && opponent.move_queue.length > 1
@@ -118,7 +121,7 @@ class Match < ActiveRecord::Base
 
     # call it back from other side (continues until queue.hit? returns false)
     play_queued_moves(response_move)
-    
   end
+=end
 
 end

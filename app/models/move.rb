@@ -99,6 +99,7 @@ class Move < ActiveRecord::Base
 
   ######### Before-save Methods ##############################################
   def update_computed_fields
+    return unless piece
     self[:castled] = 1 if (piece.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
 
     # If an enpassant capture is available, andd you are a pawn moving
