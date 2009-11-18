@@ -49,10 +49,16 @@ class Move < ActiveRecord::Base
   # TODO make this true even when the match started from a start position (FEN) with
   # black first to move
   def side
-    mynum = match.moves.index(self)
+    mynum = self.index
     return mynum % 2 == 0 ? :white : :black if mynum
     return match.moves.length % 2 == 0 ? :white : :black 
   end
+
+  # The zero-based index of this move within the match
+  def index;  @index  ||= match.moves.index(self);            end
+
+  # The player making this move
+  def player; @player ||= match.send( self.side );            end
 
   # The lazily-fetched piece involved in this move.
   def piece;    @piece ||= self.from_coord && self.board[ self.from_coord ]; end
