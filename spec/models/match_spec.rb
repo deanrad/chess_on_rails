@@ -66,4 +66,17 @@ describe Match do
       m.is_playing?( Player.new ).should == false
     end
   end
+
+  describe 'Automated PGN Tests - Run Through Without Error' do
+    # In addition to the fixtures named in matches.yml, we can refer to a pgn file in the 
+    # test/fixtures/matches directory by specifying its name as a symbol 
+    include PGN::Fixtures
+
+    it 'should go through rubinstein_immortal.pgn' do
+      pending
+      m = matches(:rubinstein_immortal)
+      m.errors.should be_empty
+    end
+
+  end
 end

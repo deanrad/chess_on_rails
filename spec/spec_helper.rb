@@ -28,23 +28,6 @@ Spec::Runner.configure do |config|
   #
 end
 
-# In addition to the fixtures named in matches.yml, we can refer to a pgn file in the 
-# test/fixtures/matches directory by specifying its name as a symbol 
-module PgnFixtures
-  # Allows us to bring in PGN fixtures !!
-  def matches_with_pgn_fixtures *args
-    matches_without_pgn_fixtures *args
-    rescue
-    pgn = PGN.new( `cat #{RAILS_ROOT}/spec/fixtures/matches/#{args.first}.pgn` )
-    pgn.playback_against( Match.new )
-  end
-  def self.included(base)
-    base.class_eval {
-      alias_method_chain :matches, :pgn_fixtures
-    }
-  end
-end
-
 # Translates the key provided, and uses the model given to provide its attributes
 # and any custom methods named in its ERROR_FIELDS constant to I18n interpolation
 def t key, model = nil

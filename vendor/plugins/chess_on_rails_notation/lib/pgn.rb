@@ -12,10 +12,13 @@ class PGN
   attr_accessor :notations
 
   # errors in the text
-  attr_accessor :errors
+  attr_accessor_with_default :parsing_errors, []
 
   # errors occurring while trying to play back against a match
-  attr_accessor :playback_errors
+  attr_accessor_with_default :playback_errors, []
+
+  # PGN text stripped of comments, event headers, etc.. Just the moves..
+  attr_accessor :normalized_text
 
   NOTATION = /(([BKNPQR]?)([a-h1-8]?)(x?)([a-h][1-8])(=[BKNQR])?([+#]?))|(O-O(-O)?)/
 
@@ -26,8 +29,9 @@ class PGN
       @errors[:format] = 'Invalid PGN file - The string 1. was not detected.' and return
     end
 
-    movetext = str #TODO split off the movetext section alone for parsing
-    movetext.scan( NOTATION ) do |n|
+    @normalized_text = str.gsub("\r","").gsub( /^\s*\[.*?\]$\n?/, '').gsub( /\{.*?\}/m, '').gsub(/\s+/, " ")
+    
+    @normalized_text.scan( NOTATION ) do |n|
       sorted_submatches = n.to_a.reject(&:nil?).uniq.sort{|a,b| a.length <=> b.length}
       @notations << sorted_submatches.last unless sorted_submatches.last.blank?
     end
@@ -45,11 +49,12 @@ class PGN
     @errors.empty?
   end
 
-  # Given an initialized match object, replays the moves
+  # Given a match object presumably starting at the beginning, plays the moves on it
+  # and returns the match. Caller should check for errors.
   def playback_against( match )
     last_move = nil
     notations.each do |notation|
-      # puts "Playing back #{notation}"
+      puts "Playing back #{notation}"
       match.moves << last_move = Move.new( :notation => notation )
       unless last_move.errors.blank?
         puts "PGN Error on notation: '#{notation}' " + last_move.errors.to_a.uniq.join(',')
@@ -61,4 +66,22 @@ class PGN
     match
   end
 
+  # In addition to the fixtures named in matches.yml, we can refer to a pgn file in the 
+  # test/fixtures/matches directory by specifying its name as a symbol 
+  module Fixtures
+    # Allows us to bring in PGN fixtures !!
+    def matches_with_pgn_fixtures *args
+      matches_without_pgn_fixtures *args
+    rescue
+      pgn = PGN.new( `cat #{RAILS_ROOT}/spec/fixtures/matches/#{args.first}.pgn` )
+      pgn.playback_against( Match.new )
+    end
+    def self.included(base)
+      base.class_eval {
+        alias_method_chain :matches, :pgn_fixtures
+      }
+    end
+  end
+
 end
+

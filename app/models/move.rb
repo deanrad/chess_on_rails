@@ -129,4 +129,5 @@ class Move < ActiveRecord::Base
   def add_error field, validation
     errors.add( field, (t :"err_#{validation}") ) and return false
   end
+
 end

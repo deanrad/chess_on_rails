@@ -1,7 +1,13 @@
 require 'piece'
 # A Board is a snapshot of a match at a moment in time, implemented as a hash
 # whose keys are positions and whose values are the pieces at those positions
+# TODO It's very important to determine if a board instance is supposed to get
+# all the moves played back on it, or if a separate instance is created afresh
 class Board < Hash
+
+  class MoveInvalid     < ::Exception; end 
+  class MissingCoord    < ::Exception; end 
+  class PieceNotFound   < ::Exception; end 
 
   include KnowledgeOfBoard
 
@@ -19,7 +25,10 @@ class Board < Hash
   # A flag for whether an en_passant move is available for the next move only.
   attr_accessor :en_passant_square
 
-  # The piece just promoted
+  # The piece most recently moved.
+  attr_accessor :piece_moved; alias :piece_last_moved :piece_moved
+
+  # The piece just promoted.
   attr_accessor :promoted_piece
 
   # Flags that are true initially, and become false for this and future boards in the match
@@ -27,7 +36,7 @@ class Board < Hash
   attr_accessor :white_kingside_castle_available, :white_queenside_castle_available
   attr_accessor :black_kingside_castle_available, :black_queenside_castle_available
 
-  # An array of pieces which have bitten the dust during this match
+  # An array of pieces which have bitten the dust during this match.
   attr_accessor :deleted_pieces
   alias :graveyard :deleted_pieces
 
@@ -75,6 +84,15 @@ class Board < Hash
   # Implements the rules of play on this Board instance, for the (presumably
   # allowed) move given.
   def play_move!( m )
+    raise MoveInvalid, m.errors.full_messages unless m.errors.empty?
+
+    raise MissingCoord, m.inspect unless begin
+      m && m.respond_to?(:from_coord) && !m.from_coord.blank? &&
+           m.respond_to?(:to_coord)   && !m.to_coord.blank?
+    end
+    raise PieceNotFound, [m.inspect,self.inspect].join("\n") if self[m.from_coord.to_sym].nil?
+
+    # locally cache this information
     from_coord = m.from_coord.to_sym
     to_coord = m.to_coord.to_sym
     captured_piece_coord = captured_piece_coord && m.captured_piece_coord.to_sym
@@ -88,10 +106,16 @@ class Board < Hash
       m.captured_piece_coord ||= to_coord.to_s
     end
 
-    piece_moved = self.delete(from_coord)
+    # Place the piece in its new spot (the board itself does not restrict where)
+    self.piece_moved = self.delete(from_coord)
     self[to_coord] = piece_moved
-    return unless piece_moved
 
+    # TODO move the 'magic' of castling (as two moves) outside of Board, and feed
+    # these two moves into the board for playback. (Also you could make the rook's
+    # castling square an 'allowed move' for that rook, to allow castling by dragging
+    # the rook, and more consistent behavior. Then castling would be the sum of two
+    # legal, allowed moves, performed successively by the same player. Piece_moved
+    # would remain the king.
     # implement the switching of the king and rook if told to do so
     if m.castled==1
       castling_rank = to_coord.rank.to_s

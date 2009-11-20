@@ -9,11 +9,12 @@ module MoveNotation
       # gets called prior to Move#all_validations 
       validate :infer_coordinates_from_notation
       before_save :notate_move
-      attr_accessor :possible_movers, :san
+      attr_accessor :possible_movers, :san, :notation_inferred
     end
   end
 
   # instance methods
+  def notation_inferred?; @notation_inferred; end
 
   # Updates self[:notation] with the SAN notation for that move
   def notate_move
@@ -25,6 +26,8 @@ module MoveNotation
   # notation refers, to or if not possible, returns false to preempt further
   # validation or saving
   def infer_coordinates_from_notation
+    @notation_inferred = false
+    $stderr.puts "Inferring Notation  #{self.notation}"
     return unless to_coord.blank? && from_coord.blank? && !notation.blank?
 
     @san = SAN.new( self[:notation] )
@@ -48,6 +51,7 @@ module MoveNotation
     case @possible_movers.length
       when 1
         self[:from_coord] = possible_movers.flatten.first.to_s
+        @notation_inferred = true
       when 0
         add_error(:notation, :notation_destination_invalid)
       else

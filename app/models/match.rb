@@ -71,7 +71,9 @@ class Match < ActiveRecord::Base
 
   # Cache this board and make it the most recent one
   def save_board( last_move )
-    return false unless last_move.errors.empty?
+    $stderr.puts "#{last_move.infer_coordinates_from_notation} #{last_move.valid?}"
+
+    return false unless last_move.infer_coordinates_from_notation && last_move.valid?
     self.boards.store( @boards.keys.max + 1, self.board.dup.play_move!( last_move ) )
   end
 
