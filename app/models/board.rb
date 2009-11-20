@@ -5,9 +5,9 @@ require 'piece'
 # all the moves played back on it, or if a separate instance is created afresh
 class Board < Hash
 
-  class MoveInvalid     < ::Exception; end 
-  class MissingCoord    < ::Exception; end 
-  class PieceNotFound   < ::Exception; end 
+  class MoveInvalid     < ::Exception; end
+  class MissingCoord    < ::Exception; end
+  class PieceNotFound   < ::Exception; end
 
   include KnowledgeOfBoard
 
@@ -84,7 +84,10 @@ class Board < Hash
   # Implements the rules of play on this Board instance, for the (presumably
   # allowed) move given.
   def play_move!( m )
+    $stderr.puts self.to_s
     raise MoveInvalid, m.errors.full_messages unless m.errors.empty?
+
+    m.infer_coordinates_from_notation unless m.notation_inferred
 
     raise MissingCoord, m.inspect unless begin
       m && m.respond_to?(:from_coord) && !m.from_coord.blank? &&

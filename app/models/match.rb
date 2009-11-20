@@ -9,7 +9,12 @@ class Match < ActiveRecord::Base
   # After adding we store the new board instance, check for checkmate, and store any move queue
   has_many :moves,   :order => 'move_num',
                      :before_add => Proc.new{ |m, mv| mv.match = m },
-                     :after_add  => [:save_board]
+                     :after_add  => [:save_board] do
+    def << mv
+      $stderr.puts "Adding move to match: #{mv.inspect}"
+      super
+    end
+  end
                      
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
@@ -53,9 +58,11 @@ class Match < ActiveRecord::Base
 
   # The series of boards this match has been played through, a hash keyed on the move number.
   def boards
+    $stderr.puts "Opening debugger to troubleshoot Match#boards ! TODO - give each move its own board !"
+    debugger
     return @boards if @boards
 
-    @boards = { 0 => Board.new( self[:start_pos] ) }
+    @boards = { 0 => Board.new }
     moves.each_with_index do |mv, idx|
       with( @boards[idx + 1] = Board.new ) do |b|
         0.upto(idx){ |i| b.play_move! moves[i] if moves[i].errors.empty? }
@@ -71,9 +78,8 @@ class Match < ActiveRecord::Base
 
   # Cache this board and make it the most recent one
   def save_board( last_move )
-    $stderr.puts "#{last_move.infer_coordinates_from_notation} #{last_move.valid?}"
-
-    return false unless last_move.infer_coordinates_from_notation && last_move.valid?
+#    $stderr.puts "#{last_move.infer_coordinates_from_notation} #{last_move.valid?}"
+#    return false unless last_move.infer_coordinates_from_notation && last_move.valid?
     self.boards.store( @boards.keys.max + 1, self.board.dup.play_move!( last_move ) )
   end
 

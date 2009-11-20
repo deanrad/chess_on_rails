@@ -73,9 +73,9 @@ describe Match do
     include PGN::Fixtures
 
     it 'should go through rubinstein_immortal.pgn' do
-      pending
       m = matches(:rubinstein_immortal)
       m.errors.should be_empty
+      pending
     end
 
   end
