@@ -19,11 +19,7 @@ class Move < ActiveRecord::Base
      :piece_must_allow_move,
   ]
 
-  # Fields exported for use in error messages.
-  ERROR_FIELDS = [:from_coord, :to_coord, :notation, :function]
-
   before_save :update_computed_fields
-
 
   ######### Properties and methods ###########################################
 
@@ -118,7 +114,11 @@ class Move < ActiveRecord::Base
   ######### After-save Methods ###############################################
 
 
-  ######### Helper Methods ###################################################
+  ######### Error Module Methods #############################################
+
+  # Fields exported for use in error messages.
+  ERROR_FIELDS = [:from_coord, :to_coord, :notation, :function]
+
   # provides interpolation options a hash of :to_coord => 'f2' for example
   def t key, *args #:nodoc:
     # I18n.t key, (ERROR_FIELDS.inject({}){ |h,v| h[v] = self.send(v) }
