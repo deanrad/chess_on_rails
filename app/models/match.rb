@@ -58,8 +58,8 @@ class Match < ActiveRecord::Base
 
   # The series of boards this match has been played through, a hash keyed on the move number.
   def boards
-    $stderr.puts "Opening debugger to troubleshoot Match#boards ! TODO - give each move its own board !"
-    debugger
+    # $stderr.puts "Opening debugger to troubleshoot Match#boards ! TODO - give each move its own board !"
+    # debugger
     return @boards if @boards
 
     @boards = { 0 => Board.new }
