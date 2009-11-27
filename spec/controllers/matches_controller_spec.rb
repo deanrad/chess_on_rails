@@ -19,6 +19,10 @@ describe 'MatchesController' do
       get :new, @match_params, @logged_in_session
       response.should be_success
     end
+    it 'should render the status method' do
+      get :status, @match_params, @logged_in_session
+      response.should be_success
+    end
   end
 
 =begin

@@ -21,6 +21,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :set, :member => {:change => :post}
 
   # allow shorthand for recognition but make sure helpers emit the real thing
+  map.match_status 'matches/:match_id/status', :controller => 'matches', :action => 'status'
   map.connect 'match/:id',         :controller => 'matches', :action => 'show'
   map.connect 'match/:id/:action', :controller => 'matches'
 

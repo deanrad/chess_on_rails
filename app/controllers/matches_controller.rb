@@ -16,11 +16,9 @@ class MatchesController < ApplicationController
   # move has been made, though, future requests will return JS to update the board
   # and the URL that the client polls for.
   def status
-    head :not_modified and return unless status_has_changed?
+    render :text => "TODO Reimplement MatchesController#status"
+    # head :not_modified and return unless status_has_changed?
   end
-
-  # Provides the js of previous boards
-  def boards; end
 
   # Shows a form allowing a player to create a new match with another.
   def new; end
