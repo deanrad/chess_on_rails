@@ -23,4 +23,3 @@ config.action_mailer.delivery_method = :test
 
 config.gem "ruby-debug"
 config.gem "ruby-prof"
-config.gem "markup_validity",  :source => "http://gems.github.com"

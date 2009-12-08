@@ -1,5 +1,4 @@
 require 'spec/spec_helper'
-require 'markup_validity'
 
 describe 'MatchesController' do
   controller_name :matches

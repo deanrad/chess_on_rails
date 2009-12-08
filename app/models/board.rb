@@ -87,7 +87,9 @@ class Board < Hash
     $stderr.puts self.to_s
     raise MoveInvalid, m.errors.full_messages unless m.errors.empty?
 
-    m.infer_coordinates_from_notation unless m.notation_inferred
+    unless m.notation_inferred
+      m.infer_coordinates_from_notation(self) rescue nil
+    end
 
     raise MissingCoord, m.inspect unless begin
       m && m.respond_to?(:from_coord) && !m.from_coord.blank? &&
