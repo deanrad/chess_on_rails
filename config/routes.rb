@@ -21,8 +21,12 @@ ActionController::Routing::Routes.draw do |map|
   #sets controller courtesy of Sean
   map.resource :set, :member => {:change => :post}
 
+  # A controller that gives us a console in the process of the 
+  map.test    'test/:action', :controller => 'test' if ENV['TEST_CONTROLLER']=="1"
+  
   # Install the default routes as the lowest priority.
   map.connect ':controller/:id/:action'
   map.connect ':controller/:id/:action.:format'  
+
   
 end
