@@ -1,6 +1,6 @@
 <h2>New match !</h2>
 
-<% form_for :match, :url => create_matches_path do |f| %>
+<% form_for :match, :url => matches_path do |f| %>
 <div>
 Opponent: 
   <!-- [Dean]<input type="hidden" name="opponent_name" value="1" /> hard-coded till opponent-chooser ready -->
@@ -10,7 +10,11 @@ Opponent:
 </div>
 
 <script type="text/javascript">
-new Ajax.Autocompleter('match_opponent_name', 'opponent_name_auto_complete', '/match/N/auto_complete_for_player_name', {
+// Define an autocompleter where the match id is unimportant (use N as standin)
+new Ajax.Autocompleter('match_opponent_name', 
+                       'opponent_name_auto_complete', 
+                       '<%= url_for :action => 'auto_complete_for_player_name', :id => 'N' %>', 
+{
     method:'get',
     paramName:'match[opponent_name]',
     minChars: 2

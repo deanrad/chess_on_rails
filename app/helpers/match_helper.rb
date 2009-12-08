@@ -42,7 +42,7 @@ module MatchHelper
 
   # The chat text lines associated with this match.
   def chats
-    @chats ||= Chat.find_all_by_match_id(params[:match_id], :include => :player)
+    @chats ||= Chat.find_all_by_match_id(match.id, :include => :player)
   end
 
   # The last move made in this match.

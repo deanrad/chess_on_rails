@@ -6,7 +6,7 @@ describe 'MatchesController' do
 
   before(:each) do
     @logged_in_session = {:player_id => players(:dean)}
-    @match_params = {:match_id => matches(:dean_vs_paul).id}
+    @match_params = {:id => matches(:dean_vs_paul).id}
   end
 
   describe 'Actions that should render successfully' do
