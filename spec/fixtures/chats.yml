@@ -3,11 +3,11 @@
 one:
   match_id: 2
   player_id: 2
-  text: MyString
+  text: Whassup
   created_at: 2009-04-23 23:13:28
 
 two:
   match_id: 2
   player_id: 1
-  text: MyString
+  text: 'What it is man!'
   created_at: 2009-04-23 23:13:28
