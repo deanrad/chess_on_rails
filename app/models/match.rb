@@ -9,7 +9,8 @@ class Match < ActiveRecord::Base
   # After adding we store the new board instance, check for checkmate, and store any move queue
   has_many :moves,   :order => 'move_num',
                      :before_add => Proc.new{ |m, mv| mv.match = m },
-                     :after_add  => [:save_board] do
+                     :after_add  => [:save_board],
+                     :include => :match do
     def << mv
       $stderr.puts "Adding move to match: #{mv.inspect}"
       super

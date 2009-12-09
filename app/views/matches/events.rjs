@@ -1,0 +1,3 @@
+match.events.each do |ev|
+  page << "add_event( #{ev.to_json} )"
+end

@@ -1,4 +1,6 @@
 class MatchesController < ApplicationController
+  include MatchesJavascriptActions
+
   before_filter :authorize
 
   # TODO can we eliminate this if not necessary ?
