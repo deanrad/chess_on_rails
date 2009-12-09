@@ -65,7 +65,14 @@ class Match < ActiveRecord::Base
     @boards = { 0 => Board.new }
     moves.each_with_index do |mv, idx|
       with( @boards[idx + 1] = Board.new ) do |b|
-        0.upto(idx){ |i| b.play_move! moves[i] if moves[i].errors.empty? }
+        begin
+          move = nil
+          0.upto(idx) do |i| 
+            b.play_move!(move=moves[i]) if moves[i].errors.empty? 
+          end
+        rescue
+          $stderr.puts "Error playing move #{move.inspect} on board:\n#{b}" and next
+        end
       end
     end
     @boards

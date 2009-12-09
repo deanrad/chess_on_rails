@@ -1,0 +1,9 @@
+GRAVEYARD
+<% match.board.graveyard.each do |deceased|%>
+	  <%= 
+	    image_tag image_source_of(deceased), 
+	      :id => deceased.board_id, 
+	      :alt => deceased.abbrev,
+	      :class => 'piece_sm'
+	  %>
+<% end %>
