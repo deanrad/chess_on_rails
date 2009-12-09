@@ -107,9 +107,10 @@ class Board < Hash
     if captured_piece_coord
       deleted_pieces << self.delete(captured_piece_coord)
     else
-      deceased = self.delete(to_coord)
-      graveyard << deceased if deceased
-      m.captured_piece_coord ||= to_coord.to_s
+      if deceased = self.delete(to_coord)
+        graveyard << deceased
+        m.captured_piece_coord ||= to_coord.to_s
+      end
     end
 
     # Place the piece in its new spot (the board itself does not restrict where)
