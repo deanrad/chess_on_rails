@@ -151,6 +151,9 @@ class Piece
   def self.class_for function
     self.const_get(function.to_s.titleize)
   end
+
+  POINT_VALUES = {:queen => 9, :rook => 5, :knight => 3, :bishop => 3, :pawn => 1} unless defined? POINT_VALUES
+  def point_value; POINT_VALUES[self.function]; end
 end
 
 require 'piece/king'
