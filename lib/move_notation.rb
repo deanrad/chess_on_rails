@@ -8,19 +8,12 @@ module MoveNotation
     move_klass.class_eval do
       # gets called prior to Move#all_validations 
       validate :infer_coordinates_from_notation
-      before_save :notate_move
       attr_accessor :possible_movers, :san, :notation_inferred
     end
   end
 
   # instance methods
   def notation_inferred?; @notation_inferred; end
-
-  # Updates self[:notation] with the SAN notation for that move
-  def notate_move
-    self[:notation] = SAN.from_move(self) if self.notation.blank?
-  end
-  alias :notate! :notate_move
 
   # Updates self[:from_coord] and self[:to_coord] with the coordinates this
   # notation refers, to or if not possible, returns false to preempt further

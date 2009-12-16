@@ -26,9 +26,12 @@ class Move < ActiveRecord::Base
   # ActiveRecord fields:
   # :from_coord, :to_coord, :castled, :captured_move_coord, etc...
 
-  # The lazily-fetched most recent board of the match, against which this move
-  # is validated.
-  def board; @board ||= match.board; end
+  # The board that existed at the time this move was made, also the board
+  # against which it is validated.
+  attr_accessor :board_before
+
+  # The board as of the completion of this move
+  attr_accessor :board_after
 
   # The side (black or white) making this move.  - TODO - is this used ? 
   # attr_accessor :side
@@ -57,7 +60,7 @@ class Move < ActiveRecord::Base
   def player; @player ||= match.send( self.side );            end
 
   # The lazily-fetched piece involved in this move.
-  def piece;    @piece ||= self.from_coord && self.board[ self.from_coord ]; end
+  def piece;    @piece ||= self.from_coord && self.board_before[ self.from_coord ]; end
 
   # The function (knight, rook, etc..) of the piece that is moving.
   def function; piece ? piece.function : "piece" ; end
@@ -94,21 +97,23 @@ class Move < ActiveRecord::Base
 
   def piece_must_allow_move
     add_error(:to_coord, :piece_must_allow_move) unless begin
-      piece.allowed_moves(self.board).include? self.to_coord.to_sym
+      piece.allowed_moves(self.board_before).include? self.to_coord.to_sym
     end
   end
 
 
   ######### Before-save Methods ##############################################
   def update_computed_fields
-    return unless piece
-    self[:castled] = 1 if (piece.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
+    # Take the board the way it was before me and play me upon it
+    self.board_after = self.board_before.dup.play_move!( self )
 
-    # If an enpassant capture is available, andd you are a pawn moving
-    # sideways onto an empty square...
-    if board.en_passant_square && piece.function == :pawn && (from_coord.file != to_coord.file) && ! board[to_coord]
-      self[:captured_piece_coord] = "#{to_coord.file}#{to_coord.rank - piece.advance_direction}"
+    # TODO this will need to be updated to read: 'if any of the opponents pieces are missing...'
+    unless board_before.size == board_after.size
+      self.captured_piece_coord ||= self[:to_coord]
     end
+
+    self[:notation] = SAN.from_move(self) if self.notation.blank?
+    self[:castled] = 1 if piece && (piece.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
   end
 
   ######### After-save Methods ###############################################

@@ -85,6 +85,7 @@ class Board < Hash
   # allowed) move given.
   def play_move!( m )
     $stderr.puts self.to_s
+
     raise MoveInvalid, m.errors.full_messages unless m.errors.empty?
 
     unless m.notation_inferred
@@ -109,7 +110,6 @@ class Board < Hash
     else
       if deceased = self.delete(to_coord)
         graveyard << deceased
-        m.captured_piece_coord ||= to_coord.to_s
       end
     end
 
@@ -160,8 +160,8 @@ class Board < Hash
       self.delete(m.to_coord)
       self[m.to_coord] = promoted_piece
     end
-    
-    self
+
+    m.board_after = self
   end
  
   # returns a copy of self with move played

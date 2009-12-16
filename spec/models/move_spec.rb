@@ -6,6 +6,16 @@ describe Move do
   end
   attr_accessor :match
   
+  describe 'Capturing' do
+    it 'should populate the captured_piece coordinate' do
+      match = matches(:ready_to_capture)
+      match.moves << move = Move.new(:from_coord => 'e4', :to_coord => 'd5')
+
+      move.captured_piece_coord.should == 'd5'
+      move.notation.should == 'exd5'
+    end
+  end
+
   describe 'Validation' do
     it 'should disallow a move with nonsensical coordinates' do
       begin
