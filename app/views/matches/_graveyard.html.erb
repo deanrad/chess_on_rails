@@ -1,27 +1,16 @@
 GRAVEYARD
-<%
-   white_non_pawns = match.board.graveyard.select do |piece|
-     piece.side == :white && piece.function != :pawn
-   end
-   black_non_pawns = match.board.graveyard.select do |piece|
-     piece.side == :black && piece.function != :pawn
-   end
-   white_pawns = match.board.graveyard.select do |piece|
-     piece.side == :white && piece.function == :pawn
-   end
-   black_pawns = match.board.graveyard.select do |piece|
-     piece.side == :black && piece.function == :pawn
-   end
-   
-   white_non_pawns.sort!{ |a,b| b.point_value <=> a.point_value }
-   black_non_pawns.sort!{ |a,b| b.point_value <=> a.point_value }
-
-   white_points = white_non_pawns.inject(0){|t,p| t += p.point_value; t} + white_pawns.length
-   black_points = black_non_pawns.inject(0){|t,p| t += p.point_value; t} + black_pawns.length
+<% 
+   graveyard = match.board.graveyard
+   white_points = graveyard.points_for(:white)
+   black_points = graveyard.points_for(:black)
 %>
 White: <b><%= white_points %></b>&nbsp;&nbsp; Black: <b><%= black_points %></b>
 
-<% white_non_pawns.each do |deceased|%>
+<% 
+   Piece::ROLES_OF_VALUE.each do |role| 
+     [:white, :black].each do |side|
+%>
+<% graveyard[side, role].each do |deceased| %>
 	  <%= 
 	    image_tag image_source_of(deceased), 
 	      :id => deceased.board_id, 
@@ -29,12 +18,6 @@ White: <b><%= white_points %></b>&nbsp;&nbsp; Black: <b><%= black_points %></b>
 	      :class => 'piece_sm'
 	  %>
 <% end %>
-<hr/>
-<% black_non_pawns.each do |deceased|%>
-	  <%= 
-	    image_tag image_source_of(deceased), 
-	      :id => deceased.board_id, 
-	      :alt => deceased.abbrev,
-	      :class => 'piece_sm'
-	  %>
-<% end %>
+<%    end # sides.each %>
+<%  end   # roles.each  %>
+

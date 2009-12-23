@@ -112,7 +112,7 @@ class Move < ActiveRecord::Base
       self.captured_piece_coord ||= self[:to_coord]
     end
 
-    self[:notation] = SAN.from_move(self) if self.notation.blank?
+    self[:notation] = SAN.from_move(self) # always renotate the move to canonicalize it
     self[:castled] = 1 if piece && (piece.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
   end
 

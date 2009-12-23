@@ -1,8 +1,3 @@
-* create gameplays for matches that didnt' have them (in prod)
-* Board is flipped around ! write failing test, fix, submit
-* action_mailer notifications
-
-* PGN is safe for comments (test on rubinsteins immortal pgn fixture)
 * extend chats to include answerable chats (questions / proposals / propositions)
 
 * relocate move queue to plugin
@@ -10,13 +5,13 @@
 * move queue is stored obfuscated
 * move queue allows branching
 
-** preview images on match page ??
-*** image of match ? 
+** preview images (or recent moves) on match page ??
+
 ** allow click-click move format in addition to dragdrop
 ** allow setting of away
 ** allow dialogs.."Claim Checkmate" / "Offer Draw" / "Request Undo" / "Claim Cheat" / "Claim Forfeit"
-** allow user settings (contact me ?)
-** allow match settings (refresh interval, ajaxy move making)
+** allow user settings (email me ?)
+** allow user-match (gameplay) settings (refresh interval, ajaxy move making)
+** allow match settings (takebacks allowed)
 
-* do some cucumber features
 * get CI running at http://blog.runcoderun.com/

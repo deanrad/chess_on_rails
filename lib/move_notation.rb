@@ -21,7 +21,8 @@ module MoveNotation
   # Arguments: board: specify the board to use on which to interpret the notation
   def infer_coordinates_from_notation board=nil
     @notation_inferred = false
-    $stderr.puts "Inferring Notation  #{self.notation}"
+    # $stderr.puts "Inferring Notation  #{self.notation}"
+
     return unless to_coord.blank? && from_coord.blank? && !notation.blank?
     @san = SAN.new( self[:notation] )
 

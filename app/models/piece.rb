@@ -153,6 +153,8 @@ class Piece
   end
 
   POINT_VALUES = {:queen => 9, :rook => 5, :knight => 3, :bishop => 3, :pawn => 1} unless defined? POINT_VALUES
+  ROLES_OF_VALUE = POINT_VALUES.keys.sort{|a,b| POINT_VALUES[b] <=> POINT_VALUES[a] }.freeze unless defined? ROLES_OF_VALUE
+
   def point_value; POINT_VALUES[self.function]; end
 end
 

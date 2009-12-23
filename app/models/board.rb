@@ -37,8 +37,7 @@ class Board < Hash
   attr_accessor :black_kingside_castle_available, :black_queenside_castle_available
 
   # An array of pieces which have bitten the dust during this match.
-  attr_accessor :deleted_pieces
-  alias :graveyard :deleted_pieces
+  attr_accessor :graveyard
 
   alias :pieces	   :values
   alias :positions :keys
@@ -57,7 +56,7 @@ class Board < Hash
     self.white_queenside_castle_available = true
     self.black_kingside_castle_available  = true
     self.black_queenside_castle_available = true
-    self.deleted_pieces = []
+    self.graveyard = Graveyard.new
   end
 
   # Allow for indifferent string/sym access, though using symbols internally
@@ -84,8 +83,6 @@ class Board < Hash
   # Implements the rules of play on this Board instance, for the (presumably
   # allowed) move given.
   def play_move!( m )
-    $stderr.puts self.to_s
-
     raise MoveInvalid, m.errors.full_messages unless m.errors.empty?
 
     unless m.notation_inferred
@@ -106,7 +103,7 @@ class Board < Hash
     # If the move is already populated with a captured piece coordinate, use that to delete and be done
     # Otherwise, delete whats at the to_coord and populate the moves captured piece coordinate.
     if captured_piece_coord
-      deleted_pieces << self.delete(captured_piece_coord)
+      graveyard << self.delete(captured_piece_coord)
     else
       if deceased = self.delete(to_coord)
         graveyard << deceased

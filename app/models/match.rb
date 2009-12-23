@@ -47,13 +47,11 @@ class Match < ActiveRecord::Base
 
   # Called by before_add
   def set_pre_board_on_move mv
-    $stderr.puts "set_pre_board_on_move\n#{self.board}"
     mv.board_before = self.board
   end
 
   # Called by after_add
   def get_post_board_from_move mv
-    $stderr.puts "set_post_board_on_move"
     self.boards.store( @boards.keys.max + 1, mv.board_after )
   end
 

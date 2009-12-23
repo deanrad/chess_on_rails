@@ -32,12 +32,15 @@ describe Board do
   end
 
   it 'should move a piece off the board (to the graveyard) when that piece is moved upon' do
-    @opposing_pawns.deleted_pieces.count.should == 0
-    @opposing_pawns.pieces.count.should == 2
-    @opposing_pawns.play_move!( move %w{ d4 e5 } )
-    @opposing_pawns.pieces.count.should == 1
-    @opposing_pawns.deleted_pieces.count.should == 1
-    # @opposing_pawns.graveyard.count.should == 1
+    with(@opposing_pawns) do |op|
+      op.graveyard.size.should == 0
+      op.pieces.count.should == 2
+      op.play_move!( move %w{ d4 e5 } )
+      op.pieces.count.should == 1
+      op.graveyard.count.should == 1
+      op.graveyard[:black, :pawn].length.should == 1
+    end
+    
   end
 
 

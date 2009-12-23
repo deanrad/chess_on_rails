@@ -73,9 +73,10 @@ describe Match do
     include PGN::Fixtures
 
     it 'should go through rubinstein_immortal.pgn' do
-      pending
       m = matches(:rubinstein_immortal)
       m.errors.should be_empty
+      m.moves.length.should == 50
+      # Checks have (at least once) verified that we notate it the same way as it comes in
     end
 
   end
