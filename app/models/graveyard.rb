@@ -9,10 +9,9 @@ class Graveyard < Array
     end
   end
 
-  # Returns how many points that side has (of the opponents pieces) in the graveyard.
+  # For the pieces of your opponent you have, the sum of their point values.
+  # Arg side: the side we're totalling for
   def points_for side
-    self.select{ |p| p.side == side.opposite }.inject(0) do |acc, p|
-      acc += p.point_value; acc
-    end 
+    select{ |p| p.side == side.opposite }.map(&:point_value).reduce(&:+)
   end
 end
