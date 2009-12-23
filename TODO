@@ -1,4 +1,5 @@
 * extend chats to include answerable chats (questions / proposals / propositions)
+* finish clearance implementation including http://github.com/jerry/clearance_admins
 
 * relocate move queue to plugin
 * move queue using http://wiki.github.com/madrobby/scriptaculous/ajax-inplaceeditor

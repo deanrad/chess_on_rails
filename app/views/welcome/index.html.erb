@@ -1,0 +1,10 @@
+<pre>
+<% if current_player %>
+  Hey there <%= current_player.name %>
+
+  <a href="<%= matches_url %>">Your matches</a>
+<% else %>
+  Sign in here: <%= sign_in_url %>
+<% end %>
+
+</pre>
