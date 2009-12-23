@@ -53,7 +53,7 @@ module MatchHelper
 
   # Whether to render for downlevel browsers
   def downlevel?
-    @downlevel ||= request.user_agent.downcase.include? 'berry'
+    false # @downlevel ||= request.user_agent.downcase.include? 'berry'
   end
 
   # checks for existance of .gif file in the current set's directory

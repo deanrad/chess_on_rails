@@ -5,21 +5,21 @@ describe 'MatchesController' do
   integrate_views
 
   before(:each) do
-    @logged_in_session = {:player_id => players(:dean)}
+    @controller.current_user= users(:dean)
     @match_params = {:id => matches(:dean_vs_paul).id}
   end
 
   describe 'Actions that should render successfully' do
     it 'should render the get method' do
-      get :new, {}, @logged_in_session
+      get :new, {}
       response.should be_success
     end
     it 'should render the show method' do
-      get :new, @match_params, @logged_in_session
+      get :new, @match_params
       response.should be_success
     end
     it 'should render the status method' do
-      get :status, @match_params, @logged_in_session
+      get :status, @match_params
       response.should be_success
     end
   end
@@ -27,7 +27,7 @@ describe 'MatchesController' do
 =begin
   describe 'Markup validity' do
     it 'Matches/new should validate transitional ' do
-      get :new, {}, @logged_in_session
+      get :new, {}
 
       response.body.should be_xhtml_transitional
     end

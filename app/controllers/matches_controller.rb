@@ -1,10 +1,8 @@
 class MatchesController < ApplicationController
-  include MatchesJavascriptActions
-
-  before_filter :authorize
+  before_filter :authenticate
 
   # TODO can we eliminate this if not necessary ?
-  rescue_from ArgumentError, :with => :display_error
+  # rescue_from ArgumentError, :with => :display_error
 
   # Shows a match in progress to its players. 
   def show; end    

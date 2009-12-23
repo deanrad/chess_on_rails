@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include Clearance::User
   belongs_to :playing_as, :class_name => "Player", :foreign_key => "playing_as"
 
   # creates a user and the corresponding player, passing a hash of options to each 

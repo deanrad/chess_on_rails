@@ -1,0 +1,3 @@
+[submodule "vendor/plugins/engines"]
+	path = vendor/plugins/engines
+	url = git://github.com/lazyatom/engines.git
