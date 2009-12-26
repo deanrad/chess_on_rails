@@ -20,6 +20,6 @@ config.action_controller.perform_caching             = false
 # Don't care if the mailer can't send
 config.action_mailer.raise_delivery_errors = false
 
-ENV["TEST_CONTROLLER"]="1"
+ENV["MAGELLAN_ON"]="1"
 HOST = "localhost:3001"
 

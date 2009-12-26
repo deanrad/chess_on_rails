@@ -24,7 +24,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :set, :member => {:change => :post}
 
   # A controller that gives us a console in the process of the 
-  map.test    'test/:action', :controller => 'test' if ENV['TEST_CONTROLLER']=="1"
+  map.test    'test/:action', :controller => 'test' if ENV['MAGELLAN_ON']=="1"
   
   # allow shorthand for recognition but make sure helpers emit the real thing
   # map.connect 'match/:id',         :controller => 'matches', :action => 'show'
