@@ -9,23 +9,17 @@ ActionController::Routing::Routes.draw do |map|
   map.create_move 'matches/:match_id/moves/:notation', :controller => 'matches', :action => 'create_move', :defaults => { :notation => nil }
 
   map.resources :matches , :except => [:delete], :collection => { :create => :post } do |match|
-    match.resource :moves, :only => [:create]
-    # TODO match route for resign must be POST since destructive 
-    match.resource :chat #TODO limit chat routes to those needed, :only => [:create, :index, :chat]
+    match.resource  :moves, :only => [:create]
+    match.resource  :chat 
+    match.resources :events # events are the sum of moves and chats
   end
 
-  #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
-  map.create_move 'matches/:match_id/moves/:notation', :controller => 'matches', :action => 'create_move', :defaults => { :notation => nil }
-
-  #allow updating of gameplays via REST
+  # Gameplays are the records of a players involvment in a match
   map.resources :gameplays, :only => [:show, :update]
 
-  #sets controller courtesy of Sean
+  # Sets of pieces, functionality courtesy of Sean
   map.resource :set, :member => {:change => :post}
 
-  # A controller that gives us a console in the process of the 
-  map.test    'test/:action', :controller => 'test' if ENV['MAGELLAN_ON']=="1"
-  
   # allow shorthand for recognition but make sure helpers emit the real thing
   # map.connect 'match/:id',         :controller => 'matches', :action => 'show'
   # map.connect 'match/:id/:action', :controller => 'matches'
