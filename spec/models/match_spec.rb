@@ -79,5 +79,18 @@ describe Match do
       # Checks have (at least once) verified that we notate it the same way as it comes in
     end
 
+    Dir['spec/fixtures/matches/*.pgn'].each do |f|
+      next if f.include?('error')
+      it "should run through #{f} without error" do
+        m = Match.new()
+        pgn = PGN.new( `cat #{RAILS_ROOT}/#{f}` )
+        pgn.playback_against( m )
+        pgn.playback_errors.should be_empty
+      end
+    end
+
+    it 'should catch pgn playback errors in matches defined as having errors' do
+      pending 'TODO must implement this'
+    end
   end
 end
