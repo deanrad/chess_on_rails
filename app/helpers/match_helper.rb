@@ -61,13 +61,13 @@ module MatchHelper
     @sections ||= 
     [
      ["views.matches.index.sections.your_turn.title",
-      lambda{|m| m.active==1 && m.player_to_move == current_player}
+      lambda{|m| m.active? && m.player_to_move == current_player}
      ],
      ["views.matches.index.sections.their_turn.title",
-      lambda{|m| m.active==1 && m.player_to_move != current_player}
+      lambda{|m| m.active? && m.player_to_move != current_player}
      ],
      ["views.matches.index.sections.historical.title",
-      lambda{|m| m.active==0 }
+      lambda{|m| ! m.active? }
      ],
     ]
   end

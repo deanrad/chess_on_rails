@@ -1,7 +1,7 @@
 - matches = current_player.matches.uniq
 %h2= t("views.matches.index.greeting", :name => current_player.name)
 - sections.each do |title, filter_proc| 
-  %h= t title
+  %h3= t title
   %ul
     - matches.select(&filter_proc).each do |m|
       %li= link_to m.name, m

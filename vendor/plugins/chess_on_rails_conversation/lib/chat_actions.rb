@@ -2,6 +2,7 @@
 # pairs of chat.
 module ChatActions
 
+  # Actions that can be performed
   ACTION_LIST=[:shake, :offer_draw]
 
   # Modifies self.text and returns it so it has additional markup beyond the 
