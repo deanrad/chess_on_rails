@@ -12,4 +12,12 @@ en:
   views:
     matches:
       index:
-        greeting: Welcome there, {{name}}
+        greeting: "Welcome there, {{name}}"
+        new_match: "Invite someone to play"
+        sections:
+          your_turn:
+            title: "Your Turn:"
+          their_turn:
+            title: "Their Turn:"
+          historical:
+            title: "Old Matches:"

@@ -68,6 +68,10 @@ body{ font-family:sans-serif; font-size:11pt; }
   .instructions { display:none }
 
 /* BEGIN OTHER, LESS CRITICAL PAGES */
+/* Match#index */
+.actions .nav{ margin-left: 20px }
+
+/* Match#new */
 #start_pos {width:300px;}
 
 div.auto_complete {

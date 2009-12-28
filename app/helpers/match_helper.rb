@@ -56,6 +56,22 @@ module MatchHelper
     false # @downlevel ||= request.user_agent.downcase.include? 'berry'
   end
 
+  # the sections to be shown on this page (currently only matches#index)
+  def sections
+    @sections ||= 
+    [
+     ["views.matches.index.sections.your_turn.title",
+      lambda{|m| m.active==1 && m.player_to_move == current_player}
+     ],
+     ["views.matches.index.sections.their_turn.title",
+      lambda{|m| m.active==1 && m.player_to_move != current_player}
+     ],
+     ["views.matches.index.sections.historical.title",
+      lambda{|m| m.active==0 }
+     ],
+    ]
+  end
+
   # checks for existance of .gif file in the current set's directory
   # if no .gif, uses .png extension
   def image_source_of( piece )
