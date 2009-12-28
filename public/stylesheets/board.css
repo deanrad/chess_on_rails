@@ -5,6 +5,9 @@ h1 { font-size: 14pt; font-weight: bold }
 body{ font-family:sans-serif; font-size:11pt; }
 
 /* BEGIN BOARD STYLES */
+#conversation_region{ }
+  #main_event{ background-color: purple; color:white; width: 500px; margin: 5px; padding: 5px;}
+
 #board_region{ float:left; clear:left; width:400px; /* should be 420 lol :) */ }
   #move_indicators { width:358px; }
   .move_indicator{ background-color:eee }
