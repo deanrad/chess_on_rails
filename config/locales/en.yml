@@ -1,10 +1,15 @@
 en:
-  err_from_coord_must_be_valid: "{{from_coord}} is not a valid position."
-  err_to_coord_must_be_valid: "{{to_coord}} is not a valid position."
-  err_piece_must_be_present: "No piece present on {{from_coord}}."
-  err_piece_must_allow_move: "{{to_coord}} is not an allowed move for the {{function}} at {{from_coord}}."
-  err_invalid_notation: "{{notation}} failed to specify a valid move."
-  err_notation_destination_invalid: "No piece may move to {{to_coord}} on this board."
-  err_notation_ambiguous: "Notation {{notation}} fails to distinguish between more than one {{function}} that can move to {{to_coord}}. Please specify, as in Ncf6."
-  chat_action_shake_text: "(shakes board)"
-  chat_action_shake_action: "<script type='text/javascript'>Effect.Shake('board_table');</script>"
+  errors:
+    from_coord_must_be_valid: "{{from_coord}} is not a valid position."
+    to_coord_must_be_valid: "{{to_coord}} is not a valid position."
+    piece_must_be_present: "No piece present on {{from_coord}}."
+    piece_must_allow_move: "{{to_coord}} is not an allowed move for the {{function}} at {{from_coord}}."
+    invalid_notation: "{{notation}} failed to specify a valid move."
+    notation_destination_invalid: "No piece may move to {{to_coord}} on this board."
+    notation_ambiguous: "Notation {{notation}} fails to distinguish between more than one {{function}} that can move to {{to_coord}}. Please specify, as in Ncf6."
+    chat_action_shake_text: "(shakes board)"
+    chat_action_shake_action: "<script type='text/javascript'>Effect.Shake('board_table');</script>"
+  views:
+    matches:
+      index:
+        greeting: Welcome there, {{name}}

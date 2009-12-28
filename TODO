@@ -1,3 +1,4 @@
+* refactor I18n support and facilitate its use in views
 * extend chats to include answerable chats (questions / proposals / propositions)
 * finish clearance implementation including http://github.com/jerry/clearance_admins
 

@@ -121,18 +121,22 @@ class Move < ActiveRecord::Base
 
   ######### Error Module Methods #############################################
 
-  # Fields exported for use in error messages.
+  # Declares fields which will be looked-up on instances of this object for 
+  # use in interpolating error messages.
   ERROR_FIELDS = [:from_coord, :to_coord, :notation, :function]
 
-  # provides interpolation options a hash of :to_coord => 'f2' for example
-  def t key, *args #:nodoc:
-    # I18n.t key, (ERROR_FIELDS.inject({}){ |h,v| h[v] = self.send(v) }
-    I18n.t key, ERROR_FIELDS.inject({}){ |h,v| h[v] = self.send(v) rescue ''; h }
+  # Looks up ERROR_FIELDS on self to create a hash of fields-to-values, and 
+  # merges an optional hash_to_merge, to create a hash of interpolatable
+  # strings to I18n
+  def t key, hash_to_merge = {} #:nodoc:
+    interpol = ERROR_FIELDS.inject({}){ |h,v| h[v] = self.send(v) rescue ''; h }
+    interpol.merge!(hash_to_merge)
+    I18n.t key, interpol
   end
 
   # invokes errors.add and evaluates to false
   def add_error field, validation
-    errors.add( field, (t :"err_#{validation}") ) and return false
+    errors.add( field, (t :"errors.#{validation}") ) and return false
   end
 
 end

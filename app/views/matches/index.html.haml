@@ -1,0 +1,5 @@
+%h1= t("views.matches.index.greeting", :name => current_player.name)
+%h2 Your current duels
+- sections = [ ['foo', :your_turn?, I18n.t('foo') ] ]
+- sections.each do |title, filter_proc, replacement_key| 
+  %h= title
