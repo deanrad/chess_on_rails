@@ -25,7 +25,7 @@ class MagellanController < ApplicationController
     # We are trying to indicate the requests' parameters
     %w{action id controller}.each{|p| @options.delete(p) }
 
-    @original_eval_text = @options['eval_text'].dup
+    @original_eval_text = (@options['eval_text'] || "").dup
     @options['safe_eval_text']  = sanitize_eval_text(@original_eval_text)
 
     true
