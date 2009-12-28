@@ -7,8 +7,6 @@ en:
     invalid_notation: "{{notation}} failed to specify a valid move."
     notation_destination_invalid: "No piece may move to {{to_coord}} on this board."
     notation_ambiguous: "Notation {{notation}} fails to distinguish between more than one {{function}} that can move to {{to_coord}}. Please specify, as in Ncf6."
-    chat_action_shake_text: "(shakes board)"
-    chat_action_shake_action: "<script type='text/javascript'>Effect.Shake('board_table');</script>"
   views:
     matches:
       index:
@@ -21,3 +19,7 @@ en:
             title: "Their Turn:"
           historical:
             title: "Old Matches:"
+  chat_actions:
+    shake:
+      text: "(shakes board)"
+      action: "<script type='text/javascript'>Effect.Shake('board_table');</script>"

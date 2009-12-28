@@ -27,13 +27,13 @@ module ChatActions
   #   for recip  becomes : (shakes board)<script>Effect.Shake('board_table')</script>
   def actify_actions(for_player)
     ACTION_LIST.each do |action|
-      view_text = I18n.t "chat_action_#{action}_text"
+      view_text = I18n.t "chat_actions.#{action}.text"
       # always display the text of the chat
       @display_text.gsub!("/#{action}", view_text)
       
       # for uncanceled chats viewed by the other party (not the originator) we also get the text
       if (for_player != self.player) && !canceled?
-        @display_text.gsub!(view_text, view_text + I18n.t("chat_action_#{action}_action") )
+        @display_text.gsub!(view_text, view_text + I18n.t("chat_actions.#{action}.action") )
       end
     end
   end
