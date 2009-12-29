@@ -91,10 +91,12 @@ describe Match do
 
     it 'should catch pgn playback errors in matches defined as having errors' do
       m = Match.new()
-      pgn = PGN.new( "1. e4 {legal move} d4 {too far - an error} 2. Nc3 {should not play past illegal move} Nf6" )
+      pgn = PGN.new( "1. e4 {legal move} Nc8 {an error} 2. Nc3 {should not play past illegal move} Nf6" )
+      # pgn = PGN.new( "1. e4 {legal move} d4 {white, but not black could have done this} " 
+      #                " 2. Nc3 {should not play past illegal move} Nf6" )
       pgn.playback_against( m )
-      pending 'why will "1. e4 d4" play back successfully when black has no pawn that can do d4 !'
-      pgn.playback_errors.should != []
+      # pending 'why will "1. e4 d4" play back successfully when black has no pawn that can do d4 !'
+      pgn.playback_errors.should_not be_empty
     end
   end
 end
