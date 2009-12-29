@@ -3,29 +3,28 @@ dean:
   id: 1
   email: chicagogrooves@gmail.com
   playing_as: 1
-  security_phrase: 9
+  salt: b3fb752b441a045f9650d0f279048c74b7c1aa9a
+  encrypted_password: 08079313aad37527788e55d028a7a5f951a7d04a # ch355
+  email_confirmed: true
+  admin: true
 maria:
   id: 2
   email: maria_poulos@yahoo.com
   playing_as: 2
-  security_phrase: 3
+  salt: b3fb752b441a045f9650d0f279048c74b7c1aa9a
+  encrypted_password: 08079313aad37527788e55d028a7a5f951a7d04a # ch355
+  email_confirmed: true
 paul:
   id: 3
   email: paulfletter@gmail.com
   playing_as: 3
-  security_phrase: 4
-rich:
-  id: 4
-  email: bigns2000@comcast.net
-  playing_as: 4
-  security_phrase: 420
-chris:
-  id: 5
-  email: chrisg@compfriend.com
-  playing_as: 5
-  security_phrase: 1
+  salt: b3fb752b441a045f9650d0f279048c74b7c1aa9a
+  encrypted_password: 08079313aad37527788e55d028a7a5f951a7d04a # ch355
+  email_confirmed: true
 miles:
   id: 7
   email: miles@thegalfers.com
   playing_as: 7
-  security_phrase: nikon
+  salt: b3fb752b441a045f9650d0f279048c74b7c1aa9a
+  encrypted_password: 08079313aad37527788e55d028a7a5f951a7d04a # ch355
+  email_confirmed: true

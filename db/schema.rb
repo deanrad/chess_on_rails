@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(:version => 20091112043949) do
     t.string   "confirmation_token", :limit => 128
     t.string   "remember_token",     :limit => 128
     t.boolean  "email_confirmed",                   :default => false, :null => false
+    t.boolean  "admin",                             :default => false, :null => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

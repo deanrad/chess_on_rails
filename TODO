@@ -1,10 +1,10 @@
-* refactor I18n support and facilitate its use in views
+* finish clearance implementation including http://github.com/jerry/clearance_admins
+
 * extend chats to include answerable chats (questions / proposals / propositions)
 ** 1. Provide the means to create a chat with a certain action_code
 ** 2. Ensure only chats with action_codes wind up in main_event
 ** 
 
-* finish clearance implementation including http://github.com/jerry/clearance_admins
 
 * relocate move queue to plugin
 * move queue using http://wiki.github.com/madrobby/scriptaculous/ajax-inplaceeditor

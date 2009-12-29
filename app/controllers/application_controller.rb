@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   # who's authenticated, visible to controllers and views
   attr_accessor :current_player
   def current_player
-    @current_player ||= current_user.playing_as
+    @current_player ||= current_user && current_user.playing_as
   end
   helper_method :current_player
 
