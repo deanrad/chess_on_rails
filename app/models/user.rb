@@ -11,4 +11,6 @@ class User < ActiveRecord::Base
     u
   end
 
+  def admin?; !! self.admin; end
+
 end

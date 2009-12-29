@@ -90,7 +90,11 @@ describe Match do
     end
 
     it 'should catch pgn playback errors in matches defined as having errors' do
-      pending 'TODO must implement this'
+      m = Match.new()
+      pgn = PGN.new( "1. e4 {legal move} d4 {too far - an error} 2. Nc3 {should not play past illegal move} Nf6" )
+      pgn.playback_against( m )
+      pending 'why will "1. e4 d4" play back successfully when black has no pawn that can do d4 !'
+      pgn.playback_errors.should != []
     end
   end
 end

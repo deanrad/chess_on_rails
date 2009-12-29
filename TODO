@@ -1,4 +1,6 @@
-* finish clearance implementation including http://github.com/jerry/clearance_admins
+* make unpending the pgn error spec
+** write test
+** figure out why "1. e4 d4" will play back successfully - black has no pawn that can do d4 !
 
 * extend chats to include answerable chats (questions / proposals / propositions)
 ** 1. Provide the means to create a chat with a certain action_code
