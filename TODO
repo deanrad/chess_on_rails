@@ -1,13 +1,18 @@
-* make unpending the pgn error spec
-** write test
-** figure out why "1. e4 d4" will play back successfully - black has no pawn that can do d4 !
+** allow click-click move format in addition to dragdrop
+** allow setting of away
+** allow dialogs.."Claim Checkmate" / "Offer Draw" / "Request Undo" / "Claim Cheat" / "Claim Forfeit"
+** allow user settings (email me ?)
+** allow user-match (gameplay) settings (refresh interval, ajaxy move making)
+** allow match settings (takebacks allowed)
+
 
 * extend chats to include answerable chats (questions / proposals / propositions)
 ** 1. Provide the means to create a chat with a certain action_code
 ** 2. Ensure only chats with action_codes wind up in main_event
-** 
 
-
+* allow matches to be started from PGN 
+** same, for FEN 
+ 
 * relocate move queue to plugin
 * move queue using http://wiki.github.com/madrobby/scriptaculous/ajax-inplaceeditor
 * move queue is stored obfuscated - perhaps per http://www.ssc.wisc.edu/~rhorrisb/wp/archives/3
@@ -15,11 +20,5 @@
 
 ** preview images (or recent moves) on match page ??
 
-** allow click-click move format in addition to dragdrop
-** allow setting of away
-** allow dialogs.."Claim Checkmate" / "Offer Draw" / "Request Undo" / "Claim Cheat" / "Claim Forfeit"
-** allow user settings (email me ?)
-** allow user-match (gameplay) settings (refresh interval, ajaxy move making)
-** allow match settings (takebacks allowed)
 
 * get CI running at http://blog.runcoderun.com/
