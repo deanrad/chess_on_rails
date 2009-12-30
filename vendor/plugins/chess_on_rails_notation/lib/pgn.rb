@@ -17,6 +17,8 @@ class PGN
   # errors occurring while trying to play back against a match
   attr_accessor_with_default :playback_errors, []
 
+  attr_accessor :move_in_error
+
   # PGN text stripped of comments, event headers, etc.. Just the moves..
   attr_accessor :normalized_text
 
@@ -56,9 +58,11 @@ class PGN
     notations.each do |notation|
       match.moves << last_move = Move.new( :notation => notation )
       unless last_move.errors.blank?
-        puts "PGN Error on notation: '#{notation}' " + last_move.errors.to_a.uniq.join(',')
-        raise ArgumentError, last_move.errors.to_a 
-        (@playback_errors ||= []) << last_move.errors.to_a.uniq
+        # debugging efforts - remove when no longer needed
+        # puts "PGN Error on notation: '#{notation}' " + last_move.errors.to_a.uniq.join(',')
+        # raise ArgumentError, last_move.errors.to_a 
+        self.playback_errors << last_move.errors.to_a.uniq
+        self.move_in_error = last_move
         break;
       end
     end

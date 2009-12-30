@@ -18,12 +18,8 @@ describe Move do
 
   describe 'Validation' do
     it 'should disallow a move with nonsensical coordinates' do
-      begin
-        match.moves << move = Move.new(:from_coord => '4d', :to_coord => 'd4')
-        # currently the board kicks out the move 
-      rescue Board::MoveInvalid => ex
-        ex.message.to_s.should == "From coord " + t( :err_from_coord_must_be_valid, move )
-      end
+      match.moves << move = Move.new(:from_coord => '4d', :to_coord => 'd4')
+      move.errors_on(:from_coord).should include( t('errors.from_coord_must_be_valid', move ) )
     end
   end
 end

@@ -11,8 +11,8 @@ class Move < ActiveRecord::Base
   validate :all_validations
 
   # The methods invoked by all_validations. An error detected at any point prevents
-  # evaluation of the later methods. Default error keys are the method, prepended
-  # with err_
+  # evaluation of the later methods. I18n error keys should be scoped by errors, and
+  # refer to which validation: eg errors.from_coord_must_be_valid
   VALIDATIONS = [
      :coords_must_be_valid,
      :piece_must_be_present,
