@@ -18,7 +18,7 @@ class ClearanceUpdateUsers < ActiveRecord::Migration
 
   def self.down
     change_table(:users) do |t|
-      t.remove :encrypted_password,:salt,:confirmation_token,:remember_token,:email_confirmed
+      t.remove :encrypted_password,:salt,:confirmation_token,:remember_token,:email_confirmed, :admin
     end
   end
 end

@@ -19,6 +19,8 @@ require 'tasks/rails'
 task :test => [:spec]
 # Backward compatibility with Test::Unit fixture loading style
 namespace :db do
+  task :seed => [:"spec:db:fixtures:load"]
+
   namespace :fixtures do
     task :load => [:"spec:db:fixtures:load"]
   end

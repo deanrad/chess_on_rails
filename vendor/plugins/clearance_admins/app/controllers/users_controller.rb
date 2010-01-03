@@ -5,6 +5,8 @@ class UsersController < ApplicationController
   before_filter :get_user, :only => [ :edit, :update ]
   
   def index
+    @user = User.find(params[:id])
+    redirect_to :action => 'edit' if @user
     @users = User.find :all
   end
   
@@ -13,6 +15,7 @@ class UsersController < ApplicationController
   end
   
   def edit
+    @user = User.find(params[:id])
   end
   
   def update
