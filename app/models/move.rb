@@ -81,23 +81,23 @@ class Move < ActiveRecord::Base
 
     return false unless errors.empty?
     VALIDATIONS.each do |v|
-      result = send(v) ; return false unless errors.empty?
+      result = send(v, self) ; return false unless errors.empty?
     end
   end
 
-  def coords_must_be_valid
+  def coords_must_be_valid(move)
     [:from_coord, :to_coord].each do |coord|
-      add_error coord, :"#{coord}_must_be_valid" unless Board.valid_position?( send(coord) )
+      add_error coord, :"#{coord}_must_be_valid" unless Board.valid_position?( move.send(coord) )
     end
   end
 
-  def piece_must_be_present
-    add_error(:from_coord, :piece_must_be_present) unless piece
+  def piece_must_be_present(move)
+    add_error(:from_coord, :piece_must_be_present) unless move.piece
   end
 
-  def piece_must_allow_move
+  def piece_must_allow_move(move)
     add_error(:to_coord, :piece_must_allow_move) unless begin
-      piece.allowed_moves(self.board_before).include? self.to_coord.to_sym
+      move.piece.allowed_moves(move.board_before).include? move.to_coord.to_sym
     end
   end
 
