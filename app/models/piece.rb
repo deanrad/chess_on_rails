@@ -83,15 +83,18 @@ class Piece
 
   # Answers "Am I forbidden to move from [mypos] to the position specified by [vector], on this board" ?
   # Returns yes when blocked by your own piece, etc..
-  # - No piece can obstruct a knight move
+  # - A knight is only obstructed on the destination square
   # - A pawns sideways move is obstructed by space or his own side
   #   - Except when en passant capture is allowed
   # - We walk along a piece's attack-line looking for obstructions
   # - If you hit a piece along the attack-line, but not at the end, you're blocked
   # - At the end of the attack-line, you're blocked only if by your own piece
   def obstructed?( board, mypos, vector )
-
-    return false if @function==:knight
+    # Special-casing could have been moved into derived classes, but stays here for easy reading
+    if @function==:knight
+      return false unless (p = board[ mypos ^ vector])
+      return p.side == self.side
+    end
 
     if @function==:pawn && vector[0] != 0 
       dest_piece = board[ mypos ^ vector ]
