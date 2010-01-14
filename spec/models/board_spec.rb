@@ -36,7 +36,7 @@ describe Board do
     
     it 'should remember which piece was last moved' do
       @opposing_pawns.play_move!( move %w{ d4 d5 } )
-      @opposing_pawns.piece_last_moved.should == @opposing_pawns[:d5]
+      @opposing_pawns.piece_moved.should == @opposing_pawns[:d5]
     end
   end
 

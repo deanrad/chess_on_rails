@@ -22,7 +22,7 @@ class Board < Hash
   attr_accessor :en_passant_square
 
   # The piece most recently moved.
-  attr_accessor :piece_moved; alias :piece_last_moved :piece_moved
+  attr_accessor :piece_moved
 
   # The piece just promoted.
   attr_accessor :promoted_piece
