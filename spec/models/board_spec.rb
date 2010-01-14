@@ -10,72 +10,60 @@ describe Board do
     )
   end
 
-  it 'should allow moves by any party at any time (Match, not Board enforces this rule)' do
-    lambda{
-      @opposing_pawns.play_move!( move %w{ d4 d5 } )
-    }.should_not raise_error
-    lambda{
-      @opposing_pawns.play_move!( move %w{ e5 e4 } )
-    }.should_not raise_error
-  end
-
-  it 'should raise an error unless given from_coord and to_coord' do
-    lambda{
-      @opposing_pawns.play_move!( Move.new "d4" )
-    }.should raise_error(Board::MissingCoord)
-  end
-
-  it 'should raise an error unless a piece is present on the from_coordinate' do
-    lambda{
-      @opposing_pawns.play_move!( move %w{ a2 a3 } )
-    }.should raise_error(Board::PieceNotFound)
-  end
-
-  it 'should move a piece off the board (to the graveyard) when that piece is moved upon' do
-    with(@opposing_pawns) do |op|
-      op.graveyard.size.should == 0
-      op.pieces.count.should == 2
-      op.play_move!( move %w{ d4 e5 } )
-      op.pieces.count.should == 1
-      op.graveyard.count.should == 1
-      op.graveyard[:black, :pawn].length.should == 1
+  describe 'Playing a move' do
+    it 'should raise an error unless given from_coord and to_coord' do
+      lambda{
+        @opposing_pawns.play_move!( Move.new "d4" )
+      }.should raise_error(Board::MissingCoord)
     end
     
+    it 'should raise an error unless a piece is present on the from_coordinate' do
+      lambda{
+        @opposing_pawns.play_move!( move %w{ a2 a3 } )
+      }.should raise_error(Board::PieceNotFound)
+    end
+    
+    it 'should move a piece off the board (to the graveyard) when that piece is moved upon' do
+      with(@opposing_pawns) do |op|
+        op.graveyard.size.should == 0
+        op.pieces.count.should == 2
+        op.play_move!( move %w{ d4 e5 } )
+        op.pieces.count.should == 1
+        op.graveyard.count.should == 1
+        op.graveyard[:black, :pawn].length.should == 1
+      end
+    end
+    
+    it 'should remember which piece was last moved' do
+      @opposing_pawns.play_move!( move %w{ d4 d5 } )
+      @opposing_pawns.piece_last_moved.should == @opposing_pawns[:d5]
+    end
   end
 
-
-  it 'should remember which piece was last moved' do
-    @opposing_pawns.play_move!( move %w{ d4 d5 } )
-    @opposing_pawns.piece_last_moved.should == @opposing_pawns[:d5]
-  end
-
-  describe 'Playing Moves' do
-    describe 'Castling Flags' do
-      it 'should initially flag castling as available for any side/flank' do
-        @castling_allowed.white_kingside_castle_available.should == true
-        @castling_allowed.white_queenside_castle_available.should == true
-        @castling_allowed.black_kingside_castle_available.should == true
-        @castling_allowed.black_queenside_castle_available.should == true
-      end
-
-      it 'should flag kingside castling unavailable when the kingside rook is moved' do
-        @castling_allowed.play_move!( move %w{ h8 h7 } )
-        @castling_allowed.black_queenside_castle_available.should == true
-        @castling_allowed.black_kingside_castle_available.should == false
-      end
-
-      it 'should flag kingside castling unavailable when the kingside rook is moved' do
-        @castling_allowed.play_move!( move %w{ a1 a2 } )
-        @castling_allowed.white_queenside_castle_available.should == false
-        @castling_allowed.white_kingside_castle_available.should == true
-      end
-
-      it 'should flag both castlings unavailable when the king is moved' do
-        @castling_allowed.play_move!( move %w{ e1 f2 } )
-        @castling_allowed.white_queenside_castle_available.should == false
-        @castling_allowed.white_kingside_castle_available.should == false
-      end
-
+  describe 'Castling Flags' do
+    it 'should initially flag castling as available for any side/flank' do
+      @castling_allowed.white_kingside_castle_available.should == true
+      @castling_allowed.white_queenside_castle_available.should == true
+      @castling_allowed.black_kingside_castle_available.should == true
+      @castling_allowed.black_queenside_castle_available.should == true
+    end
+    
+    it 'should flag kingside castling unavailable when the kingside rook is moved' do
+      @castling_allowed.play_move!( move %w{ h8 h7 } )
+      @castling_allowed.black_queenside_castle_available.should == true
+      @castling_allowed.black_kingside_castle_available.should == false
+    end
+    
+    it 'should flag kingside castling unavailable when the kingside rook is moved' do
+      @castling_allowed.play_move!( move %w{ a1 a2 } )
+      @castling_allowed.white_queenside_castle_available.should == false
+      @castling_allowed.white_kingside_castle_available.should == true
+    end
+    
+    it 'should flag both castlings unavailable when the king is moved' do
+      @castling_allowed.play_move!( move %w{ e1 f2 } )
+      @castling_allowed.white_queenside_castle_available.should == false
+      @castling_allowed.white_kingside_castle_available.should == false
     end
   end
 

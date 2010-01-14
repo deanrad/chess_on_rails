@@ -96,7 +96,6 @@ describe Match do
       #                " 2. Nc3 {should not play past illegal move} Nf6" )
       pgn.playback_against( m )
       pgn.playback_errors.should_not be_empty
-      pgn.playback_errors.flatten[1].should include( t( 'errors.notation_destination_invalid', pgn.move_in_error ) )
     end
   end
 end

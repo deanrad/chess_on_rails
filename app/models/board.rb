@@ -15,10 +15,6 @@ class Board < Hash
     attr_accessor_with_default :memoize_moves, true
   end
 
-  # if true, this board instance is used for computation only, otherwise it is
-  # or was an actual state of the game - defaults to nil
-  attr_accessor :hypothetical
-
   # The match to which this board belongs.
   attr_accessor :match	
 
@@ -38,6 +34,9 @@ class Board < Hash
 
   # An array of pieces which have bitten the dust during this match.
   attr_accessor :graveyard
+
+  # The rules (implemented as lambda methods) against which moves must abide.
+  attr_accessor :move_validations
 
   alias :pieces	   :values
   alias :positions :keys
@@ -168,9 +167,9 @@ class Board < Hash
   # # get the board for future consideration
   # new = board.consider_move( Move.new(...) )
   def consider_move(m, &block)
-    considered = self.dup
+    # shallow-copy - we dont want (and don't get) copies of the pieces
+    considered = self.dup 
 
-    considered.hypothetical = true
     considered.play_move!(m)
     return considered unless block_given?
     yield  considered
@@ -214,6 +213,7 @@ class Board < Hash
     king_pos, king  = detect do |pos, piece| 
       piece && piece.function==:king && piece.side == side 
     end
+    return nil unless king_pos
 
     assassin_pos, assassin = self.detect do |position, attacker|
       attacker && (attacker.side != side) &&
