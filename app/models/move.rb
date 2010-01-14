@@ -1,4 +1,5 @@
 class Move < ActiveRecord::Base
+  class AttemptedToValidateWithoutBoardError < Exception; end
 
   include MoveNotation
 
@@ -9,15 +10,6 @@ class Move < ActiveRecord::Base
 
   # Invokes our master validator method.
   validate :all_validations
-
-  # The methods invoked by all_validations. An error detected at any point prevents
-  # evaluation of the later methods. I18n error keys should be scoped by errors, and
-  # refer to which validation: eg errors.from_coord_must_be_valid
-  VALIDATIONS = [
-     :coords_must_be_valid,
-     :piece_must_be_present,
-     :piece_must_allow_move,
-  ]
 
   before_save :update_computed_fields
 
@@ -36,7 +28,8 @@ class Move < ActiveRecord::Base
   # The side (black or white) making this move.  - TODO - is this used ? 
   # attr_accessor :side
 
-  # Creates a new move, either the Rails way with a named hash, or a shorthand of the notation
+  # Creates a new move, either the Rails way with a named hash, or a shorthand of the notation. 
+  # Example: Move.new( :from_coord => "d2", :to_coord => "d4" )
   def initialize( opts )
     case opts; when String, Symbol
       super( :notation => "#{opts}" )
@@ -60,7 +53,7 @@ class Move < ActiveRecord::Base
   def player; @player ||= match.send( self.side );            end
 
   # The lazily-fetched piece involved in this move.
-  def piece;    @piece ||= self.from_coord && self.board_before[ self.from_coord ]; end
+  def piece;    @piece ||= self.from_coord && self.board_before && self.board_before[ self.from_coord ]; end
 
   # The function (knight, rook, etc..) of the piece that is moving.
   def function; piece ? piece.function : "piece" ; end
@@ -78,12 +71,21 @@ class Move < ActiveRecord::Base
   # Invokes through our methods, but short-circuits if one returns false
   def all_validations #:nodoc:
     # $stderr.puts "all_validations: errors (#{errors.object_id}) empty ? #{errors.empty?}, new_record? #{new_record?}"
+    raise AttemptedToValidateWithoutBoardError unless self.board_before
 
-    return false unless errors.empty?
     VALIDATIONS.each do |v|
       result = send(v, self) ; return false unless errors.empty?
     end
   end
+
+  # The methods invoked by all_validations. An error detected at any point prevents
+  # evaluation of the later methods. I18n error keys should be scoped by errors, and
+  # refer to which validation: eg errors.from_coord_must_be_valid
+  VALIDATIONS = [
+     :coords_must_be_valid,
+     :piece_must_be_present,
+     :piece_must_allow_move,
+  ]
 
   def coords_must_be_valid(move)
     [:from_coord, :to_coord].each do |coord|
@@ -97,7 +99,8 @@ class Move < ActiveRecord::Base
 
   def piece_must_allow_move(move)
     add_error(:to_coord, :piece_must_allow_move) unless begin
-      move.piece.allowed_moves(move.board_before).include? move.to_coord.to_sym
+      piece, to_coord, prior_board = move.piece, move.to_coord, move.board_before
+      piece.allowed_moves(prior_board).include? to_coord.to_sym
     end
   end
 
