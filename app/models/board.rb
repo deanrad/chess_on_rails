@@ -113,21 +113,10 @@ class Board < Hash
     self.piece_moved = self.delete(from_coord)
     self[to_coord] = piece_moved
 
-    # TODO move the 'magic' of castling (as two moves) outside of Board, and feed
-    # these two moves into the board for playback. (Also you could make the rook's
-    # castling square an 'allowed move' for that rook, to allow castling by dragging
-    # the rook, and more consistent behavior. Then castling would be the sum of two
-    # legal, allowed moves, performed successively by the same player. Piece_moved
-    # would remain the king.
-    # implement the switching of the king and rook if told to do so
-    if m.castled==1
-      castling_rank = to_coord.rank.to_s
-      [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, new_rook_file, orig_rook_file|
-	if to_coord.file == king_file 
-	   rook = self.delete(:"#{orig_rook_file}#{castling_rank}")
-	   self[:"#{new_rook_file}#{castling_rank}"] = rook
-	end
-      end
+    # Implement the switching of the king and rook if told to do so
+    if m.castled?
+      rook = self.delete(m.castling_rook_from_coord.to_sym)
+      self[m.castling_rook_to_coord.to_sym] = rook
     end
 
     # prevent future castling once kings moved

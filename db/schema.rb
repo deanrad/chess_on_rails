@@ -43,13 +43,14 @@ ActiveRecord::Schema.define(:version => 20100101000001) do
 
   create_table "moves", :force => true do |t|
     t.integer  "match_id"
-    t.string   "from_coord",           :limit => 10
-    t.string   "to_coord",             :limit => 10
-    t.integer  "move_num",                           :default => 0
-    t.string   "notation",             :limit => 10
-    t.integer  "castled"
-    t.string   "captured_piece_coord", :limit => 10
-    t.string   "promotion_choice",     :limit => 1
+    t.string   "from_coord",               :limit => 10
+    t.string   "to_coord",                 :limit => 10
+    t.integer  "move_num",                               :default => 0
+    t.string   "notation",                 :limit => 10
+    t.string   "castling_rook_from_coord", :limit => 2
+    t.string   "castling_rook_to_coord",   :limit => 2
+    t.string   "captured_piece_coord",     :limit => 10
+    t.string   "promotion_choice",         :limit => 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end

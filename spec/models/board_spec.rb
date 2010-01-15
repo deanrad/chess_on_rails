@@ -48,19 +48,19 @@ describe Board do
       @castling_allowed.black_queenside_castle_available.should == true
     end
     
-    it 'should flag kingside castling unavailable when the kingside rook is moved' do
+    it 'should make kingside castling unavailable when the kingside rook is moved' do
       @castling_allowed.play_move!( move %w{ h8 h7 } )
       @castling_allowed.black_queenside_castle_available.should == true
       @castling_allowed.black_kingside_castle_available.should == false
     end
     
-    it 'should flag kingside castling unavailable when the kingside rook is moved' do
+    it 'should make queenside castling unavailable when the kingside rook is moved' do
       @castling_allowed.play_move!( move %w{ a1 a2 } )
       @castling_allowed.white_queenside_castle_available.should == false
       @castling_allowed.white_kingside_castle_available.should == true
     end
     
-    it 'should flag both castlings unavailable when the king is moved' do
+    it 'should make both castlings unavailable when the king is moved' do
       @castling_allowed.play_move!( move %w{ e1 f2 } )
       @castling_allowed.white_queenside_castle_available.should == false
       @castling_allowed.white_kingside_castle_available.should == false

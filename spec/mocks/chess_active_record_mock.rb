@@ -1,6 +1,5 @@
-#The fields our AR objects need, not yet auto-generated
+# The fields our AR objects need, not yet auto-generated
 class Move
-  attr_accessor :castled
   attr_accessor :promotion_piece
   attr_accessor :notation
   attr_accessor :capture_coord

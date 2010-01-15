@@ -15,11 +15,12 @@ class CreateMoves < ActiveRecord::Migration
       #a notation summary of the move
       t.column :notation, :string, :limit => 10
 			
-      #calculated but stored for ease of computation
-      t.column :castled, :int
+      # The to and from coordinates of the rook involved in a castling
+      t.column :castling_rook_from_coord, :string, :limit => 2
+      t.column :castling_rook_to_coord, :string, :limit => 2
 
       #if the piece captured was not on the to_coord square as in en passant capture
-      t.column :captured_piece_coord, :string, :limit => 10, :default => nil
+      t.column :captured_piece_coord, :string, :limit => 10
 
       #the piece promoted to
       t.column :promotion_choice, :string, :limit => 1

@@ -16,7 +16,7 @@ class Move < ActiveRecord::Base
   ######### Properties and methods ###########################################
 
   # ActiveRecord fields:
-  # :from_coord, :to_coord, :castled, :captured_move_coord, etc...
+  # :from_coord, :to_coord, :captured_move_coord, etc...
 
   # The board that existed at the time this move was made, also the board
   # against which it is validated.
@@ -27,6 +27,12 @@ class Move < ActiveRecord::Base
 
   # The side (black or white) making this move.  - TODO - is this used ? 
   # attr_accessor :side
+  
+  # Castling, as the only move in standard chess where two pieces moved,
+  # is represented by whether the castling_rook_from_coord is populated
+  def castled?
+    !! castling_rook_from_coord
+  end
 
   # Creates a new move, either the Rails way with a named hash, or a shorthand of the notation. 
   # Example: Move.new( :from_coord => "d2", :to_coord => "d4" )
@@ -116,7 +122,11 @@ class Move < ActiveRecord::Base
     end
 
     self[:notation] = SAN.from_move(self) # always renotate the move to canonicalize it
-    self[:castled] = 1 if piece && (piece.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
+    if piece && (piece.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
+      rook_from_file, rook_to_file =  ( to_coord.file == 'c' ? %w{a d} : %w{f h} )
+      self[:castling_rook_from_coord] = "#{rook_from_file}#{to_coord.rank}"
+      self[:castling_rook_to_coord] = "#{rook_to_file}#{to_coord.rank}"
+    end
   end
 
   ######### After-save Methods ###############################################
