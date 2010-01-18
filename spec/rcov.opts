@@ -1,3 +1,3 @@
 --rails
 --exclude /var/lib/gems/*
-
+--exclude /usr/local/lib/site_ruby/*

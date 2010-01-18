@@ -1,3 +1,6 @@
+# While it'd be more proper to have this on the players table, or linked to from there,
+# Clearance editing pages will give quick/dirty access to these preferences if they're 
+# on the users model/table, which is the one clearance serves up currently...
 class UserPreferences < ActiveRecord::Migration
   def self.up
     change_table(:users) do |t|
