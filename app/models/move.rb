@@ -123,7 +123,7 @@ class Move < ActiveRecord::Base
 
     self[:notation] = SAN.from_move(self) # always renotate the move to canonicalize it
     if piece && (piece.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
-      rook_from_file, rook_to_file =  ( to_coord.file == 'c' ? %w{a d} : %w{f h} )
+      rook_from_file, rook_to_file =  ( to_coord.file == 'c' ? %w{a d} : %w{h f} )
       self[:castling_rook_from_coord] = "#{rook_from_file}#{to_coord.rank}"
       self[:castling_rook_to_coord] = "#{rook_to_file}#{to_coord.rank}"
     end

@@ -7,12 +7,25 @@ describe Move do
   attr_accessor :match
   
   describe 'Capturing' do
-    it 'should populate the captured_piece coordinate' do
+    it 'should populate the captured_piece coordinate field upon save' do
       match = matches(:ready_to_capture)
       match.moves << move = Move.new(:from_coord => 'e4', :to_coord => 'd5')
 
       move.captured_piece_coord.should == 'd5'
       move.notation.should == 'exd5'
+    end
+  end
+
+  describe 'Castling' do
+    it 'should populate the castling_rook_from coordinate field upon save' do
+      match = matches(:castled)
+      Move.delete(match.moves.last.id) # uncastle
+      
+      match.moves << move = Move.new(:from_coord => 'e1', :to_coord => 'g1')
+
+      move.castled?.should == true
+      move.castling_rook_from_coord.should == 'h1'
+      move.castling_rook_to_coord.should == 'f1'
     end
   end
 

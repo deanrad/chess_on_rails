@@ -23,6 +23,13 @@ describe Board do
       }.should raise_error(Board::PieceNotFound)
     end
     
+    it 'should move a piece to the graveyard when playing back a move with a captured_piece_coord' do
+      with(@opposing_pawns) do |op|
+        op.play_move!( move %w{ d4 e5 e5} ) #3rd position = captured_piece coord
+        op.graveyard.count.should == 1
+      end
+    end
+    
     it 'should move a piece off the board (to the graveyard) when that piece is moved upon' do
       with(@opposing_pawns) do |op|
         op.graveyard.size.should == 0
@@ -72,7 +79,7 @@ describe Board do
    when Hash
      Move.new( opts )
    when Array
-     Move.new( :from_coord => opts[0][0], :to_coord => opts[0][1] )
+     Move.new( :from_coord => opts[0].shift, :to_coord => opts[0].shift, :captured_piece_coord => opts[0].shift )
    when String
      Move.new( :notation => opts )
    end

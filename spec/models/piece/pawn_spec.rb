@@ -4,7 +4,7 @@ describe 'Piece Movement' do
   describe 'Pawn' do
     before(:all) do
       @initial = Board.new
-      @pawn_single = @initial.consider_move( Move.new(:from_coord => "d2", :to_coord => "d3") )
+      @pawn_single = @initial.consider_move(Move.new(:from_coord => "d2", :to_coord => "d3"))
     end
 
     it 'should be able to move (only) one or two from its starting rank' do
@@ -15,6 +15,12 @@ describe 'Piece Movement' do
     it 'should be only able to advance one once moved' do
       p = @pawn_single[:d3]
       p.allowed_moves(@pawn_single).to_set.should == [:d4].to_set
+
+      # and another way..
+      @initial.consider_move( Move.new(:from_coord => "d2", :to_coord => "d3") ) do |b|
+        p = b[:d3]
+        p.allowed_moves(b).should == [:d4]
+      end
     end
 
   end

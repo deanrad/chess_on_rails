@@ -1,6 +1,14 @@
 require 'spec/spec_helper'
 
 describe Graveyard do
+  it 'should keep track of captured pieces' do
+    g = Graveyard.new
+    g << p=Pawn.new(:white, :a)
+    
+    g[0].should == p
+    g[:white, :pawn].first.should == p
+  end
+
   it 'should start off with 0 points per player' do
     g = Graveyard.new
     g.points_for(:white).should == 0
