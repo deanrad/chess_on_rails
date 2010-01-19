@@ -6,6 +6,10 @@ class Move < ActiveRecord::Base
   ######### ActiveRecord Hooks  ##############################################
 
   belongs_to :match
+
+  # acts as list calls save even on destroy (WTF?!). We set this flag so we can
+  # exit prematurely from update_computed_fields
+  before_save {|mv| mv.instance_variable_set("@destroying", true) }
   acts_as_list :column => :move_num, :scope => :match
 
   # Invokes our master validator method.
@@ -113,6 +117,8 @@ class Move < ActiveRecord::Base
 
   ######### Before-save Methods ##############################################
   def update_computed_fields
+    return true if @destroying # see explanation at top of this file
+
     # Take the board the way it was before me and play me upon it
     self.board_after = self.board_before.dup.play_move!( self )
 
