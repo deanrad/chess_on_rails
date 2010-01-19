@@ -12,6 +12,6 @@ class Graveyard < Array
   # For the pieces of your opponent you have, the sum of their point values.
   # Arg side: the side we're totalling for
   def points_for side
-    select{ |p| p.side == side.opposite }.map(&:point_value).reduce(&:+) || 0
+    select{ |p| p.side == side.opposite }.map(&:point_value).inject(&:+) || 0
   end
 end

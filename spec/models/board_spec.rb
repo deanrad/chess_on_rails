@@ -26,17 +26,17 @@ describe Board do
     it 'should move a piece to the graveyard when playing back a move with a captured_piece_coord' do
       with(@opposing_pawns) do |op|
         op.play_move!( move %w{ d4 e5 e5} ) #3rd position = captured_piece coord
-        op.graveyard.count.should == 1
+        op.graveyard.size.should == 1
       end
     end
     
     it 'should move a piece off the board (to the graveyard) when that piece is moved upon' do
       with(@opposing_pawns) do |op|
         op.graveyard.size.should == 0
-        op.pieces.count.should == 2
+        op.pieces.size.should == 2
         op.play_move!( move %w{ d4 e5 } )
-        op.pieces.count.should == 1
-        op.graveyard.count.should == 1
+        op.pieces.size.should == 1
+        op.graveyard.size.should == 1
         op.graveyard[:black, :pawn].length.should == 1
       end
     end
