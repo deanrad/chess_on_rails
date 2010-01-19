@@ -74,6 +74,23 @@ describe Board do
     end
   end
 
+  describe 'Promotion' do
+    it 'should promote a pawn (to queen, by default) upon reaching the opponents back rank' do
+      m = matches(:promote_crazy)
+      m.moves << move = Move.new(:from_coord => "b7", :to_coord => "a8")
+      m.board[:a8].function.should == :queen
+      move.promotion_choice.should == "Q"
+    end
+
+    it 'should promote to queen to a chosen piece type upon reaching the opponents back rank' do
+      m = matches(:promote_crazy)
+      m.moves << move = Move.new(:from_coord => "b7", :to_coord => "a8", :promotion_choice => "R")
+      move.promotion_choice.should == "R"
+      m.board[:a8].function.should == :rook
+    end
+    
+  end
+
   def move( *opts )
    case opts
    when Hash

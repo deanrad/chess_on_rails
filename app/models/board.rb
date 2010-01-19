@@ -5,9 +5,10 @@ require 'piece'
 # all the moves played back on it, or if a separate instance is created afresh
 class Board < Hash
 
-  class MoveInvalid     < ::Exception; end
-  class MissingCoord    < ::Exception; end
-  class PieceNotFound   < ::Exception; end
+  class MoveInvalid      < ::Exception; end
+  class MissingCoord     < ::Exception; end
+  class PieceNotFound    < ::Exception; end
+  class InvalidPromotion < ::Exception; end
 
   include KnowledgeOfBoard
 
@@ -132,18 +133,20 @@ class Board < Hash
     # publish whether this move created an en passant option for the opponent
     ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
 
-    @is_ep = piece_moved.function == :pawn && 
-             ep_from_rank == m.from_coord.rank &&
-             ep_to_rank  == m.to_coord.rank
+    is_ep = piece_moved.function == :pawn && 
+             m.from_coord.rank == ep_from_rank &&
+             m.to_coord.rank == ep_to_rank
 
-    self.en_passant_square = @is_ep ? (m.from_coord.file + ep_rank.to_s).to_sym : nil
+    self.en_passant_square = is_ep ? (m.from_coord.file + ep_rank.to_s).to_sym : nil
       
     #reflect promotion
     if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
-      self.promoted_piece = Queen.new(piece_moved.side, :promoted) # TODO switch
-      m.promotion_choice = "Q"
-      self.delete(m.to_coord)
-      self[m.to_coord] = promoted_piece
+      m.promotion_choice ||= "Q"  # default to queen
+      new_role = SAN::ABBREV_TO_ROLE[ m.promotion_choice ] 
+      raise InvalidPromotion, m.promotion_choice unless new_role
+
+      self.promoted_piece = Piece.class_for(new_role).new(piece_moved.side, :promoted) 
+      self[m.to_coord.to_sym] = self.promoted_piece
     end
 
     m.board_after = self
