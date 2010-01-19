@@ -9,7 +9,7 @@ class Move < ActiveRecord::Base
 
   # acts as list calls save even on destroy (WTF?!). We set this flag so we can
   # exit prematurely from update_computed_fields
-  before_save {|mv| mv.instance_variable_set("@destroying", true) }
+  before_destroy {|mv| mv.instance_variable_set("@destroying", true) }
   acts_as_list :column => :move_num, :scope => :match
 
   # Invokes our master validator method.
