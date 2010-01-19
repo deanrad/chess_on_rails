@@ -5,7 +5,14 @@ describe Move do
     @match = matches(:unstarted_match) #overridable
   end
   attr_accessor :match
-  
+
+  it 'should increment the move number with each save' do
+    match = matches(:ready_to_capture)
+    lambda{ 
+      match.moves << move = Move.new(:from_coord => 'e4', :to_coord => 'd5')
+    }.should change{ match.moves.last.move_num }.by(1)
+  end
+
   describe 'Capturing' do
     it 'should populate the captured_piece coordinate field upon save' do
       match = matches(:ready_to_capture)

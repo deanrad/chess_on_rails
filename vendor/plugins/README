@@ -1,0 +1,10 @@
+Plugin Summary
+--------------
+
+acts_as_list - used for incrementing Move#move_num
+chess_on_rails_notation - used for PGN, needed for PGN fixtures used by test suite
+
+Other plugins add functionality to the core app without increasing the line count or 
+bloating the methods with conditionals. Anything not necessary to play and notate a
+game of chess should go into plugins to comply with the design guidelines of 
+ChessOnRails
