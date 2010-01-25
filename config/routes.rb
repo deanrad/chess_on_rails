@@ -20,6 +20,9 @@ ActionController::Routing::Routes.draw do |map|
   # Sets of pieces, functionality courtesy of Sean
   map.resource :set, :member => {:change => :post}
 
+  # Clearance admin pages
+  map.connect '/admin/:controller/:id/:action'
+
   # allow shorthand for recognition but make sure helpers emit the real thing
   # map.connect 'match/:id',         :controller => 'matches', :action => 'show'
   # map.connect 'match/:id/:action', :controller => 'matches'

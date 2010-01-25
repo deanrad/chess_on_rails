@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_filter :get_user, :only => [ :edit, :update ]
   
   def index
-    @user = User.find(params[:id])
+    @user = User.find(params[:id]) rescue nil
     redirect_to :action => 'edit' if @user
     @users = User.find :all
   end
