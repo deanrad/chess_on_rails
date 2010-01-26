@@ -3,6 +3,7 @@
 
 class ApplicationController < ActionController::Base
   include Clearance::Authentication
+  include MatchSession::ControllerInstanceMethods
 
   helper :all
 
