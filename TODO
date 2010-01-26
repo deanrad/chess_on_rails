@@ -1,24 +1,22 @@
-** allow click-click move format in addition to dragdrop
-** allow setting of away
+* Admin/Preferences
+** break out prefs into has_one table on player
+** write controller-level test ensuring http://localhost:3001/admin/users/ is running, protected
+** ensure user settings get saved at http://localhost:3001/admin/users/1/edit (they're not, currently)
+
+** allow setting of away/online
 ** allow dialogs.."Claim Checkmate" / "Offer Draw" / "Request Undo" / "Claim Cheat" / "Claim Forfeit"
-** allow user settings (email me ?)
 ** allow user-match (gameplay) settings (refresh interval, ajaxy move making)
 ** allow match settings (takebacks allowed)
 
 
-* extend chats to include answerable chats (questions / proposals / propositions)
-** 1. Provide the means to create a chat with a certain action_code
-** 2. Ensure only chats with action_codes wind up in main_event
+* FrontEnd enhancements
+** allow click-click move format in addition to dragdrop
+** extend chats to include answerable chats (questions / proposals / propositions)
 
-* allow matches to be started from PGN 
-** same, for FEN 
- 
-* relocate move queue to plugin
-* move queue using http://wiki.github.com/madrobby/scriptaculous/ajax-inplaceeditor
-* move queue is stored obfuscated - perhaps per http://www.ssc.wisc.edu/~rhorrisb/wp/archives/3
-* move queue allows branching
+* allow matches to be started from PGN, and or FEN 
+** ensure 
 
-** preview images (or recent moves) on match page ??
-
-
-* get CI running at http://blog.runcoderun.com/
+* Reinstate move queue as plugin 
+** move queue using http://wiki.github.com/madrobby/scriptaculous/ajax-inplaceeditor
+** move queue is stored obfuscated - perhaps per http://www.ssc.wisc.edu/~rhorrisb/wp/archives/3
+** move queue allows branching on different opponent moves
