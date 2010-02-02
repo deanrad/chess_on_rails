@@ -29,6 +29,11 @@
     <% end %>
   </head>
   <body>
+    <div id="flash">
+      <% flash.each do |key, value| -%>
+        <span class="<%= key %>"><%= html_escape(value) %></span>
+      <% end -%>
+    </div>
    <%= yield %>
    <script type="text/javascript" id="autoexec_javascripts">
    //<![CDATA[

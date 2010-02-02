@@ -53,6 +53,8 @@ config.gem "clearance",
   :source  => 'http://gemcutter.org',
   :version => '0.8.3'
 
+config.gem 'justinfrench-formtastic', :lib => 'formtastic', :source => 'http://gems.github.com'
+
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,
   # like if you have constraints or database-specific column types
