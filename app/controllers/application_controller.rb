@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
 
   helper :all
 
+  include MatchHelper
+  helper_method :match_session
+
+
   # who's authenticated, visible to controllers and views
   helper_method :current_player
   attr_accessor :current_player
