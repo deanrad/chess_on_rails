@@ -19,8 +19,8 @@ describe Chat do
     display_text = c.display_text( players(:paul) )
 
     # <script type='text/javascript'>Effect.Shake('board_table');</script>"
-    display_text.should include(I18n.t("chat_action_shake_text"))
-    display_text.should include(I18n.t("chat_action_shake_action"))
+    display_text.should include(I18n.t("chat_actions.shake.text"))
+    display_text.should include(I18n.t("chat_actions.shake.action"))
   end
 
   it 'should replace an action with its text but not its behavior when viewed by opponent and cancelled' do
@@ -29,8 +29,8 @@ describe Chat do
 
     display_text = c.display_text( players(:paul) ) # viewed by the other player
 
-    display_text.should     include(I18n.t("chat_action_shake_text"))
-    display_text.should_not include(I18n.t("chat_action_shake_action"))
+    display_text.should     include(I18n.t("chat_actions.shake.text"))
+    display_text.should_not include(I18n.t("chat_actions.shake.action"))
   end
 
   it 'should not be cancelled if it is the only chat' do

@@ -5,7 +5,12 @@ class Chat < ActiveRecord::Base
   belongs_to :match
   belongs_to :player
 
-  def to_json
-    %Q|{event_type:chat,event_id:c#{id},player:"#{player.name}",text:"#{display_text}"}|
+  def to_client_hash
+    {
+      'type' => 'chat',
+      'text' => self.display_text,
+      'date' => self.created_at,
+      'player' => self.player.name
+    }
   end
 end

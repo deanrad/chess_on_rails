@@ -7,6 +7,8 @@ dean_vs_paul, 1, , Nc4 b5
 dean_vs_paul, 3, 1
 unstarted_match, 1
 unstarted_match, 2, 1
+ready_to_capture, 1
+ready_to_capture, 2, 1
 castled, 1
 castled, 2, 1
 resigned, 1

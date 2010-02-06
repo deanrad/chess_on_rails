@@ -16,7 +16,7 @@ require 'tasks/rails'
 # as opposed to hacking within a for-loop
 # 
 
-task :test => [:spec]
+task :test => [:spec, 'spec:plugins']
 # Backward compatibility with Test::Unit fixture loading style
 namespace :db do
   task :seed => [:"spec:db:fixtures:load"]

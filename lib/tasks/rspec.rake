@@ -90,6 +90,15 @@ namespace :spec do
       t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
       t.spec_files = FileList['vendor/plugins/rspec-rails/spec/**/*_spec.rb']
     end
+
+    SPEC_PLUGINS = %w{ chess_on_rails_conversation }
+    SPEC_PLUGINS.each do |p|
+      desc "Runs the examples for #{p}"
+      Spec::Rake::SpecTask.new(p.to_sym => spec_prereq) do |t|
+        t.spec_opts = ['--options', "\"#{RAILS_ROOT}/spec/spec.opts\""]
+        t.spec_files = FileList['vendor/plugins/#{p}/spec/**/*_spec.rb']
+      end
+    end
   end
 
   # Setup specs for stats
