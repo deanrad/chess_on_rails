@@ -98,4 +98,10 @@ describe Match do
       pgn.playback_errors.should_not be_empty
     end
   end
+
+  describe 'Active-Record specific hacks with chess value' do
+    it 'should return the same match object in memory any time asked for' do
+      Match[@match.id].object_id.should == Match[@match.id].object_id
+    end
+  end
 end
