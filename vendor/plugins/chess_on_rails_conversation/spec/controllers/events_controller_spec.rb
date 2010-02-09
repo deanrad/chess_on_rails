@@ -18,10 +18,14 @@ describe EventsController do
 
     get :index, { :match_id => m.id }
 
-    response.should be_success
+    assigns[:event_hashes].length.should == m.moves.length + m.chats.length
+    pp assigns[:event_hashes]
 
-    json = JSON.load( response.body )
-    json.length.should == m.moves.length + m.chats.length
-    pp json
+    #response.should be_success
+    #json = JSON.load( response.body )
+    #json.length.should == m.moves.length + m.chats.length
+    #pp json
   end
+
+  # it 'should have sequential ids starting from 1'
 end

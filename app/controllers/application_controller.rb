@@ -3,11 +3,19 @@
 
 class ApplicationController < ActionController::Base
   include Clearance::Authentication
-  include MatchSession::ControllerInstanceMethods
 
   helper :all
 
   include MatchHelper
+
+
+  # Gives controllers access to a 'smart' object with methods instead of a
+  # hash acting like a global variable
+  def match_session
+    # MatchSession.new(session, params[:match_id] || params[:id] )
+    session[:matches] ||= {}
+    session[:matches][ params[:match_id] || params[:id] ] ||= {}
+  end
   helper_method :match_session
 
 

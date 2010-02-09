@@ -7,6 +7,8 @@ require 'spec'
 require 'spec/rails'
 require 'mocha'
 
+ActionController::TestSession.send(:include, MatchSession::ExtensionMethods)
+
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
   # lines, delete config/database.yml and disable :active_record

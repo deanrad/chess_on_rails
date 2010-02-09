@@ -5,30 +5,42 @@
 # will ensure flexibility when you consider different strategies for storing client-
 # specific state.
 # Calls like
-#    session[:set] ||= 'default'
+#    session[:matches][ params[:match_id] ][:set] ||= 'default'
 # Become
 #    match_session.set
 # 
 # and now the logic for initializing/defaulting session variables is consolidated 
 # into one place instead of littered throughout controllers.
 class MatchSession
-  module ControllerInstanceMethods
-    def can_fly_to_moon; true; end
-    def match_session;  MatchSession.new(session) ; end
-  end
 
   # The match session may store/retrieve its values from the session
-  def initialize(cgi_session)
-    self.session = cgi_session
+  def initialize(cgi_session, match_id)
+    unless match_id 
+      # raise ArgumentError 
+      $stderr.puts "No match_id #{__FILE__} #{__LINE__}"
+    end
+
+    with (self.session = cgi_session) do |sess|
+      sess[:matches] ||= {}
+      sess[:matches][ match_id ] ||= Match[match_id]  
+    end
+    self
   end
 
-  # BEGIN Session-extension methods
-  def set
-    session[:set] ||= 'default'
-  end
-  # END   Session-extension methods
+  module ExtensionMethods
+    # BEGIN Session-extension methods
+    def set
+      self[:set] ||= 'default'
+    end
+    def matches
+      self[:matches] ||= Match.matches
+    end
+  end   # ExtensionMethods
 
-  # Below here are the internals we shield callers from.
+  
+  ########################## ACHTUNG CUIDADO ###########################
   private
+
+  # the cached reference to the CGI::Session
   attr_accessor :session
 end

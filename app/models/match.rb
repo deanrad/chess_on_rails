@@ -146,4 +146,11 @@ class Match < ActiveRecord::Base
   end
 =end
 
+  # Handy instance cache of AR objects - go through Match[id] and you're guaranteed
+  # to get a process-level-cached instance of that AR object.
+  cattr_accessor :matches
+  def self.[] id
+    self.matches ||= {}
+    self.matches[id] ||= Match.find(id)
+  end
 end
