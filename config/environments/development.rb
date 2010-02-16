@@ -7,7 +7,7 @@ require 'ruby-debug'
 
 # Giving up auto-reloading solves non-deterministic load problems, at the cost
 # of a deterministic alteration to your workflow, thus minimizing frustration.
-config.cache_classes = true
+config.cache_classes = false
 
 # Log error messages when you accidentally call methods on nil.
 config.whiny_nils = true

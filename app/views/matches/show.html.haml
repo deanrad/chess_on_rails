@@ -1,0 +1,11 @@
+%h1
+  = match.name
+
+#board_region
+  .board
+    = render :partial => 'board'
+
+#actions_region
+  #move_creator_parent
+    = render :partial => 'move_maker'
+    
