@@ -26,8 +26,8 @@ I_KNOW_I_AM_USING_AN_OLD_AND_BUGGY_VERSION_OF_LIBXML2=1
 
 config.gem "ruby-debug"
 # config.gem "ruby-prof" # runcoderun
-config.gem "thoughtbot-factory_girl",
-             :lib    => "factory_girl",
-             :source => "http://gems.github.com"
+#config.gem "thoughtbot-factory_girl",
+#             :lib    => "factory_girl",
+#             :source => "http://gems.github.com"
 
 HOST = "localhost"
