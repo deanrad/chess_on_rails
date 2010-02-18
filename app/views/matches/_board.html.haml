@@ -1,0 +1,21 @@
+%table#board_table
+  - ranks.each_with_index do |rank, rank_idx| 
+    %tr.row_container
+      %td.label.rank= rank
+      - files.each do |file|
+        - position="#{file}#{rank}"
+        %td.piece_container(class="#{position}" id="#{position}")
+          - p = self.board[position]
+          - if img_src=image_source_of(p)
+            %img.piece(src="#{img_src}"
+                       id="#{p.board_id}")
+          - else
+            &nbsp;
+
+      - if rank_idx==7
+        %tr.bottom_labels
+        %td.rank.file &nbsp;
+        - files.each do |file| 
+          %td.label.file= file
+
+
