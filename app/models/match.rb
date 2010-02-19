@@ -52,32 +52,34 @@ class Match < ActiveRecord::Base
 
   # Called by after_add
   def get_post_board_from_move mv
-    self.boards.store( @boards.keys.max + 1, mv.board_after )
+    self.boards << mv.board_after
   end
 
+  # The current state of the board for this match
   def board
     unless @boards && @boards.size == moves.length
       #b = boards(true) # force recalc
     end
-    boards[ boards.keys.max ]
+    boards.last
   end
 
   # The series of boards this match has been played through, a hash keyed on the move number.
+  # TODO dup the board from the previous move instead of replaying from scratch
   def boards(force_recalc = false)
-    # $stderr.puts "Opening debugger to troubleshoot Match#boards ! TODO - give each move its own board !"
-    # debugger
     return @boards if @boards && ! force_recalc
 
-    @boards = { 0 => Board.new }
+    logger.info "calculating boards for match #{self.id}"
+    @boards = [Board.new]
     moves.each_with_index do |mv, idx|
-      with( @boards[idx + 1] = Board.new ) do |b|
+      with( Board.new ) do |b|
         begin
           move = nil
           0.upto(idx) do |i| 
             b.play_move!(move=moves[i]) if moves[i].errors.empty? 
           end
+          @boards << b
         rescue
-          $stderr.puts "Error playing move #{move.inspect} on board:\n#{b}" and next
+          logger.error "Error playing move #{move.inspect} on board:\n#{b}" and next
         end
       end
     end
