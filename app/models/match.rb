@@ -63,26 +63,24 @@ class Match < ActiveRecord::Base
     boards.last
   end
 
-  # The series of boards this match has been played through, a hash keyed on the move number.
-  # TODO dup the board from the previous move instead of replaying from scratch
+  # An array of boards of length moves.length+1 (including initial board)
   def boards(force_recalc = false)
     return @boards if @boards && ! force_recalc
+    # logger.info "calculating boards for match #{self.id}"
 
-    logger.info "calculating boards for match #{self.id}"
+    # we have a new board (in initial position)
     @boards = [Board.new]
-    moves.each_with_index do |mv, idx|
-      with( Board.new ) do |b|
-        begin
-          move = nil
-          0.upto(idx) do |i| 
-            b.play_move!(move=moves[i]) if moves[i].errors.empty? 
-          end
-          @boards << b
-        rescue
-          logger.error "Error playing move #{move.inspect} on board:\n#{b}" and next
-        end
-      end
+
+    # and for each move
+    moves.each do |mv|
+      # we have a new board, which is a dup of old one ..
+      new_board = @boards.last.dup
+      @boards << new_board
+
+      # .. but with this new move played upon it
+      new_board.play_move!(mv) if mv.errors.empty?
     end
+
     @boards
   end
 
@@ -107,7 +105,7 @@ class Match < ActiveRecord::Base
 
   # the next_to_move alternates sides each move (technically every half-move)
   def next_to_move
-    moves.count.even? ? first_to_move : first_to_move.opposite
+    moves.length.even? ? first_to_move : first_to_move.opposite
   end
   alias :side_to_move :next_to_move
 
