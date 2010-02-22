@@ -16,7 +16,7 @@ end
 # I sometimes like to give up auto-reloading in order to avoid hard-to-debug
 # side-effects of auto-reloading, like the continual loss of class variables. 
 # See also ActiveSupport::Dependencies.mechanism
-config.cache_classes = false
+config.cache_classes = true
 
 # Log error messages when you accidentally call methods on nil.
 config.whiny_nils = true
