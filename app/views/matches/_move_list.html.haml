@@ -1,0 +1,13 @@
+- match.moves.each_with_index do |m, i|
+  - if (i%2)==0
+    %div(class="move_w"
+	 title="#{m.created_at.strftime('%a %H:%M')}")
+      = ( ((i+2)/2).to_s + ". " + m.notation ).ljust(10)
+  - else
+    %div(class="move_b"
+	 title="#{m.created_at.strftime('%a %H:%M')}")
+      = m.notation
+
+:javascript
+  var objDiv = document.getElementById("move_list");
+  if(objDiv) objDiv.scrollTop = objDiv.scrollHeight;

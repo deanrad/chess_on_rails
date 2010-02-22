@@ -6,8 +6,16 @@
     = render :partial => 'board'
 
 #actions_region
+  %ul
+    %li 
+      %a(href='#move_creator_parent') Play
+    %li
+      %a(href='#move_list_parent') History
   #move_creator_parent
     = render :partial => 'move_maker'
+  #move_list_parent
+    = render :partial => 'move_list'
 
 :javascript
   $('.piece').draggable();
+  $('#actions_region').tabs();

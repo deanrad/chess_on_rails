@@ -53,7 +53,6 @@ body{ font-family:sans-serif; font-size:11pt; }
   }
   .move_w{ float:left; clear:left; width: 85px }
   .move_b{ float:left; width: 85px}
-  .move_list_item{ } 
   .move_list_most_recent{ border: solid 1px black; }
   .move_list_currently_displayed{ background-color: #ddd }
 
