@@ -1,13 +1,22 @@
 # Settings specified here will take precedence over those in config/environment.rb
 require 'ruby-debug'
 
-# In the development environment your application's code is reloaded on
-# every request.  This slows down response time but is perfect for development
-# since you don't have to restart the webserver when you make code changes.
+# Allow the attachment of a remote debugger to this process
+puts "Starting debugging server... on #{Debugger::PORT}"
+puts "Use script/attach [hostname] [port] to connect a debugging application.\n"
+Debugger.start_remote()
 
-# Giving up auto-reloading solves non-deterministic load problems, at the cost
-# of a deterministic alteration to your workflow, thus minimizing frustration.
-config.cache_classes = false
+if File.exist? "#{RAILS_ROOT}/config/breakpoints.rb"
+  puts "Loading in custom breakpoints..."
+  require 'config/breakpoints'
+else
+  puts "No custom breakpoints found in config/breakpoints.rb, skipping..."
+end
+
+# I sometimes like to give up auto-reloading in order to avoid hard-to-debug
+# side-effects of auto-reloading, like the continual loss of class variables. 
+# See also ActiveSupport::Dependencies.mechanism
+config.cache_classes = true
 
 # Log error messages when you accidentally call methods on nil.
 config.whiny_nils = true

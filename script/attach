@@ -1,0 +1,16 @@
+#!/usr/bin/ruby
+# File   : script/attach
+# Author : Dean 2/22/10
+# Purpose: Starts a process that will attach to a local debugger on port 8989 
+# by default. Will block until the application it attaches to sends back a 
+# prompt, usually caused by hitting a breakpoint
+
+require 'rubygems'
+require 'ruby-debug'
+
+host = ARGV[0] || 'localhost'
+port = ARGV[1] || '8989'
+
+puts "Connecting to debugger at #{host}:#{port}..\n"
+puts "Waiting for first breakpoint to be hit.."
+Debugger.start_client host, port.to_i
