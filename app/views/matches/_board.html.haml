@@ -8,7 +8,8 @@
           - p = self.board[position]
           - if img_src=image_source_of(p)
             %img.piece(src="#{img_src}"
-                       id="#{p.board_id}")
+                       id="#{p.board_id}"
+                       class="#{p.allowed_moves(self.board).join(' ')}")
           - else
             &nbsp;
 

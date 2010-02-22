@@ -10,7 +10,7 @@
     <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
 
-<% remote_form_for (gameplay, :html => {:id => 'gameplay_editor'}) do |f| %>
+<% remote_form_for(gameplay, :html => {:id => 'gameplay_editor'}) do |f| %>
   Set Move Queue:
   <%= f.text_field :move_queue, :style => 'width: 80px' %>
   <%= f.submit "Save" %>

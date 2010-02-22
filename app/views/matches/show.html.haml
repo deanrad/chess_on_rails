@@ -17,5 +17,7 @@
     = render :partial => 'move_list'
 
 :javascript
-  $('.piece').draggable();
+  $('.piece').draggable( {revert:'invalid', grid:[44,44]});
   $('#actions_region').tabs();
+
+  $('#d7').droppable( {accept:'.d7'} );
