@@ -5,13 +5,25 @@ ActionController::Routing::Routes.draw do |map|
   # Default routes
   map.root :controller => "welcome"
 
-  #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
-  map.create_move 'matches/:match_id/moves/:notation', :controller => 'matches', :action => 'create_move', :defaults => { :notation => nil }
 
-  map.resources :matches , :except => [:delete], :collection => { :create => :post } do |match|
-    match.resource  :moves, :only => [:create]
-    match.resource  :chat 
-    match.resources :events # events are the sum of moves and chats
+  #allow moving from CURL, but only after we've reserved pure digits for showing moves
+  map.show_move 'matches/:match_id/moves/:move_num', 
+    :controller => 'matches', 
+    :action => 'show_move', 
+    :requirements => { :move_num => /\d+/ }
+
+  map.create_move 'matches/:match_id/moves/:notation', 
+    :controller => 'matches', 
+    :action => 'create_move', 
+    :defaults => { :notation => nil }
+
+  # Define matches as resources with certain sub-resources
+  map.resources :matches , 
+    :except => [:delete], 
+    :collection => { :create => :post } do |match|
+      match.resource  :moves, :only => [:create]
+      match.resource  :chat 
+      match.resources :events # events are the sum of moves and chats
   end
 
   # Gameplays are the records of a players involvment in a match

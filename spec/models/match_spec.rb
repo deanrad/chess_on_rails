@@ -9,16 +9,16 @@ describe Match do
   end
 
   describe 'Turn Alternation' do
-    it 'shall be whites turn to move when no move has been made' do
-      @match.moves.stubs(:count).returns(0)
+    it 'should be whites turn to move when no move has been made' do
+      @match.moves.stubs(:length).returns(0)
       @match.player_to_move.should == @match.white
       @match.player_to_move.should_not == @match.black
       @match.side_to_move.should == :white
     end
 
-    it 'shall be blacks turn to move when an odd number of moves have been made' do
+    it 'should be blacks turn to move when an odd number of moves have been made' do
       [1,3,19].each do |oddball|
-        @match.moves.stubs(:count).returns(oddball)
+        @match.moves.stubs(:length).returns(oddball)
         @match.player_to_move.should == @match.black
         @match.player_to_move.should_not == @match.white
         @match.side_to_move.should == :black
@@ -26,21 +26,21 @@ describe Match do
     end
 
     it 'should think its a players move when white is to move and that player is white' do
-      @match.moves.stubs(:count).returns(0)
+      @match.moves.stubs(:length).returns(0)
       @match.player_to_move.should == @match.white
     end
 
     it 'should think its a players move when black is to move and that player is black' do
-      @match.moves.stubs(:count).returns(1)
+      @match.moves.stubs(:length).returns(1)
       @match.player_to_move.should == @match.black
     end
 
     it 'should think its a players move when that player is playing both sides of the game' do
       m = matches(:self_love)
-      m.moves.stubs(:count).returns(0)
+      m.moves.stubs(:length).returns(0)
       m.player_to_move.should == m.white
 
-      m.moves.stubs(:count).returns(1)
+      m.moves.stubs(:length).returns(1)
       m.player_to_move.should == m.white
     end
   end
