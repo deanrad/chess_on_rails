@@ -16,7 +16,7 @@ end
 # I sometimes like to give up auto-reloading in order to avoid hard-to-debug
 # side-effects of auto-reloading, like the continual loss of class variables. 
 # See also ActiveSupport::Dependencies.mechanism
-config.cache_classes = true
+config.cache_classes = false
 
 # Log error messages when you accidentally call methods on nil.
 config.whiny_nils = true
@@ -32,3 +32,8 @@ config.action_mailer.raise_delivery_errors = false
 ENV["MAGELLAN_ON"]="1"
 HOST = "localhost:3001"
 
+if config.cache_classes
+  puts "Views and Code will NOT be automatically reloaded this session"
+else
+  puts "Views and Code will be automatically reloaded this session"
+end
