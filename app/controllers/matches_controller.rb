@@ -91,7 +91,11 @@ class MatchesController < ApplicationController
     #redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
     redirect_to( match_path(@match) )
   end
-  
+
+  def show_move
+    render :text => "#{params[:move_num]}"
+  end
+
 protected
   def display_error(ex)
     flash[:move_error] = Exception === ex ? ex.message : ex.to_s
