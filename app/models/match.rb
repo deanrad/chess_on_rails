@@ -66,6 +66,7 @@ class Match < ActiveRecord::Base
   # An array of boards of length moves.length+1 (including initial board)
   def boards(force_recalc = false)
     return @boards if @boards && ! force_recalc
+
     # logger.info "calculating boards for match #{self.id}"
 
     # we have a new board (in initial position)
@@ -147,10 +148,14 @@ class Match < ActiveRecord::Base
 =end
 
   # Handy instance cache of AR objects - go through Match[id] and you're guaranteed
-  # to get a process-level-cached instance of that AR object.
-  cattr_accessor :matches
+  # to get a process-level-cached instance of that AR object. Note that when 
+  # config.cache_classes = false, as is often the case in development environment,
+  # the autoloader will do loads more often and class variables will disappear, thus
+  # making global variables the choice for a process-wide cache.
+  def self.matches
+    ActiveSupport::Dependencies.mechanism == :load ? ($MATCHES||={}) : (@@matches||={})
+  end
   def self.[] id
-    self.matches ||= {}
     self.matches[id] ||= Match.find(id)
   end
 end

@@ -1,13 +1,10 @@
 module MatchHelper
 
   # The match the user is viewing or participating in.
+  # Uses the process-level caching features of the Match[] accessor
   def match
     match_id = params[:id] || params[:match_id]
-    @match ||= if match_id
-      match_id.to_i != 0 ? Match.find( match_id ) : Match.find_by_name( match_idx )
-    else
-      Match.new    
-    end
+    Match[match_id.to_i]
   end
 
   # The side of the current player in this match, or nil if the viewer is not
