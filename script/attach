@@ -13,4 +13,8 @@ port = ARGV[1] || '8989'
 
 puts "Connecting to debugger at #{host}:#{port}..\n"
 puts "Waiting for first breakpoint to be hit.."
-Debugger.start_client host, port.to_i
+begin
+  Debugger.start_client host, port.to_i
+rescue Interrupt => int
+  puts "\nGoodbye."
+end
