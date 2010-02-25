@@ -2,15 +2,16 @@
   = match.name
 
 #board_region
+  .board_status
+    = render :partial => 'board_status'
   .board
     = render :partial => 'board'
+  .board_controls
+    = render :partial => 'board_controls'
 
 #actions_region
   %ul
-    %li 
-      %a(href='#move_creator_parent') Play
-    %li
-      %a(href='#move_list_parent') History
+    = render :partial => 'play_tabs'
   #move_creator_parent
     = render :partial => 'move_maker'
   #move_list_parent
