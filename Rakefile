@@ -25,16 +25,13 @@ namespace :db do
     task :load => [:"spec:db:fixtures:load"]
   end
 end
-#namespace :analyze do
 
-  desc "Report statistics (lines, lines of ERB, etc) about the views in this application"
-  task :analyze_stats => [:stats] do
+desc "Report statistics (lines, lines of ERB, etc) about the views in this application"
+task :analyze_stats => [:stats] do
     
-    require 'misc/view_statistics'
-    ViewStatistics.new( *[
-      %w(Views             app/views)
-    ]).to_s
+  require 'misc/view_statistics'
+  ViewStatistics.new( *[
+    %w(Views             app/views)
+  ]).to_s
 
-  end
-
-#end
+end
