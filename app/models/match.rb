@@ -155,7 +155,10 @@ class Match < ActiveRecord::Base
   def self.matches
     ActiveSupport::Dependencies.mechanism == :load ? ($MATCHES||={}) : (@@matches||={})
   end
+
+  # Implements a concise syntax for find, and allows callers to grab
+  # a canonical object instance for a given DB record.
   def self.[] id
-    self.matches[id] ||= Match.find(id)
+    matches[id.to_i] ||= Match.find(id, :include => [:gameplays, :players, :moves])
   end
 end

@@ -3,6 +3,13 @@
 
 class ApplicationController < ActionController::Base
   include Clearance::Authentication
+  # override this clearance method to do eager loading
+  def user_from_cookie
+    if token = cookies[:remember_token]
+      ::User.find_by_remember_token(token, :include => :playing_as)
+    end
+  end
+  protected :user_from_cookie
 
   helper :all
 

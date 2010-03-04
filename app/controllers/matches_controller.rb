@@ -25,7 +25,7 @@ class MatchesController < ApplicationController
 
   # Resigns the current game.
   def resign
-    @match = Match.find( params[:id] )
+    @match = Match[ params[:id].to_i ]
     @match.resign( current_player )
     redirect_to :action => 'index'
   end
