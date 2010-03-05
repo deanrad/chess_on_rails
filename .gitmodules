@@ -1,3 +1,6 @@
 [submodule "vendor/plugins/engines"]
 	path = vendor/plugins/engines
 	url = git://github.com/lazyatom/engines.git
+[submodule "vendor/plugins/magellan"]
+	path = vendor/plugins/magellan
+	url = git://github.com/chicagogrooves/magellan.git
