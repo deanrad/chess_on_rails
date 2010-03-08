@@ -1,0 +1,12 @@
+- chats = match.chats
+- last_chat_id = chats.blank? ? nil : chats[chats.length-1].id 
+#chat
+  - chats.each do |chat|
+    .chat_line(title="#{ chat.created_at.strftime('%a %H:%M') }")
+      %b= chat.player.name
+      = chat.display_text(current_player)
+
+:javascript
+  var objDiv = document.getElementById("chat");
+  if(objDiv) objDiv.scrollTop = objDiv.scrollHeight;
+
