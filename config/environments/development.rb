@@ -1,6 +1,9 @@
 # Settings specified here will take precedence over those in config/environment.rb
 require 'ruby-debug'
 
+ENV["MAGELLAN_ON"]="1"
+HOST = "localhost:3001"
+
 # Allow the attachment of a remote debugger to this process
 puts "Starting debugging server... on #{Debugger::PORT}"
 puts "Use script/attach [hostname] [port] to connect a debugging application.\n"
@@ -28,9 +31,6 @@ config.action_controller.perform_caching             = false
 
 # Don't care if the mailer can't send
 config.action_mailer.raise_delivery_errors = false
-
-ENV["MAGELLAN_ON"]="1"
-HOST = "localhost:3001"
 
 if config.cache_classes
   puts "Views and Code will NOT be automatically reloaded this session"
