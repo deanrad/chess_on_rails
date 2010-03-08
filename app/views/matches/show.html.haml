@@ -12,6 +12,8 @@
 #actions_region
   %ul
     = render :partial => 'play_tabs'
+  #chat_parent
+    = render :partial => 'chats/chats'
   #move_creator_parent
     = render :partial => 'move_maker'
   #move_list_parent
@@ -21,4 +23,6 @@
   $('.piece').draggable( {revert:'invalid', grid:[44,44]});
   $('#actions_region').tabs();
 
-  $('#d7').droppable( {accept:'.d7'} );
+%script
+  - Board.all_positions.each do |p|
+    = "  $('##{p}').droppable( {accept:'.#{p}'} )"

@@ -17,7 +17,8 @@ body{ font-family:sans-serif; font-size:11pt; }
 
   #js_updatable_board{ float:left; clear:left; }
   #board_table td{
-    width:40px; height:40px;
+    width:40px; 
+    height:42px; /* only by putting height to 42px does it reach 40px ! */
     border-width: 1px; border-style:solid; border-color:#333;
     margin:0px; padding: 0px;
    }
