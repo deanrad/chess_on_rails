@@ -1,0 +1,12 @@
+- graveyard = match.board.graveyard
+- white_points = graveyard.points_for(:white)
+- black_points = graveyard.points_for(:black)
+
+.points.white= "White: #{white_points}"
+.points.black= "Black: #{black_points}"
+
+- Piece::ROLES_OF_VALUE.each do |role| 
+  - [:white, :black].each do |side|
+    - graveyard[side, role].each do |deceased|
+      %img.piece_sm{src=>image_source_of(deceased)}
+  
