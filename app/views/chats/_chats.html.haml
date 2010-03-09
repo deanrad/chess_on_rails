@@ -5,8 +5,19 @@
     .chat_line(title="#{ chat.created_at.strftime('%a %H:%M') }")
       %b= chat.player.name
       = chat.display_text(current_player)
+#chat_form
+  - form_for( Chat.new, :url => match_chat_path(match), :update => 'chat' ) do |f|
+    = f.text_field :text, :style => 'width:150px' 
+    = f.submit 'Send'
 
 :javascript
   var objDiv = document.getElementById("chat");
   if(objDiv) objDiv.scrollTop = objDiv.scrollHeight;
 
+  $('#new_chat').submit( function (){  
+    $.post($(this).attr('action'), 
+           $(this).serialize(), 
+           function(){ $('chat_text').clear(); } 
+     );
+    return false;
+  });  

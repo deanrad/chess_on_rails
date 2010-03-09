@@ -36,6 +36,8 @@ body{ font-family:sans-serif; font-size:11pt; }
   #e1, #e3, #e5, #e7, #f2, #f4, #f6, #f8,
   #g1, #g3, #g5, #g7, #h2, #h4, #h6, #h8 {background-color:#dfdfdf}
 
+#graveyard_region { width: 100px; float:left; background-color:#cccccc }
+
 /* BEGIN ACTIONS AND NON-BOARD FORM ELEMENT STYLES */
 
 #actions_region { width: 600px; float:left;}

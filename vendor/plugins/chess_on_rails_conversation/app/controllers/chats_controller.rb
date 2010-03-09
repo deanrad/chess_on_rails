@@ -22,7 +22,7 @@ class ChatsController < ApplicationController
     @chat.player_id = current_player.id
 
     @chat.save!
-    render :action => :show
+    render :partial => 'chats', :layout => !request.xhr?
   end
 
 end

@@ -1,3 +1,6 @@
+jQuery.ajaxSetup({  
+   'beforeSend': function (xhr) {xhr.setRequestHeader("Accept", "text/javascript")}  
+});
 
 function handle_release_of_piece(draggable, droparea){
 
@@ -108,6 +111,7 @@ function set_board(move_num, allowed_moves){
         da_board.insert( bottom_labels );
       }
 
+// BUG: this doesn't work well when in a chat field !!
 function handleArrowKeys(evt) {
     evt = (evt) ? evt : ((window.event) ? event : null);
     if (evt) {
