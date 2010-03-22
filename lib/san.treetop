@@ -1,23 +1,28 @@
-grammar San
+# This is the grammar for what makes a San (Standard Algebraic Notation) 
+# notating a move in chess. In general, this specifies what piece moved,
+# if a capture occurred etc. See also SanGrammar module for the methods
+# that are provided on top of a returned parse tree when this file matches.
+grammar SanGrammar
   rule move 
-    (
+    move:(
       castling / 
       simple_move
-     ) 
-    threat?
-    comment? 
+     )
+    threat
+    comment
+    <SanRoot>
   end
 
   rule simple_move
     (
       non_pawn_mover capture? destination /
-      pawn_mover?    capture? destination promotion?
+      pawn_mover     capture? destination promotion?
     ) 
   end
 
   # A pawn move can be unspecified: '' in 'e4', or a capture: 'd' in 'dxe4'
   rule pawn_mover
-    [a-h] &capture
+    ( [a-h] &capture )?
   end
 
   # May include a rank or file needed to specify which piece moved, in the 
@@ -46,11 +51,11 @@ grammar San
   end
 
   rule threat
-    [+#]
+    [+#]?
   end
 
   rule comment
-    [?!]+
+    [?!]*
   end
 
   rule promotion
