@@ -1,0 +1,68 @@
+grammar San
+  rule move 
+    (
+      castling / 
+      simple_move
+     ) 
+    threat?
+    comment? 
+  end
+
+  rule simple_move
+    (
+      non_pawn_mover capture? destination /
+      pawn_mover?    capture? destination promotion?
+    ) 
+  end
+
+  # A pawn move can be unspecified: '' in 'e4', or a capture: 'd' in 'dxe4'
+  rule pawn_mover
+    [a-h] &capture
+  end
+
+  # May include a rank or file needed to specify which piece moved, in the 
+  # case of rooks or knights (bishops are on different colored squares)
+  rule non_pawn_mover
+    [NR] disambiguator? / [KQB]
+  end
+
+  # When two rooks are on the same rank, the file of the one moving
+  #  .g. Ra x e4 . Prefer file to rank. Do NOT claim the first character
+  # of a destination - eg. in Rb7, b is NOT part of the disambiguator
+  rule disambiguator
+    rank / file !rank 
+  end
+
+  rule destination
+    file rank
+  end
+
+  rule file
+    [a-h]
+  end
+
+  rule rank
+    [1-8]
+  end
+
+  rule threat
+    [+#]
+  end
+
+  rule comment
+    [?!]+
+  end
+
+  rule promotion
+    '=' [QNRB]
+  end
+ 
+  rule capture
+    'x'
+  end
+
+  rule castling
+    'O-O' '-O'?
+  end
+  
+end

@@ -27,6 +27,7 @@ Rails::Initializer.run do |config|
 
   config.gem 'justinfrench-formtastic', :lib => 'formtastic', :source => 'http://gems.github.com'
 
+  config.gem "treetop", :version => ">=1.4.3"
 end
 
 DO_NOT_REPLY = "donotreply@chessonrails.com"

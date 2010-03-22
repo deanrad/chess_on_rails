@@ -1,0 +1,15 @@
+grammar ParenLanguage
+  rule parenthesized_letter
+    '(' parenthesized_letter ')' {
+      def depth
+        parenthesized_letter.depth + 1
+      end
+    }
+    /
+    [a-z] {
+      def depth
+        0
+      end
+    }
+  end
+end
