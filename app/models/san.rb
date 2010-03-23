@@ -1,4 +1,8 @@
 # An instance of Standard Algebraic Notation
+
+require 'san_node_classes' # for adding onto parse nodes found below
+Treetop.load('lib/san')    # defines the treetop grammar
+
 class SAN
 
   # The regular expression for parsing a SAN string (a work-in-progress!)

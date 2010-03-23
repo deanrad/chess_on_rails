@@ -1,0 +1,15 @@
+grammar PgnGrammar
+  include SanGrammar
+
+  rule pgn
+    turn+
+  end
+
+  rule turn
+    space? move
+  end
+
+  rule space
+    ' '*
+  end
+end

@@ -83,6 +83,7 @@ describe Match do
       next if f.include?('error')
       it "should run through #{f} without error" do
         m = Match.new()
+        # debugger if f.include? 'maria'
         pgn = PGN.new( `cat #{RAILS_ROOT}/#{f}` )
         pgn.playback_against( m )
         pgn.playback_errors.should be_empty
