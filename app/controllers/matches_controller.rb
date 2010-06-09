@@ -89,7 +89,7 @@ class MatchesController < ApplicationController
 
     #unceremonious way of saying you just ended the game 
     #redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
-    redirect_to( match_path(@match) )
+    redirect_to( match_path(@move.match) )
   end
 
   def show_move

@@ -9,8 +9,6 @@
   .board_controls
     = render :partial => 'board_controls'
 
-#graveyard
-  = render :partial => 'graveyard'
 
 #actions_region
   %ul
@@ -21,11 +19,13 @@
     = render :partial => 'move_maker'
   #move_list_parent
     = render :partial => 'move_list'
+  #status_parent
+    = render :partial => 'graveyard'
 
 :javascript
   $('.piece').draggable( {revert:'invalid', grid:[44,44]});
   $('#actions_region').tabs();
 
-%script
+%script(type="text/javascript")
   - Board.all_positions.each do |p|
     = "  $('##{p}').droppable( {accept:'.#{p}'} )"

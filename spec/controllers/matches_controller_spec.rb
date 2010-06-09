@@ -22,6 +22,12 @@ describe 'MatchesController' do
       get :status, @match_params
       response.should be_success
     end
+    it 'should route to a match' do
+      m = nil
+      @controller.instance_eval{ 
+        match_path( m = Match.first )
+      }.should == "/matches/#{m.id}"
+    end 
   end
 
 =begin
