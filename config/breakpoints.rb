@@ -6,9 +6,9 @@
 #  
 #  Debugger.add_breakpoint(source, pos, condition = nil) -> breakpoint
 # ------------------------------------------------------------------------
-#    Adds a new breakpoint. _source_ is a name of a file or a class.
-#     _pos_ is a line number or a method name if _source_ is a class
-#     name. _condition_ is a string which is evaluated to +true+ when
-#     this breakpoint is activated.
+#    Adds a new breakpoint. 
+#      source    : the name of a file or a class name.
+#      pos       : a line number or a method name if _source_ is a class name.
+#      condition : a string which will activate the breakpoint if it evals to true
 
 Debugger.add_breakpoint 'ActionController::Dispatcher', 'dispatch'
