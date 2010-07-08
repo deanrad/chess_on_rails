@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(:version => 20090424042453) do
   end
 
   create_table "fbusers", :force => true do |t|
-    t.integer  "facebook_user_id", :limit => 8
+    t.integer  "facebook_user_id", :null => false
     t.integer  "playing_as"
     t.datetime "created_at"
     t.datetime "updated_at"

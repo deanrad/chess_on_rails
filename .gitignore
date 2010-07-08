@@ -11,3 +11,4 @@ doc/app/*
 doc/plugins/*
 *database.yml*
 /tmp/spec_server.pid
+db/*.sqlite3

@@ -1,20 +1,24 @@
 # SQL Server
 
 development:
-  adapter: mysql
-  host: localhost
-  database: chessonrails_development
-  username: chessonrails
-  password: ch3550nrails
+  adapter: sqlite3
+  database: db/development.sqlite3
+
+  # adapter: mysql
+  # host: localhost
+  # database: chessonrails_development
+  # username: chessonrails
+  # assword: ch3550nrails
 
 test:
-  #use either sqllite section or mysql 
-  #adapter: sqlite3
-  #database: ":memory:"
-  #verbosity: quiet
+  # use either sqllite section or mysql 
+  # database: ":memory:" once worked (sigh..)
+  database: db/test.sqlite3
+  adapter: sqlite3
+  verbosity: quiet
   
-  adapter: mysql
-  host: localhost
-  database: chessonrails_test
-  username: chessonrails
-  password: ch3550nrails
+  # adapter: mysql
+  # host: localhost
+  # database: chessonrails_test
+  # username: chessonrails
+  # password: ch3550nrails

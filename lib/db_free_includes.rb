@@ -4,12 +4,13 @@ module DbFreeIncludes
    rubygems 
    irb/completion
    logger
-   util
    active_record_mock
-   spec/db_free_spec_helper
    chess_fixtures
    chess_active_record_mock
   }
+
+  # util - No util.rb found in project; deleted.
+  # spec/db_free_spec_helper - not needed for script/db_free_run and erring; deleted.
 
   IRB_LOAD_PATHS = %w{
     lib

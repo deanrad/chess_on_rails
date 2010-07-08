@@ -9,7 +9,7 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 
-require 'metric_fu'
+# require 'metric_fu'
 
 # not merging with rails own predefined rake task yet..
 # GOAL: Eventually report on JS, comments, etc, through extensible lambda-based infrastructure

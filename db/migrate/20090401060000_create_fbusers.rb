@@ -6,7 +6,8 @@ class CreateFbusers < ActiveRecord::Migration
       t.timestamps
     end
 
-    execute("alter table fbusers modify facebook_user_id bigint")
+    # this line is problematic when database is not supportive of bigint (ie sqlite)
+    # execute("alter table fbusers modify facebook_user_id bigint")
   end
 
   def self.down

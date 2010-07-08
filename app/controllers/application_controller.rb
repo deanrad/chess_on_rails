@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
   # that sometimes facebook_session is nil in test mode. We'll extend the definition for now to
   # also allow for hacked-on fb_sig_user as well
   def is_facebook?
+    return false unless defined? facebook_session
     !! ( facebook_session || params[:fb_sig_user] )
   end
 
@@ -40,7 +41,10 @@ class ApplicationController < ActionController::Base
 
   # if accessed over facebook, the player referenced
   def player_in_facebook
-    fb_id = facebook_session ? facebook_session.user.id : params[:fb_sig_user]
+    fb_id = nil
+    if defined? facebook_session
+       fb_id = facebook_session ? facebook_session.user.id : params[:fb_sig_user]
+    end
     return unless fb_id
     fbuser = Fbuser.find_by_facebook_user_id(fb_id)
     return fbuser.playing_as if fbuser
