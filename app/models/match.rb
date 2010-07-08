@@ -11,7 +11,9 @@ class Match < ActiveRecord::Base
                      :include => :match,
                      :before_add => :set_pre_board_on_move,
                      :after_add  => :get_post_board_from_move
-  
+
+  has_many :chats 
+ 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
                      
   named_scope :active,    :conditions => { :active => 1 }
@@ -147,13 +149,11 @@ class Match < ActiveRecord::Base
   end
 =end
 
-  # Handy instance cache of AR objects - go through Match[id] and you're guaranteed
-  # to get a process-level-cached instance of that AR object. Note that when 
-  # config.cache_classes = false, as is often the case in development environment,
-  # the autoloader will do loads more often and class variables will disappear, thus
-  # making global variables the choice for a process-wide cache.
+  # A process-wide cache of instances of this class. 
+  # Unfortunately does not play well with reloading, in which case we provide a throw-away
+  # instance of the cache.
   def self.matches
-    ActiveSupport::Dependencies.mechanism == :load ? ($MATCHES||={}) : (@@matches||={})
+    ActiveSupport::Dependencies.mechanism == :load ? (Hash.new) : (@@matches||={})
   end
 
   # Implements a concise syntax for find, and allows callers to grab
