@@ -41,6 +41,7 @@ end
 class Symbol
   def rank; self.to_s.rank ; end
   def file; self.to_s.file ; end
+  def opposite; self == :black ? :white : :black ; end
 end
 
 class Fixnum

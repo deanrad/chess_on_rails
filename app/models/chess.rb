@@ -3,6 +3,9 @@ class Chess
   Files = "abcdefgh"
   Ranks = "12345678"
 
+  def self.files( for_side ); for_side == :black ? Files.reverse : Files ; end
+  def self.ranks( for_side ); for_side == :black ? Ranks : Ranks.reverse ; end
+  
   def self.valid_position?(pos)
     return false unless pos and pos.length == 2
     return false unless Files.include? pos[0] and Ranks.include? pos[1]

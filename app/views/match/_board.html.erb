@@ -7,10 +7,10 @@ var current_allowed_moves = [];
 
 </script>
 <table class="board_table" cellpadding="0" cellspacing="0">
-  <% ranks.each_char do |rank| -%>
+  <% Chess.ranks( viewed_from_side() ).each_char do |rank| -%>
     <tr>
     <td class="label rank"><%= rank %></td>
-    <% files.each_char do |file|
+    <% Chess.files( viewed_from_side() ).each_char do |file|
       position = "#{file}#{rank}" -%>
       <td class="piece_container <%= position %>" id="<%= position %>">
 

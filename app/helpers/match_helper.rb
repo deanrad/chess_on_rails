@@ -5,6 +5,7 @@ module MatchHelper
   end
 
   def viewed_from_side
+    return match.next_to_move if match.is_self_play?
     @viewed_from_side ||= (current_player == match.player1) ? :white : :black
   end
 

@@ -70,9 +70,12 @@ class Match < ActiveRecord::Base
     next_to_move == :black ? gameplays.black.player : gameplays.white.player
   end
   
+  def is_self_play? 
+    @self_play ||= (player1 == player2) 
+  end
+  
   def turn_of?( plyr )	
-    #return true #HACK
-    self.next_to_move == side_of(plyr)
+    is_self_play? ? true : self.next_to_move == side_of(plyr)
   end
 
   # as long as the game starts at the beginning, white goes first
