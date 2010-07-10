@@ -12,7 +12,7 @@ module Fen
       current_file = 1   
       rank.each_char do |instr|
         if instr.match FenString::PIECE_REGEX
-          place_piece( current_file, rank_num, instr )
+          place_piece( current_file, 7-rank_num, instr )
           current_file += 1
         else
           current_file += instr.to_i 
