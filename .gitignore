@@ -6,6 +6,7 @@
 .dotest/*
 log/*
 tmp/*
+db/*.sqlite3
 coverage/*
 doc/app/*
 doc/plugins/*

@@ -1,0 +1,19 @@
+To install chess_on_rails:
+
+1. Run 'rake config:gems' in the root dir. If you get normal rspec test results yay ! If not you may have one or more of these errors:
+   - no such file to load -- spec/rake/spectask
+   - no such file to load -- net/https
+
+   Apt-get commands to run: # on compatible Linux platforms
+
+   sudo apt-get install libopenssl-ruby  
+   sudo apt-get install ruby1.8-dev  
+   sudo apt-get install libsqlite3-dev libsqlite3-ruby
+
+   Make sure you have run 
+
+   sudo gem install rspec rspec-rails sqlite3-ruby ruby-debug ruby-prof mocha
+
+
+
+
