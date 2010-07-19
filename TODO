@@ -1,0 +1,16 @@
+Triage for relevant development activities
+ - Port any ongoing external games to website
+ - Make an effort to get at least one relevant *externally apparent* feature (such as notifications)
+ - Check each game through each supported interface
+ - Make sure developer-on-boarding process is simple
+
+Features:
+  Notifications (can beat 
+  Mobile playability (TODO break this down into minimal steps needed) 
+    - Simple streamlined templates
+    - Click-click move interface
+    - Parsing of either kind of notation (eg Nb5, a1b2)
+    - No auto-refresh 
+    - Fewer (or no) clicks to get to an active match on which it's your turn
+    - Javascript setting of first move coordinate if avail, server reload otherwise
+
