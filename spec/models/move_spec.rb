@@ -47,6 +47,14 @@ describe Move do
     match.moves << Move.new( :from_coord => 'f1', :to_coord => 'b5' ) 
     assert_equal 'Bb5', match.moves.last.notation
   end
+
+  it 'should allow a2b2 style notation' do
+    match = matches(:dean_vs_paul)
+    match.moves << Move.new( :notation => 'f1b5' ) 
+
+    assert_equal 'f1', match.moves.last.from_coord
+    assert_equal 'b5', match.moves.last.to_coord
+  end
   
   it 'should allow_move_from_notation_only' do
     match = matches(:dean_vs_paul)

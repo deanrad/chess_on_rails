@@ -7,6 +7,13 @@ module MoveNotation
   # available to move model, sets fields on self based on self[:notation]
   def infer_coordinates_from_notation
 
+    # handle a1b1 style moves - common style, but not part of the SAN grammar
+    if self[:notation] =~ /[a-h][1-8][a-h][1-8]/
+      self[:from_coord] = self[:notation][0..1]
+      self[:to_coord] = self[:notation][2..3]
+      return 
+    end
+
     #expand the castling notation
     if self[:notation].include?('O-O')
       new_notation = 'K' + (self[:notation].include?('O-O-O') ? 'c' : 'g')

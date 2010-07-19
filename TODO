@@ -9,7 +9,6 @@ Features:
   Mobile playability (TODO break this down into minimal steps needed) 
     - Simple streamlined templates
     - Click-click move interface
-    - Parsing of either kind of notation (eg Nb5, a1b2)
     - No auto-refresh 
     - Fewer (or no) clicks to get to an active match on which it's your turn
     - Javascript setting of first move coordinate if avail, server reload otherwise
