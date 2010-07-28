@@ -25,7 +25,7 @@ class Match < ActiveRecord::Base
 
   # the most recent board known
   def board
-    boards[ boards.keys.max ]
+    boards.last
   end
 
   def initialize( opts={} )
@@ -56,8 +56,7 @@ class Match < ActiveRecord::Base
 
   # cache this board and make it the most recent one
   def save_board( last_move )
-    recent = boards[boards.keys.max]
-    @boards[ @boards.keys.max + 1 ] = recent.dup.play_move!( last_move )
+    @boards << boards.last.dup.play_move!( last_move )
   end
 
   def check_for_checkmate(last_move)
@@ -148,11 +147,13 @@ class Match < ActiveRecord::Base
 
   private
   def boards_upto_current_move
-    boards = { 0 => Board.new( self[:start_pos] ) }
+    boards = []
+    boards << Board.new( self[:start_pos] )
     moves.each_with_index do |mv, idx|
-      board = boards[idx + 1] = Board.new
+      board = Board.new
       board.match = self
       0.upto(idx){ |i| board.play_move! moves[i] }
+      boards << board
     end
     boards
   end
