@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+  <head>
+    <link href="/browser_check.css" media="screen" rel="stylesheet" type="text/css" />
+ </head>
+  <body>
+    <form action="mailto:info@chessonrails.com?subject=BrowserCheck">
+    <div>
+       <input type='checkbox' value='1' name='supports_unicode'/>
+      Does this appear as a rook ? : ♖
+    </div>
+    <div>
+       <input type='checkbox' value='1' name='supports_image_with_scaling'/>
+      Does this appear as a small knight ? : <img src='/images/sets/default/knight_b.png' width='20' height='20'/>
+    </div>
+    <div>
+       <input type='checkbox' value='1' name='javascript_inline'/>
+      Does the word 'chess' appear here ? : <script type='text/javascript'>document.write('chess')</script>
+    </div>
+    <div>
+       <input type='checkbox' value='1' name='css_inline'/>
+       <span style="color:blue"> Is this question colored blue ? </span>
+    </div>
+    <div>
+       <input type='checkbox' value='1' name='css_include'/>
+       <span class='red'> Is this question colored red ? </span>
+    </div>
+    <div>
+       <input type='submit' value='Send Results' name='submit'/>
+      <br/>(if it doesnt send automatically, please copy the questions and answers into an email to info@chessonrails.com)
+   </div>
+    </form>
+ </body>
+</html>
