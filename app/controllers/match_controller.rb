@@ -4,13 +4,13 @@ class MatchController < ApplicationController
 
   # GET /match/1
   def show    
-    respond_to do |format|
-      format.fbml # should be same as html
-      format.html { render :template => 'match/result' and return if request.match.active == 0 }
-      format.text { render :text => request.match.board.to_s(viewed_from_side==:black) }
-      format.pgn  { render :partial => 'match/move_list' }
-      format.wml  { render :tempate => 'match/show' }
-    end
+    # respond_to do |format|
+    #   format.fbml # should be same as html
+    #   format.html { render :template => 'match/result' and return if request.match.active == 0 }
+    #   format.text { render :text => request.match.board.to_s(viewed_from_side==:black) }
+    #   format.pgn  { render :partial => 'match/move_list' }
+    #   format.wml  {} # render :tempate => 'match/show' }
+    # end
   end
 
   # GET /match/ 
