@@ -1,0 +1,39 @@
+<table class="board_table" cellpadding="0" cellspacing="0">
+  <% Chess.ranks( request.viewed_from_side ).each_char do |rank| -%>
+    <tr>
+    <td class="label rank"><%= rank %></td>
+    <% Chess.files( request.viewed_from_side ).each_char do |file|
+      position = "#{file}#{rank}" -%>
+      <td class="piece_container <%= position %>" id="<%= position %>">
+
+        <% if p = match.board[position]                                       -%>
+
+	  <%= 
+	    image_tag image_source_of(p), 
+	      :id => p.board_id, 
+	      :alt => p.abbrev,
+	      :class => 'piece ',
+              :height=> 20,
+              :width=> 20
+	  %>
+
+          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn? %> 
+
+        <% else %>
+          &nbsp;
+        <% end %>
+      </td>	
+    <% end %>
+    </tr>
+    
+    <% if rank==ranks[7..8] %>
+      <tr>
+        <td class="rank file">&nbsp;</td>
+        <% files.each_char do |file| -%>
+          <td class="label file"><%= file %></td>	
+        <% end %>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+
