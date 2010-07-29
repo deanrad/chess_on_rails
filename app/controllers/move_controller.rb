@@ -12,15 +12,9 @@ class MoveController < ApplicationController
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
     raise ArgumentError, "It is your not your turn to move yet" unless request.your_turn?
 
-    if params[:move]
-      @match.moves << @move = Move.new( params[:move] )
-    elsif params[:notation]
-      @match.moves << @move = Move.new( :notation => params[:notation] )
-    end
-    
-    # @match.save! #only here to trigger validation
+    @match.moves << @move = Move.new( params[:move] )
 
-    #unceremonious way of saying you just ended the game 
+    # unceremonious way of saying you just ended the game 
     redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
     respond_to do |format|
       format.html{ create_respond }

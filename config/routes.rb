@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
   map.register   'authentication/register', :controller => 'authentication', :action => 'register'
 
   #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
-  map.create_move 'match/:match_id/moves/:notation', :controller => 'move', :action => 'create', :defaults => { :notation => nil }
+  map.create_move 'match/:match_id/moves/create', :controller => 'move', :action => 'create'
 
   map.resources :match , :except => [:delete], :shallow => true, :collection => { :create => :post } do |match|
     match.resources :moves, :controller => :move, :collection => { :create => :post }

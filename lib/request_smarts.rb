@@ -9,6 +9,7 @@ module RequestSmarts
   def current_player
     @current_player = player_in_session || player_in_cookie || player_over_http
   end
+  alias :player :current_player
 
   # an already logged in player
   def player_in_session

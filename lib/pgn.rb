@@ -1,5 +1,5 @@
 # Parses PGN files. My own quick dirty reinvention of the wheel.
-class PGN
+class Pgn
   attr_accessor :tags
   attr_accessor :notations
 

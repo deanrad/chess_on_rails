@@ -32,33 +32,22 @@ class MatchController < ApplicationController
   # edit form for a new match
   def new; end
 
-  # 
+  # give up the ghost
   def resign
     request.match.resign( current_player )
     redirect_to :action => 'index'
   end
 
-  # POST /match/create
+  # start the fun
+  # TODO error handling in MatchController#create
   def create
-    return unless request.post?
-    attrs = {}
-    if params[:opponent_side] == 'black'
-      attrs = {:white => current_player, :black => Player.find( params[:opponent_id] )}
-    else
-      attrs = {:black => current_player, :white => Player.find( params[:opponent_id] )}
-    end
-    setup = params[:start_pos]
-    
-    attrs[:start_pos] = setup if setup and Fen::is_fen?( setup )
-    @match = Match.create( attrs )
-    
-    if setup and PGN::is_pgn?( setup )
-      pgn = PGN.new( setup )
-      pgn.playback_against( @match )
-      logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{setup}" if pgn.playback_errors
-    end
 
-    redirect_to match_url(@match.id) if @match
+    players = [ request.player, Player.find( params[:opponent_id] ) ]
+    players.reverse! if params[:opponent_side] == 'white'
+
+    @match = Match.start( :players => players, :start_pos => params[:start_pos] )
+    
+    redirect_to match_url(@match.id)
   end
 
 end

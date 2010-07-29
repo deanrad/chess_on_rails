@@ -3,6 +3,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe 'Forsyth-Edwards (FEN) Notation' do
 
   INITIAL_BOARD = 'RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr'
+  D4 = 'RNBQKBNR/PPP1PPPP/8/3P4/8/8/pppppppp/rnbqkbnr b'
+  D4E4 = 'RNBQKBNR/PPP1PPPP/8/3P4/3p4/8/ppp1pppp/rnbqkbnr'
   ROOK_A1_ONLY = 'R7/8/8/8/8/8/8/8'
   KQ_ONLY = '3KQ3/8/8/8/8/8/8/3kq3'
 

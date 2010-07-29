@@ -15,7 +15,7 @@ class Board < Hash
 
   # Creates a board initialized at the default starting position, or from FEN if given
   def initialize( start_pos = nil )
-    return _initialize_fen( start_pos ) if start_pos
+    return _initialize_fen( start_pos ) if start_pos && Fen::is_fen?(start_pos) && !Pgn::is_pgn?(start_pos)
     Chess.initial_pieces.each{ |piece, pos| self[pos] = piece }
   end
 

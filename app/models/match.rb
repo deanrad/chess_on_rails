@@ -28,13 +28,25 @@ class Match < ActiveRecord::Base
     boards.last
   end
 
-  def initialize( opts={} )
-    white = opts.delete(:white) if opts[:white]
-    black = opts.delete(:black) if opts[:black]
-    super
-    save!
-    gameplays << Gameplay.new(:player_id => white.id) if white
-    gameplays << Gameplay.new(:player_id => black.id, :black => true) if black
+  # Match.start( :players => [white, black], :start_pos => fen_or_pgn_or_nil )
+  def self.start( opts={} )
+    players=opts.delete(:players)
+    white, black = players.first, players.last
+    match = self.create(opts)
+
+    # TODO switch gameplays if fen indicates you should
+    match.gameplays << Gameplay.new(:player_id => white.id) 
+    match.gameplays << Gameplay.new(:player_id => black.id, :black => true)
+    
+    if setup = opts[:start_pos] && ! setup.blank? && PGN::is_pgn?( setup )
+      # TODO leave original PGN in start_pos, but ignore it (since its moves have been saved as move records)
+      match.update_attribute(:start_pos, nil)
+
+      pgn = PGN.new( setup )
+      pgn.playback_against( match )
+      logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{setup}" if pgn.playback_errors
+    end
+    match
   end
 
   def player1
