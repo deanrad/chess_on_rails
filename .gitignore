@@ -1,6 +1,7 @@
 *~HEAD*
 #*#
 *#*
+*.bak
 *~
 *.cache
 .dotest/*

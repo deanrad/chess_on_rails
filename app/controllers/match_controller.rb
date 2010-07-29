@@ -1,14 +1,13 @@
 class MatchController < ApplicationController
-  include MatchHelper
 
   before_filter :authorize
-  
+
   # GET /match/1
   def show    
     respond_to do |format|
       format.fbml # should be same as html
-      format.html { render :template => 'match/result' and return if match.active == 0 }
-      format.text { render :text => match.board.to_s(viewed_from_side==:black) }
+      format.html { render :template => 'match/result' and return if request.match.active == 0 }
+      format.text { render :text => request.match.board.to_s(viewed_from_side==:black) }
       format.pgn  { render :partial => 'match/move_list' }
       format.wml  { render :tempate => 'match/show' }
     end
@@ -25,21 +24,17 @@ class MatchController < ApplicationController
   # javascript to update the board, and will 304 after the first request. Once that
   # move has been made, though, future requests will return JS to update the board
   # and the URL that the client polls for.
-  def status 
-  end
+  def status; end
 
   # provides the js of previous boards
-  def boards
+  def boards; end
 
-  end
+  # edit form for a new match
+  def new; end
 
-  # GET /match/new
-  def new
-  end
-
+  # 
   def resign
-    @match = Match.find( params[:id] )
-    @match.resign( current_player )
+    request.match.resign( current_player )
     redirect_to :action => 'index'
   end
 
@@ -65,16 +60,5 @@ class MatchController < ApplicationController
 
     redirect_to match_url(@match.id) if @match
   end
-
-  private 
-
-  def match
-    @match ||= if params[:id] 
-      params[:id].to_i != 0 ? Match.find( params[:id] ) : Match.find_by_name( params[:id] )
-    else
-      Match.new # params[:match]?
-    end
-  end
-  helper_method :match #, :board, :your_turn, :files, :ranks, :last_move, :status_has_changed
 
 end

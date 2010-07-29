@@ -12,7 +12,7 @@
 <script>
   //<![CDATA[
 
-<% if ! your_turn %>
+<% if ! your_turn? %>
   this_updater = new PeriodicalExecuter(
     function(){
       new Ajax.Request(

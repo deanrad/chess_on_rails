@@ -1,5 +1,5 @@
 %h1= match.lineup
-- if match.turn_of? current_player
+- if your_turn?
   .mobi_last_move= "Last move: #{match.moves.last.try(:notation)}"
 .board= render :partial => 'board'
 .move_maker= render :partial => 'move/create'

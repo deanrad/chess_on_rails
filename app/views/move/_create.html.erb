@@ -1,5 +1,5 @@
 
-<% remote_form_for :move, :html => {:id => 'new_move_form'}, :url => create_match_moves_path(match.id)  do |f| %>
+<% form_for :move, :html => {:id => 'new_move_form'}, :url => create_match_moves_path(match.id)  do |f| %>
     Notation: <%= f.text_field :notation  %> or... <br/>
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
@@ -12,7 +12,7 @@
 <%= link_to "Resign", url_for(:action => 'resign'), 
     :confirm => 'Are you truly ready to accept disgrace and sulk back to the rock from under which you came ?' %>
 
-<%= link_to "PGN", match_url(@match, :format=>'pgn') %>
+<%= link_to "PGN", match_url(request.match, :format=>'pgn') %>
     
 
 <%= javascript_tag("$('move_notation').focus()") %>

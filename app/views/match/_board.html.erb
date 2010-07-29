@@ -7,17 +7,17 @@ var current_allowed_moves = [];
 
 </script>
 <table class="board_table" cellpadding="0" cellspacing="0">
-  <% Chess.ranks( viewed_from_side() ).each_char do |rank| -%>
+  <% Chess.ranks( request.viewed_from_side ).each_char do |rank| -%>
     <tr>
     <td class="label rank"><%= rank %></td>
-    <% Chess.files( viewed_from_side() ).each_char do |file|
+    <% Chess.files( request.viewed_from_side ).each_char do |file|
       position = "#{file}#{rank}" -%>
       <td class="piece_container <%= position %>" id="<%= position %>">
 
         <script>    Droppables.add('<%= position %>', {hoverclass:'hoverActive', onDrop:handle_release_of_piece, accept: '<%= position %>' } ); </script>
 
         <% #indexing the helper-returned variable board doesnt work unless called through self.board
-	   p = self.board[position] 
+	   p = match.board[position] 
 	   capture_class = case last_move && last_move.to_coord == position
 	     when true
 	        " just_moved#{last_move && last_move.notation.include?('x') ? '_w_capture' : '' }"
@@ -33,7 +33,7 @@ var current_allowed_moves = [];
 	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
 	  %>
 
-          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if match.turn_of?(current_player) %> 
+          <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn? %> 
 
         <% else %>
           &nbsp;

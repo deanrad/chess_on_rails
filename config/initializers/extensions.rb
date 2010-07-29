@@ -65,3 +65,9 @@ class Array
 end
 
 
+module MyModuleMethodIntrospection
+  def methods_excluding_ancestors
+    (self.instance_methods - (self.included_modules.map(&:instance_methods).reduce(&:+) || []) ).sort
+  end
+end
+Module.send(:include, MyModuleMethodIntrospection)

@@ -2,20 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Match do
 
-  it 'should have player1 be the first to move' do
-    m1 = matches(:unstarted_match)
-
-    m1.turn_of?(m1.player1).should be_true
-  end
-
-  it 'should be player2 the next to move' do
-    m1 = matches(:unstarted_match)
-    m1.moves << Move.new(:from_coord => 'b2', :to_coord => 'b4' )
-    
-    m1.turn_of?(m1.player2).should be_true
-  end
-
-  it 'should know current player via next to move' do
+  it 'should know which side and player is next to move' do
     m1 = matches(:paul_vs_dean)
     m1.next_to_move.should == :white
     m1.current_player.should == players(:paul)
@@ -76,11 +63,9 @@ describe Match do
     it 'should have next_to_move white if FEN starts black (and odd # of moves)' do
       m = matches(:e4)
       m.next_to_move.should == :black
-      m.turn_of?( m.player2 ).should be_true
 
       m.moves << newm = Move.new( :from_coord => 'e7', :to_coord => 'e5' )
       m.next_to_move.should == :white
-      m.turn_of?( m.player1 ).should be_true
     end
 
     it 'should reflect the piece location FEN indicates, not the initial board' do

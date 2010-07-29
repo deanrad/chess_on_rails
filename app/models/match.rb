@@ -85,7 +85,7 @@ class Match < ActiveRecord::Base
 
   # the next_to_move alternates sides each move (technically every half-move)
   def next_to_move
-    moves.count.even? ? first_to_move : opp(first_to_move)
+    moves.count.even? ? first_to_move : first_to_move.opposite
   end
 
   def side_of( plyr ) 
@@ -108,14 +108,6 @@ class Match < ActiveRecord::Base
     self.result, self.active = ['Checkmate', 0]
     self.winning_player = (side == :white ? player1 : player2 )
     save!
-  end
-
-  # returns the opposite of a side, or nil
-  def opp( s )
-    case s
-      when :white; :black
-      when :black; :white
-    end
   end
 
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue

@@ -5,7 +5,7 @@ class Move < ActiveRecord::Base
 
   belongs_to :match
   before_save :update_computed_fields
-  after_save :notify_of_move_via_email
+  # after_save :notify_of_move_via_email
 
   attr_accessor :side
   attr_reader   :board

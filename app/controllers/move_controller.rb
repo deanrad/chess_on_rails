@@ -7,10 +7,10 @@ class MoveController < ApplicationController
 
   #accessible via get or post but should be idempotent on 2x get
   def create
-    @match = current_player.matches.find( params[:match_id] || params[:move][:match_id] )
+    @match = request.match
 
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
-    raise ArgumentError, "It is your not your turn to move yet" unless @match.turn_of?( current_player )
+    raise ArgumentError, "It is your not your turn to move yet" unless request.your_turn?
 
     if params[:move]
       @match.moves << @move = Move.new( params[:move] )
@@ -18,7 +18,7 @@ class MoveController < ApplicationController
       @match.moves << @move = Move.new( :notation => params[:notation] )
     end
     
-    @match.save! #only here to trigger validation
+    # @match.save! #only here to trigger validation
 
     #unceremonious way of saying you just ended the game 
     redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
