@@ -1,16 +1,16 @@
-(in /home/dradcliffe/Documents/chess_on_rails)
+(in /Users/dean/src/chess_on_rails)
 +----------------------+-------+-------+---------+---------+-----+-------+
 | Name                 | Lines |   LOC | Classes | Methods | M/C | LOC/M |
 +----------------------+-------+-------+---------+---------+-----+-------+
-| Controllers          |   302 |   194 |       6 |      25 |   4 |     5 |
-| Helpers              |    73 |    55 |       0 |      11 |   0 |     3 |
-| Models               |   768 |   498 |      17 |      74 |   4 |     4 |
+| Controllers          |   307 |   199 |       6 |      25 |   4 |     5 |
+| Helpers              |    74 |    56 |       0 |      11 |   0 |     3 |
+| Models               |   831 |   528 |      18 |      80 |   4 |     4 |
 | Functional tests     |   133 |    90 |       2 |      17 |   8 |     3 |
-| Model specs          |   679 |   503 |       0 |       0 |   0 |     0 |
+| Model specs          |   704 |   523 |       0 |       0 |   0 |     0 |
 | Controller specs     |   281 |   208 |       0 |       0 |   0 |     0 |
 | Helper specs         |     9 |     7 |       0 |       0 |   0 |     0 |
 +----------------------+-------+-------+---------+---------+-----+-------+
-| Total                |  2245 |  1555 |      25 |     127 |   5 |    10 |
+| Total                |  2339 |  1611 |      26 |     133 |   5 |    10 |
 +----------------------+-------+-------+---------+---------+-----+-------+
-  Code LOC: 747     Test LOC: 808     Code to Test Ratio: 1:1.1
+  Code LOC: 783     Test LOC: 828     Code to Test Ratio: 1:1.1
 
