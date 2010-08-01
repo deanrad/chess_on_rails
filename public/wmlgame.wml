@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+  <head>
+    <link href="/stylesheets/wml.css" media="screen" rel="stylesheet"
+type="text/css" />
+    <style>
+       .board_table{ border: 1px solid black; }
+       .board_table td{ border: 1px solid black; }
+       .label{ background-color: #ccc; font-size: 8pt; text-align:center; width:12px; height: 12px; }
+    </style>
+    <script type="text/javascript" src="/javascripts/wml.js"></script>
+
+ </head>
+  <body>
+    <h3>Dean vs. Dean</h3>
+<div class='mobi_last_move'>Last move: Ne5</div>
+<div class='board'>
+  <table class="board_table" cellpadding="0" cellspacing="0">
+        <tr>
+      <td class="label rank">8</td>
+      
+      <td class="piece_container a8" id="a8">
+              <a href="/match/1072323689.wml?from_coord=a8" onclick="      select_position( 'a8' ); return false;
+  ">      <img src="/images/sets/default/rook_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container b8" id="b8">
+              <a href="/match/1072323689.wml?from_coord=b8" onclick="      select_position( 'b8' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container c8" id="c8">
+              <a href="/match/1072323689.wml?from_coord=c8" onclick="      select_position( 'c8' ); return false;
+  ">      <img src="/images/sets/default/bishop_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container d8" id="d8">
+              <a href="/match/1072323689.wml?from_coord=d8" onclick="      select_position( 'd8' ); return false;
+  ">      <img src="/images/sets/default/queen_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container e8" id="e8">
+              <a href="/match/1072323689.wml?from_coord=e8" onclick="      select_position( 'e8' ); return false;
+  ">      <img src="/images/sets/default/king_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container f8" id="f8">
+              <a href="/match/1072323689.wml?from_coord=f8" onclick="      select_position( 'f8' ); return false;
+  ">      <img src="/images/sets/default/bishop_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container g8" id="g8">
+              <a href="/match/1072323689.wml?from_coord=g8" onclick="      select_position( 'g8' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container h8" id="h8">
+              <a href="/match/1072323689.wml?from_coord=h8" onclick="      select_position( 'h8' ); return false;
+  ">      <img src="/images/sets/default/rook_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      </tr>
+      
+      
+        <tr>
+      <td class="label rank">7</td>
+      
+      <td class="piece_container a7" id="a7">
+              <a href="/match/1072323689.wml?from_coord=a7" onclick="      select_position( 'a7' ); return false;
+  ">      <img src="/images/sets/default/pawn_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container b7" id="b7">
+              <a href="/match/1072323689.wml?from_coord=b7" onclick="      select_position( 'b7' ); return false;
+  ">      <img src="/images/sets/default/pawn_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container c7" id="c7">
+              <a href="/match/1072323689.wml?from_coord=c7" onclick="      select_position( 'c7' ); return false;
+  ">      <img src="/images/sets/default/pawn_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container d7" id="d7">
+              <a href="/match/1072323689.wml?from_coord=d7" onclick="      select_position( 'd7' ); return false;
+  ">      <img src="/images/sets/default/pawn_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container e7" id="e7">
+              <a href="/match/1072323689.wml?from_coord=e7" onclick="      select_position( 'e7' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container f7" id="f7">
+              <a href="/match/1072323689.wml?from_coord=f7" onclick="      select_position( 'f7' ); return false;
+  ">      <img src="/images/sets/default/pawn_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container g7" id="g7">
+              <a href="/match/1072323689.wml?from_coord=g7" onclick="      select_position( 'g7' ); return false;
+  ">      <img src="/images/sets/default/pawn_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container h7" id="h7">
+              <a href="/match/1072323689.wml?from_coord=h7" onclick="      select_position( 'h7' ); return false;
+  ">      <img src="/images/sets/default/pawn_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      </tr>
+      
+      
+        <tr>
+      <td class="label rank">6</td>
+      
+      <td class="piece_container a6" id="a6">
+              <a href="/match/1072323689.wml?from_coord=a6" onclick="      select_position( 'a6' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container b6" id="b6">
+              <a href="/match/1072323689.wml?from_coord=b6" onclick="      select_position( 'b6' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container c6" id="c6">
+              <a href="/match/1072323689.wml?from_coord=c6" onclick="      select_position( 'c6' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container d6" id="d6">
+              <a href="/match/1072323689.wml?from_coord=d6" onclick="      select_position( 'd6' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container e6" id="e6">
+              <a href="/match/1072323689.wml?from_coord=e6" onclick="      select_position( 'e6' ); return false;
+  ">      <img src="/images/sets/default/pawn_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container f6" id="f6">
+              <a href="/match/1072323689.wml?from_coord=f6" onclick="      select_position( 'f6' ); return false;
+  ">      <img src="/images/sets/default/knight_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container g6" id="g6">
+              <a href="/match/1072323689.wml?from_coord=g6" onclick="      select_position( 'g6' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container h6" id="h6">
+              <a href="/match/1072323689.wml?from_coord=h6" onclick="      select_position( 'h6' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      </tr>
+      
+      
+        <tr>
+      <td class="label rank">5</td>
+      
+      <td class="piece_container a5" id="a5">
+              <a href="/match/1072323689.wml?from_coord=a5" onclick="      select_position( 'a5' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container b5" id="b5">
+              <a href="/match/1072323689.wml?from_coord=b5" onclick="      select_position( 'b5' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container c5" id="c5">
+              <a href="/match/1072323689.wml?from_coord=c5" onclick="      select_position( 'c5' ); return false;
+  ">      <img src="/images/sets/default/knight_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container d5" id="d5">
+              <a href="/match/1072323689.wml?from_coord=d5" onclick="      select_position( 'd5' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container e5" id="e5">
+              <a href="/match/1072323689.wml?from_coord=e5" onclick="      select_position( 'e5' ); return false;
+  ">      <img src="/images/sets/default/knight_b.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container f5" id="f5">
+              <a href="/match/1072323689.wml?from_coord=f5" onclick="      select_position( 'f5' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container g5" id="g5">
+              <a href="/match/1072323689.wml?from_coord=g5" onclick="      select_position( 'g5' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container h5" id="h5">
+              <a href="/match/1072323689.wml?from_coord=h5" onclick="      select_position( 'h5' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      </tr>
+      
+      
+        <tr>
+      <td class="label rank">4</td>
+      
+      <td class="piece_container a4" id="a4">
+              <a href="/match/1072323689.wml?from_coord=a4" onclick="      select_position( 'a4' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container b4" id="b4">
+              <a href="/match/1072323689.wml?from_coord=b4" onclick="      select_position( 'b4' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container c4" id="c4">
+              <a href="/match/1072323689.wml?from_coord=c4" onclick="      select_position( 'c4' ); return false;
+  ">      <img src="/images/sets/default/pawn_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container d4" id="d4">
+              <a href="/match/1072323689.wml?from_coord=d4" onclick="      select_position( 'd4' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container e4" id="e4">
+              <a href="/match/1072323689.wml?from_coord=e4" onclick="      select_position( 'e4' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container f4" id="f4">
+              <a href="/match/1072323689.wml?from_coord=f4" onclick="      select_position( 'f4' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container g4" id="g4">
+              <a href="/match/1072323689.wml?from_coord=g4" onclick="      select_position( 'g4' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container h4" id="h4">
+              <a href="/match/1072323689.wml?from_coord=h4" onclick="      select_position( 'h4' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      </tr>
+      
+      
+        <tr>
+      <td class="label rank">3</td>
+      
+      <td class="piece_container a3" id="a3">
+              <a href="/match/1072323689.wml?from_coord=a3" onclick="      select_position( 'a3' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container b3" id="b3">
+              <a href="/match/1072323689.wml?from_coord=b3" onclick="      select_position( 'b3' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container c3" id="c3">
+              <a href="/match/1072323689.wml?from_coord=c3" onclick="      select_position( 'c3' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container d3" id="d3">
+              <a href="/match/1072323689.wml?from_coord=d3" onclick="      select_position( 'd3' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container e3" id="e3">
+              <a href="/match/1072323689.wml?from_coord=e3" onclick="      select_position( 'e3' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container f3" id="f3">
+              <a href="/match/1072323689.wml?from_coord=f3" onclick="      select_position( 'f3' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container g3" id="g3">
+              <a href="/match/1072323689.wml?from_coord=g3" onclick="      select_position( 'g3' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container h3" id="h3">
+              <a href="/match/1072323689.wml?from_coord=h3" onclick="      select_position( 'h3' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      </tr>
+      
+      
+        <tr>
+      <td class="label rank">2</td>
+      
+      <td class="piece_container a2" id="a2">
+              <a href="/match/1072323689.wml?from_coord=a2" onclick="      select_position( 'a2' ); return false;
+  ">      <img src="/images/sets/default/pawn_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container b2" id="b2">
+              <a href="/match/1072323689.wml?from_coord=b2" onclick="      select_position( 'b2' ); return false;
+  ">      <img src="/images/sets/default/pawn_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container c2" id="c2">
+              <a href="/match/1072323689.wml?from_coord=c2" onclick="      select_position( 'c2' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container d2" id="d2">
+              <a href="/match/1072323689.wml?from_coord=d2" onclick="      select_position( 'd2' ); return false;
+  ">      <img src="/images/sets/default/pawn_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container e2" id="e2">
+              <a href="/match/1072323689.wml?from_coord=e2" onclick="      select_position( 'e2' ); return false;
+  ">      <img src="/images/sets/default/pawn_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container f2" id="f2">
+              <a href="/match/1072323689.wml?from_coord=f2" onclick="      select_position( 'f2' ); return false;
+  ">      <img src="/images/sets/default/pawn_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container g2" id="g2">
+              <a href="/match/1072323689.wml?from_coord=g2" onclick="      select_position( 'g2' ); return false;
+  ">      <img src="/images/sets/default/pawn_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container h2" id="h2">
+              <a href="/match/1072323689.wml?from_coord=h2" onclick="      select_position( 'h2' ); return false;
+  ">      <img src="/images/sets/default/pawn_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      </tr>
+      
+      
+        <tr>
+      <td class="label rank">1</td>
+      
+      <td class="piece_container a1" id="a1">
+              <a href="/match/1072323689.wml?from_coord=a1" onclick="      select_position( 'a1' ); return false;
+  ">      <img src="/images/sets/default/rook_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container b1" id="b1">
+              <a href="/match/1072323689.wml?from_coord=b1" onclick="      select_position( 'b1' ); return false;
+  ">      <img src="/images/spacer.gif" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container c1" id="c1">
+              <a href="/match/1072323689.wml?from_coord=c1" onclick="      select_position( 'c1' ); return false;
+  ">      <img src="/images/sets/default/bishop_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container d1" id="d1">
+              <a href="/match/1072323689.wml?from_coord=d1" onclick="      select_position( 'd1' ); return false;
+  ">      <img src="/images/sets/default/queen_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container e1" id="e1">
+              <a href="/match/1072323689.wml?from_coord=e1" onclick="      select_position( 'e1' ); return false;
+  ">      <img src="/images/sets/default/king_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container f1" id="f1">
+              <a href="/match/1072323689.wml?from_coord=f1" onclick="      select_position( 'f1' ); return false;
+  ">      <img src="/images/sets/default/bishop_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container g1" id="g1">
+              <a href="/match/1072323689.wml?from_coord=g1" onclick="      select_position( 'g1' ); return false;
+  ">      <img src="/images/sets/default/knight_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      <td class="piece_container h1" id="h1">
+              <a href="/match/1072323689.wml?from_coord=h1" onclick="      select_position( 'h1' ); return false;
+  ">      <img src="/images/sets/default/rook_w.png" height="20" width="20" border="0" class="piece" /></a>
+  </a>
+  
+      </td>	
+      
+      </tr>
+      
+      
+        <tr>
+          <td class="rank file">&#160;</td>
+                    <td class="label file">a</td>	
+                    <td class="label file">b</td>	
+                    <td class="label file">c</td>	
+                    <td class="label file">d</td>	
+                    <td class="label file">e</td>	
+                    <td class="label file">f</td>	
+                    <td class="label file">g</td>	
+                    <td class="label file">h</td>	
+          
+        </tr>
+      
+    
+  </table>
+  
+  <script>
+         var selected_piece = null;
+         function select_position(pos){
+            if (document.getElementById('move_from_coord').value == ""){
+              document.getElementById('move_from_coord').value = pos;
+            } else { 
+              document.getElementById('move_to_coord').value = pos;
+              document.getElementById('move_maker').submit();
+            }
+        }
+  </script>
+</div>
+<div class='move_maker'>
+  <form action='/match/1072323689/moves/create' id='move_maker'>
+    <div class='move_from'>
+      <label>Move from:</label>
+      <input id='move_from_coord' name='move[from_coord]' type='text' />
+    </div>
+    <div class='move_to'>
+      <label>Move to:</label>
+      <input id='move_to_coord' name='move[to_coord]' type='text' />
+    </div>
+    <div class='submit'>
+      <input type='submit' value='Submit' />
+    </div>
+  </form>
+</div>
+
+  </body>
+</html>

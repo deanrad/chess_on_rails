@@ -27,8 +27,9 @@ class MoveController < ApplicationController
   
 protected
   def create_respond
-    #back to the match if non-ajax
-    redirect_to( match_path(@match) ) and return unless request.xhr? 
+    this_match = match_path(@match)
+    this_match << ".wml" if request.mobile?
+    redirect_to( this_match ) and return unless request.xhr? 
     
     #otherwise do a normal status update to refresh UI
     render :template => 'match/status' and return

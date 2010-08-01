@@ -73,6 +73,10 @@ module RequestSmarts
     @status_has_changed ||= ( params[:move].to_i <= match.moves.length)
   end
 
+  def mobile?
+    env["REQUEST_URI"].include?("wml") or
+    env["HTTP_REFERER"].include?("wml")
+  end
 
   # if this request is coming from facebook- its been seen while testing match_controller_fb_spec
   # that sometimes facebook_session is nil in test mode. We'll extend the definition for now to

@@ -1,9 +1,9 @@
-%form(action="/match/#{match.id}/moves/create")
+%form(action="/match/#{match.id}/moves/create" id="move_maker")
   .move_from
     %label Move from:
-    %input(type="text" name="move[from_coord]")
+    %input(type="text" name="move[from_coord]" id="move_from_coord")
   .move_to
     %label Move to:
-    %input(type="text" name="move[to_coord]")
+    %input(type="text" name="move[to_coord]" id="move_to_coord")
   .submit
     %input(type="submit" value="Submit")
