@@ -60,12 +60,12 @@ module RequestSmarts
 
   # the files, in order from the viewed_from_side for rendering
   def files
-    @files ||= (viewed_from_side == :black) ? Chess::Files.reverse : Chess::Files
+    @files ||= Chess.files(viewed_from_side)
   end
 
   # the ranks, in order from the viewed_from_side for rendering
   def ranks
-    @ranks ||= (viewed_from_side == :black) ? Chess::Ranks : Chess::Ranks.reverse
+    @ranks ||= Chess.ranks(viewed_from_side)
   end
 
   # when polling, indicates whether there is new information to send to the client

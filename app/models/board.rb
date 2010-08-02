@@ -10,26 +10,18 @@ class Board < Hash
   attr_accessor :match	
   attr_accessor :en_passant_square
   
-  alias :pieces	   :values
-  alias :positions :keys
+  alias :pieces	            :values
+  alias :occupied_positions :keys
 
   # Creates a board initialized at the default starting position, or from FEN if given
   def initialize( start_pos = nil )
     return _initialize_fen( start_pos ) if start_pos && Fen::is_fen?(start_pos) && !Pgn::is_pgn?(start_pos)
-    Chess.initial_pieces.each{ |piece, pos| self[pos] = piece }
+    Chess.setup_board(self)
   end
 
-  # TODO eliminate the string underpinnings of this class once callers use symbols / vectors
   def [] x
-    super(x.to_s)
-  end
-  
-  def each_square &block
-    "12345678".each_char do |rank|
-      "abcdefgh".each_char do |file|
-        yield "#{file}#{rank}"
-      end
-    end
+    x = x.to_sym
+    super
   end
 
   # updates internals with a given move played
@@ -63,8 +55,6 @@ class Board < Hash
     if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
       self.delete(m.to_coord)
       self[m.to_coord] = Queen.new(piece_moved.side, :promoted)
-      #puts self.to_s if m.to_coord == 'a8'
-      #debugger if m.to_coord == 'a8'
     end
     
     self
@@ -155,7 +145,7 @@ class Board < Hash
     ranks  = %w{ 8 7 6 5 4 3 2 1 }
     files  = %w{ a b c d e f g h } 
     (ranks.reverse! and files.reverse!) if for_black
-    last_file = files[7]
+    last_file = files.last
     ranks.each do |rank|
       files.each do |file|
         piece = self[ file + rank ]

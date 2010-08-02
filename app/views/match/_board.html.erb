@@ -1,16 +1,16 @@
 <script>
 <!-- allowed moves -->
 var current_allowed_moves = [];
-<%  match.board.each do |pos, piece| -%>
-<%= %Q{current_allowed_moves['#{pos}'] = '#{piece.allowed_moves(match.board).join(' ')}';} %>
+<%  board.each do |pos, piece| -%>
+<%= %Q{current_allowed_moves['#{pos}'] = '#{piece.allowed_moves(board).map(&:to_s).join(' ')}';} %>
 <%  end -%>
 
 </script>
 <table class="board_table" cellpadding="0" cellspacing="0">
-  <% Chess.ranks( request.viewed_from_side ).each_char do |rank| -%>
+  <% Chess.ranks( request.viewed_from_side ).each do |rank| -%>
     <tr>
     <td class="label rank"><%= rank %></td>
-    <% Chess.files( request.viewed_from_side ).each_char do |file|
+    <% Chess.files( request.viewed_from_side ).each do |file|
       position = "#{file}#{rank}" -%>
       <td class="piece_container <%= position %>" id="<%= position %>">
 

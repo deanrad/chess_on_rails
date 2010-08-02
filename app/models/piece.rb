@@ -1,5 +1,6 @@
 # The base class of all pieces - contains behaviors common to all pieces
 class Piece  
+  extend ActiveSupport::Memoizable
 
   # the side - eg white or black
   attr_accessor :side 
@@ -67,21 +68,21 @@ class Piece
     self.class.allowed_move?(vector, starting_rank)
   end
 
-  @moves_cache ||= {}
+ 
 
   # The set of squares on the board for which this piece answers allowed_move? == true
-  def allowed_moves(board)
-    # return @moves_cache[board] if @moves_cache[board]
+  def allowed_moves board
+    raise ArgumentError, "Piece is not associated with board." unless mypos = board.index(self)
+
     moves = []
-
-    mypos = board.index(self) 
-    board.each_square do |sq|
-      moves << sq.to_sym if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
+    Chess.each_position do |sq|
+      if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
+        moves << sq
+      end
     end
-    #@moves_cache[board] = moves
-
     moves
   end
+  # memoize :allowed_moves
 
   # Answers "Am I forbidden to move from [mypos] to the position specified by [vector], on this board" ?
   # Returns yes when blocked by your own piece, etc..

@@ -70,7 +70,6 @@ module Fen
       when 'P' then :pawn
     end
     @pieces << piece.to_piece
-    # piece.position = "#{(current_file+96).chr}#{rank+1}"
     self["#{(current_file+96).chr}#{rank+1}"] = piece.to_piece
   end
   
@@ -117,13 +116,14 @@ module Fen
 
     # converts to the Piece object of our app with its crazy 'type' field
     def to_piece
-      type = case role
-        when :pawn then :a_pawn
-        when :queen then :queen
-        when :king  then :king
-        else :"kings_#{role}"
+      case role
+        when :pawn then ::Pawn.new(side)
+        when :queen then ::Queen.new(side)
+        when :king  then ::King.new(side)
+        when :knight  then ::Knight.new(side)
+        when :rook then ::Rook.new(side)
+        when :bishop then ::Bishop.new(side)
       end
-      ::Piece.new( side, type )
     end
   end
 end

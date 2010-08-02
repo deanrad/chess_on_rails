@@ -33,7 +33,7 @@
 
 
 <div id="board_parent" style="float:left">
-<%= render :partial => "board" %>
+<%= render :partial => "board", :locals => {:board => match.board} %>
 </div>
 
 <div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">  
