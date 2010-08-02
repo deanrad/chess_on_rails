@@ -2,16 +2,32 @@ set :application, "Chess On Rails"
 set :use_sudo, false
 
 #############################################################
-#	SCM (Git)
+#	DEPLOYMENT CONFIGURATION OPTIONS
 #############################################################
 
 default_run_options[:pty] = true
-set :repository,  "git@github.com:chicagogrooves/chess_on_rails.git"
 set :scm, "git"
+
+# Local repo: 
+#     "/Users/dean/src/chess_on_rails.git/"
+# Remote repo: 
+#     "git@github.com:chicagogrooves/chess_on_rails.git"
+# 
+set :repository, "git@github.com:chicagogrooves/chess_on_rails.git"
+
 set :git_enable_submodules, 1
 set :branch, "master"
 ssh_options[:forward_agent] = true
+
+# IMPORTANT OPTION deploy_via: the strategy here affects which
+# copy of the code (local or remote) will be deployed
+#   :copy - do deploy from local cache of code (eg unpushed code)
+#   :remote_cache - to deploy code only which has been pushed
+# Also helpful for :copy :
+#  set :copy_compression, :gzip
 set :deploy_via, :remote_cache
+set :copy_compression, :gzip
+
 set :deploy_to, "/home/chicagogrooves/www.chessonrails.com"
 
 #############################################################
