@@ -8,14 +8,7 @@ describe Match do
     m1.current_player.should == players(:paul)
   end
       
-  it 'should label player1 as white and player2 as black' do
-    m1 = matches(:paul_vs_dean)
-    
-    m1.side_of( players(:paul) ).should == :white
-    m1.side_of( players(:dean) ).should == :black
-  end
-
-  it 'should display the lineup as player1 vs. player 2' do
+  it 'should display the lineup as white vs. black' do
     matches(:paul_vs_dean).lineup.should == 'Paul vs. Dean'
     matches(:dean_vs_paul).lineup.should == 'Dean vs. Paul'
   end

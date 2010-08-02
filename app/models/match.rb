@@ -113,14 +113,14 @@ class Match < ActiveRecord::Base
 
   def resign( plyr )
     self.result, self.active = ['Resigned', 0]
-    self.winning_player = (plyr == player1) ? player2 : player1
+    self.winning_player = (plyr == white) ? black : white
     save!
   end
 
   def checkmate_by( side )
     self.reload
     self.result, self.active = ['Checkmate', 0]
-    self.winning_player = (side == :white ? player1 : player2 )
+    self.winning_player = (side == :white ? white : black )
     save!
   end
 

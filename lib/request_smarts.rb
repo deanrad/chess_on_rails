@@ -42,7 +42,7 @@ module RequestSmarts
 
   def viewed_from_side
     return match.next_to_move if match.is_self_play?
-    @viewed_from_side ||= (player == match.player1) ? :white : :black
+    @viewed_from_side ||= (player == match.white) ? :white : :black
   end
 
   def your_turn?
