@@ -9,7 +9,13 @@ class Move < ActiveRecord::Base
 
   attr_accessor :side
   attr_reader   :board
- 
+
+  def from_coord_sym; @from_coord_sym = from_coord.to_sym; end
+  def to_coord_sym;   @to_coord_sym   = to_coord.to_sym;   end
+  def captured_piece_coord_sym
+    @captured_piece_coord_sym = captured_piece_coord && captured_piece_coord.to_sym
+  end
+
   # The board this move is being made against - set and read for validations
   def board; @board ||= match.board; end
   private :board
@@ -17,13 +23,8 @@ class Move < ActiveRecord::Base
   def before_validation
     @board = match.board
 
-    #strip off to the move queue any portion of notation
-    split_off_move_queue
+    infer_coordinates_from_notation if !notation.blank? && (from_coord.blank? || to_coord.blank?)
 
-    #determine coordinates from notation
-    infer_coordinates_from_notation if !self[:notation].blank? && (from_coord.blank? || to_coord.blank?)
-
-    # validations will get us later
     return unless from_coord
 
     @piece_moving = @board[from_coord]
@@ -39,26 +40,26 @@ class Move < ActiveRecord::Base
   def update_computed_fields
     #enpassant
     if @board.en_passant_capture?( from_coord, to_coord )
-      self[:captured_piece_coord] = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
+      self.captured_piece_coord = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
     end
 
     #castling
-    self[:castled] = 1 if (@piece_moving.function==:king && from_coord.file=='e' && to_coord.file =~ /[cg]/ )
+    self.castled = 1 if (@piece_moving.function==:king && from_coord_sym.file=='e' && to_coord_sym.file =~ /[cg]/ )
 
     #finally ensure move is (re)notated
-    self[:notation] = notate
+    self.notation = notate
   end
 
   #stuff here depends on knowledge of the board's position prior to the move being committed
   # this should be considered a before-save function and maybe validate is not exactly the best place
   def validate
 
-    if self[:from_coord].blank? && @possible_movers && @possible_movers.length > 1
+    if from_coord.blank? && @possible_movers && @possible_movers.length > 1
       errors.add :notation, "Ambiguous move #{notation}. Clarify as in Ngf3 or R2d4, for example"
       return 
     end
 
-    if self[:notation] && ( self[:from_coord].blank? || self[:to_coord].blank? )
+    if notation && ( from_coord.blank? || to_coord.blank? )
       errors.add :notation, "The notation #{notation} doesn't specify a valid move" and return 
     end
     
@@ -99,18 +100,4 @@ private
     nil
   end
 
-  def split_off_move_queue
-    return if self[:notation].blank?
-
-    all_moves = self[:notation].split /[,; ]/
-
-    self[:notation] = all_moves.shift
-
-    return if all_moves.length == 0 #no move queue
-    
-    with match.gameplays.send( match.next_to_move ) do |gp|
-      gp.update_attribute( :move_queue, all_moves.join(' ') )
-    end
-  end
-  
 end

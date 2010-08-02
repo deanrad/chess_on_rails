@@ -34,7 +34,7 @@ class Chess
     end
 
     def valid_position?(pos)
-      all_positions.include? pos
+      all_positions.include? pos.to_sym
     end
 
     def each_position( to_move = :white_to_move, order = :layout_order )

@@ -74,8 +74,7 @@ module RequestSmarts
   end
 
   def mobile?
-    env["REQUEST_URI"].include?("wml") or
-    env["HTTP_REFERER"].include?("wml")
+    env["REQUEST_URI"].include?("wml") || env["HTTP_REFERER"].include?("wml")
   end
 
   # if this request is coming from facebook- its been seen while testing match_controller_fb_spec

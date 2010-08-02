@@ -28,18 +28,18 @@ class Board < Hash
   # Dereferences any existing piece we're moving onto or capturing enpassant
   # Updates our EP square or nils it out
   def play_move!( m )
-    self.delete_if { |pos, piece| pos == m.to_coord || pos == m.captured_piece_coord }
+    self.delete_if { |pos, piece| pos == m.to_coord_sym || pos == m.captured_piece_coord_sym }
 
-    piece_moved = self.delete(m.from_coord)
-    self[m.to_coord] = piece_moved
+    piece_moved = self.delete(m.from_coord_sym)
+    self[m.to_coord_sym] = piece_moved
 
     if m.castled==1
-      castling_rank = m.to_coord.rank.to_s
+      castling_rank = m.to_coord_sym.rank.to_s
       [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, new_rook_file, orig_rook_file|
         #update the position of the rook corresponding to the square the king landed on
-	if m.to_coord.file == king_file 
-	   rook = self.delete("#{orig_rook_file}#{castling_rank}")
-	   self["#{new_rook_file}#{castling_rank}"] = rook
+	if m.to_coord_sym.file == king_file 
+	   rook = self.delete("#{orig_rook_file}#{castling_rank}".to_sym)
+	   self["#{new_rook_file}#{castling_rank}".to_sym] = rook
 	end
       end
     end
@@ -48,13 +48,13 @@ class Board < Hash
     return unless piece_moved
     ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
     @en_passant_square = ( piece_moved.function == :pawn &&
-                           m.from_coord.rank == ep_from_rank && 
-                           m.to_coord.rank == ep_to_rank ) ? m.from_coord.file + ep_rank.to_s : nil
+                           m.from_coord_sym.rank == ep_from_rank && 
+                           m.to_coord_sym.rank == ep_to_rank ) ? m.from_coord_sym.file + ep_rank.to_s : nil
 
     #reflect promotion
-    if piece_moved && piece_moved.function == :pawn && m.to_coord.to_s.rank == piece_moved.promotion_rank
-      self.delete(m.to_coord)
-      self[m.to_coord] = Queen.new(piece_moved.side, :promoted)
+    if piece_moved && piece_moved.function == :pawn && m.to_coord_sym.rank == piece_moved.promotion_rank
+      self.delete(m.to_coord_sym)
+      self[m.to_coord_sym] = Queen.new(piece_moved.side, :promoted)
     end
     
     self
