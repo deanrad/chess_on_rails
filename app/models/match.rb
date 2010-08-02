@@ -49,12 +49,12 @@ class Match < ActiveRecord::Base
     match
   end
 
-  def player1
-    @player1 ||= gameplays.white.player
+  def white
+    @white ||= gameplays.white.player
   end
 
-  def player2
-    @player2 ||= gameplays.black.player
+  def black
+    @black ||= gameplays.black.player
   end
 
   def name
@@ -78,15 +78,17 @@ class Match < ActiveRecord::Base
     
   # for purposes of move validation it's handy to have access to such a variable
   def current_player
-    next_to_move == :black ? gameplays.black.player : gameplays.white.player
+    next_to_move == :black ? self.black : self.white
   end
   
   def is_self_play? 
-    @self_play ||= (player1 == player2) 
+    @self_play ||= (self.white == self.black) 
   end
   
-  def turn_of?( plyr )	
-    is_self_play? ? true : self.next_to_move == side_of(plyr)
+  def turn_of? player 	
+    return true if self.white == player && self.next_to_move == :white
+    return true if self.black == player && self.next_to_move == :black
+    false
   end
 
   # as long as the game starts at the beginning, white goes first
@@ -101,12 +103,12 @@ class Match < ActiveRecord::Base
   end
 
   def side_of( plyr ) 
-    return :white if plyr == player1
-    return :black if plyr == player2
+    return :white if plyr == self.white
+    return :black if plyr == self.black
   end
 
   def lineup
-    "#{player1.name} vs. #{player2.name}"
+    "#{white.name} vs. #{black.name}"
   end
 
   def resign( plyr )

@@ -11,10 +11,12 @@ class Player < ActiveRecord::Base
   # --OR--
   has_one    :fbuser, :foreign_key => :playing_as
 
-  def facebook_id
-    return nil unless fbuser
-    fbuser.facebook_user_id
-  end
+  def email; user.email; end
 
+  def opponent_in( match = @match ) 
+    return match.black if match.white == self 
+    return match.white if match.black == self 
+    nil
+  end
 
 end

@@ -5,7 +5,7 @@ class Move < ActiveRecord::Base
 
   belongs_to :match
   before_save :update_computed_fields
-  # after_save :notify_of_move_via_email
+  after_save :notify_of_move_via_email
 
   attr_accessor :side
   attr_reader   :board
@@ -83,16 +83,20 @@ class Move < ActiveRecord::Base
 
   end
 
+  def player
+    match.gameplays.send( match.next_to_move )
+  end
+
 private
 
   def notify_of_move_via_email
     # dont send email if its been less than 1/24 of a day
     # TODO move email blackout interval into configuration
-    return unless(self.created_at - match.moves[ match.moves.index(self) - 1 ].created_at > 1.0 /24 )
+    # return unless(self.created_at - match.moves[ match.moves.index(self) - 1 ].created_at > 1.0 /24 )
 
-    mover = match.gameplays[self.side].player
-    opponent = match.gameplays[self.side.opposite].player
-    ChessNotifier.deliver_opponent_moved(opponent, mover, self)
+    ChessNotifier.deliver_opponent_moved(self.player, self.match.next_to_move, self)
+  rescue
+    nil
   end
 
   def split_off_move_queue
