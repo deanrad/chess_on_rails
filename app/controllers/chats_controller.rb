@@ -21,7 +21,7 @@ class ChatsController < ApplicationController
 
   private
   def chats
-    @chats ||= Chat.find_all_by_match_id( params[:match_id] )
+    @chats ||= Chat.find_all_by_match_id( params[:match_id], :include => :player )
   end
   helper_method :chats
 end
