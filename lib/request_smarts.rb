@@ -5,12 +5,6 @@
 module RequestSmarts
   attr_accessor :session, :cookies, :params
 
-  # the player this request is being processed for
-  def current_player
-    @current_player = player_in_session || player_in_cookie || player_over_http
-  end
-  alias :player :current_player
-
   # an already logged in player
   def player_in_session
     return nil unless session[:player_id] 
@@ -20,16 +14,14 @@ module RequestSmarts
   # authenticates from a stored md5 hash in a cookie
   def player_in_cookie
     return nil unless cookies[:auth_token]
-    User.find_by_auth_token( cookies[:auth_token] ).playing_as
+    return nil unless u = User.find_by_auth_token( cookies[:auth_token] )
+    u.playing_as
   end
 
-  # provides basic auth for Curl/Wget functionality
-  def player_over_http
-    authenticate_with_http_basic do |username, password|
-      User.find_by_email_and_security_phrase(username, password).playing_as
-    end
+  def player
+    player_in_session || player_in_cookie
   end
-  
+
   # any http request is for only one match
   def match
     the_id = params[:id] || params[:match_id] 
@@ -76,24 +68,5 @@ module RequestSmarts
   def mobile?
     env["REQUEST_URI"].include?("wml") || env["HTTP_REFERER"].include?("wml")
   end
-
-  # if this request is coming from facebook- its been seen while testing match_controller_fb_spec
-  # that sometimes facebook_session is nil in test mode. We'll extend the definition for now to
-  # also allow for hacked-on fb_sig_user as well
-  # def is_facebook?
-  #   return false unless defined? facebook_session
-  #   !! ( facebook_session || params[:fb_sig_user] )
-  # end
-
-  # # if accessed over facebook, the player referenced
-  # def player_in_facebook
-  #   fb_id = nil
-  #   if defined? facebook_session
-  #      fb_id = facebook_session ? facebook_session.user.id : params[:fb_sig_user]
-  #   end
-  #   return unless fb_id
-  #   fbuser = Fbuser.find_by_facebook_user_id(fb_id)
-  #   return fbuser.playing_as if fbuser
-  # end
 
 end
