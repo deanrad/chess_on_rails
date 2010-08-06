@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
   def current_player
     @current_player = request.player || player_over_http
   end
+  helper_method :current_player
 
   # provides basic auth for Curl/Wget functionality
   def player_over_http
