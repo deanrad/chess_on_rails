@@ -1,8 +1,8 @@
 <table class="board_table" cellpadding="0" cellspacing="0">
-  <% Chess.ranks( request.viewed_from_side ).each_char do |rank| -%>
+  <% Chess.ranks( request.viewed_from_side ).each do |rank| -%>
     <tr>
     <td class="label rank"><%= rank %></td>
-    <% Chess.files( request.viewed_from_side ).each_char do |file|
+    <% Chess.files( request.viewed_from_side ).each do |file|
          position = "#{file}#{rank}" 
 	 board = match.board
          piece = board[position]
@@ -16,7 +16,7 @@
     <% if rank==ranks[7..8] %>
       <tr>
         <td class="rank file">&#160;</td>
-        <% files.each_char do |file| -%>
+        <% files.each do |file| -%>
           <td class="label file"><%= file %></td>	
         <% end %>
       </tr>
