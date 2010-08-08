@@ -31,13 +31,14 @@ var current_allowed_moves = [];
 	    image_tag image_source_of(p), 
 	      :id => p.board_id, 
 	      :alt => p.abbrev,
-	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class
+	      :class => 'piece ' + p.allowed_moves(self.board).join(' ') + capture_class,
+	      :onclick => "select_position( '#{position}' )"
 	  %>
 
           <%= draggable_element( p.board_id, :revert => 'true', :snap => '[42,42]' ) if your_turn? %> 
 
         <% else %>
-          &nbsp;
+          <img src="/images/spacer.gif" height="35" width="35" onclick="select_position('<%= position %>')"/>
         <% end %>
       </td>	
     <% end %>
@@ -53,3 +54,15 @@ var current_allowed_moves = [];
     <% end %>
   <% end %>
 </table>
+
+<script>
+       var selected_piece = null;
+       function select_position(pos){
+          if (document.getElementById('move_from_coord').value == ""){
+            document.getElementById('move_from_coord').value = pos;
+          } else { 
+            document.getElementById('move_to_coord').value = pos;
+            document.getElementById('new_move_form').submit();
+          }
+      }
+</script>

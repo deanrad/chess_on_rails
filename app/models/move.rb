@@ -38,10 +38,10 @@ class Move < ActiveRecord::Base
 
   #fields like the notation and whether this was a castling are stored with the move
   def update_computed_fields
-    #enpassant
-    if @board.en_passant_capture?( from_coord, to_coord )
-      self.captured_piece_coord = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
-    end
+    # enpassant TODO rewrite
+    # if @board.en_passant_capture?( from_coord, to_coord )
+    #  self.captured_piece_coord = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
+    # end
 
     #castling
     self.castled = 1 if (@piece_moving.function==:king && from_coord_sym.file=='e' && to_coord_sym.file =~ /[cg]/ )
