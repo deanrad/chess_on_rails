@@ -1,26 +1,25 @@
 class ChessNotifier < ActionMailer::Base
 
+  MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS = 1.0/24
   SENDER = "ChessOnRails Games<games@chessonrails.com>"
 
-  # notifies player that their opponent in match N made a move
-  def opponent_moved(recipient, initiator, data_obj)
-    subject    "#{initiator.name} made the move: #{data_obj.notation}"
+  # notifies @recipient that their opponent, @initiator, made move @move
+  def opponent_moved(recipient, initiator, move)
+    subject    "#{initiator.name} made the move: #{move.notation}"
     recipients recipient.email
     from       SENDER
     sent_on    Time.now
     
-    # The hash of items to become instance variables in the view
-    body       :move => mv, :match => mv.match, :board => mv.match.board.to_s
+    body       :move => move
   end
 
-  # notifies that the player has been invited to a match by opponent
-  def match_created(plyr, opp, match)
-    subject    "#{opp.name} has invited you to a match"
-    recipients plyr.user.email
+  # notifies @recipient has been invited to @match by @initiator
+  def match_created(recipient, initiator, match)
+    subject    "#{initiator.name} has invited you to a match"
+    recipients recipient.user.email
     from       SENDER
     sent_on    Time.now
     
-    # The hash of items to become instance variables in the view
-    body       :match => match
+    body       :match => match, :recipient => recipient
   end
 end

@@ -28,8 +28,9 @@ class Match < ActiveRecord::Base
     boards.last
   end
 
-  # Match.start( :players => [white, black], :start_pos => fen_or_pgn_or_nil )
-  def self.start( opts={} )
+  # Returns a saved, started match. 
+  # Match.start!( :players => [white, black], :start_pos => fen_or_pgn_or_nil )
+  def self.start!( opts={} )
     players=opts.delete(:players)
     white, black = players.first, players.last
     match = self.create(opts)

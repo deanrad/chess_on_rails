@@ -42,10 +42,12 @@ class MatchController < ApplicationController
   # TODO error handling in MatchController#create
   def create
 
-    players = [ request.player, Player.find( params[:opponent_id] ) ]
-    players.reverse! if params[:opponent_side] == 'white'
+    req_players = [ request.player, Player.find( params[:opponent_id] ) ]
+    match_players = params[:opponent_side] =='white' ? req_players.reverse : req_players
 
-    @match = Match.start( :players => players, :start_pos => params[:start_pos] )
+    @match = Match.start!( :players => match_players, :start_pos => params[:start_pos] )
+
+    ChessNotifier.deliver_match_created( req_players.first, req_players.last, self)
     
     redirect_to match_url(@match.id)
   end
