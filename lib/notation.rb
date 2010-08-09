@@ -60,7 +60,7 @@ module MoveNotation
       end
     end
         
-    if @piece_moved_upon && (@piece_moving.side != @piece_moved_upon.side) || @board.en_passant_capture?( from_coord, to_coord )
+    if @piece_moved_upon && (@piece_moving.side != @piece_moved_upon.side) || @board.en_passant_capture?( from_coord_sym, to_coord_sym )
       mynotation += 'x' 
       captured = true
     end
