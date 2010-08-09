@@ -20,6 +20,6 @@ class ChessNotifier < ActionMailer::Base
     from       SENDER
     sent_on    Time.now
     
-    body       :match => match, :recipient => recipient
+    body       :match => match, :recipient => recipient, :initiator => initiator
   end
 end
