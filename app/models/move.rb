@@ -96,8 +96,8 @@ private
     # return unless(self.created_at - match.moves[ match.moves.index(self) - 1 ].created_at > 1.0 /24 )
 
     ChessNotifier.deliver_opponent_moved(self.player, self.match.next_to_move, self)
-  rescue
-    nil
+#  rescue
+#    nil
   end
 
 end

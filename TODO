@@ -4,12 +4,17 @@ Triage for relevant development activities
  - Check each game through each supported interface
  - Make sure developer-on-boarding process is simple
 
+Enabling for future dev:
+ - i18n 
+ - MVVM for move/show templates !!! (POJS VM object, scriptaculous? template engine, careful not to do double work w.r.t. RJS)
+ - Env.js tests for various browser sim/ JS validation
+
 Features:
-  Notifications (can beat 
+  ** Notifications
+  ** Persistent login
   Mobile playability (TODO break this down into minimal steps needed) 
-    - Simple streamlined templates
-    - Click-click move interface
+    - Simple streamlined templates - DONE
+    - Click-click move interface - DONE
     - No auto-refresh 
     - Fewer (or no) clicks to get to an active match on which it's your turn
-    - Javascript setting of first move coordinate if avail, server reload otherwise
 

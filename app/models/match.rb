@@ -91,13 +91,14 @@ class Match < ActiveRecord::Base
     false
   end
 
-  # as long as the game starts at the beginning, white goes first
+  # Returns the symbol :white or :black of the first mover in this match
+  # (If started from an arbitrary FEN board, black may be the first to move)
   def first_to_move
     return :white if self[:start_pos].blank?
     @first_to_move ||= Board.new( self[:start_pos] ).next_to_move
   end
 
-  # the next_to_move alternates sides each move (technically every half-move)
+  # Returns the symbol :white or :black of the next to move in this match
   def next_to_move
     moves.count.even? ? first_to_move : first_to_move.opposite
   end
