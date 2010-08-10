@@ -32,7 +32,7 @@ module MoveNotation
     self.from_coord = @possible_movers[0][0].to_s and return if @possible_movers.length == 1
     disambiguator = notation[-3,1]
     matcher = (disambiguator =~ /[1-8]/) ? Regexp.new( "^.#{disambiguator}$" ) : Regexp.new( "^#{disambiguator}.$" )
-    movers = @possible_movers.select { |pos, piece| matcher.match(pos) }
+    movers = @possible_movers.select { |pos, piece| matcher.match(pos.to_s) }
 
     self.from_coord = movers[0][0].to_s and return if movers.length == 1
 

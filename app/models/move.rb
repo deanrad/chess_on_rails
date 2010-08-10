@@ -4,14 +4,17 @@ class Move < ActiveRecord::Base
   include MoveNotation
 
   belongs_to :match
+  belongs_to :player
+
   before_save :update_computed_fields
   after_save :notify_of_move_via_email
 
   attr_accessor :side
   attr_reader   :board
 
-  def from_coord_sym; @from_coord_sym = from_coord.to_sym; end
-  def to_coord_sym;   @to_coord_sym   = to_coord.to_sym;   end
+  def from_coord_sym; from_coord && from_coord.to_sym; end
+  def to_coord_sym;   to_coord && to_coord.to_sym;     end
+
   def captured_piece_coord_sym
     @captured_piece_coord_sym = captured_piece_coord && captured_piece_coord.to_sym
   end
@@ -31,28 +34,18 @@ class Move < ActiveRecord::Base
     @piece_moved_upon = @board[to_coord]
   end
 
-  # Turns start at one and encompasss two moves each
-  def turn
-    @turn ||= (self.match.moves.index( self ) + 2) / 2
-  end  
-
   #fields like the notation and whether this was a castling are stored with the move
   def update_computed_fields
-    # enpassant TODO rewrite
-    # if @board.en_passant_capture?( from_coord, to_coord )
-    #  self.captured_piece_coord = to_coord.gsub( /3/, '4' ).gsub( /6/, '5' )
-    # end
-
-    #castling
     self.castled = 1 if (@piece_moving.function==:king && from_coord_sym.file=='e' && to_coord_sym.file =~ /[cg]/ )
 
-    #finally ensure move is (re)notated
     self.notation = notate
+    # self.player = match.opponent_of( match.send( match.next_to_move ) )
   end
 
   #stuff here depends on knowledge of the board's position prior to the move being committed
   # this should be considered a before-save function and maybe validate is not exactly the best place
   def validate
+    return true if self.id  # saved moves are valid by definition
 
     if from_coord.blank? && @possible_movers && @possible_movers.length > 1
       errors.add :notation, "Ambiguous move #{notation}. Clarify as in Ngf3 or R2d4, for example"
@@ -77,15 +70,11 @@ class Move < ActiveRecord::Base
     end
 
     #can not leave your king in check at end of a move
-    #new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
-    #if new_board.in_check?( @piece_moving.side )
-    #  errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
-    #end
+    new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
+    if new_board.in_check?( @piece_moving.side )
+      errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
+    end
 
-  end
-
-  def player
-    match.gameplays.send( match.next_to_move )
   end
 
   # In the match passed, how long it has been
@@ -103,8 +92,8 @@ private
     # TODO move email blackout interval into configuration
     return unless self.time_since_last_move( self.match ) > ChessNotifier::MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS
 
-    mover = match.gameplays[self.side].player
-    opponent = match.gameplays[self.side.opposite].player
+    mover = self.player
+    opponent = match.opponent_of(mover)
     ChessNotifier.deliver_opponent_moved(opponent, mover, self)
   rescue Exception => ex
     $stderr.puts ex.inspect

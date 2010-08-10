@@ -11,19 +11,15 @@ class ApplicationController < ActionController::Base
   def extend_session_and_request
     s, r, c, p  = session, request, cookies, params
     r.extend(RequestSmarts)
+    s.extend(SessionSmarts)
     r.session, r.cookies, r.params = s, c, p
   end
 
-  RequestSmarts.methods_excluding_ancestors.each do |m|
+  # HACK - really re-add params and params= to controller ?
+  RequestSmarts.methods_excluding_ancestors.reject{|m| m.to_s.include?("=")}.each do |m|
     helper_method m.to_sym 
     define_method m do request.send(m) end
   end
-
-  # the player this request is being processed for
-  def current_player
-    @current_player = request.player || player_over_http
-  end
-  helper_method :current_player
 
   # provides basic auth for Curl/Wget functionality
   def player_over_http
@@ -56,6 +52,13 @@ class ApplicationController < ActionController::Base
 
   #only use layout if not a facebook request - todo - standardize the 'is_facebook' test
   # layout proc{ |c| c.params[:fb_sig] ? false : 'application' }
+
+  # the player this request is being processed for
+  def current_player
+    p = request.player || player_over_http
+    request.player = p if p
+  end
+  helper_method :current_player
 
   # descendant controllers call authorize to ensure player is logged in, or redirect them to login
   def authorize

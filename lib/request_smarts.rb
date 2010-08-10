@@ -4,6 +4,7 @@
 # and to extend the request object with other methods which abstract above all of those.
 module RequestSmarts
   attr_accessor :session, :cookies, :params
+  attr_accessor :player
 
   # an already logged in player
   def player_in_session
@@ -20,6 +21,9 @@ module RequestSmarts
 
   def player
     player_in_session || player_in_cookie
+  end
+  def player= p
+    session[:player_id] = p.id
   end
 
   # any http request is for only one match
