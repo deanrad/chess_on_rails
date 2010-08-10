@@ -42,10 +42,10 @@ class AuthenticationController < ApplicationController
     @player = user.playing_as
     session[:player_id] = @player.id
 
-    unless user.auth_token
-      user.update_attribute( :auth_token,  Digest::MD5.hexdigest(Time.now.to_s) )
-    end
-    cookies[:auth_token] = user.auth_token
+    user.auth_token = Digest::MD5.hexdigest(Time.now.to_s)
+    user.save!
+
+    cookies[:auth_token] = { :value => user.auth_token, :expires => 1.year.from_now }
 
     #return them to original page requested
     redirect_to session[:original_uri] and return if session[:original_uri]
