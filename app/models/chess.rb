@@ -7,12 +7,6 @@ class Chess
   class << self
     extend ActiveSupport::Memoizable
 
-    def setup_board(board)
-      initial_pieces.each do |piece, pos|
-        board[pos.to_sym] = piece
-      end
-    end
-
     def ranks( to_move = :white, order = :layout_order )
       to_move == :white ? RANKS : RANKS.reverse
     end
@@ -33,37 +27,61 @@ class Chess
       positions
     end
 
-    def valid_position?(pos)
+    def valid_position? pos
       all_positions.include? pos.to_sym
     end
 
-    def each_position( to_move = :white_to_move, order = :layout_order )
+    def each_position to_move = :white_to_move, order = :layout_order 
       all_positions(to_move, order).each { |p| yield p }
     end
 
     # Array of [piece, position] elements
-    def initial_pieces
-      
-      @@pieces = []
-      
-      [ [:white, '1', '2'], [:black, '8', '7'] ].each do |side, back_rank, front_rank|
-        ('a'..'h').each do |file|
-          @@pieces << [ Pawn.new( side, file.to_sym) , file + front_rank ]
-        end
-
-        @@pieces << [ Rook.new(side, :queens)   , 'a'+back_rank ]
-        @@pieces << [ Knight.new(side, :queens) , 'b'+back_rank ]
-        @@pieces << [ Bishop.new(side, :queens) , 'c'+back_rank ]
-        @@pieces << [ Queen.new(side )          , 'd'+back_rank ]
-        @@pieces << [ King.new(side )           , 'e'+back_rank ]
-        @@pieces << [ Bishop.new(side, :kings)  , 'f'+back_rank ]
-        @@pieces << [ Knight.new(side, :kings)  , 'g'+back_rank ]
-        @@pieces << [ Rook.new(side, :kings)    , 'h'+back_rank ]
-      end
-
-      @@pieces
-
-    end # initial_pieces    
+    def new_board
+      Board[
+        *(
+          [
+           :a1 , Rook.new(:white, :queens),   
+           :b1 , Knight.new(:white, :queens),
+           :c1 , Bishop.new(:white, :queens),
+           :d1 , Queen.new(:white),
+           :e1 , King.new(:white),           
+           :f1 , Bishop.new(:white, :kings),
+           :g1 , Knight.new(:white, :kings), 
+           :h1 , Rook.new(:white, :kings), 
+          ] +
+          [
+           :a8 , Rook.new(:black, :queens),   
+           :b8 , Knight.new(:black, :queens),
+           :c8 , Bishop.new(:black, :queens),
+           :d8 , Queen.new(:black),
+           :e8 , King.new(:black),           
+           :f8 , Bishop.new(:black, :kings),
+           :g8 , Knight.new(:black, :kings), 
+           :h8 , Rook.new(:black, :kings), 
+          ] +
+          [
+           :a2 , Pawn.new(:white, :a),
+           :b2 , Pawn.new(:white, :b),
+           :c2 , Pawn.new(:white, :c),
+           :d2 , Pawn.new(:white, :d),
+           :e2 , Pawn.new(:white, :e),
+           :f2 , Pawn.new(:white, :f),
+           :g2 , Pawn.new(:white, :g),
+           :h2 , Pawn.new(:white, :h),
+          ] + 
+          [
+           :a7 , Pawn.new(:black, :a),
+           :b7 , Pawn.new(:black, :b),
+           :c7 , Pawn.new(:black, :c),
+           :d7 , Pawn.new(:black, :d),
+           :e7 , Pawn.new(:black, :e),
+           :f7 , Pawn.new(:black, :f),
+           :g7 , Pawn.new(:black, :g),
+           :h7 , Pawn.new(:black, :h),
+          ]
+        )
+       ]
+    end # initial_pieces
 
     memoize :ranks, :files, :all_positions, :valid_position?
   end # class << self  

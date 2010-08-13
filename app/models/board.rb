@@ -2,9 +2,6 @@
 # whose keys are positions and whose values are the pieces at those positions
 class Board < Hash
 
-  # the to, from, and enpassant ranks for each side
-  EN_PASSANT_CONFIG = {:white => [2, 4, 3], :black => [7, 5, 6] }
-
   include Fen
 
   attr_accessor :match	
@@ -12,12 +9,6 @@ class Board < Hash
   
   alias :pieces	            :values
   alias :occupied_positions :keys
-
-  # Creates a board initialized at the default starting position, or from FEN if given
-  def initialize( start_pos = nil )
-    return _initialize_fen( start_pos ) if start_pos && Fen::is_fen?(start_pos) && !Pgn::is_pgn?(start_pos)
-    Chess.setup_board(self)
-  end
 
   def [] x
     x = x.to_sym
