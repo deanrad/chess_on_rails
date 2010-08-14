@@ -81,8 +81,7 @@ class Move < ActiveRecord::Base
 
   end
 
-  # In the match passed, how long it has been
-  def time_since_last_move( match )
+  def time_since_last_move
     self.created_at - match.moves[ match.moves.index(self) - 1 ].created_at
   rescue
     # make sure we exceed this to trigger an email if we cant tell when they last moved
@@ -94,11 +93,10 @@ private
   def notify_of_move_via_email
     # dont send email if its been less than 1/24 of a day
     # TODO move email blackout interval into configuration
-    return unless self.time_since_last_move( self.match ) > ChessNotifier::MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS
+    return unless self.time_since_last_move > ChessNotifier::MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS || Rails.env.development?
 
-    mover = self.player
-    opponent = match.opponent_of(mover)
-    ChessNotifier.deliver_opponent_moved(opponent, mover, self)
+    mover, opponent = match.send(board.side_to_move), match.send(board.side_to_move.opposite)
+    ChessNotifier.deliver_player_moved(opponent, mover, self)
   rescue Exception => ex
     $stderr.puts ex.inspect
   end

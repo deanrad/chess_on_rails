@@ -1,0 +1,5 @@
+Hey <%= @recipient.name %>,
+  Your opponent <%= @initiator.name %> has moved. 
+  Please visit http://www.chessonrails.com/match/<%= @move.match.id %> to resume your game.
+
+<%= @move.match.board.to_s %>

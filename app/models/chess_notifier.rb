@@ -4,18 +4,18 @@ class ChessNotifier < ActionMailer::Base
   SENDER = "ChessOnRails Games<games@chessonrails.com>"
 
   # notifies @recipient that their opponent, @initiator, made move @move
-  def opponent_moved(recipient, initiator, move)
-    subject    "#{initiator.name} made the move: #{move.notation}"
+  def player_moved(recipient, initiator, move)
+    subject    "[ChessOnRails] #{initiator.name} made the move: #{move.notation}"
     recipients recipient.email
     from       SENDER
     sent_on    Time.now
     
-    body       :move => move
+    body       :move => move, :recipient => recipient, :initiator => initiator
   end
 
   # notifies @recipient has been invited to @match by @initiator
   def match_created(recipient, initiator, match)
-    subject    "#{initiator.name} has invited you to a match"
+    subject    "[ChessOnRails] #{initiator.name} has invited you to a match"
     recipients recipient.user.email
     from       SENDER
     sent_on    Time.now
