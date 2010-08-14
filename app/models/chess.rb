@@ -1,8 +1,12 @@
 class Chess 	
-  # The order of the ranks and files are very important. 
-  # They are defined in layout order, and with white to move.
+  # The ranks, or rows, defined in layout order, with white to move.
   RANKS  = %w{ 8 7 6 5 4 3 2 1 }
+
+  # The files, or columns, defined in layout order, with white to move.
   FILES  = %w{ a b c d e f g h } 
+
+  # The squares involved in an opening up an enpassant square
+  EN_PASSANT = {:white => [2,3,4], :black => [7,6,5] }
 
   class << self
     extend ActiveSupport::Memoizable

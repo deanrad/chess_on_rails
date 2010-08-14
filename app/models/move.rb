@@ -38,6 +38,10 @@ class Move < ActiveRecord::Base
   def update_computed_fields
     self.castled = 1 if (@piece_moving.function==:king && from_coord_sym.file=='e' && to_coord_sym.file =~ /[cg]/ )
 
+    if ep = board.en_passant_capture?(from_coord_sym, to_coord_sym)
+      self.captured_piece_coord = ep.to_s
+    end
+
     self.notation = notate
     # self.player = match.opponent_of( match.send( match.next_to_move ) )
   end

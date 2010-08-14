@@ -91,15 +91,9 @@ class Match < ActiveRecord::Base
     false
   end
 
-  # Returns the symbol :white or :black of the first mover in this match
-  # (If started from an arbitrary FEN board, black may be the first to move)
-  def first_to_move
-    return :white
-  end
-
   # Returns the symbol :white or :black of the next to move in this match
   def next_to_move
-    moves.count.even? ? first_to_move : first_to_move.opposite
+    board.side_to_move
   end
 
   def side_of( plyr ) 
@@ -154,11 +148,9 @@ class Match < ActiveRecord::Base
 =end
 
   def boards_upto_current_move
-    boards = []
-    boards << Chess.new_board
+    boards = [Chess.new_board]
     moves.each_with_index do |mv, idx|
       board = Chess.new_board
-      board.match = self
       0.upto(idx){ |i| board.play_move! moves[i] }
       boards << board
     end

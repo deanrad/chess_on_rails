@@ -2,11 +2,12 @@
 # whose keys are positions and whose values are the pieces at those positions
 class Board < Hash
 
-  include Fen
+  attr_accessor :last_move
+  attr_accessor :piece_moved
 
-  attr_accessor :match	
   attr_accessor :en_passant_square
-  
+  attr_accessor_with_default :side_to_move, :white
+
   alias :pieces	            :values
   alias :occupied_positions :keys
 
@@ -21,7 +22,8 @@ class Board < Hash
   def play_move!( m )
     self.delete_if { |pos, piece| pos == m.to_coord_sym || pos == m.captured_piece_coord_sym }
 
-    piece_moved = self.delete(m.from_coord_sym)
+    self.last_move = m
+    self.piece_moved = self.delete(m.from_coord_sym)
     self[m.to_coord_sym] = piece_moved
 
     if m.castled==1
@@ -37,10 +39,8 @@ class Board < Hash
     
     #TODO investigate why this method is getting called multiply per moves << Move.new
     return unless piece_moved
-    ep_from_rank, ep_to_rank, ep_rank = EN_PASSANT_CONFIG[ piece_moved.side ]
-    @en_passant_square = ( piece_moved.function == :pawn &&
-                           m.from_coord_sym.rank == ep_from_rank && 
-                           m.to_coord_sym.rank == ep_to_rank ) ? m.from_coord_sym.file + ep_rank.to_s : nil
+
+    update_en_passant_square! m
 
     #reflect promotion
     if piece_moved && piece_moved.function == :pawn && m.to_coord_sym.rank == piece_moved.promotion_rank
@@ -48,9 +48,24 @@ class Board < Hash
       self[m.to_coord_sym] = Queen.new(piece_moved.side, :promoted)
     end
     
+    # switch turns
+    self.side_to_move = side_to_move.opposite
+
     self
   end
- 
+
+  # When a move is made, either sets or clears the square on which an en_passant capture is available
+  def update_en_passant_square! move
+    ep_from_rank, ep_rank, ep_to_rank  = Chess::EN_PASSANT[ piece_moved.side ]
+    if piece_moved.function == :pawn &&
+       move.from_coord_sym.rank == ep_from_rank && 
+       move.to_coord_sym.rank == ep_to_rank 
+      @en_passant_square = ( move.from_coord_sym.file + ep_rank.to_s ).to_sym
+    else
+      @en_passant_square = nil
+    end
+  end
+
   # returns a copy of self with move played
   # examples: 
   # # block style for instant answer
@@ -62,19 +77,6 @@ class Board < Hash
     considered.play_move!(m)
     return considered unless block_given?
     yield  considered
-  end
-
-  def previous_board
-    return nil if match.nil?
-    
-    return self if (idx = match.boards.index(self))==0
-    match.boards[ idx - 1 ]
-  end
-
-  def side_occupying(pos)
-    p = self[pos]
-    return nil if !p 
-    return p.side
   end
 
   def sister_piece_of( a_piece, sitting_here )
@@ -99,13 +101,14 @@ class Board < Hash
     !! assassin
   end
 
-  # Says whether you are a pawn moving sideways onto an empty square
-  #  when an enpassant capture is available
+  # Says whether the move is an en_passant capture
   def en_passant_capture?( from_coord, to_coord ) 
-    with ( self[from_coord] ) do |pawn|
-      return false unless pawn.function == :pawn
-      return false unless self.en_passant_square
-      return (from_coord.file != to_coord.file) && (self[to_coord]==nil)
+    attacker = self[from_coord]
+    return nil unless (attacker && attacker.function == :pawn && to_coord == self.en_passant_square)
+
+    capture_coord = (to_coord.file.to_s + Chess::EN_PASSANT[attacker.side.opposite].last.to_s).to_sym
+    if self.has_key?(capture_coord) && self[capture_coord].side == attacker.side.opposite
+      return capture_coord
     end
   end
 
