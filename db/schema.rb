@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(:version => 20090424042453) do
 
   create_table "moves", :force => true do |t|
     t.integer  "match_id"
-    t.integer  "player_id"
     t.string   "from_coord",           :limit => 10
     t.string   "to_coord",             :limit => 10
     t.string   "notation",             :limit => 10
