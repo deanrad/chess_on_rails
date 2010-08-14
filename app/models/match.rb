@@ -3,8 +3,7 @@ class Match < ActiveRecord::Base
   has_many :players, :through    => :gameplays
   has_many :moves,   :before_add => :refer_to_match_instance,
                      :after_add  => [:save_board,
-                                      :check_for_checkmate, 
-                                      :play_queued_moves]
+                                      :check_for_checkmate] 
 
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 
@@ -125,6 +124,8 @@ class Match < ActiveRecord::Base
     save!
   end
 
+  private
+=begin
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue
   # for now requires exact match on the notation
   def play_queued_moves( m )
@@ -149,10 +150,9 @@ class Match < ActiveRecord::Base
 
     # call it back
     play_queued_moves(response_move)
-    
   end
+=end
 
-  private
   def boards_upto_current_move
     boards = []
     boards << Chess.new_board
