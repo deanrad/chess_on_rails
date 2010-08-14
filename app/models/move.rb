@@ -21,6 +21,7 @@ class Move < ActiveRecord::Base
 
   # The board this move is being made against - set and read for validations
   def board; @board ||= match.board; end
+  private :board
 
   def before_validation
     @board = match.board
@@ -94,7 +95,6 @@ private
     # TODO move email blackout interval into configuration
     return unless self.time_since_last_move > ChessNotifier::MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS || Rails.env.development?
 
-    board = board.consider_move self
     mover, opponent = match.send(board.side_to_move), match.send(board.side_to_move.opposite)
     ChessNotifier.deliver_player_moved(opponent, mover, self)
   rescue Exception => ex
