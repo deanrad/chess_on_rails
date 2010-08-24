@@ -18,7 +18,11 @@ class Symbol
   def file; self.to_s[0..0]       ; end
   def rank; self.to_s[1..1].to_i  ; end
 
-  def opposite; self == :black ? :white : :black ; end
+  def flank;          %w{a b c d}.include?( self.file ) ? :queen : :king ; end
+  def castling_files; self == :queen ? %w{b c d} : %w{ f g }             ; end
+  def castling_file;  self == :queen ? :c : :g                           ; end
+  def back_rank;      self == :white ? 1 : 8                             ; end
+  def opposite;       self == :black ? :white : :black                   ; end
   
   # Lets you do d2 - d1 and get [0, -1]
   def - other

@@ -2,19 +2,20 @@
 # whose keys are positions and whose values are the pieces at those positions
 class Board < Hash
 
+  alias :pieces	            :values
+  alias :occupied_positions :keys
+
   attr_accessor :last_move
   attr_accessor :piece_moved
 
   attr_accessor :en_passant_square
   attr_accessor_with_default :side_to_move, :white
 
-  alias :pieces	            :values
-  alias :occupied_positions :keys
+  attr_accessor_with_default :white_can_castle_kingside,  true
+  attr_accessor_with_default :white_can_castle_queenside, true
 
-  def [] x
-    x = x.to_sym
-    super
-  end
+  attr_accessor_with_default :black_can_castle_kingside,  true
+  attr_accessor_with_default :black_can_castle_queenside, true
 
   # updates internals with a given move played
   # Dereferences any existing piece we're moving onto or capturing enpassant
@@ -41,6 +42,7 @@ class Board < Hash
     return unless piece_moved
 
     update_en_passant_square! m
+    update_castling! m
 
     #reflect promotion
     if piece_moved && piece_moved.function == :pawn && m.to_coord_sym.rank == piece_moved.promotion_rank
@@ -63,6 +65,16 @@ class Board < Hash
       @en_passant_square = ( move.from_coord_sym.file + ep_rank.to_s ).to_sym
     else
       @en_passant_square = nil
+    end
+  end
+
+  def update_castling! m
+    case piece_moved.function
+    when :king
+      self.send(:"#{piece_moved.side}_can_castle_kingside=",  false)
+      self.send(:"#{piece_moved.side}_can_castle_queenside=", false)
+    when :rook
+      self.send(:"#{piece_moved.side}_can_castle_#{m.from_coord.flank}side=",  false)
     end
   end
 
@@ -142,7 +154,7 @@ class Board < Hash
     last_file = files.last
     ranks.each do |rank|
       files.each do |file|
-        piece = self[ file + rank ]
+        piece = self[ (file + rank).to_sym ]
         #output << file+rank
         output << (piece ? piece.abbrev : ' ')
         output << (file != last_file ? ' ' : "\n")
