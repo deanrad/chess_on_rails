@@ -17,6 +17,12 @@ class Board < Hash
   attr_accessor_with_default :black_can_castle_kingside,  true
   attr_accessor_with_default :black_can_castle_queenside, true
 
+  # Oh god, why do I still need this silly thing ?!
+  def [] x  
+    x = x.to_sym
+    super
+  end
+
   # updates internals with a given move played
   # Dereferences any existing piece we're moving onto or capturing enpassant
   # Updates our EP square or nils it out
