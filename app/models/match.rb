@@ -15,11 +15,12 @@ class Match < ActiveRecord::Base
     def white; self[0]; end
     def black; self[1]; end
   end
-
   
-  # the boards this match has known
+  # the boards this match has known, in move order from the beginning
   def boards
-    @boards ||= boards_upto_current_move
+    @boards ||= moves.inject([Chess.new_board]) do |all_boards, mv|
+      all_boards << all_boards.last.dup.play_move!(mv)
+    end
   end
 
   # the most recent board known
@@ -146,15 +147,5 @@ class Match < ActiveRecord::Base
     play_queued_moves(response_move)
   end
 =end
-
-  def boards_upto_current_move
-    boards = [Chess.new_board]
-    moves.each_with_index do |mv, idx|
-      board = Chess.new_board
-      0.upto(idx){ |i| board.play_move! moves[i] }
-      boards << board
-    end
-    boards
-  end
 
 end
