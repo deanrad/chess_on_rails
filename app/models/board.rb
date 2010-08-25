@@ -56,9 +56,6 @@ class Board < Hash
       self[m.to_coord_sym] = Queen.new(piece_moved.side, :promoted)
     end
     
-    # switch turns
-    self.side_to_move = side_to_move.opposite
-
     self
   end
 
@@ -83,6 +80,8 @@ class Board < Hash
       self.send(:"#{piece_moved.side}_can_castle_#{m.from_coord.flank}side=",  false)
     end
   end
+
+  def toggle_side_to_move! ; self.side_to_move = side_to_move.opposite; self; end
 
   # returns a copy of self with move played
   # examples: 

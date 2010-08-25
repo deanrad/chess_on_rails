@@ -19,7 +19,7 @@ class Match < ActiveRecord::Base
   # the boards this match has known, in move order from the beginning
   def boards
     @boards ||= moves.inject([Chess.new_board]) do |all_boards, mv|
-      all_boards << all_boards.last.dup.play_move!(mv)
+      all_boards << all_boards.last.dup.toggle_side_to_move!.play_move!(mv)
     end
   end
 
@@ -93,7 +93,7 @@ class Match < ActiveRecord::Base
   end
 
   # Returns the symbol :white or :black of the next to move in this match
-  def next_to_move
+  def side_to_move
     board.side_to_move
   end
 

@@ -24,7 +24,7 @@ module MoveNotation
     self.to_coord =  notation[-2,2]
     function = NOTATION_TO_FUNCTION_MAP[ notation[0,1] ] || :pawn
     @possible_movers = board.select do |pos, piece| 
-      piece.side == match.next_to_move && 
+      piece.side == match.side_to_move && 
       piece.function == function && 
       piece.allowed_moves(board).include?( to_coord_sym )
     end
