@@ -19,7 +19,7 @@ class Match < ActiveRecord::Base
   # the boards this match has known, in move order from the beginning
   def boards
     @boards ||= moves.inject([Chess.new_board]) do |all_boards, mv|
-      all_boards << all_boards.last.dup.toggle_side_to_move!.play_move!(mv)
+      all_boards << all_boards.last.clone.toggle_side_to_move!.play_move!(mv)
     end
   end
 
@@ -69,7 +69,7 @@ class Match < ActiveRecord::Base
 
   # cache this board and make it the most recent one
   def save_board( last_move )
-    @boards << boards.last.dup..toggle_side_to_move!.play_move!( last_move )
+    @boards << boards.last.clone.toggle_side_to_move!.play_move!( last_move )
   end
 
   def check_for_checkmate(last_move)
