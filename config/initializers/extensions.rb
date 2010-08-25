@@ -14,6 +14,17 @@ class Object
   end
 end
 
+class String
+  def method_missing name, *args
+    if self.to_sym.respond_to? name
+      self.to_sym.send(name, *args)
+    else
+      raise NoMethodError
+    end
+  end
+
+end
+
 class Symbol
   def file; self.to_s[0..0]       ; end
   def rank; self.to_s[1..1].to_i  ; end
