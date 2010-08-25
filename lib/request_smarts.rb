@@ -37,12 +37,12 @@ module RequestSmarts
   end
 
   def viewed_from_side
-    return match.next_to_move if match.is_self_play?
+    return match.side_to_move if match.is_self_play?
     @viewed_from_side ||= (player == match.white) ? :white : :black
   end
 
   def your_turn?
-    @your_turn ||= viewed_from_side == match.next_to_move
+    @your_turn ||= viewed_from_side == match.side_to_move
   end
   alias :your_turn :your_turn?
 
