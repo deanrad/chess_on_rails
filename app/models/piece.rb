@@ -82,7 +82,7 @@ class Piece
     end
     moves
   end
-  memoize :allowed_moves
+  # memoize :allowed_moves
 
   # Answers "Am I forbidden to move from [mypos] to the position specified by [vector], on this board" ?
   # Returns yes when blocked by your own piece, etc..
