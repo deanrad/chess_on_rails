@@ -17,7 +17,7 @@ module MoveNotation
     #expand the castling notation
     if notation.include?('O-O')
       new_notation = 'K' + (self[:notation].include?('O-O-O') ? 'c' : 'g')
-      new_notation += (match.next_to_move == :white) ? '1' : '8'
+      new_notation += (match.side_to_move == :white) ? '1' : '8'
       self.notation = new_notation
     end
 

@@ -68,21 +68,25 @@ class Piece
     self.class.allowed_move?(vector, starting_rank)
   end
 
+  # overridden in descendents if needed
+  def special_moves(board); [] ; end
  
-
   # The set of squares on the board for which this piece answers allowed_move? == true
   def allowed_moves board
     raise ArgumentError, "Piece is not associated with board." unless mypos = board.index(self)
 
-    moves = []
+    all_moves = []
     Chess.each_position do |sq|
       if allowed_move?( sq - mypos, mypos.rank ) && !obstructed?( board, mypos, sq - mypos )
-        moves << sq
+        all_moves << sq
       end
     end
-    moves
+    
+    # add special moves if defined
+    all_moves += self.special_moves(board)
+    all_moves
   end
-  # memoize :allowed_moves
+  memoize :allowed_moves
 
   # Answers "Am I forbidden to move from [mypos] to the position specified by [vector], on this board" ?
   # Returns yes when blocked by your own piece, etc..

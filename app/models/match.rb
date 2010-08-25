@@ -69,7 +69,7 @@ class Match < ActiveRecord::Base
 
   # cache this board and make it the most recent one
   def save_board( last_move )
-    @boards << boards.last.dup.play_move!( last_move )
+    @boards << boards.last.dup..toggle_side_to_move!.play_move!( last_move )
   end
 
   def check_for_checkmate(last_move)
@@ -79,7 +79,7 @@ class Match < ActiveRecord::Base
     
   # for purposes of move validation it's handy to have access to such a variable
   def current_player
-    next_to_move == :black ? self.black : self.white
+    side_to_move == :black ? self.black : self.white
   end
   
   def is_self_play? 
@@ -87,8 +87,8 @@ class Match < ActiveRecord::Base
   end
   
   def turn_of? player 	
-    return true if self.white == player && self.next_to_move == :white
-    return true if self.black == player && self.next_to_move == :black
+    return true if self.white == player && self.side_to_move == :white
+    return true if self.black == player && self.side_to_move == :black
     false
   end
 
@@ -124,7 +124,7 @@ class Match < ActiveRecord::Base
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue
   # for now requires exact match on the notation
   def play_queued_moves( m )
-    opponent = m.match.gameplays.send( m.match.next_to_move )
+    opponent = m.match.gameplays.send( m.match.side_to_move )
     queue = opponent.move_queue
     return unless queue.length > 1
 

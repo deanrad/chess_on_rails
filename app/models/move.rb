@@ -43,7 +43,7 @@ class Move < ActiveRecord::Base
     end
 
     self.notation = notate
-    # self.player = match.opponent_of( match.send( match.next_to_move ) )
+    # self.player = match.opponent_of( match.send( match.side_to_move ) )
   end
 
   #stuff here depends on knowledge of the board's position prior to the move being committed
