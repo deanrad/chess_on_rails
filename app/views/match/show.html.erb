@@ -55,7 +55,8 @@
 </div>
 -->
 
+<input value="test" type=button  data-bind="click: function(){ your_turn( !your_turn() ) }" />
 
+<span data-bind="text: your_turn()"></span>
 
-
-
+<script src="<%= match_viewmodel_path(match) %>"></script>

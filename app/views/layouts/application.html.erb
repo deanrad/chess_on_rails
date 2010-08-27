@@ -4,6 +4,7 @@
     <%= stylesheet_link_tag "board" %>
     <%= javascript_include_tag :defaults %>
     <%= javascript_include_tag 'board_action' %>
+    <%= javascript_include_tag 'knockout-latest.min.js' %>
     <script>
       PeriodicalExecuter.prototype.registerCallback = function() {
         this.intervalID = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
