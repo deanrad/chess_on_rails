@@ -2,9 +2,6 @@ class ChatsController < ApplicationController
   before_filter :authorize
   layout false
 
-  def show
-  end
-
   # POST /match/N/chat
   def create
     chat = Chat.new(params[:chat])
@@ -19,9 +16,4 @@ class ChatsController < ApplicationController
     end
   end
 
-  private
-  def chats
-    @chats ||= Chat.find_all_by_match_id( params[:match_id], :include => :player )
-  end
-  helper_method :chats
 end

@@ -35,6 +35,10 @@ module RequestSmarts
       Match.new
     end
   end
+  
+  def chats
+    @chats ||= Chat.find_all_by_match_id( match.id, :include => :player )
+  end
 
   def viewed_from_side
     return match.side_to_move if match.is_self_play?

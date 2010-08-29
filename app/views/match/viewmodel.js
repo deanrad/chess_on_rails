@@ -8,6 +8,7 @@ var game_view_model = {
   last_move_id:             <%= last_move ? last_move.id : 'null' %>,
   last_chat_id:             <%= last_chat ? last_chat.id : 'null' %>,
   poll_count:               0,
+  next_poll_in:             3,             
 
   your_turn:                new ko.observable(<%= your_turn %>),
   allowed_moves:            <%= board.allowed_moves.to_json %>,
@@ -26,13 +27,32 @@ var game_view_model = {
   bind_draggables:          function(){
     console.log('binding draggables')
   },
+  set_display_move:         function( move_num ){
+    //TODO allow playback via setting this parameter
+  },
   add_move:                 function( mv ){
-    console.log('tracking move:' + mv)
     this.all_moves.push( mv );
+  },
+  add_chat:                 function( c ){
+    var chatTemplate = '<div class="chat_line"><b title="#{time}">#{player}:</b>#{text}</div>';
+
+		$('#chat').append( $.tmpl( chatTemplate, c ) );
+  },
+  increment_poll:           function(){
+    game_view_model.poll_count += 1;
+    
+    if ( game_view_model.poll_count <=  10 )
+      game_view_model.next_poll_in = 3;
+    else if (game_view_model.poll_count <= 20 )
+      game_view_model.next_poll_in = 10;
+    else if (game_view_model.poll_count <= 50 )
+      game_view_model.next_poll_in = 60;
+    else 
+      game_view_model.next_poll_in = 3600;
   },
   poll:                     function(){
     console.log('initiating poll num:' + game_view_model.poll_count)
-    game_view_model.poll_count += 1;
+    game_view_model.increment_poll();
     
     $.get( '<%= url_for :action => 'update_view', :format => :js %>',
         { 
@@ -45,23 +65,8 @@ var game_view_model = {
         }    
     ); 
 
-    var new_interval = client_config.interval_for_poll( this.poll_count );
-    console.log('next poll in ' + new_interval + ' seconds');
-    window.setTimeout( game_view_model.poll,  new_interval * 1000);
-  }
-};
-
-var client_config = {
-  initial_poll_interval:    3,
-  interval_for_poll:  function( poll_num ){
-    if (isNaN(poll_num) || poll_num <  10 )
-      return 3;
-    else if (poll_num < 20 )
-      return 10;
-    else if (poll_num < 50 )
-      return 60;
-    else 
-      return 3600;
+    console.log('next poll in ' + game_view_model.next_poll_in + ' seconds');
+    window.setTimeout( game_view_model.poll,  game_view_model.next_poll_in * 1000);
   }
 };
 
@@ -69,4 +74,4 @@ var client_config = {
 ko.applyBindings(document.body, game_view_model);
 
 //TODO kickoff polling loop
-window.setTimeout( game_view_model.poll, client_config.initial_poll_interval * 1000 )
+window.setTimeout( game_view_model.poll, game_view_model.next_poll_in * 1000 )
