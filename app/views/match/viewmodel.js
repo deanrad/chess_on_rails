@@ -34,9 +34,11 @@ var game_view_model = {
     this.all_moves.push( mv );
   },
   add_chat:                 function( c ){
-    var chatTemplate = '<div class="chat_line"><b title="#{time}">#{player}:</b>#{text}</div>';
-
-		$('#chat').append( $.tmpl( chatTemplate, c ) );
+    console.log('adding chat ' + c.id)
+    this.all_chats.push(c);
+    var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
+    render  = $.tmpl( chatTemplate, c );
+		$('#chat_window').append( render );
   },
   increment_poll:           function(){
     game_view_model.poll_count += 1;
