@@ -15,6 +15,7 @@ var game_view_model = {
   
   displayed_move_num:       new ko.observable(<%= match.moves.count %>),
   all_moves:                new ko.observableArray([]),
+  all_chats:                new ko.observableArray([]),
   
   sync_page:                function(){
     //TODO any items not bound via knockout - update them here
@@ -30,24 +31,38 @@ var game_view_model = {
     this.all_moves.push( mv );
   },
   poll:                     function(){
-    console.log('initiating poll num:' + this.poll_count)
-    this.poll_count += 1;
-    <%# remote_function(:url => {:action => :update_view, :format => :js }) %>
-    new Ajax.Request('/match/1072323677/update_view.js',
-      {
-        asynchronous:true, evalScripts:true, 
-        parameters:'last_move_id='  + game_view_model.last_move_id + 
-                   '&last_chat_id=' + game_view_model.last_chat_id + 
-                   '&authenticity_token=' + encodeURIComponent('<%= form_authenticity_token %>')
-      });
-        // window.setTimeout this.poll (with new interval)
-    // window.setTimeout this.poll (with new interval)
+    console.log('initiating poll num:' + game_view_model.poll_count)
+    game_view_model.poll_count += 1;
+    
+    $.get( '<%= url_for :action => 'update_view', :format => :js %>',
+        { 
+          last_move_id:       game_view_model.last_move_id, 
+          last_chat_id:       game_view_model.last_chat_id,
+          authenticity_token: '<%= form_authenticity_token %>' 
+        },
+        function(data){
+          eval(data);
+        }    
+    ); 
+
+    var new_interval = client_config.interval_for_poll( this.poll_count );
+    console.log('next poll in ' + new_interval + ' seconds');
+    window.setTimeout( game_view_model.poll,  new_interval * 1000);
   }
 };
 
 var client_config = {
   initial_poll_interval:    3,
-  polling_falloff_schedule: [ [10, 5], [20, 10], [50, 60], [100, 3600] ]
+  interval_for_poll:  function( poll_num ){
+    if (isNaN(poll_num) || poll_num <  10 )
+      return 3;
+    else if (poll_num < 20 )
+      return 10;
+    else if (poll_num < 50 )
+      return 60;
+    else 
+      return 3600;
+  }
 };
 
 // Start knockout's tracking of auto-updating items

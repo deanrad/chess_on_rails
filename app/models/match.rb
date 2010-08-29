@@ -125,6 +125,11 @@ class Match < ActiveRecord::Base
     moves.select{ |mv| mv.id > move_id }
   end
   
+  def chats_more_recent_than( chat_id )
+    return chats if chat_id.nil? || chat_id == 0
+    chats.select{ |c| c.id > chat_id }
+  end
+  
   private
 =begin
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue
