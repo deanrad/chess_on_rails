@@ -32,12 +32,26 @@ var game_view_model = {
   poll:                     function(){
     console.log('initiating poll num:' + this.poll_count)
     this.poll_count += 1;
-    <%= remote_function(:url => {:action => :update_view, :format => :js}) %>
+    <%# remote_function(:url => {:action => :update_view, :format => :js }) %>
+    new Ajax.Request('/match/1072323677/update_view.js',
+      {
+        asynchronous:true, evalScripts:true, 
+        parameters:'last_move_id='  + game_view_model.last_move_id + 
+                   '&last_chat_id=' + game_view_model.last_chat_id + 
+                   '&authenticity_token=' + encodeURIComponent('<%= form_authenticity_token %>')
+      });
+        // window.setTimeout this.poll (with new interval)
+    // window.setTimeout this.poll (with new interval)
   }
 };
 
 var client_config = {
-  poll_interval:            3
+  initial_poll_interval:    3,
+  polling_falloff_schedule: [ [10, 5], [20, 10], [50, 60], [100, 3600] ]
 };
 
+// Start knockout's tracking of auto-updating items
 ko.applyBindings(document.body, game_view_model);
+
+//TODO kickoff polling loop
+window.setTimeout( game_view_model.poll, client_config.initial_poll_interval * 1000 )
