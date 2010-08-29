@@ -1,5 +1,5 @@
 <div id="move_indicator">
-<span class="<%= your_turn?  ? "active_yours"  : "" -%>"><%= your_turn? ? "<b>Yours</b>" : "Yours" %></span> 
-|
-<span class="<%= !your_turn? ? "active_theirs" : "" -%>"><%= your_turn? ? "Theirs" : "<b>Theirs</b>" %></span>
+	<span style="float:left">Turn to move:</span>
+  <span class="active_yours" data-bind="visible:your_turn">Yours</span> 
+  <span class="active_theirs" data-bind="visible:!your_turn()">Theirs</span> 
 </div>

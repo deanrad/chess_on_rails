@@ -14,9 +14,6 @@ ActionController::Routing::Routes.draw do |map|
   #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
   map.create_move 'match/:match_id/moves/create', :controller => 'move', :action => 'create'
 
-  #allow this
-  map.match_viewmodel 'match/:match_id/viewmodel', :controller => 'match', :action => 'viewmodel', :format => :js
-
   map.resources :match , :except => [:delete], :shallow => true, :collection => { :create => :post } do |match|
     match.resources :moves, :controller => :move, :collection => { :create => :post }
     match.resource :chat

@@ -4,7 +4,7 @@
 <%= render :partial => "move_indicator" %> 
 </span>
 
-<div id="board_parent" style="float:left">
+<div id="board_parent" style="float:left; clear:left">
 <%= render :partial => "board", :locals => {:board => match.board} %>
 </div>
 
@@ -17,7 +17,7 @@
   <% if match.side_of(current_player) %>
   <div id="chat_container" style="float:left;">
    <div id="chat" style="overflow:auto; border:solid 1px black; height: 300px; width: 180px;">
-      Chat loading..
+      <%= render :template => 'chats/show' %>
     </div>
     <div id="chat_form" style="float:left;">
       <% remote_form_for( Chat.new, :url => match_chat_path(match), :update => 'chat' ) do |f| %>
@@ -59,4 +59,4 @@
 
 <span data-bind="text: your_turn()"></span>
 
-<script src="<%= match_viewmodel_path(match) %>"></script>
+<script src="<%= url_for(:action => :viewmodel, :format => :js) %>"></script>

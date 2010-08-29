@@ -30,7 +30,7 @@ module RequestSmarts
   def match
     the_id = params[:id] || params[:match_id] 
     @match ||= if the_id
-      the_id.to_i != 0 ? Match.find( the_id ) : Match.find_by_name( the_id )
+      the_id.to_i != 0 ? Match.find( the_id, :include => [:chats, :moves] ) : Match.find_by_name( the_id )
     else
       Match.new
     end
@@ -48,6 +48,10 @@ module RequestSmarts
 
   def last_move
     @last_move ||= match.moves.last
+  end
+
+  def last_chat
+    @last_chat ||= match.chats.last
   end
 
   def board

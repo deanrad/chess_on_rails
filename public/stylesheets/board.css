@@ -23,11 +23,18 @@ body {font-family: Arial; font-size: 10pt;}
 */
 
 h1 { font-size: 14pt; font-weight: bold }
+
+#move_indicator { width: 360px; }
+.active_yours { background-color:black; color:white; font-weight:bold; float:right;}
+.active_theirs { background-color:eee; color:bbb; font-weight:bold; float:right;}
+
+.board_table { clear:both ;}
 .board_table td{
   width:40px; height:40px;
   border-width: 1px; border-style:solid; border-color:#333;
   margin:0px; padding: 0px;
  }
+
 
 .move_creator_parent { clear: all; float: left; }
 .instructions { display:none }
@@ -70,9 +77,6 @@ h1 { font-size: 14pt; font-weight: bold }
 #g1, #g3, #g5, #g7,
 #h2, #h4, #h6, #h8
 {background-color:#dfdfdf}
-
-.active_yours {background-color:black; color:white; font-weight:bold}
-.active_theirs {background-color:eee; color:bbb; font-weight:bold}
 
 
 /*

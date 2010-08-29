@@ -5,6 +5,7 @@ class Match < ActiveRecord::Base
                      :after_add  => [:save_board,
                                       :check_for_checkmate] 
 
+  has_many :chats
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 
   named_scope :active,    :conditions => { :active => true }
@@ -119,6 +120,11 @@ class Match < ActiveRecord::Base
     save!
   end
 
+  def moves_more_recent_than( move_id )
+    return moves if move_id.nil? || move_id == 0
+    moves.select{ |mv| mv.id > move_id }
+  end
+  
   private
 =begin
   # if moves are queued up, looks for matches and plays appropriate responses, or invalidates queue

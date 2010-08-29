@@ -52,5 +52,4 @@ class MatchController < ApplicationController
     redirect_to match_url(@match.id)
   end
 
-  def viewmodel; end
 end

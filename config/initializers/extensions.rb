@@ -12,6 +12,7 @@ class Object
   def try(meth, *args)
     self.send(meth, *args) if self.respond_to?(meth)
   end
+  
 end
 
 class String
@@ -22,7 +23,6 @@ class String
       raise NoMethodError
     end
   end
-
 end
 
 class Symbol

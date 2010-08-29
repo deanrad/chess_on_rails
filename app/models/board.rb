@@ -168,6 +168,13 @@ class Board < Hash
     output + "\n"
   end
   
+  def allowed_moves
+    @allowed_moves ||= self.keys.inject({}) do |moves, position|
+      moves[position] = self[position].allowed_moves(self)
+      moves
+    end
+  end
+  
   def inspect; "\n" + to_s; end
 
 end
