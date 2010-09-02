@@ -36,7 +36,7 @@ h1 { font-size: 14pt; font-weight: bold }
  }
 
 
-.move_creator_parent { clear: all; float: left; }
+.move_creator_parent { clear: both; float: left; }
 .instructions { display:none }
 #move_error { color: #ff4444 }
 

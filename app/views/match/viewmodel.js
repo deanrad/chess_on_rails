@@ -34,6 +34,7 @@ var game_view_model = {
     this.all_moves.push( mv );
   },
   add_chat:                 function( c ){
+    
     console.log('adding chat ' + c.id)
     this.all_chats.push(c);
     var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
@@ -56,7 +57,7 @@ var game_view_model = {
     console.log('initiating poll num:' + game_view_model.poll_count)
     game_view_model.increment_poll();
     
-    $.get( '<%= url_for :action => 'update_view', :format => :js %>',
+    $.get( "<%= url_for :action => 'update_view', :format => :js %>",
         { 
           last_move_id:       game_view_model.last_move_id, 
           last_chat_id:       game_view_model.last_chat_id,
