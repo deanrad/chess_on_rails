@@ -17,17 +17,24 @@ class Board < Hash
   attr_accessor_with_default :black_can_castle_kingside,  true
   attr_accessor_with_default :black_can_castle_queenside, true
 
+  attr_accessor_with_default :graveyard, []
+
   # Oh god, why do I still need this silly thing ?!
   def [] x  
     x = x.to_sym
     super
+  end
+  
+  def kill at_position
+    graveyard << self[at_position] if self[at_position]
   end
 
   # updates internals with a given move played
   # Dereferences any existing piece we're moving onto or capturing enpassant
   # Updates our EP square or nils it out
   def play_move!( m )
-    self.delete_if { |pos, piece| pos == m.to_coord_sym || pos == m.captured_piece_coord_sym }
+    m = Move.new(m) if m.class==Hash
+    self.kill( m.captured_piece_coord_sym || m.to_coord_sym )
 
     self.last_move = m
     self.piece_moved = self.delete(m.from_coord_sym)
@@ -37,10 +44,10 @@ class Board < Hash
       castling_rank = m.to_coord_sym.rank.to_s
       [['g', 'f', 'h'], ['c', 'd', 'a']].each do |king_file, new_rook_file, orig_rook_file|
         #update the position of the rook corresponding to the square the king landed on
-	if m.to_coord_sym.file == king_file 
-	   rook = self.delete("#{orig_rook_file}#{castling_rank}".to_sym)
-	   self["#{new_rook_file}#{castling_rank}".to_sym] = rook
-	end
+    	if m.to_coord_sym.file == king_file 
+    	   rook = self.delete("#{orig_rook_file}#{castling_rank}".to_sym)
+    	   self["#{new_rook_file}#{castling_rank}".to_sym] = rook
+    	end
       end
     end
     
