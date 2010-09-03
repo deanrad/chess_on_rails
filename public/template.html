@@ -13,8 +13,9 @@
             
             <p>POC for knockout templating</p>
 
-            <div data-bind="template: 'xTemplate', data: xArr"></div>
+            <!-- div data-bind="template: 'xTemplate', data: xArr"></div -->
 
+            <select multiple="multiple" height="5" data-bind="options:xArr"></select>
             <input type="submit" data-bind="click: moreHam" value="More" text="More"/>
 
             <script type="text/html" id='xTemplate'>
@@ -29,7 +30,10 @@
 
         <script type="text/javascript">
             var viewModel = {
-              xArr: new ko.observableArray(["Ham"]),
+              xArr: new ko.observableArray([ 
+									{id: 988, text: 'Hey'},
+									{id: 989, text: 'Hey2'}
+								]),
               moreHam: function(){
                 viewModel.xArr.push('More Ham');
               }

@@ -1,3 +1,6 @@
+var clientConfig= {
+  initial_poll_interval: 3
+}
 // Because client state will change while the page is loaded, we set up an object
 // with fields to track it, and methods to manipulate it. This is called a viewmodel.
 // Then we bind (using HTML5 data-bind attributes and knockout syntax) DOM elements
@@ -8,7 +11,7 @@ var game_view_model = {
   last_move_id:             <%= last_move ? last_move.id : 'null' %>,
   last_chat_id:             <%= last_chat ? last_chat.id : 'null' %>,
   poll_count:               0,
-  next_poll_in:             3,             
+  next_poll_in:             clientConfig.initial_poll_interval,             
 
   your_turn:                new ko.observable(<%= your_turn %>),
   allowed_moves:            <%= board.allowed_moves.to_json %>,
@@ -16,7 +19,9 @@ var game_view_model = {
   
   displayed_move_num:       new ko.observable(<%= match.moves.count %>),
   all_moves:                new ko.observableArray([]),
-  all_chats:                new ko.observableArray([]),
+  all_chats:                new ko.observableArray([
+    <%= match.chats.map(&:to_json).join(",\n    ") %>
+  ]),
   
   sync_page:                function(){
     //TODO any items not bound via knockout - update them here
@@ -32,14 +37,21 @@ var game_view_model = {
   },
   add_move:                 function( mv ){
     this.all_moves.push( mv );
+    this.reset_poller();
   },
-  add_chat:                 function( c ){
+  add_chat:                 function( ch ){
+    if ( ko.utils.arrayFirst( game_view_model.all_chats(), 
+                              function(c){ return c.id == ch.id  } ) != null ) {
+      console.log('already have chat ' + ch.id)
+      return;
+    }
     
-    console.log('adding chat ' + c.id)
-    this.all_chats.push(c);
+    console.log('adding chat ' + ch.id)
+    this.all_chats.push(ch);
     var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
-    render  = $.tmpl( chatTemplate, c );
+    render  = $.tmpl( chatTemplate, ch );
 		$('#chat_window').append( render );
+    this.reset_poller();
   },
   increment_poll:           function(){
     game_view_model.poll_count += 1;
@@ -52,6 +64,10 @@ var game_view_model = {
       game_view_model.next_poll_in = 60;
     else 
       game_view_model.next_poll_in = 3600;
+  },
+  reset_poller:           function(){
+    this.poll_count = 0;
+    this.next_poll_in = clientConfig.initial_poll_interval;
   },
   poll:                     function(){
     console.log('initiating poll num:' + game_view_model.poll_count)
