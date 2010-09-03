@@ -1,5 +1,6 @@
 var clientConfig= {
-  initial_poll_interval: 3
+  initial_poll_interval: 3,
+  your_turn_msg: 'Your Turn - '
 }
 // Because client state will change while the page is loaded, we set up an object
 // with fields to track it, and methods to manipulate it. This is called a viewmodel.
@@ -18,9 +19,17 @@ var game_view_model = {
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
   
   displayed_move_num:       new ko.observable(<%= match.moves.count %>),
-  all_moves:                new ko.observableArray([]),
+
+  all_moves:                new ko.observableArray([
+    <%= match.moves.map(&:to_json).join(",\n    ") %>
+  ]),
+
   all_chats:                new ko.observableArray([
     <%= match.chats.map(&:to_json).join(",\n    ") %>
+  ]),
+
+  all_boards:                new ko.observableArray([
+    <%= match.boards.map(&:to_json).join(",\n    ") %>
   ]),
   
   sync_page:                function(){
@@ -35,14 +44,20 @@ var game_view_model = {
   set_display_move:         function( move_num ){
     //TODO allow playback via setting this parameter
   },
-  add_move:                 function( mv ){
+  add_move:                 function( mv, board ){
+    if ( ko.utils.arrayFirst( game_view_model.all_moves(), 
+                              function(m){ return m.id == mv.id  } ) != null ) {
+      console.log('already have move ' + mv.id + ', skipping ..')
+      return;
+    }
     this.all_moves.push( mv );
+    this.all_boards.push( board );
     this.reset_poller();
   },
   add_chat:                 function( ch ){
     if ( ko.utils.arrayFirst( game_view_model.all_chats(), 
                               function(c){ return c.id == ch.id  } ) != null ) {
-      console.log('already have chat ' + ch.id)
+      console.log('already have chat ' + ch.id + ', skipping ..')
       return;
     }
     

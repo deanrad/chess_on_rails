@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>EnPassant</title>
+    <title><%= your_turn? ? "Your Turn - " : ""%>EnPassant</title>
     <%= stylesheet_link_tag "board" %>
     <%= javascript_include_tag 'jquery-1.4.2.js' %>
     <%= javascript_include_tag 'jquery.tmpl.js' %>
