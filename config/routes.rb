@@ -14,10 +14,13 @@ ActionController::Routing::Routes.draw do |map|
   #allow moving from CURL - Although GET generally not acceptable, post won't work without the forgery protection
   map.create_move 'match/:match_id/moves/create', :controller => 'move', :action => 'create'
 
+  map.match_players 'match/players.js', :controller => 'match', :action => 'players'
+
   map.resources :match , :except => [:delete], :shallow => true, :collection => { :create => :post } do |match|
     match.resources :moves, :controller => :move, :collection => { :create => :post }
     match.resource :chat
   end
+
 
   #sets controller courtesy of Sean
   map.resource :set, :member => {:change => :post}

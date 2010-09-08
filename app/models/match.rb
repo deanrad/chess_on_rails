@@ -33,6 +33,7 @@ class Match < ActiveRecord::Base
   # Match.start!( :players => [white, black], :start_pos => fen_or_pgn_or_nil )
   def self.start!( opts={} )
     players=opts.delete(:players)
+    raise ArgumentError unless players && players.length == 2 && ! players.include?(nil)
     white, black = players.first, players.last
     match = self.create(opts)
 

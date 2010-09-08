@@ -32,6 +32,14 @@ class MatchController < ApplicationController
   # edit form for a new match
   def new; end
 
+  # json for autocomplete
+  def players
+    x = Player.find(:all, :conditions => "name like '#{ params[:term] }%'" ).map do |p|
+        p.name
+    end
+    render :text => x.to_json, :layout => false
+  end
+
   # give up the ghost
   def resign
     request.match.resign( current_player )
@@ -41,8 +49,7 @@ class MatchController < ApplicationController
   # start the fun
   # TODO error handling in MatchController#create
   def create
-
-    req_players = [ request.player, Player.find( params[:opponent_id] ) ]
+    req_players = [ request.player, opponent ]
     match_players = params[:opponent_side] =='white' ? req_players.reverse : req_players
 
     @match = Match.start!( :players => match_players, :start_pos => params[:start_pos] )
@@ -52,4 +59,11 @@ class MatchController < ApplicationController
     redirect_to match_url(@match.id)
   end
 
+  def opponent
+    if id = params[:opponent_id]
+      Player.find(id)
+    elsif name = params[:opponent_name]
+      Player.find_by_name(name)
+    end
+  end
 end
