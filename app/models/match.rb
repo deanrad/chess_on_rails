@@ -52,11 +52,11 @@ class Match < ActiveRecord::Base
   end
 
   def white
-    @white ||= gameplays.white.player
+    @white ||= gameplays.white && gameplays.white.player
   end
 
   def black
-    @black ||= gameplays.black.player
+    @black ||= gameplays.black && gameplays.black.player
   end
 
   def name
