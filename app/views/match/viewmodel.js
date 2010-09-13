@@ -32,19 +32,24 @@ var game_view_model = {
     <%= match.boards.map(&:to_json).join(",\n    ") %>
   ]),
   
+  // Does not follow the subscriber model, since its too busy..
   add_move:                 function( mv, board ){
-    if ( ko.utils.arrayFirst( game_view_model.all_moves(), 
-                              function(m){ return m.id == mv.id  } ) != null ) {
+    if ( game_view_model.all_moves().map( function(mv){ return mv.id } ).indexOf(mv.id) > -1 ){
       console.log('already have move ' + mv.id + ', skipping ..')
       return;
     }
+    console.log('adding move ' + mv.id)
     this.all_moves.push( mv );
     this.all_boards.push( board );
+
+    if( mv.id == this.last_move_id){
+      this.redraw_board( board );
+    }
+
     this.reset_poller();
   },
   add_chat:                 function( ch ){
-    if ( ko.utils.arrayFirst( game_view_model.all_chats(), 
-                              function(c){ return c.id == ch.id  } ) != null ) {
+    if ( game_view_model.all_chats().map( function(ch){ return ch.id } ).indexOf(ch.id) > -1 ){
       console.log('already have chat ' + ch.id + ', skipping ..')
       return;
     }
@@ -54,6 +59,7 @@ var game_view_model = {
     var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
     render  = $.tmpl( chatTemplate, ch );
 		$('#chat_window').append( render );
+
     this.reset_poller();
   },
   increment_poll:           function(){
@@ -81,9 +87,24 @@ var game_view_model = {
   set_display_move:         function( move_num ){
     //TODO allow playback via setting this parameter
   },
+  redraw_board:             function(board) {
+    console.log('Redrawing board.')
+    $('td.piece_container').each( 
+       function( elem ){ 
+         try{
+  	       elem.empty();
+         }
+         catch(ex){
+  	       alert(ex); return;
+         }
+       }
+    );
+  },
+
+  // Performs a poll, evaling what comes back, and schedules the next poll.
   poll:                     function(){
-    console.log('initiating poll num:' + game_view_model.poll_count)
     game_view_model.increment_poll();
+    console.log('initiating poll num: ' + game_view_model.poll_count + ' - next poll in ' + game_view_model.next_poll_in + ' seconds')
     
     $.get( "<%= url_for :action => 'update_view', :format => :js %>",
         { 
@@ -96,7 +117,6 @@ var game_view_model = {
         }    
     ); 
 
-    console.log('next poll in ' + game_view_model.next_poll_in + ' seconds');
     window.setTimeout( game_view_model.poll,  game_view_model.next_poll_in * 1000);
   },
   update_title:             function(your_turn){
@@ -115,7 +135,6 @@ ko.applyBindings(document.body, game_view_model);
 
 // Set up subscriptions on interesting items
 game_view_model.your_turn.subscribe( game_view_model.update_title );
-game_view_model.all_moves.subscribe( game_view_model.update_move_list );
 
 //TODO kickoff polling loop
 window.setTimeout( game_view_model.poll, game_view_model.next_poll_in * 1000 )
