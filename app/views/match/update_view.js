@@ -3,12 +3,8 @@ game_view_model.last_move_id =  <%= last_move ? last_move.id : 'null' %>;
 game_view_model.last_chat_id =  <%= last_chat ? last_chat.id : 'null' %>;
 
 game_view_model.your_turn( <%= your_turn %> );
-//dirty, should use data-binding
-document.title = document.title.replace( clientConfig.your_turn_msg, '' );
-<% if your_turn -%>
-  document.title = clientConfig.your_turn_msg + document.title
-<% end %>
 
+// update the allowed moves from the current board
 game_view_model.allowed_moves = <%= board.allowed_moves.to_json %>;
 
 // Update any moves/boards they haven't seen;
