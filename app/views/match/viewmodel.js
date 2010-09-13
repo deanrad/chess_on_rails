@@ -104,6 +104,9 @@ var game_view_model = {
     if (your_turn){
       document.title = clientConfig.your_turn_msg + document.title
     }
+  },
+  update_move_list:         function(mv){
+    $("#move_list").append( mv.notation );
   }
 };
 
@@ -112,6 +115,7 @@ ko.applyBindings(document.body, game_view_model);
 
 // Set up subscriptions on interesting items
 game_view_model.your_turn.subscribe( game_view_model.update_title );
+game_view_model.all_moves.subscribe( game_view_model.update_move_list );
 
 //TODO kickoff polling loop
 window.setTimeout( game_view_model.poll, game_view_model.next_poll_in * 1000 )
