@@ -18,7 +18,7 @@ var game_view_model = {
   allowed_moves:            <%= board.allowed_moves.to_json %>,
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
   
-  displayed_move_num:       new ko.observable(<%= match.moves.count %>),
+  display_move:            new ko.observable(<%= match.moves.count %>),
 
   all_moves:                new ko.observableArray([
     <%= match.moves.map(&:to_json).join(",\n    ") %>
@@ -43,11 +43,46 @@ var game_view_model = {
     this.all_boards.push( board );
 
     if( mv.id == this.last_move_id){
-      this.redraw_board( board );
+      this.set_display_move( this.all_boards.indexOf(board) );
     }
 
     this.reset_poller();
   },
+  
+  layout_board:             function(board_idx) {
+    console.log('Laying out board ' + board_idx  );
+    $('td.piece_container').empty();
+    $('td.piece_container').append("&nbsp;");
+    $.each( game_view_model.all_boards()[board_idx], function (pos, piece) { 
+        // piece = [w, f, pawn] for example
+
+        img_base = piece[2] + "_" + piece[0]
+        board_id = (piece[1] ? piece[1].substr(0,1)+'_' : '') + img_base;
+
+        var img = '<img id="' + board_id + '" class="piece" src="/images/sets/default/' + img_base + '.png" />';
+
+        $("#" + pos).empty();
+        $("#" + pos).append(img);
+      })
+  },
+
+  // Lays out the board and enables/disables moves via drag/drop mediated thru CSS
+  set_display_move:         function(mvidx) {
+     game_view_model.layout_board(mvidx);
+     if( mvidx == game_view_model.all_boards().length-1 ){
+        $('td.piece_container img').removeClass();
+        
+        $('td.piece_container').each( 
+          function(idx, elem) {
+            sq_id = $(this).attr('id')
+            allowed = game_view_model.allowed_moves[sq_id]
+            allowed = allowed == undefined ? '' : allowed.join(' ')
+            $('img', this).addClass( "piece " + allowed )
+          }
+        );
+     } 
+  },
+
   add_chat:                 function( ch ){
     if ( game_view_model.all_chats().map( function(ch){ return ch.id } ).indexOf(ch.id) > -1 ){
       console.log('already have chat ' + ch.id + ', skipping ..')
@@ -62,6 +97,7 @@ var game_view_model = {
 
     this.reset_poller();
   },
+
   increment_poll:           function(){
     game_view_model.poll_count += 1;
     
@@ -74,31 +110,10 @@ var game_view_model = {
     else 
       game_view_model.next_poll_in = 3600;
   },
+
   reset_poller:           function(){
     this.poll_count = 0;
     this.next_poll_in = clientConfig.initial_poll_interval;
-  },
-  unbind_draggables:        function(){
-    console.log('unbinding draggables')
-  },
-  bind_draggables:          function(){
-    console.log('binding draggables')
-  },
-  set_display_move:         function( move_num ){
-    //TODO allow playback via setting this parameter
-  },
-  redraw_board:             function(board) {
-    console.log('Redrawing board.')
-    $('td.piece_container').each( 
-       function( elem ){ 
-         try{
-  	       elem.empty();
-         }
-         catch(ex){
-  	       alert(ex); return;
-         }
-       }
-    );
   },
 
   // Performs a poll, evaling what comes back, and schedules the next poll.
@@ -124,9 +139,6 @@ var game_view_model = {
     if (your_turn){
       document.title = clientConfig.your_turn_msg + document.title
     }
-  },
-  update_move_list:         function(mv){
-    $("#move_list").append( mv.notation );
   }
 };
 
@@ -134,7 +146,11 @@ var game_view_model = {
 ko.applyBindings(document.body, game_view_model);
 
 // Set up subscriptions on interesting items
-game_view_model.your_turn.subscribe( game_view_model.update_title );
+game_view_model.your_turn.subscribe(    game_view_model.update_title );
+game_view_model.display_move.subscribe( game_view_model.set_display_move );
 
-//TODO kickoff polling loop
+// Show first move
+game_view_model.display_move( game_view_model.all_boards().length - 1 );
+
+// Kickoff polling loop
 window.setTimeout( game_view_model.poll, game_view_model.next_poll_in * 1000 )

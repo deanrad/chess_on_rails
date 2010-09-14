@@ -1,10 +1,10 @@
 <% match.moves.each_with_index do |m, i| -%>
   <%if (i%2)==0 %>
-    <div class="move_w" onclick="set_board(<%= i+1 %>)">
+    <div class="move_w" onclick="game_view_model.display_move(<%= i %>)">
       <%= ( ((i+2)/2).to_s + ". " + m.notation ).ljust(10) -%>
     </div>
   <%else%>
-    <div class="move_b" onclick="set_board(<%= i+1 %>)">
+    <div class="move_b" onclick="game_view_model.display_move(<%= i %>)">
       <%= "#{m.notation}\n" -%>
     </div>
   <% end %>
