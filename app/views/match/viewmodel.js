@@ -69,15 +69,27 @@ var game_view_model = {
   // Lays out the board and enables/disables moves via drag/drop mediated thru CSS
   set_display_move:         function(mvidx) {
      game_view_model.layout_board(mvidx);
+     
+     //if this is the latest move, rebind allowed moves/draggables
      if( mvidx == game_view_model.all_boards().length-1 ){
         $('td.piece_container img').removeClass();
         
         $('td.piece_container').each( 
           function(idx, elem) {
             sq_id = $(this).attr('id')
+
+            //set the piece therein to have css classes for each allowed move
             allowed = game_view_model.allowed_moves[sq_id]
             allowed = allowed == undefined ? '' : allowed.join(' ')
-            $('img', this).addClass( "piece " + allowed )
+            $('img', this).addClass( "piece " + allowed );
+            $('img', this).draggable( {revert: 'invalid', grid: [42, 42] } );
+            
+            // set all squares to be drop targets which accept if the draggable
+            // is tagged with their class (love this strategy!)
+            $(this).droppable({ 
+                accept: '.'+sq_id,
+                hoverClass: 'mayDropPiece' //TODO hoverClass not working
+            });
           }
         );
      } 

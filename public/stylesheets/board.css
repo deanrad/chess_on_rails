@@ -35,6 +35,8 @@ h1 { font-size: 14pt; font-weight: bold }
   margin:0px; padding: 0px;
  }
 
+.mayDropPiece { background-color: green; }
+
 
 .move_creator_parent { clear: both; float: left; }
 .instructions { display:none }
