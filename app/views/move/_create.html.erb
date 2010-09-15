@@ -5,7 +5,7 @@
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
     <%= f.hidden_field :match_id, :value => match.id %><br/>
 
-    <%= submit_tag "Submit Move", :id => 'move_submit_btn', :disabled => !your_turn %>
+    <%= submit_tag "Submit Move", :id => 'move_submit_btn', :"data-bind" => "enable: your_turn" %>
     <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
 
