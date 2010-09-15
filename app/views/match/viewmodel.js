@@ -1,5 +1,5 @@
 var clientConfig= {
-  initial_poll_interval: 3,
+  initial_poll_interval: 1,
   your_turn_msg: 'Your Turn - '
 }
 // Because client state will change while the page is loaded, we set up an object
@@ -42,13 +42,29 @@ var game_view_model = {
     this.all_moves.push( mv );
     this.all_boards.push( board );
 
+    //if we are not caught up, we only need to update on the final move known about
     if( mv.id == this.last_move_id){
-      this.set_display_move( this.all_boards.indexOf(board) );
+      my_index = this.all_boards.indexOf(board)
+      this.set_display_move( my_index );
+      this.add_to_move_list( mv, my_index );
     }
 
     this.reset_poller();
   },
-  
+
+  add_to_move_list:         function( mv, index ) {
+    console.log('adding move ' + mv.notation + ' to move list at index ' + index);
+    mv.index = index;
+    if( index % 2 == 1 ){
+      mv.ply_count = Math.ceil(index/2); mv.index = index
+      template = '<div class="move_w" onclick="game_view_model.set_display_move(#{index})">${ply_count}. ${notation}</div>';
+    } 
+    else{
+      template = '<div class="move_b" onclick="game_view_model.set_display_move(#{index})">${notation}</div>';
+    }
+    $("#move_list").append( $.tmpl( template, mv ) )
+  },
+
   layout_board:             function(board_idx) {
     console.log('Laying out board ' + board_idx  );
     $('td.piece_container').empty();
@@ -56,9 +72,11 @@ var game_view_model = {
     $.each( game_view_model.all_boards()[board_idx], function (pos, piece) { 
         // piece = [w, f, pawn] for example
 
+        //TODO return from the serverside DTO's {img: '', board_id: ''}
         img_base = piece[2] + "_" + piece[0]
         board_id = (piece[1] ? piece[1].substr(0,1)+'_' : '') + img_base;
 
+        //TODO use template
         var img = '<img id="' + board_id + '" class="piece" src="/images/sets/default/' + img_base + '.png" />';
 
         $("#" + pos).empty();
@@ -69,9 +87,13 @@ var game_view_model = {
   // Lays out the board and enables/disables moves via drag/drop mediated thru CSS
   set_display_move:         function(mvidx) {
      game_view_model.layout_board(mvidx);
+
+     //get rid of, then replace draggables
+     $('td.piece_container img').draggable("destroy");
      
-     //if this is the latest move, rebind allowed moves/draggables
-     if( mvidx == game_view_model.all_boards().length-1 ){
+     //if this is the latest move and your turn, rebind allowed moves/draggables
+     if( mvidx == game_view_model.all_boards().length-1 && game_view_model.your_turn()){
+        console.log('rebinding draggables')
         $('td.piece_container img').removeClass();
         
         $('td.piece_container').each( 
@@ -83,16 +105,12 @@ var game_view_model = {
             allowed = allowed == undefined ? '' : allowed.join(' ')
             $('img', this).addClass( "piece " + allowed );
             $('img', this).draggable( {revert: 'invalid', grid: [42, 42] } );
-            
-            // set all squares to be drop targets which accept if the draggable
-            // is tagged with their class (love this strategy!)
-            $(this).droppable({ 
-                accept: '.'+sq_id,
-                hoverClass: 'mayDropPiece' //TODO hoverClass not working
-            });
           }
         );
      } 
+     else{
+       $('td.piece_container img').draggable("destroy");
+     }
   },
 
   add_chat:                 function( ch ){
@@ -113,12 +131,14 @@ var game_view_model = {
   increment_poll:           function(){
     game_view_model.poll_count += 1;
     
-    if ( game_view_model.poll_count <=  10 )
-      game_view_model.next_poll_in = 3;
-    else if (game_view_model.poll_count <= 20 )
-      game_view_model.next_poll_in = 10;
+    if ( game_view_model.poll_count <=  15 )
+      game_view_model.next_poll_in = clientConfig.initial_poll_interval;
+    else if (game_view_model.poll_count <= 30 )
+      game_view_model.next_poll_in = 5;
     else if (game_view_model.poll_count <= 50 )
-      game_view_model.next_poll_in = 60;
+      game_view_model.next_poll_in = 30;
+      else if (game_view_model.poll_count <= 100 )
+        game_view_model.next_poll_in = 60;
     else 
       game_view_model.next_poll_in = 3600;
   },
@@ -146,6 +166,20 @@ var game_view_model = {
 
     window.setTimeout( game_view_model.poll,  game_view_model.next_poll_in * 1000);
   },
+  submit_move:              function(from, to){
+    $.post( "<%= create_match_moves_path(match.id) %>",
+        { 
+          'move[match_id]':           <%= match.id %>, 
+          'move[from_coord]':         from,
+          'move[to_coord]':           to,
+          authenticity_token: '<%= form_authenticity_token %>' 
+        },
+        function(data){
+          console.log('AJAX POST returned: ' + data);
+        }    
+    ); 
+    game_view_model.reset_poller();
+  },
   update_title:             function(your_turn){
     document.title = document.title.replace( clientConfig.your_turn_msg, '' );
     if (your_turn){
@@ -163,6 +197,23 @@ game_view_model.display_move.subscribe( game_view_model.set_display_move );
 
 // Show first move
 game_view_model.display_move( game_view_model.all_boards().length - 1 );
+
+// Allow for droppability
+$('td.piece_container').each( 
+  function() {
+    sq_id = $(this).attr('id')
+    $(this).droppable({ 
+        accept: '.'+sq_id,
+        hoverClass: 'mayDropPiece', //TODO hoverClass not working
+        drop: function(evt, ui){
+          from = ui.draggable.parent().attr('id');
+          to = $(this).attr('id');
+          console.log(from  + ' dropped on ' + to );
+          game_view_model.submit_move( from, to )
+        }
+    });
+  });
+
 
 // Kickoff polling loop
 window.setTimeout( game_view_model.poll, game_view_model.next_poll_in * 1000 )
