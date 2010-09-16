@@ -176,9 +176,10 @@ var game_view_model = {
         },
         function(data){
           console.log('AJAX POST returned: ' + data);
+          game_view_model.poll();
+          game_view_model.reset_poller();
         }    
     ); 
-    game_view_model.reset_poller();
   },
   update_title:             function(your_turn){
     document.title = document.title.replace( clientConfig.your_turn_msg, '' );
