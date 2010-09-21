@@ -9,11 +9,8 @@ class ChatsController < ApplicationController
     chat.match_id = params[:match_id]
     chat.player_id = current_player.id
 
-    respond_to do |format|
-      if chat.save
-        format.html { render :action => :show }
-      end
-    end
+    chat.save! 
+    render :text => 'ok'
   end
 
 end

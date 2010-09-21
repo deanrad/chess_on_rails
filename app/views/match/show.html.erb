@@ -26,10 +26,9 @@
 
 		
     <div id="chat_form" style="float:left;">
-      <% form_for( Chat.new, :url => match_chat_path(match) ) do |f| %>
-      <%= f.text_field :text, :style => 'width:150px' %>
-      <%= f.submit 'Send', :onclick => "window.setTimeout(function(){$('chat_text').clear();}, 200)" %>
-      <% end %>
+			<form action="<%= match_chat_path(match) %>" method="POST" onsubmit="game_view_model.submit_chat(); return false;">
+      <input type="text" name="chat[text]" id="chat_msg" data-bind="value: chat_msg, valueUpdate: 'keyup'"/>
+			<input type="submit" value="Send" >
     </div>
   </div>
   <% end %>

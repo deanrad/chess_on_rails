@@ -1,5 +1,5 @@
 var clientConfig= {
-  initial_poll_interval: 1,
+  initial_poll_interval: 2,
   your_turn_msg: 'Your Turn - '
 }
 // Because client state will change while the page is loaded, we set up an object
@@ -18,7 +18,8 @@ var game_view_model = {
   allowed_moves:            <%= board.allowed_moves.to_json %>,
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
   
-  display_move:            new ko.observable(<%= match.moves.count %>),
+  display_move:             new ko.observable(<%= match.moves.count %>),
+  chat_msg:                 new ko.observable(''),
 
   all_moves:                new ko.observableArray([
     <%= match.moves.map(&:to_json).join(",\n    ") %>
@@ -113,6 +114,19 @@ var game_view_model = {
      }
   },
 
+  submit_chat:              function(){
+    $.post( "<%= match_chat_path(match) %>",
+        { 
+          'chat[text]':         game_view_model.chat_msg(),
+          authenticity_token: '<%= form_authenticity_token %>' 
+        },
+        function(data){
+          game_view_model.chat_msg('');
+          game_view_model.reset_poller();
+        } 
+    );   
+  },
+  
   add_chat:                 function( ch ){
     if ( game_view_model.all_chats().map( function(ch){ return ch.id } ).indexOf(ch.id) > -1 ){
       console.log('already have chat ' + ch.id + ', skipping ..')
@@ -146,6 +160,7 @@ var game_view_model = {
   reset_poller:           function(){
     this.poll_count = 0;
     this.next_poll_in = clientConfig.initial_poll_interval;
+    window.setTimeout( game_view_model.poll,  game_view_model.next_poll_in * 1000);
   },
 
   // Performs a poll, evaling what comes back, and schedules the next poll.
