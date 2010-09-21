@@ -64,6 +64,9 @@ var game_view_model = {
       template = '<div class="move_b" onclick="game_view_model.set_display_move(#{index})">${notation}</div>';
     }
     $("#move_list").append( $.tmpl( template, mv ) )
+    moveDiv = document.getElementById('move_list');
+    moveDiv.scrollTop = moveDiv.scrollHeight;
+		
   },
 
   layout_board:             function(board_idx) {
@@ -138,6 +141,8 @@ var game_view_model = {
     var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
     render  = $.tmpl( chatTemplate, ch );
 		$('#chat_window').append( render );
+		chatDiv = document.getElementById('chat_window');
+    chatDiv.scrollTop = chatDiv.scrollHeight;
 
     this.reset_poller();
   },
