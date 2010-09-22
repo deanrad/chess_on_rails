@@ -28,6 +28,8 @@ h1 { font-size: 14pt; font-weight: bold }
 .active_yours { background-color:black; color:white; font-weight:bold; float:right;}
 .active_theirs { background-color:eee; color:bbb; font-weight:bold; float:right;}
 
+#original_board {margin-bottom: 5px;}
+
 .board_table { clear:both ;}
 .board_table td{
   width:40px; height:40px;

@@ -17,9 +17,17 @@ class Match < ActiveRecord::Base
     def black; self[1]; end
   end
   
+  def initial_board
+    return @initial_board if @initial_board
+    return @initial_board = Chess.new_board if start_pos.blank?
+    fen = Fen.new(start_pos)
+    fen.parse
+    return @initial_board = fen.board
+  end
+  
   # the boards this match has known, in move order from the beginning
   def boards
-    @boards ||= moves.inject([Chess.new_board]) do |all_boards, mv|
+    @boards ||= moves.inject([ self.initial_board ]) do |all_boards, mv|
       all_boards << all_boards.last.clone.toggle_side_to_move!.play_move!(mv)
     end
   end
@@ -41,13 +49,17 @@ class Match < ActiveRecord::Base
     match.gameplays << Gameplay.new(:player_id => white.id) 
     match.gameplays << Gameplay.new(:player_id => black.id, :black => true)
     
-    if setup = opts[:start_pos] && ! setup.blank? && PGN::is_pgn?( setup )
-      # TODO leave original PGN in start_pos, but ignore it (since its moves have been saved as move records)
-      match.update_attribute(:start_pos, nil)
+    if setup = opts[:start_pos] && ! setup.blank?
+      if PGN::is_pgn?( setup )
+        # TODO leave original PGN in start_pos, but ignore it (since its moves have been saved as move records)
+        match.update_attribute(:start_pos, nil)
 
-      pgn = PGN.new( setup )
-      pgn.playback_against( match )
-      logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{setup}" if pgn.playback_errors
+        pgn = PGN.new( setup )
+        pgn.playback_against( match )
+        logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{setup}" if pgn.playback_errors
+      elsif fen=Fen.new(setup) && fen.parse
+        
+      end
     end
     match
   end

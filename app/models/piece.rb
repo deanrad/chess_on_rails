@@ -39,7 +39,7 @@ class Piece
   def initialize(side, function, discriminator=nil)
     @side, @function, @discriminator = side, function, discriminator
   end
-
+  
   # without respect to any other pieces, can the piece move the given vector
   # (length and direction) from that place
   def self.allowed_move?(vector, starting_rank = nil)
@@ -149,6 +149,26 @@ class Piece
       else @function.to_s[0,1]
     end
     return letter.send( @side==:white ? :upcase : :downcase )
+  end
+
+  def self.new_from_fen( char, pos )
+    side= char.downcase? ? :black : :white
+    case char.downcase
+    when 'p'
+      Pawn.new(side, pos)
+    when 'r'
+      Rook.new(side, pos)
+    when 'n'
+      Knight.new(side, pos)
+    when 'b'
+      Bishop.new(side, pos)
+    when 'q'
+      Queen.new(side, pos)
+    when 'k'
+      King.new(side)
+    else 
+      raise Fen::Error, "#{char} does not specify a valid piece type."
+    end
   end
 
 end

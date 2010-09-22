@@ -20,8 +20,9 @@ class Move < ActiveRecord::Base
   end
 
   # The board this move is being made against - set and read for validations
-  def board; @board ||= match.board; end
-  private :board
+  def board
+    @board ||= match.board
+  end
 
   def before_validation
     @board = match.board

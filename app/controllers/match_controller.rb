@@ -54,7 +54,7 @@ class MatchController < ApplicationController
 
     @match = Match.start!( :players => match_players, :start_pos => params[:start_pos] )
 
-    ChessNotifier.deliver_match_created( req_players.first, req_players.last, self)
+    ChessNotifier.deliver_match_created( req_players.last, req_players.first, self)
     
     redirect_to match_url(@match.id)
   end

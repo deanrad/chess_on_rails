@@ -15,6 +15,7 @@ var game_view_model = {
   next_poll_in:             clientConfig.initial_poll_interval,             
 
   your_turn:                new ko.observable(<%= your_turn %>),
+  side_to_move:             new ko.observable('<%= match.side_to_move.to_s.titleize %>'),
   allowed_moves:            <%= board.allowed_moves.to_json %>,
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
   

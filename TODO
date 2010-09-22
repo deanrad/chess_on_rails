@@ -5,16 +5,21 @@ Triage for relevant development activities
  - Make sure developer-on-boarding process is simple
 
 Enabling for future dev:
+ - bundler
  - i18n 
- - MVVM for move/show templates !!! (POJS VM object, scriptaculous? template engine, careful not to do double work w.r.t. RJS)
- - Env.js tests for various browser sim/ JS validation
+ - Javascript tests of some sort
+
+User-facing:
+ - Start from arbitrary FEN - DONE 
+ - Selected piece/cancel move/etc..
 
 Features:
-  ** Notifications
-  ** Persistent login
   Mobile playability (TODO break this down into minimal steps needed) 
     - Simple streamlined templates - DONE
     - Click-click move interface - DONE
-    - No auto-refresh 
+    - No auto-refresh - DONE
     - Fewer (or no) clicks to get to an active match on which it's your turn
 
+Dreams:
+  Make frontend configurable as to which REST backend it talks to :)
+  

@@ -23,6 +23,9 @@ class String
       raise NoMethodError
     end
   end
+  def downcase?
+    !! (self[0..0] =~ /[a-z]/)
+  end
 end
 
 class Symbol
