@@ -115,16 +115,6 @@ class Piece
     return false
   end
 
-
-  # the first character of the side: w or b
-  def s; @side.to_s[0,1]; end
-
-  # the first character of the discriminator, or ''
-  def d; @discriminator ? @discriminator.to_s[0,1] : '' end
-
-  # the first, lower-case character of the function - p q, etc
-  def f; @function.to_s; end
-
   # when rendered the client id uniquely specifies an individual piece within a board
   # example: f_pawn_w
   def board_id
@@ -138,7 +128,7 @@ class Piece
   end
     
   def to_json(*args)
-    %q(["%s","%s","%s"]) % [self.s, self.d, self.f]
+    "{img:'#{self.img_name}', board_id:'#{self.board_id}'}"
   end
 
   # for FEN like situations

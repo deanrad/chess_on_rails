@@ -75,14 +75,9 @@ var game_view_model = {
     $('td.piece_container').empty();
     $('td.piece_container').append("&nbsp;");
     $.each( game_view_model.all_boards()[board_idx], function (pos, piece) { 
-        // piece = [w, f, pawn] for example
-
-        //TODO return from the serverside DTO's {img: '', board_id: ''}
-        img_base = piece[2] + "_" + piece[0]
-        board_id = (piece[1] ? piece[1].substr(0,1)+'_' : '') + img_base;
 
         //TODO use template
-        var img = '<img id="' + board_id + '" class="piece" src="/images/sets/default/' + img_base + '.png" />';
+        var img = '<img id="' + piece.board_id + '" class="piece" src="/images/sets/default/' + piece.img + '.png" />';
 
         $("#" + pos).empty();
         $("#" + pos).append(img);
@@ -116,6 +111,12 @@ var game_view_model = {
      else{
        $('td.piece_container img').draggable("destroy");
      }
+  },
+  decrement_displayed_move: function(){
+    //TODO display previous board, not less than 1
+  },
+  increment_displayed_move: function(){
+    //TODO display next board, not greater than current move
   },
 
   submit_chat:              function(){
@@ -226,7 +227,7 @@ $('td.piece_container').each(
     sq_id = $(this).attr('id')
     $(this).droppable({ 
         accept: '.'+sq_id,
-        hoverClass: 'mayDropPiece', //TODO hoverClass not working
+        hoverClass: 'drop-allowed', //TODO hoverClass not working
         drop: function(evt, ui){
           from = ui.draggable.parent().attr('id');
           to = $(this).attr('id');
@@ -236,6 +237,15 @@ $('td.piece_container').each(
     });
   });
 
+// Allow for keyboard handling
+$('body').keyup(function(event) {
+    if ($(event.target).is(':not(input, textarea)')) {
+      if (event.keyCode == 37) // left
+        game_view_model.decrement_displayed_move();
+      if (event.keyCode == 39) // right
+        game_view_model.increment_displayed_move();
+    }
+});
 
 // Kickoff polling loop
 window.setTimeout( game_view_model.poll, game_view_model.next_poll_in * 1000 )

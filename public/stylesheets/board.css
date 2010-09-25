@@ -1,28 +1,4 @@
-/*
-.label {background-color:gray; color:white; font-family:Arial; font-size:smaller}
-body {font-family: Arial; font-size: 10pt;}
-.instructions { font-size: 10pt; width:600px;}
-#new_move_form { font-size: 10pt; }
-#match_ender { font-size: 10pt; }
-#move_indicator { font-family: Times New Roman, serif; font-size: 12pt; }
-#board_table { border-width: 1px; border-style:solid; border-color:black; }
-
-#board_table .rank {width:20px; }
-#board_table .file {height:20px;}
-
-.piece {font-weight:bold;}
-
-#board_table td{
-  width:45px; height:45px;
-  border-width: 1px; border-style:solid; border-color:black;
-  margin:0px; padding: 0px;
- }
-
-.ml { height: 20px; }
-.hoverActive { background-color: #00ff00; }
-*/
-
-h1 { font-size: 14pt; font-weight: bold }
+h1 { font-size: 14pt; font-weight: bold; margin-bottom:3px; }
 
 #move_indicator { width: 360px; }
 .active_yours { background-color:black; color:white; font-weight:bold; float:right;}
@@ -37,8 +13,11 @@ h1 { font-size: 14pt; font-weight: bold }
   margin:0px; padding: 0px;
  }
 
-.mayDropPiece { background-color: green; }
 
+.drop-allowed { background-color: green; }
+.last-move-from { background-color: #c6f1c6;}
+.last-move-to { background-color: #c6f1c6;}
+.last-move-to-w-capture { background-color: #c6f1c6;}
 
 .move_creator_parent { clear: both; float: left; }
 .instructions { display:none }
