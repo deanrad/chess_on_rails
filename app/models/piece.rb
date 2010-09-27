@@ -100,10 +100,14 @@ class Piece
 
     return false if @function==:knight
 
-    if @function==:pawn && vector[0] != 0 
+    if @function==:pawn 
       dest_piece = board[ mypos ^ vector ]
-      return false if (mypos ^ vector)==board.en_passant_square
-      return true  unless dest_piece && dest_piece.side != self.side
+      if vector[0] == 0 
+        return !! dest_piece
+      else
+        return false if (mypos ^ vector)==board.en_passant_square
+        return true  unless dest_piece && dest_piece.side != self.side
+      end
     end
 
     vector.walk do |step|
