@@ -19,4 +19,17 @@ class Object
     match.chats << Chat.new( :player => match.white, :text => msg)
     msg
   end
+  
+  def reset
+    self.match = Match.find(self.match.id)
+  end
+  
+  def undo
+    self.match.moves.last.destroy
+    reset
+  end
+  
+  def errors
+    self.match.moves.last.errors.full_messages
+  end
 end

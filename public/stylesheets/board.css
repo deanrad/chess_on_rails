@@ -41,6 +41,9 @@ h1 { font-size: 14pt; font-weight: bold; margin-bottom:3px; }
 }
 .move_w{ float:left; clear:left; width: 82px }
 .move_b{ float:left; width: 82px}
+.move_list_current{ background-color: #ddd;}
+
+#playback_controls {}
 
 #a2, #a4, #a6, #a8,
 #b1, #b3, #b5, #b7,

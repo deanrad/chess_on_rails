@@ -10,6 +10,13 @@
 
 <div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">  
 
+	<div id="playback_controls">
+		<input type="button" value="|&lt;" data-bind="click:display_first_move"/>
+		<input type="button" value="&lt;&lt;" data-bind="enable:can_play_previous, click:decrement_displayed_move"/>
+		<span data-bind="text:display_board" style="color:white"></span>
+		<input type="button" value="&gt;&gt;" data-bind="enable:can_play_next, click:increment_displayed_move"/>
+		<input type="button" value="&gt;|" data-bind="click:display_last_move"/>
+	</div>
   <div id="move_list" class="move_list">
     <%= render :partial => 'move_list' %>
   </div>

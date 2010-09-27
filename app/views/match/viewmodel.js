@@ -19,7 +19,7 @@ var game_view_model = {
   allowed_moves:            <%= board.allowed_moves.to_json %>,
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
   
-  display_move:             new ko.observable(<%= match.moves.count %>),
+  display_board:            new ko.observable(<%= match.moves.count %>),
   chat_msg:                 new ko.observable(''),
 
   all_moves:                new ko.observableArray([
@@ -47,8 +47,8 @@ var game_view_model = {
     //if we are not caught up, we only need to update on the final move known about
     if( mv.id == this.last_move_id){
       my_index = this.all_boards.indexOf(board)
-      this.set_display_move( my_index );
       this.add_to_move_list( mv, my_index );
+      this.display_board( my_index );
     }
 
     this.reset_poller();
@@ -59,10 +59,10 @@ var game_view_model = {
     mv.index = index;
     if( index % 2 == 1 ){
       mv.ply_count = Math.ceil(index/2); mv.index = index
-      template = '<div class="move_w" onclick="game_view_model.set_display_move(#{index})">${ply_count}. ${notation}</div>';
+      template = '<div class="move_w" id="move_list_${index}" onclick="game_view_model.display_board(${index})">${ply_count}. ${notation}</div>';
     } 
     else{
-      template = '<div class="move_b" onclick="game_view_model.set_display_move(#{index})">${notation}</div>';
+      template = '<div class="move_b" id="move_list_${index}" onclick="game_view_model.display_board(${index})">${notation}</div>';
     }
     $("#move_list").append( $.tmpl( template, mv ) )
     moveDiv = document.getElementById('move_list');
@@ -85,7 +85,7 @@ var game_view_model = {
   },
 
   // Lays out the board and enables/disables moves via drag/drop mediated thru CSS
-  set_display_move:         function(mvidx) {
+  set_display_board:         function(mvidx) {
      game_view_model.layout_board(mvidx);
 
      //get rid of, then replace draggables
@@ -111,15 +111,36 @@ var game_view_model = {
      else{
        $('td.piece_container img').draggable("destroy");
      }
+     
+     //indicate this move in the movelist
+     $("#move_list div").removeClass('move_list_current');
+     $("#move_list_" + mvidx).addClass('move_list_current');
   },
-  decrement_displayed_move: function(){
-    //TODO display previous board, not less than 1
+  can_play_previous:         function(){
+    return (game_view_model.display_board() > 0);
   },
-  increment_displayed_move: function(){
-    //TODO display next board, not greater than current move
+  can_play_next:             function(){
+    return (game_view_model.display_board() < game_view_model.all_boards().length-1);
   },
-
-  submit_chat:              function(){
+  decrement_displayed_move:  function(){
+    cur_mvidx = game_view_model.display_board();
+    mvidx = cur_mvidx == 0 ? 0 : cur_mvidx - 1;
+    console.log("Setting move to " + mvidx);
+    game_view_model.display_board(mvidx);
+  },
+  increment_displayed_move:  function(){
+    cur_mvidx = game_view_model.display_board();
+    mvidx = (cur_mvidx == game_view_model.all_boards().length-1) ? game_view_model.all_boards().length-1 : cur_mvidx + 1
+    console.log("Setting move to " + mvidx)
+    game_view_model.display_board(mvidx);
+  },
+  display_first_move:        function(){
+    game_view_model.display_board(0);
+  },
+  display_last_move:         function(){
+    game_view_model.display_board(game_view_model.all_boards().length-1);
+  },
+  submit_chat:               function(){
     $.post( "<%= match_chat_path(match) %>",
         { 
           'chat[text]':         game_view_model.chat_msg(),
@@ -216,10 +237,10 @@ ko.applyBindings(document.body, game_view_model);
 
 // Set up subscriptions on interesting items
 game_view_model.your_turn.subscribe(    game_view_model.update_title );
-game_view_model.display_move.subscribe( game_view_model.set_display_move );
+game_view_model.display_board.subscribe( game_view_model.set_display_board );
 
 // Show first move
-game_view_model.display_move( game_view_model.all_boards().length - 1 );
+game_view_model.display_board( game_view_model.all_boards().length - 1 );
 
 // Allow for droppability
 $('td.piece_container').each( 
