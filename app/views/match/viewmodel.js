@@ -270,7 +270,7 @@ $('td.piece_container').each(
 // Allow for keyboard handling - arrow keys move back/forth through history
 // If focused in a text field, hit Esc to return to general keyboard mode
 $('body').keyup(function(event) {
-    if ($(event.target).is(':not(input, textarea)')) {
+    if ($(event.target).is(':not(:text)')) {
       if (event.keyCode == 37) // left
         game_view_model.decrement_displayed_move();
       if (event.keyCode == 39) // right
