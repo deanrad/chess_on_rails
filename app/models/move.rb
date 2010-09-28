@@ -35,12 +35,12 @@ class Move < ActiveRecord::Base
 
   def before_validation
     @board = match && match.board
-    return unless @board && from_coord
+    return unless @board 
 
     @piece_moving = @board[from_coord]
     @piece_moved_upon = @board[to_coord]
 
-    infer_coordinates_from_notation if !notation.blank? && (from_coord.blank? || to_coord.blank?)
+    infer_coordinates_from_notation if !notation.blank? || from_coord.blank? || to_coord.blank?
 
     if @board.en_passant_square == self.to_coord_sym
       coord = @board.en_passant_square ^ ( @piece_moving.side == :white  ? [0,-1]  : [0,1] )
