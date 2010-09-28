@@ -38,6 +38,8 @@ class Move < ActiveRecord::Base
     return unless @board 
 
     infer_coordinates_from_notation if !notation.blank? || from_coord.blank? || to_coord.blank?
+
+    return if from_coord.blank? || to_coord.blank?
     @piece_moving = @board[from_coord]
     @piece_moved_upon = @board[to_coord]
 
@@ -66,7 +68,7 @@ class Move < ActiveRecord::Base
     end
 
     if notation && ( from_coord.blank? || to_coord.blank? )
-      errors.add :notation, "The notation #{notation} doesn't specify a valid move" and return 
+      errors.add :notation, "The notation #{notation} doesn't specify a valid move for #{match.side_to_move} on this board." and return 
     end
     
     #ensure the validity of the coordinates we have whether specified or inferred

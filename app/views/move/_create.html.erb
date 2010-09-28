@@ -7,11 +7,6 @@
     <%= submit_tag "Submit Move", :id => 'move_submit_btn', :"data-bind" => "enable: your_turn" %>
 <% end %>
 
-<%= link_to "Resign", url_for(:action => 'resign'), 
-    :confirm => 'Are you truly ready to accept disgrace and sulk back to the rock from under which you came ?' %>
-
-<%= link_to "PGN", match_url(request.match, :format=>'pgn') %>
-    
 <div id="move_error">
 	<%= flash[:error] %>
 </div>

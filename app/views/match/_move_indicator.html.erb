@@ -1,9 +1,0 @@
-<div id="move_indicator">
-	
-	
-	<span style="float:left">(<span data-bind="text:side_to_move"></span> to move)</span>
-  <span class="active_yours" data-bind="visible:your_turn"     
-		style="<%= 'display:none' unless your_turn %>">Your Move</span> 
-  <span class="active_theirs" data-bind="visible:!your_turn()" 
-	  style="<%= 'display:none' if your_turn %>">Their Move</span> 
-</div>

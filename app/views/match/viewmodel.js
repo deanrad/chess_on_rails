@@ -216,6 +216,7 @@ var game_view_model = {
     window.setTimeout( game_view_model.poll,  game_view_model.next_poll_in * 1000);
   },
   submit_move:              function(from, to){
+    $("#board_table").addClass('busy');
     $.post( "<%= create_match_moves_path(match.id) %>",
         { 
           'move[match_id]':           <%= match.id %>, 
@@ -227,14 +228,10 @@ var game_view_model = {
           console.log('AJAX POST returned: ' + data);
           game_view_model.poll();
           game_view_model.reset_poller();
+          $("#board_table").removeClass('busy');
         }    
     ); 
-  },
-  update_title:             function(your_turn){
-    document.title = document.title.replace( clientConfig.your_turn_msg, '' );
-    if (your_turn){
-      document.title = clientConfig.your_turn_msg + document.title
-    }
+    
   }
 };
 
@@ -242,8 +239,14 @@ var game_view_model = {
 ko.applyBindings(document.body, game_view_model);
 
 // Set up subscriptions on interesting items
-game_view_model.your_turn.subscribe(    game_view_model.update_title );
 game_view_model.display_board.subscribe( game_view_model.set_display_board );
+game_view_model.all_moves.subscribe( function(){
+  document.title = document.title.replace( clientConfig.your_turn_msg, '' );
+
+  if( game_view_model.your_turn() ){
+    document.title = clientConfig.your_turn_msg + document.title
+  }
+})
 
 // Show first move
 game_view_model.display_board( game_view_model.all_boards().length - 1 );
@@ -264,7 +267,8 @@ $('td.piece_container').each(
     });
   });
 
-// Allow for keyboard handling
+// Allow for keyboard handling - arrow keys move back/forth through history
+// If focused in a text field, hit Esc to return to general keyboard mode
 $('body').keyup(function(event) {
     if ($(event.target).is(':not(input, textarea)')) {
       if (event.keyCode == 37) // left
@@ -272,6 +276,19 @@ $('body').keyup(function(event) {
       if (event.keyCode == 39) // right
         game_view_model.increment_displayed_move();
     }
+});
+$('body').keypress(function(event) {
+    if ($(event.target).is(':not(input, textarea)')) {
+      if (event.keyCode == 97) // 'c' for chat
+        $('#chat_msg').focus();
+      if (event.keyCode == 109) // 'm' for move
+        $('#move_notation').focus();
+        
+      return false; //dont register the keypress in the field
+    }
+});
+$(document).ready(function(){
+  $("#move_notation").focus();
 });
 
 // Kickoff polling loop
