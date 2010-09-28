@@ -96,6 +96,7 @@ var game_view_model = {
         console.log('rebinding draggables')
         $('td.piece_container img').removeClass();
         
+        // restore draggability
         $('td.piece_container').each( 
           function(idx, elem) {
             sq_id = $(this).attr('id')
@@ -108,11 +109,16 @@ var game_view_model = {
           }
         );
      } 
-     else{
-       $('td.piece_container img').draggable("destroy");
+
+     // show the move that brought this board to this state
+     $('td.piece_container').removeClass('last-move-from last-move-to last-move-to-x');
+     if(mvidx > 0){
+       mv = game_view_model.all_moves()[mvidx - 1];
+       $('#' + mv.from_coord ).addClass('last-move-from')
+       $('#' + mv.to_coord   ).addClass('last-move-to' + (mv.captured_piece_coord == undefined ? '' : '-x') )
      }
      
-     //indicate this move in the movelist
+     // highlight this move in the movelist
      $("#move_list div").removeClass('move_list_current');
      $("#move_list_" + mvidx).addClass('move_list_current');
   },

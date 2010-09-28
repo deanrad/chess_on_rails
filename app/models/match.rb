@@ -1,9 +1,7 @@
 class Match < ActiveRecord::Base
   
   has_many :players, :through    => :gameplays
-  has_many :moves,   :before_add => :refer_to_match_instance,
-                     :after_add  => [:save_board,
-                                      :check_for_checkmate] 
+  has_many :moves
 
   has_many :chats
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
@@ -18,12 +16,10 @@ class Match < ActiveRecord::Base
   end
   
   def initial_board
-    return @initial_board if @initial_board
-    return @initial_board = Chess.new_board if start_pos.blank?
-    fen = Fen.new(start_pos)
-    fen.parse
-    return @initial_board = fen.board
+    @initial_board ||= start_pos.blank? ? Chess.new_board : Fen.new(start_pos).parse
   end
+
+  def reload; super; @boards = nil; self; end
   
   # the boards this match has known, in move order from the beginning
   def boards
@@ -74,11 +70,6 @@ class Match < ActiveRecord::Base
 
   def name
     self[:name] || lineup
-  end
-
-  # ensure that the match object instance used is ourselves
-  def refer_to_match_instance( move )
-    move.match = self
   end
 
   # cache this board and make it the most recent one

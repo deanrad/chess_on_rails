@@ -3,10 +3,8 @@
     Notation: <%= f.text_field :notation  %> or... <br/>
     From: <%= f.text_field :from_coord, :maxlength => '2' %> and
     To: <%= f.text_field :to_coord, :maxlength => '2' %>
-    <%= f.hidden_field :match_id, :value => match.id %><br/>
 
     <%= submit_tag "Submit Move", :id => 'move_submit_btn', :"data-bind" => "enable: your_turn" %>
-    <input type="button" value="Cancel" onclick="document.location.reload()"/>
 <% end %>
 
 <%= link_to "Resign", url_for(:action => 'resign'), 
@@ -14,9 +12,6 @@
 
 <%= link_to "PGN", match_url(request.match, :format=>'pgn') %>
     
-
-<%= javascript_tag("$('move_notation').focus()") %>
-
 <div id="move_error">
 	<%= flash[:error] %>
 </div>

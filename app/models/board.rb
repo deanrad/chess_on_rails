@@ -1,14 +1,9 @@
 # A Board is a snapshot of a match at a moment in time, implemented as a hash
-# whose keys are positions and whose values are the pieces at those positions
+# whose keys are (symbol) positions and whose values are pieces
 class Board < Hash
 
-  alias :pieces	            :values
-  alias :occupied_positions :keys
+  attr_accessor :last_move, :piece_moved, :en_passant_square
 
-  attr_accessor :last_move
-  attr_accessor :piece_moved
-
-  attr_accessor :en_passant_square
   attr_accessor_with_default :side_to_move, :white
 
   attr_accessor_with_default :white_can_castle_kingside,  true
@@ -19,21 +14,19 @@ class Board < Hash
 
   attr_accessor_with_default :graveyard, []
 
-  # Oh god, why do I still need this silly thing ?!
-  def [] x  
-    x = x.to_sym
-    super
-  end
+  def [] x;  x = x.to_sym; super ; end
   
   def kill at_position
-    graveyard << self[at_position] if self[at_position]
+    return unless self[at_position]
+    graveyard << self.delete(at_position)
   end
 
   # updates internals with a given move played
   # Dereferences any existing piece we're moving onto or capturing enpassant
   # Updates our EP square or nils it out
   def play_move!( m )
-    m = Move.new(m) if m.class==Hash
+    
+    m = Move.new(m) if m.kind_of?(Hash)
     self.kill( m.captured_piece_coord_sym || m.to_coord_sym )
 
     self.last_move = m
@@ -125,17 +118,6 @@ class Board < Hash
     !! assassin
   end
 
-  # Says whether the move is an en_passant capture
-  def en_passant_capture?( from_coord, to_coord ) 
-    attacker = self[from_coord]
-    return nil unless (attacker && attacker.function == :pawn && to_coord == self.en_passant_square)
-
-    capture_coord = (to_coord.file.to_s + Chess::EN_PASSANT[attacker.side.opposite].last.to_s).to_sym
-    if self.has_key?(capture_coord) && self[capture_coord].side == attacker.side.opposite
-      return capture_coord
-    end
-  end
-
   #simplest logic here - if theres a move you're allowed which gets you out of check, you're not in checkmate
   #contrast with more intelligent Capture/Block/Evade strategy
   def in_checkmate?( side )
@@ -146,13 +128,11 @@ class Board < Hash
     each_pair do |pos, piece|
       next if piece.side != side
       return false if way_out
-
       piece.allowed_moves(self).each do |mv|
         consider_move( Move.new( :from_coord => pos, :to_coord => mv ) ) do |b|
-	  way_out = ! b.in_check?( side )
-	end
+          way_out = ! b.in_check?( side )
+        end
       end
-
     end
     return !way_out
   end

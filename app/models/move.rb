@@ -23,28 +23,36 @@ class Move < ActiveRecord::Base
   def board
     @board ||= match.board
   end
+  
+  # The match this move is being made against - the exact instance
+  def match
+    return @match if @match
+    ObjectSpace.each_object(Match) do |m| 
+      @match=m if m.id == match_id
+    end
+    @match ||= Match.find(match_id)
+  end
 
   def before_validation
-    @board = match.board
-
-    infer_coordinates_from_notation if !notation.blank? && (from_coord.blank? || to_coord.blank?)
-
-    return unless from_coord
+    @board = match && match.board
+    return unless @board && from_coord
 
     @piece_moving = @board[from_coord]
     @piece_moved_upon = @board[to_coord]
+
+    infer_coordinates_from_notation if !notation.blank? && (from_coord.blank? || to_coord.blank?)
+
+    if @board.en_passant_square == self.to_coord_sym
+      coord = @board.en_passant_square ^ ( @piece_moving.side == :white  ? [0,-1]  : [0,1] )
+      self.captured_piece_coord = coord.to_s
+    end
+
   end
 
   #fields like the notation and whether this was a castling are stored with the move
   def update_computed_fields
     self.castled = 1 if (@piece_moving.function==:king && from_coord_sym.file=='e' && to_coord_sym.file =~ /[cg]/ )
-
-    if ep = board.en_passant_capture?(from_coord_sym, to_coord_sym)
-      self.captured_piece_coord = ep.to_s
-    end
-
     self.notation = notate
-    # self.player = match.opponent_of( match.send( match.side_to_move ) )
   end
 
   #stuff here depends on knowledge of the board's position prior to the move being committed

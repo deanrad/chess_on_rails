@@ -9,7 +9,8 @@ class MoveController < ApplicationController
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
     raise ArgumentError, "It is your not your turn to move yet" unless request.your_turn?
 
-    @match.moves << @move = Move.new( params[:move] )
+    @move = @match.moves.build( params[:move] )
+    @move.save
     flash[:error] = @move.errors.full_messages unless @move.id
 
     # unceremonious way of saying you just ended the game 
@@ -29,8 +30,8 @@ protected
     this_match << ".wml" if request.mobile?
     redirect_to( this_match ) and return unless request.xhr? 
     
-    #otherwise do a normal status update to refresh UI
-    render :template => 'match/status' and return
+    #for non AJAX, should do something else
+    render :json => @move.to_json
   end
 
 end
