@@ -99,7 +99,8 @@ class Match < ActiveRecord::Base
 
   # Returns the symbol :white or :black of the next to move in this match
   def side_to_move
-    board.side_to_move
+    s = initial_board.side_to_move
+    moves.count % 2 == 0 ? s : s.opposite
   end
 
   def side_of( plyr ) 
