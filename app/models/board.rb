@@ -95,15 +95,6 @@ class Board < Hash
     return considered unless block_given?
     yield  considered
   end
-
-  def sister_piece_of( a_piece, sitting_here )
-    pos, piece = select do |pos, piece| 
-      piece.side == a_piece.side && 
-      piece.function == a_piece.function && 
-      pos != sitting_here
-    end
-    piece
-  end
   
   def in_check?( side )
     king_pos, king  = detect do |pos, piece| 

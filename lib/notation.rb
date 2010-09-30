@@ -48,16 +48,16 @@ module MoveNotation
     mynotation = @piece_moving.abbrev.upcase.sub('P', from_coord_sym.file)
     
     # disambiguate which piece moved if a 'sister_piece' could have moved there as well
-    if( @piece_moving.function==:rook) || (@piece_moving.function==:knight)
+    sister_pieces = @board.values.select do |piece|  
+      # [:rook, :knight, :queen].include?(piece.type) &&
+      (piece_position = @board.index(piece)) != from_coord_sym &&
+      piece.function == @piece_moving.function &&
+      piece.side == @piece_moving.side &&
+      piece.allowed_moves(@board).include?( to_coord_sym)
+    end
 
-      # look for a piece of the same type which also could have moved 
-      sister_piece_pos, sister_piece = @board.consider_move(self) do |b|
-        b.sister_piece_of(@piece_moving, from_coord)
-      end
-
-      if( sister_piece != nil && sister_piece.allowed_moves(@board).include?(to_coord_sym) )
-        mynotation += ( from_coord_sym.file != sister_piece_pos.file) ? from_coord_sym.file : from_coord_sym.rank.to_s
-      end
+    if ! sister_pieces.empty? && (other_guy_pos = @board.index(sister_pieces.first))
+      mynotation += ( from_coord_sym.file != other_guy_pos.file) ? from_coord_sym.file : from_coord_sym.rank.to_s
     end
         
     if @piece_moved_upon && (@piece_moving.side != @piece_moved_upon.side) || captured_piece_coord

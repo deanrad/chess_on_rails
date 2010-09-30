@@ -3,16 +3,17 @@
 # move :a2, :a4
 class Object
   def match;     @match; end
-  def match= *args; @match = Match.find(*args); end
+  def match= *args; @match = args.first.kind_of?(Match) ? args.first : Match.find(*args); end
     
   # helper methods
   def move *args
     if args.length == 1
-      match.moves << Move.new(:notation => args.shift.to_s)
+      match.moves << m=Move.new(:notation => args.shift.to_s)
     else
-      match.moves << Move.new(:from_coord => args.shift.to_s, :to_coord => args.shift.to_s)
+      match.moves << m=Move.new(:from_coord => args.shift.to_s, :to_coord => args.shift.to_s)
     end
-    match.board
+    return match.board if m.id
+    return m.errors.full_messages
   end
   
   def chat msg
