@@ -170,12 +170,13 @@ var game_view_model = {
     var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
     render  = $.tmpl( chatTemplate, ch );
 		$('#chat_window').append( render );
-		chatDiv = document.getElementById('chat_window');
-    chatDiv.scrollTop = chatDiv.scrollHeight;
-
+    this.scroll_chat('bottom')
     this.reset_poller();
   },
-
+  scroll_chat:              function(where){
+    chatDiv = document.getElementById('chat_window');
+    chatDiv.scrollTop = (where=="bottom") ? chatDiv.scrollHeight : 0;
+  },
   increment_poll:           function(){
     game_view_model.poll_count += 1;
     
@@ -235,22 +236,6 @@ var game_view_model = {
   }
 };
 
-// Start knockout's tracking of auto-updating items
-ko.applyBindings(document.body, game_view_model);
-
-// Set up subscriptions on interesting items
-game_view_model.display_board.subscribe( game_view_model.set_display_board );
-game_view_model.all_moves.subscribe( function(){
-  document.title = document.title.replace( clientConfig.your_turn_msg, '' );
-
-  if( game_view_model.your_turn() ){
-    document.title = clientConfig.your_turn_msg + document.title
-  }
-})
-
-// Show first move
-game_view_model.display_board( game_view_model.all_boards().length - 1 );
-
 // Allow for droppability
 $('td.piece_container').each( 
   function() {
@@ -287,9 +272,25 @@ $('body').keypress(function(event) {
       return false; //dont register the keypress in the field
     }
 });
-$(document).ready(function(){
-  $("#move_notation").focus();
-});
 
+// Start knockout's tracking of auto-updating items
+ko.applyBindings(document.body, game_view_model);
+
+// Set up subscriptions on interesting items
+game_view_model.display_board.subscribe( game_view_model.set_display_board );
+game_view_model.all_moves.subscribe( function(){
+  document.title = document.title.replace( clientConfig.your_turn_msg, '' );
+
+  if( game_view_model.your_turn() ){
+    document.title = clientConfig.your_turn_msg + document.title
+  }
+})
+
+// Show first move
+game_view_model.display_board( game_view_model.all_boards().length - 1 );
+
+// Make sure latest chat is in focus
+game_view_model.scroll_chat('bottom');
+	
 // Kickoff polling loop
 window.setTimeout( game_view_model.poll, game_view_model.next_poll_in * 1000 )
