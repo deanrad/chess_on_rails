@@ -1,6 +1,5 @@
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
+require 'request_smarts'
+require 'session_smarts'
 class ApplicationController < ActionController::Base
   helper :all 
 
@@ -10,13 +9,13 @@ class ApplicationController < ActionController::Base
 
   def extend_session_and_request
     s, r, c, p  = session, request, cookies, params
-    r.extend(RequestSmarts)
-    s.extend(SessionSmarts)
+    r.extend(::RequestSmarts)
+    s.extend(::SessionSmarts)
     r.session, r.cookies, r.params = s, c, p
   end
 
   # HACK - really re-add params and params= to controller ?
-  RequestSmarts.methods_excluding_ancestors.reject{|m| m.to_s.include?("=")}.each do |m|
+  ::RequestSmarts.methods_excluding_ancestors.reject{|m| m.to_s.include?("=")}.each do |m|
     helper_method m.to_sym 
     define_method m do request.send(m) end
   end

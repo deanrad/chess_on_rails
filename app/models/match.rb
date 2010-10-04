@@ -1,3 +1,4 @@
+require 'fen'
 class Match < ActiveRecord::Base
   
   has_many :players, :through    => :gameplays
@@ -6,8 +7,8 @@ class Match < ActiveRecord::Base
   has_many :chats
   belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
 
-  named_scope :active,    :conditions => { :active => true }
-  named_scope :completed, :conditions => { :active => false }
+  scope :active,     where(:active => true)
+  scope :completed,  where(:active => false)
 
   # fetches the first and second joins to player, which are white,black respectively
   has_many :gameplays do

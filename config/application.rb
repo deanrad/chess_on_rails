@@ -33,7 +33,7 @@ module ChessOnRails
     # JavaScript files you want as :defaults (application.js is always included).
     # config.action_view.javascript_expansions[:defaults] = %w(jquery rails)
 
-    config.action_controller.session_store = :active_record_store
+    config.session_store :active_record_store
     
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
