@@ -35,7 +35,7 @@ class MatchController < ApplicationController
   # json for autocomplete
   def players
     # TODO use .where
-    x = Player.find(:all, :conditions => "name like '#{ params[:term] }%'" ).map do |p|
+    x = Player.where( "name like '#{ params[:term] }%'" ).map do |p|
         p.name
     end
     render :text => x.to_json, :layout => false
