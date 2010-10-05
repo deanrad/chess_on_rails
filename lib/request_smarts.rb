@@ -46,7 +46,7 @@ module RequestSmarts
   end
 
   def your_turn?
-    @your_turn ||= viewed_from_side == (match && match.side_to_move)
+    @your_turn ||= (viewed_from_side == (match.id && match.side_to_move))
   end
   alias :your_turn :your_turn?
 

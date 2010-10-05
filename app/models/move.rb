@@ -6,6 +6,7 @@ class Move < ActiveRecord::Base
   belongs_to :match
   belongs_to :player
 
+  before_validation :prevalidate
   before_save :update_computed_fields
   after_save :notify_of_move_via_email
 
@@ -33,7 +34,7 @@ class Move < ActiveRecord::Base
     @match ||= Match.find(match_id)
   end
 
-  def before_validation
+  def prevalidate
     @board = match && match.board
     return unless @board 
 
@@ -49,12 +50,6 @@ class Move < ActiveRecord::Base
       self.captured_piece_coord = coord.to_s
     end
 
-  end
-
-  #fields like the notation and whether this was a castling are stored with the move
-  def update_computed_fields
-    self.castled = 1 if (@piece_moving.function==:king && from_coord_sym.file=='e' && to_coord_sym.file =~ /[cg]/ )
-    self.notation = notate
   end
 
   #stuff here depends on knowledge of the board's position prior to the move being committed
@@ -90,6 +85,12 @@ class Move < ActiveRecord::Base
       errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
     end
 
+  end
+
+  #fields like the notation and whether this was a castling are stored with the move
+  def update_computed_fields
+    self.castled = 1 if (@piece_moving.function==:king && from_coord_sym.file=='e' && to_coord_sym.file =~ /[cg]/ )
+    self.notation = notate
   end
 
   def time_since_last_move

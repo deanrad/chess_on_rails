@@ -218,7 +218,7 @@ var game_view_model = {
   },
   submit_move:              function(from, to){
     $("#board_table").addClass('busy');
-    $.post( "<%= create_match_moves_path(match.id) %>",
+    $.post( "<%= match_moves_path(match.id) %>",
         { 
           'move[match_id]':           <%= match.id %>, 
           'move[from_coord]':         from,
