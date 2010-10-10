@@ -265,11 +265,9 @@ $('body').keyup(function(event) {
 $('body').keypress(function(event) {
     if ($(event.target).is(':not(input, textarea)')) {
       if (event.keyCode == 97) // 'c' for chat
-        $('#chat_msg').focus();
+        { $('#chat_msg').focus(); return false; }
       if (event.keyCode == 109) // 'm' for move
-        $('#move_notation').focus();
-        
-      return false; //dont register the keypress in the field
+        { $('#move_notation').focus(); return false; }
     }
 });
 
