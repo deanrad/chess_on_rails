@@ -4,10 +4,17 @@
 
 h1 { font-size: 18pt; font-weight: bold; margin-bottom:3px; }
 
-#move_indicator { width: 360px; }
+#move_indicator { width: 360px; float:left; }
 .active_yours { background-color:black; color:white; font-weight:bold; font-size: 10pt;}
 .active_theirs { background-color:eee; color:bbb; font-weight:bold; font-size: 10pt;}
 #match_actions { font-size: 10pt;}
+
+.move_creator_parent { clear: both; float: left; }
+.instructions { display:none }
+#move_error { color: #ff4444 }
+/*#playback_controls{ float:left;}*/
+#server_msg { float:left; width:376px; padding:2px; font-size: 10pt;
+              border: 1px black solid; background-color:#ddd;}
 
 #original_board {margin-bottom: 5px;}
 
@@ -28,9 +35,6 @@ h1 { font-size: 18pt; font-weight: bold; margin-bottom:3px; }
 .drop-allowed { background-color: green; }
 .piece-to-move { background-color: #c6f1c6;}
 
-.move_creator_parent { clear: both; float: left; }
-.instructions { display:none }
-#move_error { color: #ff4444 }
 
 .label {background-color:gray; color:white; font-family:Arial; font-size:smaller; text-align:center; font-weight:bold}
 .board_table .rank {width: 20px}
@@ -54,25 +58,25 @@ h1 { font-size: 18pt; font-weight: bold; margin-bottom:3px; }
 
 #playback_controls {}
 
-#a2, #a4, #a6, #a8,
-#b1, #b3, #b5, #b7,
-#c2, #c4, #c6, #c8,
-#d1, #d3, #d5, #d7,
-#e2, #e4, #e6, #e8,
-#f1, #f3, #f5, #f7,
+#h1, #h3, #h5, #h7,
 #g2, #g4, #g6, #g8,
-#h1, #h3, #h5, #h7
+#f1, #f3, #f5, #f7,
+#e2, #e4, #e6, #e8,
+#d1, #d3, #d5, #d7,
+#c2, #c4, #c6, #c8,
+#b1, #b3, #b5, #b7,
+#a2, #a4, #a6, #a8
 {background-color:#fff}
 
-#a1, #a3, #a5, #a7,
-#b2, #b4, #b6, #b8,
-#c1, #c3, #c5, #c7,
-#d2, #d4, #d6, #d8,
-#e1, #e3, #e5, #e7,
-#f2, #f4, #f6, #f8,
+#h2, #h4, #h6, #h8,
 #g1, #g3, #g5, #g7,
-#h2, #h4, #h6, #h8
-{background-color:#dfdfdf}
+#f2, #f4, #f6, #f8,
+#e1, #e3, #e5, #e7,
+#d2, #d4, #d6, #d8,
+#c1, #c3, #c5, #c7,
+#b2, #b4, #b6, #b8,
+#a1, #a3, #a5, #a7
+{background-color:#cfcfcf}
 
 
 /*

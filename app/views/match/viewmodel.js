@@ -20,7 +20,7 @@ var game_view_model = {
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
   
   display_board:            new ko.observable(<%= match.moves.count %>),
-  chat_msg:                 new ko.observable(''),
+  chat_msg:                 new ko.observable(''), //the message the user is entering
 
   all_moves:                new ko.observableArray([
     <%= match.moves.map(&:to_json).join(",\n    ") %>
@@ -33,6 +33,8 @@ var game_view_model = {
   all_boards:                new ko.observableArray([
     <%= match.boards.map(&:to_json).join(",\n    ") %>
   ]),
+
+  server_messages:          new ko.observableArray([]),
   
   // Does not follow the subscriber model, since its too busy..
   add_move:                 function( mv, board ){
@@ -232,7 +234,9 @@ var game_view_model = {
           $("#board_table").removeClass('busy');
         }    
     ); 
-    
+  },
+  has_message:              function(){
+    return game_view_model.server_messages().length > 0 
   }
 };
 

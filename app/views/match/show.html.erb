@@ -15,18 +15,16 @@
 
 <span id="move_indicator_parent">
 	<div id="move_indicator">
-
-
 		<span style="float:left; margin-right:20px">(<span data-bind="text:side_to_move"></span> to move)</span>
-		<div id="playback_controls" style="float:left">
+		<div id="playback_controls">
 			<input type="button" value="|&lt;" data-bind="click:display_first_move"/>
 			<input type="button" value="&lt;&lt;" data-bind="enable:can_play_previous, click:decrement_displayed_move"/>
 			<span data-bind="text:display_board" style="color:white"></span>
 			<input type="button" value="&gt;&gt;" data-bind="enable:can_play_next, click:increment_displayed_move"/>
 			<input type="button" value="&gt;|" data-bind="click:display_last_move"/>
 		</div>
-
 	</div>
+	<div id="server_msg" data-bind="visible:has_message"></div>
 </span>
 
 <div id="board_parent" style="float:left; clear:left">
