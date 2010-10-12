@@ -9,29 +9,21 @@ class MoveController < ApplicationController
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
     raise ArgumentError, "It is your not your turn to move yet" unless request.your_turn?
 
-    @move = @match.moves.build( params[:move] )
-    @move.save
+    @match.moves << @move = Move.new( params[:move] )
+    
+    # Oh Rails, you make me weep. You only like the above moves << Move.new syntax :(
+    # @match.moves.build( params[:move] )
+    # @move.save
     flash[:error] = @move.errors.full_messages unless @move.id
 
-    # unceremonious way of saying you just ended the game 
-    redirect_to( :controller => 'match', :action => 'index' ) and return unless @match.active
-    respond_to do |format|
-      format.html{ create_respond }
-      format.fbml{ create_respond }
-      format.text{
-        render :text => @match.board.to_s( @viewed_from_side==:black )
-      }
-    end
-  end
-  
-protected
-  def create_respond
     this_match = match_path(@match)
     this_match << ".wml" if request.mobile?
-    redirect_to( this_match ) and return unless request.xhr? 
+    if request.xhr? || true
+      render :json => @move.to_json
+    else
+      redirect_to( this_match ) and return
+    end
     
-    #for non AJAX, should do something else
-    render :json => @move.to_json
   end
-
+  
 end

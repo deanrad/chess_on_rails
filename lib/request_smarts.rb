@@ -78,7 +78,7 @@ module RequestSmarts
   end
 
   def mobile?
-    env["REQUEST_URI"].include?("wml") || env["HTTP_REFERER"].include?("wml")
+    env["REQUEST_URI"].include?("wml") || (env["HTTP_REFERER"] || '').include?("wml")
   end
 
 end

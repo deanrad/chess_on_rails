@@ -34,7 +34,7 @@ var game_view_model = {
     <%= match.boards.map(&:to_json).join(",\n    ") %>
   ]),
 
-  server_messages:          new ko.observableArray([]),
+  server_messages:          new ko.observable(''),
   
   // Does not follow the subscriber model, since its too busy..
   add_move:                 function( mv, board ){
@@ -228,7 +228,13 @@ var game_view_model = {
           authenticity_token: '<%= form_authenticity_token %>' 
         },
         function(data){
-          console.log('AJAX POST returned: ' + data);
+          if (data.errors){
+            game_view_model.server_messages( data.errors )
+            game_view_model.display_last_move();
+          }else{
+            game_view_model.server_messages( '' )
+          }
+          
           game_view_model.poll();
           game_view_model.reset_poller();
           $("#board_table").removeClass('busy');
@@ -236,7 +242,7 @@ var game_view_model = {
     ); 
   },
   has_message:              function(){
-    return game_view_model.server_messages().length > 0 
+    return game_view_model.server_messages() != ''
   }
 };
 

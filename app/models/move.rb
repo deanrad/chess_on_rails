@@ -98,6 +98,12 @@ class Move < ActiveRecord::Base
     # make sure we exceed this to trigger an email if we cant tell when they last moved
     ChessNotifier::MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS + 1.0/24
   end
+  
+  def to_json
+    h = JSON.load(super)
+    h[:errors] = self.errors.full_messages.join("\n") unless self.errors.blank?
+    h.to_json
+  end
 
 private
 
