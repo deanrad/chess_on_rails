@@ -31,7 +31,11 @@
 <%= render :partial => "board", :locals => {:board => match.board} %>
 </div>
 
-<div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">  
+<div id="game_tabs">  
+	<ul id='tab_headers'>
+		<li><a href="#move-list">Move List</a></li>
+		<li><a href="#chat_container">Chat</a></li>
+	</ul>
 
   <div id="move_list" class="move_list">
     <%= render :partial => 'move_list' %>

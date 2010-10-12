@@ -9,6 +9,9 @@ h1 { font-size: 18pt; font-weight: bold; margin-bottom:3px; }
 .active_theirs { background-color:eee; color:bbb; font-weight:bold; font-size: 10pt;}
 #match_actions { font-size: 10pt;}
 
+#game_tabs{ margin: 0 0 0 20px; padding: 8px; }
+#tab_headers{ display:none; }
+
 .move_creator_parent { clear: both; float: left; }
 .instructions { display:none }
 #move_error { color: #ff4444 }
