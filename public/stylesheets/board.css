@@ -13,7 +13,7 @@ h1 { font-size: 18pt; font-weight: bold; margin-bottom:3px; }
 .instructions { display:none }
 #move_error { color: #ff4444 }
 /*#playback_controls{ float:left;}*/
-#server_msg { float:left; width:376px; height:22px; padding:2px; font-size: 10pt;
+#server_msg { float:left; width:376px; height:20px; padding:2px; font-size: 10pt;
               border: 1px black solid; background-color:#ddd;}
 
 #original_board {margin-bottom: 5px;}
