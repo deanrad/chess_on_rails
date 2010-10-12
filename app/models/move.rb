@@ -102,7 +102,7 @@ class Move < ActiveRecord::Base
   def to_json
     j = super
     unless self.errors.blank?
-      j.sub('}', "'errors': '#{self.errors.full_messages.join(". ")}'}")
+      j.sub!('}', "'errors': '#{self.errors.full_messages.join(". ")}'}")
     end
     j
   end
