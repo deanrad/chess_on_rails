@@ -3,6 +3,7 @@
 class Pawn < Piece
 
   # not using the class macro - see Pawn#allowed_move?
+  POINT_VALUE=1 
 
   # Initializes side and discriminator to :a through :h, if passed
   def initialize(side = :white, discriminator=nil)

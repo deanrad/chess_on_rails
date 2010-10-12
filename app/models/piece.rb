@@ -144,6 +144,11 @@ class Piece
     end
     return letter.send( @side==:white ? :upcase : :downcase )
   end
+  
+  def point_value
+    # Gets the constant defined in the derived class
+    self.class.const_get("POINT_VALUE")
+  end
 
   def self.new_from_fen( char, pos )
     side= char.downcase? ? :black : :white
