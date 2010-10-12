@@ -100,9 +100,11 @@ class Move < ActiveRecord::Base
   end
   
   def to_json
-    h = JSON.load(super)
-    h[:errors] = self.errors.full_messages.join("\n") unless self.errors.blank?
-    h.to_json
+    j = super
+    unless self.errors.blank?
+      j.sub('}', "'errors': '#{self.errors.full_messages.join(". ")}'}")
+    end
+    j
   end
 
 private
