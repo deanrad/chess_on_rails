@@ -87,7 +87,7 @@ class Move < ActiveRecord::Base
     #can not leave your king in check at end of a move
     new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
     if new_board.in_check?( @piece_moving.side )
-      errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
+      errors.add_to_base "Cannot leave ones own king in check" 
     end
 
   end
@@ -102,7 +102,7 @@ class Move < ActiveRecord::Base
   def to_json
     j = super
     unless self.errors.blank?
-      j.sub!('}', "'errors': '#{self.errors.full_messages.join(". ")}'}")
+      j.sub!('}', ",\"errors\":\"#{self.errors.full_messages.join(". ")}\"}")
     end
     j
   end

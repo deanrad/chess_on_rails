@@ -38,7 +38,7 @@ var game_view_model = {
     <%= match.boards.map{|b| b.graveyard.to_json}.join(",\n   ") %>
   ]),
 
-  server_messages:          new ko.observable(''),
+  server_messages:          new ko.observable(""),
   
   // Does not follow the subscriber model, since its too busy..
   add_move:                 function( mv, board ){
@@ -244,11 +244,16 @@ var game_view_model = {
           $("#board_table").removeClass('busy');
         }    
     ); 
-  },
-  has_message:              function(){
-    return game_view_model.server_messages() != ''
   }
 };
+
+// Add functions that are dependent upon the values of other view model fields
+// (and which will be memoized until their dependents change)
+game_view_model.has_message =     new ko.dependentObservable(
+  function(){
+    return !(game_view_model.server_messages() == "")
+  }
+);
 
 // Allow for droppability
 $('td.piece_container').each( 
