@@ -20,6 +20,12 @@ class Board < Hash
     return unless self[at_position]
     graveyard << self.delete(at_position)
   end
+  
+  def dup *args
+    b2 = super
+    b2.graveyard = self.graveyard.dup
+    b2
+  end
 
   # updates internals with a given move played
   # Dereferences any existing piece we're moving onto or capturing enpassant

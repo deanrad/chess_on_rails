@@ -132,7 +132,7 @@ class Piece
   end
     
   def to_json(*args)
-    "{img:'#{self.img_name}', board_id:'#{self.board_id}'}"
+    "{role:'#{function}', img:'#{self.img_name}', board_id:'#{self.board_id}', points:'#{point_value}'}"
   end
 
   # for FEN like situations

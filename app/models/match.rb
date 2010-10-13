@@ -24,7 +24,7 @@ class Match < ActiveRecord::Base
   # the boards this match has known, in move order from the beginning
   def boards
     @boards ||= moves.inject([ self.initial_board ]) do |all_boards, mv|
-      all_boards << all_boards.last.clone.toggle_side_to_move!.play_move!(mv)
+      all_boards << all_boards.last.dup.toggle_side_to_move!.play_move!(mv)
     end
   end
 

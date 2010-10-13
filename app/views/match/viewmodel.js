@@ -33,6 +33,10 @@ var game_view_model = {
   all_boards:                new ko.observableArray([
     <%= match.boards.map(&:to_json).join(",\n    ") %>
   ]),
+  
+  all_graveyards:            new ko.observableArray([
+    <%= match.boards.map{|b| b.graveyard.to_json}.join(",\n   ") %>
+  ]),
 
   server_messages:          new ko.observable(''),
   
