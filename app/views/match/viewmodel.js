@@ -47,17 +47,17 @@ var game_view_model = {
       return;
     }
     console.log('adding move ' + mv.id)
-    this.all_moves.push( mv );
-    this.all_boards.push( board );
+    game_view_model.all_moves.push( mv );
+    game_view_model.all_boards.push( board );
 
     //if we are not caught up, we only need to update on the final move known about
-    if( mv.id == this.last_move_id){
-      my_index = this.all_boards.indexOf(board)
-      this.add_to_move_list( mv, my_index );
-      this.display_board( my_index );
+    if( mv.id == game_view_model.last_move_id){
+      my_index = game_view_model.all_boards.indexOf(board)
+      game_view_model.add_to_move_list( mv, my_index );
+      game_view_model.display_board( my_index );
     }
 
-    this.reset_poller();
+    game_view_model.reset_poller();
   },
 
   add_to_move_list:         function( mv, index ) {
@@ -172,12 +172,12 @@ var game_view_model = {
     }
     
     console.log('adding chat ' + ch.id)
-    this.all_chats.push(ch);
+    game_view_model.all_chats.push(ch);
     var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
     render  = $.tmpl( chatTemplate, ch );
 		$('#chat_window').append( render );
-    this.scroll_chat('bottom')
-    this.reset_poller();
+    game_view_model.scroll_chat('bottom')
+    game_view_model.reset_poller();
   },
   scroll_chat:              function(where){
     chatDiv = document.getElementById('chat_window');
@@ -199,8 +199,8 @@ var game_view_model = {
   },
 
   reset_poller:           function(){
-    this.poll_count = 0;
-    this.next_poll_in = clientConfig.initial_poll_interval;
+    game_view_model.poll_count = 0;
+    game_view_model.next_poll_in = clientConfig.initial_poll_interval;
     window.setTimeout( game_view_model.poll,  game_view_model.next_poll_in * 1000);
   },
 
