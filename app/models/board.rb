@@ -1,6 +1,7 @@
 # A Board is a snapshot of a match at a moment in time, implemented as a hash
 # whose keys are (symbol) positions and whose values are pieces
 class Board < Hash
+  extend ActiveSupport::Memoizable
 
   attr_accessor :last_move, :piece_moved, :en_passant_square
 
@@ -24,6 +25,9 @@ class Board < Hash
   def dup *args
     b2 = super
     b2.graveyard = self.graveyard.dup
+    [[:white, :king], [:white, :queen], [:black, :king], [:black, :queen]].each do |side, flank|
+      b2.send(:"#{side}_can_castle_#{flank}side=",  self.send("#{side}_can_castle_#{flank}side"))
+    end
     b2
   end
 
@@ -114,9 +118,13 @@ class Board < Hash
 
     !! assassin
   end
+  memoize :in_check?
 
-  #simplest logic here - if theres a move you're allowed which gets you out of check, you're not in checkmate
-  #contrast with more intelligent Capture/Block/Evade strategy
+  # Checkmate detection done with only the simplest logic:
+  #   for all moves you can do
+  #     - if you're not in check at the end of it 
+  #     - you've not been checkmated
+  # contrast with more intelligent Capture/Block/Evade strategy
   def in_checkmate?( side )
 
     return false unless in_check?( side )
@@ -133,6 +141,7 @@ class Board < Hash
     end
     return !way_out
   end
+  memoize :in_checkmate?
 
   #provides a format for tracing
   def to_s( for_black = false )
@@ -161,4 +170,5 @@ class Board < Hash
   
   def inspect; "\n" + to_s; end
 
+  # TODO Hash code for board should include everything FENable
 end

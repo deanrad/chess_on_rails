@@ -170,5 +170,7 @@ class Piece
     end
   end
 
+  def inspect; board_id; end
+  def to_s;   inspect; end
 end
 
