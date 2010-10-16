@@ -36,7 +36,6 @@ h1 { font-size: 18pt; font-weight: bold; margin-bottom:3px; }
 
 
 .drop-allowed { background-color: green; }
-.piece-to-move { background-color: #c6f1c6;}
 
 
 .label {background-color:gray; color:white; font-family:Arial; font-size:smaller; text-align:center; font-weight:bold}
@@ -81,6 +80,8 @@ h1 { font-size: 18pt; font-weight: bold; margin-bottom:3px; }
 #a1, #a3, #a5, #a7
 {background-color:#cfcfcf}
 
+
+.selected-piece { background-color: #c6f1c6;}
 
 /*
 .just_moved {  background-color:afa;  }

@@ -18,6 +18,7 @@ var view = {
   side_to_move:             new ko.observable('<%= match.side_to_move.to_s.titleize %>'),
   allowed_moves:            <%= board.allowed_moves.to_json %>,
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
+  selected_piece_coord:     new ko.observable(null),
   
   display_board:            new ko.observable(<%= match.moves.count %>),
   chat_msg:                 new ko.observable(''), //the message the user is entering
@@ -244,6 +245,15 @@ var view = {
           $("#board_table").removeClass('busy');
         }    
     ); 
+  },
+  side_occupying:          function(coord){
+    piece_id = $('#' + coord + ' img').attr('id')
+    if(piece_id == undefined) return null;
+    
+    if( piece_id.match( /_w$/ ) )
+      return 'white'
+    if( piece_id.match( /_b$/ ) )
+      return 'black'
   }
 };
 
@@ -254,6 +264,16 @@ view.has_message =     new ko.dependentObservable(
     return !(view.server_messages() == "")
   }
 );
+
+view.selected_piece_side = new ko.dependentObservable(
+  function(){
+    coord = view.selected_piece_coord();
+    if( coord == null)
+      return null
+    else 
+      return view.side_occupying(coord);
+  }
+)
 
 // Allow for droppability
 $('td.piece_container').each( 
@@ -270,6 +290,34 @@ $('td.piece_container').each(
         }
     });
   });
+
+// Allow for click-click moving
+$('td.piece_container').click( 
+  function() {
+    clicked_id = $(this).attr('id')
+    from_piece_coord = view.selected_piece_coord();
+    
+    if( from_piece_coord != null){
+      if (view.side_occupying(clicked_id) == view.selected_piece_side() ){
+        view.selected_piece_coord(clicked_id);        
+      }
+      else{
+        view.selected_piece_coord(null);
+        view.submit_move( from_piece_coord, clicked_id );
+      }
+    }
+    else{
+      if( $(this).has('img').length > 0 && 
+          view.side_occupying(clicked_id) == view.side_to_move().toLowerCase() ){
+        // console.log('selected piece ' + $(this).has('img').first().attr('id') );
+        view.selected_piece_coord(clicked_id);
+      }
+      else {
+        console.log('clicked sq ' + clicked_id);
+      } // ignore it
+    }
+  }
+);
 
 // Allow for keyboard handling - arrow keys move back/forth through history
 // If focused in a text field, hit Esc to return to general keyboard mode
@@ -297,11 +345,17 @@ ko.applyBindings(document.body, view);
 view.display_board.subscribe( view.set_display_board );
 view.all_moves.subscribe( function(){
   document.title = document.title.replace( clientConfig.your_turn_msg, '' );
+  if( view.your_turn() )
+    document.title = clientConfig.your_turn_msg + document.title;
+});
 
-  if( view.your_turn() ){
-    document.title = clientConfig.your_turn_msg + document.title
-  }
-})
+view.selected_piece_coord.subscribe( function(val) {
+  $('td.piece_container').removeClass('selected-piece');
+  $('#' + val).addClass('selected-piece');
+  //HACK
+  $('td.piece_container').css('background-color', '')
+  $('#' + val).css('background-color', '#c6f1c6')
+});
 
 // Show first move
 view.display_board( view.all_boards().length - 1 );
