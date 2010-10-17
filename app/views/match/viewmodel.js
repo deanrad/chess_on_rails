@@ -307,7 +307,8 @@ $('td.piece_container').click(
       }
     }
     else{
-      if( $(this).has('img').length > 0 && 
+      if( view.your_turn() &&  
+          $(this).has('img').length > 0 && 
           view.side_occupying(clicked_id) == view.side_to_move().toLowerCase() ){
         // console.log('selected piece ' + $(this).has('img').first().attr('id') );
         view.selected_piece_coord(clicked_id);
