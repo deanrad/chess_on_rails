@@ -9,6 +9,7 @@ var clientConfig= {
 // whether by user-interaction, or AJAX polls.
 var view = {
   
+  //TODO make last_move/last_chat_id dependentObservables
   last_move_id:             <%= last_move ? last_move.id : 'null' %>,
   last_chat_id:             <%= last_chat ? last_chat.id : 'null' %>,
   poll_count:               0,
@@ -65,11 +66,11 @@ var view = {
     console.log('adding move ' + mv.notation + ' to move list at index ' + index);
     mv.index = index;
     if( index % 2 == 1 ){
-      mv.ply_count = Math.ceil(index/2); mv.index = index
-      template = '<div class="move_w" id="move_list_${index}" onclick="view.display_board(${index})">${ply_count}. ${notation}</div>';
+      mv.ply_count = Math.ceil(index/2)
+      template = '<div class="move_w" id="move_list_${index}" onclick="view.display_board(${index})" title="${friendly_time}">${ply_count}. ${notation}</div>';
     } 
     else{
-      template = '<div class="move_b" id="move_list_${index}" onclick="view.display_board(${index})">${notation}</div>';
+      template = '<div class="move_b" id="move_list_${index}" onclick="view.display_board(${index})" title="${friendly_time}">${notation}</div>';
     }
     $("#move_list").append( $.tmpl( template, mv ) )
     moveDiv = document.getElementById('move_list');

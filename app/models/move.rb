@@ -91,6 +91,10 @@ class Move < ActiveRecord::Base
     end
 
   end
+  
+  def friendly_time
+    self.created_at.strftime("%a %H:%M")
+  end
 
   def time_since_last_move
     self.created_at - match.moves[ match.moves.index(self) - 1 ].created_at
@@ -100,11 +104,13 @@ class Move < ActiveRecord::Base
   end
   
   def to_json
-    j = super
-    unless self.errors.blank?
-      j.sub!('}', ",\"errors\":\"#{self.errors.full_messages.join(". ")}\"}")
-    end
-    j
+    h = {
+      # TODO include index/plycount
+      'notation' => self.notation,
+      'friendly_time' => self.friendly_time
+    }
+    h['errors'] = self.errors.full_messages.join(". ") unless self.errors.blank?
+    h.to_json
   end
 
 private
