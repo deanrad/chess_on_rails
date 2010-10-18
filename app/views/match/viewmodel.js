@@ -194,7 +194,7 @@ var view = {
       view.next_poll_in = 5;
     else if (view.poll_count <= 50 )
       view.next_poll_in = 30;
-      else if (view.poll_count <= 100 )
+      else if (view.poll_count <= 1000 )
         view.next_poll_in = 60;
     else 
       view.next_poll_in = 3600;
