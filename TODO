@@ -1,9 +1,15 @@
 Features:
 
-	Normal UI enhancements:
-	 - Start from arbitrary FEN - DONE 
-	 - Display move errors in standard way for AJAX/POST
-	 - Allow click-click moving (highlighting/cancel highlighting selected piece)
+  Normal UI enhancements:
+    - Start from arbitrary FEN - DONE 
+    - Display move errors in standard way for AJAX/POST - DONE
+    - Allow click-click moving (highlighting/cancel highlighting selected piece) - DONE
+    - Link/keyboard shortcut (ajax-updated?) for next match
+    - Tabs on rightside (graveyard, etc.., focused if chat arrives)
+  Bugs
+    - Double (or wrong move emails)
+    - Mobile site click-click
+    - Ssh key issue on DH makes not deployable right now
 
   Mobile playability (TODO break this down into minimal steps needed) 
     - Link to mobile /normal site (for recognized user agents)
@@ -12,12 +18,11 @@ Features:
     - No auto-refresh - DONE
     - Fewer (or no) clicks to get to an active match on which it's your turn
 
-	Enabling for future dev:
-	 - bundler
-	 - i18n 
-	 - rails 3
-	 - Javascript tests of some sort
-	 - Document REST interface (and allow pointing frontend at any REST backend)
+Enabling for future dev:
+ - bundler (done, rolled back except for rails 3)
+ - i18n (in progress)
+ - rails 3 (in progress)
+ - Allow pointing frontend at any REST backend
 
 If there's time:
   - Make frontend configurable as to which REST backend it talks to
