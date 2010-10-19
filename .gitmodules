@@ -1,6 +1,3 @@
-[submodule "vendor/plugins/facebooker"]
-	path = vendor/plugins/facebooker
-	url = git://github.com/mmangino/facebooker.git
 [submodule "vendor/plugins/haml"]
 	path = vendor/plugins/haml
 	url = git://github.com/nex3/haml.git

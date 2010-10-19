@@ -15,7 +15,7 @@ set :scm, "git"
 # 
 set :repository, "git@github.com:chicagogrooves/chess_on_rails.git"
 
-set :git_enable_submodules, 1
+# set :git_enable_submodules, 1
 set :branch, "master"
 ssh_options[:forward_agent] = true
 
