@@ -20,7 +20,7 @@ class MoveController < ApplicationController
     
     # was Move#notify - moved out of model
     begin
-      mover, opponent = match.send(board.side_to_move), match.send(board.side_to_move.opposite)
+      opponent, mover = match.send(board.side_to_move), match.send(board.side_to_move.opposite)
       ChessNotifier.deliver_player_moved(opponent, mover, @move)
     rescue Exception => ex
       $stderr.puts ex.inspect
