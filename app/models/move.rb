@@ -7,7 +7,6 @@ class Move < ActiveRecord::Base
   belongs_to :player
 
   before_save :update_computed_fields
-  after_save :notify_of_move_via_email
 
   attr_accessor :side
   attr_reader   :board
@@ -113,19 +112,6 @@ class Move < ActiveRecord::Base
     }
     h['errors'] = self.errors.full_messages.join(". ") unless self.errors.blank?
     h.to_json
-  end
-
-private
-
-  def notify_of_move_via_email
-    # dont send email if its been less than 1/24 of a day
-    # TODO move email blackout interval into configuration
-    return unless self.time_since_last_move > ChessNotifier::MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS || Rails.env.development?
-
-    mover, opponent = match.send(board.side_to_move), match.send(board.side_to_move.opposite)
-    ChessNotifier.deliver_player_moved(opponent, mover, self)
-  rescue Exception => ex
-    $stderr.puts ex.inspect
   end
 
 end

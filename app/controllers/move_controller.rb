@@ -16,8 +16,16 @@ class MoveController < ApplicationController
     # @move.save
     flash[:error] = @move.errors.full_messages unless @move.id
 
-    this_match = match_path(@match)
-    this_match << ".wml" if request.mobile?
+    this_match = match_path(@match) + (request.mobile? ? '.wml' : '')
+    
+    # was Move#notify - moved out of model
+    begin
+      mover, opponent = match.send(board.side_to_move), match.send(board.side_to_move.opposite)
+      ChessNotifier.deliver_player_moved(opponent, mover, @move)
+    rescue Exception => ex
+      $stderr.puts ex.inspect
+    end
+    
     if request.xhr? || true
       render :json => @move.to_json
     else
