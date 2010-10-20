@@ -107,7 +107,9 @@ class Move < ActiveRecord::Base
     h = {
       # TODO include index/plycount
       'notation' => self.notation,
-      'friendly_time' => self.friendly_time
+      'friendly_time' => self.friendly_time,
+      'from_coord' => self.from_coord,
+      'to_coord' => self.to_coord
     }
     h['errors'] = self.errors.full_messages.join(". ") unless self.errors.blank?
     h.to_json
