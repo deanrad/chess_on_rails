@@ -1,3 +1,6 @@
+view.active(  <%= match.active? %> )
+view.outcome( '<%= match.outcome %>' )
+
 // Update 'current status' fields
 view.last_move_id =  <%= last_move ? last_move.id : 'null' %>;
 view.last_chat_id =  <%= last_chat ? last_chat.id : 'null' %>;

@@ -4,10 +4,10 @@ class Match < ActiveRecord::Base
   has_many :moves
 
   has_many :chats
-  belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
+  belongs_to :winner, :class_name => 'Player', :foreign_key => 'winning_player'
 
-  named_scope :active,    :conditions => { :active => true }
-  named_scope :completed, :conditions => { :active => false }
+  named_scope :active,    :conditions => { :active => 1 }
+  named_scope :completed, :conditions => { :active => 0 }
 
   # fetches the first and second joins to player, which are white,black respectively
   has_many :gameplays do
@@ -70,6 +70,16 @@ class Match < ActiveRecord::Base
 
   def name
     self[:name] || lineup
+  end
+  
+  def outcome
+    return "In Progress" if self.active? 
+    case self.result
+    when "Checkmate"
+      "Checkmate by #{winner.name}"
+    when "Resigned"
+      "Resigned. Winner #{winner.name}"
+    end
   end
 
   # cache this board and make it the most recent one

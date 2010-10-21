@@ -15,7 +15,7 @@
 
 <span id="move_indicator_parent">
 	<div id="move_indicator">
-		<span style="float:left; margin-right:20px">(<span data-bind="text:side_to_move"></span> to move)</span>
+		<span id="match_status" data-bind="text:match_status"></span>
 		<div id="playback_controls">
 			<input type="button" value="|&lt;" data-bind="click:display_first_move"/>
 			<input type="button" value="&lt;&lt;" data-bind="enable:can_play_previous, click:decrement_displayed_move"/>

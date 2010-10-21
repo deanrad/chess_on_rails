@@ -1,26 +1,28 @@
 <h1>Your current duels</h1>
-Hi. Welcome, <%= current_player.name %>.
+Welcome, <%= current_player.name %>.
 
-<h3>Active Matches</h3>
+<h3>Active Matches - Your Turn</h3>
 <ul>
-<% current_player.matches.active.each do |m| %>
-	<li>
-		<%= link_to m.name, match_url(m)  %> 
-		<%=  '(Your move)' if m.turn_of?( current_player ) %>
-	</li>
-<% end%>
+	<% current_player.matches.where_turn_of(current_player).each do |m| %>
+		<li>
+			<%= link_to m.name, match_url(m)  %> 
+		</li>
+	<% end %>
 </ul>	
+
+<h3>Active Matches - Their Turn</h3>
+<ul>
+	<% ( current_player.matches.to_a - current_player.matches.where_turn_of(current_player) ).each do |m| %>
+		<li><%= link_to m.name, match_url(m)  %></li>
+	<% end %>
+</ul>
 
 <h3>Completed Matches</h3>
 <ul>
 <% current_player.matches.completed.each do |m| %>
 	<li>
 		<%= link_to m.name, match_url(m) %> 
-		(<%=  m.result %> 
-<% if m.winning_player %>
-<%= ", Winner: #{m.winning_player == current_player ? 'You' : m.winning_player.name}" %> 
-<% end %>
-		)
+		(<%=  m.outcome %>)
 
 	</li>
 <% end%>

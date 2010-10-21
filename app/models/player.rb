@@ -1,7 +1,11 @@
 class Player < ActiveRecord::Base
   
   has_many  :gameplays
-  has_many  :matches, :through => :gameplays
+  has_many  :matches, :through => :gameplays do
+    def where_turn_of(player)
+      self.select{ |m| m.active && (m.side_to_move == m.side_of(player)) }
+    end
+  end
 
   validates_length_of :name, :maximum => 20
   validates_uniqueness_of :name

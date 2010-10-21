@@ -16,7 +16,12 @@ var view = {
   next_poll_in:             clientConfig.initial_poll_interval,             
 
   your_turn:                new ko.observable(<%= your_turn %>),
+  
+  //together these 3 fields comprise the match_status dependentObservable
   side_to_move:             new ko.observable('<%= match.side_to_move.to_s.titleize %>'),
+  active:                   new ko.observable(<%= match.active? %>),
+  outcome:                  new ko.observable('<%= match.outcome %>'),
+  
   allowed_moves:            <%= board.allowed_moves.to_json %>,
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
   selected_piece_coord:     new ko.observable(null),
@@ -276,6 +281,14 @@ view.selected_piece_side = new ko.dependentObservable(
   }
 )
 
+view.match_status = new ko.dependentObservable(
+  function(){
+    if (view.active()){
+      return '(' + view.side_to_move() + ' to move)'
+    }
+    return view.outcome();
+  }
+)
 // Allow for droppability
 $('td.piece_container').each( 
   function() {

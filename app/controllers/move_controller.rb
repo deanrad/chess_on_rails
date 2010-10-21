@@ -18,6 +18,10 @@ class MoveController < ApplicationController
 
     this_match = match_path(@match) + (request.mobile? ? '.wml' : '')
     
+    [:black, :white].each do |side| 
+      match.checkmate_by(side.opposite) if @match.reload.board.in_checkmate?(side)
+    end
+    
     # was Move#notify - moved out of model
     begin
       opponent, mover = match.send(board.side_to_move), match.send(board.side_to_move.opposite)
