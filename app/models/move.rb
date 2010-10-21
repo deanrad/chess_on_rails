@@ -105,6 +105,7 @@ class Move < ActiveRecord::Base
   def to_json
     h = {
       # TODO include index/plycount
+      'id' => self.id,
       'notation' => self.notation,
       'friendly_time' => self.friendly_time,
       'from_coord' => self.from_coord,
