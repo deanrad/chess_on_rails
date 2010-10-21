@@ -92,7 +92,7 @@ class Move < ActiveRecord::Base
   end
   
   def friendly_time
-    self.created_at.strftime("%a %H:%M")
+    self.created_at && self.created_at.strftime("%a %H:%M")
   end
 
   def time_since_last_move
