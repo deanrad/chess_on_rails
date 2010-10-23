@@ -1,34 +1,41 @@
-<h2>New match !</h2>
+<h1>Start a match !</h1>
 
 <% form_for(:match, :url => create_match_path ) do |f| %>
-<div>
-<!-- Opponent: [Dean]<input type="hidden" name="opponent_id" value="1" /> 
- hard-coded till ajax/facebook opponent-chooser ready -->
+	<div>
+		<label>Opponent (type name):
+		<input type="text" id="opponent_name" name="opponent_name" />
+		</label>
+		<script>
+		$('#opponent_name').autocomplete({
+		  source: '<%= match_players_path %>'
+		});
 
-<input type="text" id="opponent_name" name="opponent_name" />
-<script>
-$('#opponent_name').autocomplete(
-	{
-    source: '<%= match_players_path %>'
-	}
-);
+		</script>
+	</div>
 
-</script>
-</div>
-<div>
-<label for="ck_opp_on_white">
-  <input type="checkbox" value="1" name="opp_on_white" id="ck_opp_on_white"/>
-  Let them play white ?
-</label>
-</div>
+	<div>
+		<label>
+		  <input type="radio" value="black" name="opponent_side"/>
+		  I play white
+		</label><br/>
+		<label>
+		  <input type="radio" value="white" name="opponent_side"/>
+		  I play black
+		</label>
+	</div>
 
-<div>
-Starting Position:<br/>
-<textarea height="5" width="70" id="start_pos" style="width:300px;" name="start_pos" title="A PGN or FEN formatted game specification"></textarea>
-</div>
-
-<div>
-<%= submit_tag "Start" %>
-</div>
+	<div>
+	<%= submit_tag "Start" %>
+	</div>
+  
+  <h2>Advanced Settings</h2>
+	<div id='advanced'>
+		<ul>
+			<li><label><input type='radio' onclick="$('#start_pos').text('1NBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr')">White at rook odds (queenside)</label></li>
+			<li><label><input type='radio' onclick="$('#start_pos').text('R1BQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr')">White at knight odds (queenside)</label></li>
+		</ul>
+	Starting Position (FEN):<br/>
+	<textarea height="5" width="70" id="start_pos" style="width:400px; color:grey" name="start_pos" title="A PGN or FEN formatted game specification"></textarea>
+	</div>
 
 <% end %>
