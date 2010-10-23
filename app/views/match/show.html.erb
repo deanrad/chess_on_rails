@@ -53,7 +53,7 @@
 
 		
     <div id="chat_form" style="float:left;">
-			<form action="<%= match_chat_path(match) %>" method="POST" onsubmit="view.submit_chat(); return false;">
+			<form action="<%= match_chat_url(match) %>" method="POST" onsubmit="view.submit_chat(); return false;">
       <input type="text" name="chat[text]" id="chat_msg" data-bind="value: chat_msg, valueUpdate: 'keyup'"/>
 			<input type="submit" value="Send" >
 			</form>

@@ -2,7 +2,6 @@ class MatchController < ApplicationController
 
   before_filter :authorize
 
-  # GET /match/1
   def show    
     # respond_to do |format|
     #   format.fbml # should be same as html
@@ -13,21 +12,10 @@ class MatchController < ApplicationController
     # end
   end
 
-  # GET /match/ 
   def index
     # shows active matches
     @matches = current_player.matches.active
   end
-
-  # match/:id/status?move=N returns javascript to update the board to move N. 
-  # If no moves have been made and you query status for move 1 - it will not return
-  # javascript to update the board, and will 304 after the first request. Once that
-  # move has been made, though, future requests will return JS to update the board
-  # and the URL that the client polls for.
-  def status; end
-
-  # provides the js of previous boards
-  def boards; end
 
   # edit form for a new match
   def new; end
@@ -49,7 +37,7 @@ class MatchController < ApplicationController
   # start the fun
   # TODO error handling in MatchController#create
   def create
-    req_players = [ request.player, opponent ]
+    req_players = [ request.player, Player.find_by_name(params[:opponent_name]) ]
     match_players = params[:opponent_side] =='white' ? req_players.reverse : req_players
 
     @match = Match.start!( :players => match_players, :start_pos => params[:start_pos] )
@@ -59,11 +47,10 @@ class MatchController < ApplicationController
     redirect_to match_url(@match.id)
   end
 
-  def opponent
-    if id = params[:opponent_id]
-      Player.find(id)
-    elsif name = params[:opponent_name]
-      Player.find_by_name(name)
-    end
-  end
+private
+  # Gets you some of the way to doing remote ajax (ids must be the same in both dbs as well)
+  # def default_url_options( options = nil)
+  #   { :host => 'www.chessonrails.com'}
+  # end
+
 end
