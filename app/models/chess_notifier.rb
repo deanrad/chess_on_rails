@@ -10,7 +10,11 @@ class ChessNotifier < ActionMailer::Base
     from       SENDER
     sent_on    Time.now
     
-    body       :move => move, :recipient => recipient, :initiator => initiator
+    match = move.match
+    board = match.reload.board
+    
+    board_string = board.to_s( match.side_of(recipient) == :black )
+    body       :move => move, :recipient => recipient, :initiator => initiator, :board_string => board_string
   end
 
   # notifies @recipient has been invited to @match by @initiator
