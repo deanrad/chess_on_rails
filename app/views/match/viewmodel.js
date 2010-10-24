@@ -351,6 +351,10 @@ $('body').keypress(function(event) {
         { $('#chat_msg').focus(); return false; }
       if (event.keyCode == 109) // 'm' for move
         { $('#move_notation').focus(); return false; }
+      if (event.keyCode == 110) { // 'n' for next game
+          next_match = $('#my_next_matches a:first').attr('href')
+          if( next_match ) document.location = next_match;
+      }
     }
 });
 
