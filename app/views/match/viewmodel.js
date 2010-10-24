@@ -25,6 +25,7 @@ var view = {
   allowed_moves:            <%= board.allowed_moves.to_json %>,
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
   selected_piece_coord:     new ko.observable(null),
+  my_next_matches:          new ko.observableArray( <%= my_next_matches %> ),
   
   display_board:            new ko.observable(<%= match.moves.count %>),
   chat_msg:                 new ko.observable(''), //the message the user is entering
@@ -371,6 +372,17 @@ view.selected_piece_coord.subscribe( function(val) {
   $('td.piece_container').css('background-color', '')
   $('#' + val).css('background-color', '#c6f1c6')
 });
+
+view.my_next_matches.subscribe( function(){
+  next_matches = '';
+  $.each( view.my_next_matches(), function(idx, match_id){
+    next_matches += '<a href="<%= match_url(314) %>">314</a>'.replace(/314/g, match_id)
+    next_matches += (idx < view.my_next_matches().length-1) ? ',' : ''
+  })
+  $("#my_next_matches").html(
+     next_matches
+  )
+})
 
 // Show first move
 view.display_board( view.all_boards().length - 1 );

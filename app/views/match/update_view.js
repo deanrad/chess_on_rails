@@ -11,6 +11,8 @@ view.side_to_move( '<%= match.side_to_move.to_s.titleize %>' );
 // update the allowed moves from the current board
 view.allowed_moves = <%= board.allowed_moves.to_json %>;
 
+view.my_next_matches( <%= my_next_matches %> )
+
 // Update any moves/boards they haven't seen;
 <% match.moves_more_recent_than( params[:last_move_id].to_i ).each do |move| -%>
 view.add_move( 
