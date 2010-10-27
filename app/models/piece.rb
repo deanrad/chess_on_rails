@@ -132,7 +132,7 @@ class Piece
   end
     
   def to_json(*args)
-    "{img:'#{self.img_name}', board_id:'#{self.board_id}'}"
+    "{role:'#{function}', img:'#{self.img_name}', board_id:'#{self.board_id}', points:'#{point_value}'}"
   end
 
   # for FEN like situations
@@ -143,6 +143,11 @@ class Piece
       else @function.to_s[0,1]
     end
     return letter.send( @side==:white ? :upcase : :downcase )
+  end
+  
+  def point_value
+    # Gets the constant defined in the derived class
+    self.class.const_get("POINT_VALUE")
   end
 
   def self.new_from_fen( char, pos )
@@ -165,5 +170,7 @@ class Piece
     end
   end
 
+  def inspect; board_id; end
+  def to_s;   inspect; end
 end
 

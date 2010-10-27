@@ -1,16 +1,16 @@
 <div id="original_board" 
 	   title="<%= match.start_pos %>" 
-	   onclick="game_view_model.set_display_board(0)">(Starting Board)</div>
+	   onclick="view.set_display_board(0)">(Starting Board)</div>
 
 <% match.moves.each_with_index do |m, i| -%>
   <%if (i%2)==0 %>
-    <div class="move_w" id="move_list_<%= i+1 %>" onclick="game_view_model.set_display_board(<%= i+1 %>)"
-			  title="<%= m.created_at.strftime("%a %H:%M") %>">
+    <div class="move_w" id="move_list_<%= i+1 %>" onclick="view.display_board(<%= i+1 %>)"
+			  title="<%= m.friendly_time %>">
       <%= ( ((i+2)/2).to_s + ". " + m.notation ).ljust(10) -%>
     </div>
   <%else%>
-    <div class="move_b" id="move_list_<%= i+1 %>" onclick="game_view_model.set_display_board(<%= i+1 %>)"
-		  title="<%= m.created_at.strftime("%a %H:%M") %>">
+    <div class="move_b" id="move_list_<%= i+1 %>" onclick="view.display_board(<%= i+1 %>)"
+		  title="<%= m.friendly_time %>">
       <%= "#{m.notation}\n" -%>
     </div>
   <% end %>

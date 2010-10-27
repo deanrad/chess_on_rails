@@ -1,16 +1,21 @@
-// Update 'current status' fields
-game_view_model.last_move_id =  <%= last_move ? last_move.id : 'null' %>;
-game_view_model.last_chat_id =  <%= last_chat ? last_chat.id : 'null' %>;
+view.active(  <%= match.active? %> )
+view.outcome( '<%= match.outcome %>' )
 
-game_view_model.your_turn(    <%= your_turn %> );
-game_view_model.side_to_move( '<%= match.side_to_move.to_s.titleize %>' );
+// Update 'current status' fields
+view.last_move_id =  <%= last_move ? last_move.id : 'null' %>;
+view.last_chat_id =  <%= last_chat ? last_chat.id : 'null' %>;
+
+view.your_turn(    <%= your_turn %> );
+view.side_to_move( '<%= match.side_to_move.to_s.titleize %>' );
 
 // update the allowed moves from the current board
-game_view_model.allowed_moves = <%= board.allowed_moves.to_json %>;
+view.allowed_moves = <%= board.allowed_moves.to_json %>;
+
+view.my_next_matches( <%= my_next_matches %> )
 
 // Update any moves/boards they haven't seen;
 <% match.moves_more_recent_than( params[:last_move_id].to_i ).each do |move| -%>
-game_view_model.add_move( 
+view.add_move( 
   <%= move.to_json %>,
   <%= move.match.board.to_json %>
 );
@@ -18,6 +23,6 @@ game_view_model.add_move(
 
 // Update any chats they haven't seen;
 <% match.chats_more_recent_than( params[:last_chat_id].to_i ).each do |chat| -%>
-game_view_model.add_chat( <%= chat.to_json %> );
+view.add_chat( <%= chat.to_json %> );
 <% end -%>
 

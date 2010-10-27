@@ -37,4 +37,11 @@ module MatchHelper
     return '/images/spacer.gif' unless piece
     "/images/sets/default/#{piece.img_name}.png"
   end
+  
+  def my_next_matches
+    my_other_matches = current_player.matches.where_turn_of(current_player).reject do |m| 
+      m == match
+    end
+    my_other_matches.map(&:id).map(&:to_s).to_json
+  end
 end

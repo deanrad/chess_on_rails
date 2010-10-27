@@ -7,7 +7,6 @@ class Move < ActiveRecord::Base
   belongs_to :player
 
   before_save :update_computed_fields
-  after_save :notify_of_move_via_email
 
   attr_accessor :side
   attr_reader   :board
@@ -87,9 +86,13 @@ class Move < ActiveRecord::Base
     #can not leave your king in check at end of a move
     new_board=  @board.consider_move( Move.new( :from_coord => from_coord, :to_coord => to_coord ) )
     if new_board.in_check?( @piece_moving.side )
-      errors.add_to_base "Can not place or leave one's own king in check - you may as well resign if you do that !" 
+      errors.add_to_base "Cannot leave ones own king in check" 
     end
 
+  end
+  
+  def friendly_time
+    self.created_at && self.created_at.strftime("%a %H:%M")
   end
 
   def time_since_last_move
@@ -98,18 +101,18 @@ class Move < ActiveRecord::Base
     # make sure we exceed this to trigger an email if we cant tell when they last moved
     ChessNotifier::MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS + 1.0/24
   end
-
-private
-
-  def notify_of_move_via_email
-    # dont send email if its been less than 1/24 of a day
-    # TODO move email blackout interval into configuration
-    return unless self.time_since_last_move > ChessNotifier::MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS || Rails.env.development?
-
-    mover, opponent = match.send(board.side_to_move), match.send(board.side_to_move.opposite)
-    ChessNotifier.deliver_player_moved(opponent, mover, self)
-  rescue Exception => ex
-    $stderr.puts ex.inspect
+  
+  def to_json
+    h = {
+      # TODO include index/plycount
+      'id' => self.id,
+      'notation' => self.notation,
+      'friendly_time' => self.friendly_time,
+      'from_coord' => self.from_coord,
+      'to_coord' => self.to_coord
+    }
+    h['errors'] = self.errors.full_messages.join(". ") unless self.errors.blank?
+    h.to_json
   end
 
 end

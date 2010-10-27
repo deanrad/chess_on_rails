@@ -5,7 +5,7 @@ class Match < ActiveRecord::Base
   has_many :moves
 
   has_many :chats
-  belongs_to :winning_player, :class_name => 'Player', :foreign_key => 'winning_player'
+  belongs_to :winner, :class_name => 'Player', :foreign_key => 'winning_player'
 
   scope :active,     where(:active => true)
   scope :completed,  where(:active => false)
@@ -25,7 +25,7 @@ class Match < ActiveRecord::Base
   # the boards this match has known, in move order from the beginning
   def boards
     @boards ||= moves.inject([ self.initial_board ]) do |all_boards, mv|
-      all_boards << all_boards.last.clone.toggle_side_to_move!.play_move!(mv)
+      all_boards << all_boards.last.dup.toggle_side_to_move!.play_move!(mv)
     end
   end
 
@@ -71,6 +71,16 @@ class Match < ActiveRecord::Base
 
   def name
     self[:name] || lineup
+  end
+  
+  def outcome
+    return "In Progress" if self.active? 
+    case self.result
+    when "Checkmate"
+      "Checkmate by #{winner.name}"
+    when "Resigned"
+      "Resigned. Winner #{winner.name}"
+    end
   end
 
   # cache this board and make it the most recent one

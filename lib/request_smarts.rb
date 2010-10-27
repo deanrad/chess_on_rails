@@ -26,6 +26,11 @@ module RequestSmarts
     session[:player_id] = p.id
   end
 
+  def opponent( match = self.match)
+    return match.black if match.white == self.player 
+    return match.white if match.black == self.player 
+  end
+
   # any http request is for only one match
   def match
     the_id = params[:id] || params[:match_id] 
@@ -46,7 +51,7 @@ module RequestSmarts
   end
 
   def your_turn?
-    @your_turn ||= viewed_from_side == (match && match.side_to_move)
+    @your_turn ||= (viewed_from_side == (match.id && match.side_to_move))
   end
   alias :your_turn :your_turn?
 
@@ -78,7 +83,7 @@ module RequestSmarts
   end
 
   def mobile?
-    env["REQUEST_URI"].include?("wml") || env["HTTP_REFERER"].include?("wml")
+    env["REQUEST_URI"].include?("wml") || (env["HTTP_REFERER"] || '').include?("wml")
   end
 
 end

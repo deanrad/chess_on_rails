@@ -2,43 +2,13 @@ class MatchController < ApplicationController
 
   before_filter :authorize
 
-  # GET /match/1
-  def show    
-    # respond_to do |format|
-    #   format.fbml # should be same as html
-    #   format.html { render :template => 'match/result' and return if request.match.active == 0 }
-    #   format.text { render :text => request.match.board.to_s(viewed_from_side==:black) }
-    #   format.pgn  { render :partial => 'match/move_list' }
-    #   format.wml  {} # render :tempate => 'match/show' }
-    # end
-  end
-
-  # GET /match/ 
-  def index
-    # shows active matches
-    @matches = current_player.matches.active
-  end
-
-  # match/:id/status?move=N returns javascript to update the board to move N. 
-  # If no moves have been made and you query status for move 1 - it will not return
-  # javascript to update the board, and will 304 after the first request. Once that
-  # move has been made, though, future requests will return JS to update the board
-  # and the URL that the client polls for.
-  def status; end
-
-  # provides the js of previous boards
-  def boards; end
-
-  # edit form for a new match
+  def index; end
+  def show; end
   def new; end
 
   # json for autocomplete
   def players
-    # TODO use .where
-    x = Player.where( "name like '#{ params[:term] }%'" ).map do |p|
-        p.name
-    end
-    render :text => x.to_json, :layout => false
+    render :json => Player.where( "name like '#{ params[:term] }%'" ).map(&:name)
   end
 
   # give up the ghost
@@ -47,24 +17,13 @@ class MatchController < ApplicationController
     redirect_to :action => 'index'
   end
 
-  # start the fun
-  # TODO error handling in MatchController#create
-  def create
-    req_players = [ request.player, opponent ]
-    match_players = params[:opponent_side] =='white' ? req_players.reverse : req_players
+  def create( switch_em = params[:opponent_side] =='white' )
+    players = [ request.player, Player.find_by_name(params[:opponent_name]) ]
+    @match = Match.start!( :players => players.send(switch_em ? :reverse : :to_a),
+                           :start_pos => params[:start_pos] )
 
-    @match = Match.start!( :players => match_players, :start_pos => params[:start_pos] )
-
-    ChessNotifier.deliver_match_created( req_players.last, req_players.first, self)
-    
+    ChessNotifier.deliver_match_created(request.opponent(@match), request.player, @match)
     redirect_to match_url(@match.id)
   end
 
-  def opponent
-    if id = params[:opponent_id]
-      Player.find(id)
-    elsif name = params[:opponent_name]
-      Player.find_by_name(name)
-    end
-  end
 end

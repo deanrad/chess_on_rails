@@ -1,5 +1,5 @@
 Hey <%= @recipient.name %>,
-  Your opponent <%= @initiator.name %> has moved. 
+  Your opponent <%= @initiator.name %> has made the move: <%= @move.notation %>. 
   Please visit http://www.chessonrails.com/match/<%= @move.match.id %> to resume your game.
 
-<%= @move.match.reload.board.to_s %>
+<%= @board_string %>

@@ -15,7 +15,7 @@ set :scm, "git"
 # 
 set :repository, "git@github.com:chicagogrooves/chess_on_rails.git"
 
-set :git_enable_submodules, 1
+# set :git_enable_submodules, 1
 set :branch, "master"
 ssh_options[:forward_agent] = true
 
@@ -57,6 +57,9 @@ namespace :configure do
   task :remove_fb do
     run "rm -rf #{release_path}/vendor/plugins/facebooker"
   end
+  task :update_rev do
+    run "cp #{release_path}/REVISION #{release_path}/public/REVISION"
+  end
 end
 
 namespace :deploy do
@@ -65,6 +68,6 @@ namespace :deploy do
     run "touch #{current_path}/tmp/restart.txt"
   end
 
-  after "deploy:update_code", "configure:db", "configure:env", "configure:remove_fb"
+  after "deploy:update_code", "configure:db", "configure:env", "configure:remove_fb", "configure:update_rev"
 end
 

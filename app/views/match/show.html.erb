@@ -15,29 +15,36 @@
 
 <span id="move_indicator_parent">
 	<div id="move_indicator">
-
-
-		<span style="float:left; margin-right:20px">(<span data-bind="text:side_to_move"></span> to move)</span>
-		<div id="playback_controls" style="float:left">
+		<span id="match_status" data-bind="text:match_status"></span>
+		<div id="playback_controls">
 			<input type="button" value="|&lt;" data-bind="click:display_first_move"/>
 			<input type="button" value="&lt;&lt;" data-bind="enable:can_play_previous, click:decrement_displayed_move"/>
 			<span data-bind="text:display_board" style="color:white"></span>
 			<input type="button" value="&gt;&gt;" data-bind="enable:can_play_next, click:increment_displayed_move"/>
 			<input type="button" value="&gt;|" data-bind="click:display_last_move"/>
 		</div>
-
 	</div>
+	<div id="my_next_matches_div" data-bind="visible:my_next_matches().length > 0">Your turn in matches: <span id="my_next_matches"></span></div>
+	<div id="server_msg" data-bind="visible:has_message(), text:server_messages()"></div>
 </span>
 
 <div id="board_parent" style="float:left; clear:left">
 <%= render :partial => "board", :locals => {:board => match.board} %>
 </div>
 
-<div id="peripheral_to_board" style="margin: 0 0 0 20px; padding: 8px">  
+<div id="game_tabs">  
+	<ul id='tab_headers'>
+		<li><a href="#move-list">Move List</a></li>
+		<li><a href="#chat_container">Chat</a></li>
+	</ul>
 
   <div id="move_list" class="move_list">
     <%= render :partial => 'move_list' %>
   </div>
+
+	<div id="graveyard" style="display:none">
+		
+	</div>
 
   <% if match.side_of(current_player) %>
   <div id="chat_container" style="float:left;">
@@ -47,7 +54,7 @@
 
 		
     <div id="chat_form" style="float:left;">
-			<form action="<%= match_chat_path(match) %>" method="POST" onsubmit="game_view_model.submit_chat(); return false;">
+			<form action="<%= match_chat_url(match) %>" method="POST" onsubmit="view.submit_chat(); return false;">
       <input type="text" name="chat[text]" id="chat_msg" data-bind="value: chat_msg, valueUpdate: 'keyup'"/>
 			<input type="submit" value="Send" >
 			</form>

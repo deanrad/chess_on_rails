@@ -7,20 +7,28 @@ var clientConfig= {
 // Then we bind (using HTML5 data-bind attributes and knockout syntax) DOM elements
 // to the viewmodel, and updating happens automatically as the viewmodel is changed
 // whether by user-interaction, or AJAX polls.
-var game_view_model = {
+var view = {
   
+  //TODO make last_move/last_chat_id dependentObservables
   last_move_id:             <%= last_move ? last_move.id : 'null' %>,
   last_chat_id:             <%= last_chat ? last_chat.id : 'null' %>,
   poll_count:               0,
   next_poll_in:             clientConfig.initial_poll_interval,             
 
   your_turn:                new ko.observable(<%= your_turn %>),
+  
+  //together these 3 fields comprise the match_status dependentObservable
   side_to_move:             new ko.observable('<%= match.side_to_move.to_s.titleize %>'),
+  active:                   new ko.observable(<%= match.active? %>),
+  outcome:                  new ko.observable('<%= match.outcome %>'),
+  
   allowed_moves:            <%= board.allowed_moves.to_json %>,
   last_move:                <%= last_move ? last_move.to_json : Move.new.to_json %>,
+  selected_piece_coord:     new ko.observable(null),
+  my_next_matches:          new ko.observableArray( <%= my_next_matches %> ),
   
   display_board:            new ko.observable(<%= match.moves.count %>),
-  chat_msg:                 new ko.observable(''),
+  chat_msg:                 new ko.observable(''), //the message the user is entering
 
   all_moves:                new ko.observableArray([
     <%= match.moves.map(&:to_json).join(",\n    ") %>
@@ -34,35 +42,41 @@ var game_view_model = {
     <%= match.boards.map(&:to_json).join(",\n    ") %>
   ]),
   
+  all_graveyards:            new ko.observableArray([
+    <%= match.boards.map{|b| b.graveyard.to_json}.join(",\n   ") %>
+  ]),
+
+  server_messages:          new ko.observable(""),
+  
   // Does not follow the subscriber model, since its too busy..
   add_move:                 function( mv, board ){
-    if ( game_view_model.all_moves().map( function(mv){ return mv.id } ).indexOf(mv.id) > -1 ){
+    if ( view.all_moves().map( function(mv){ return mv.id } ).indexOf(mv.id) > -1 ){
       console.log('already have move ' + mv.id + ', skipping ..')
       return;
     }
     console.log('adding move ' + mv.id)
-    this.all_moves.push( mv );
-    this.all_boards.push( board );
+    view.all_moves.push( mv );
+    view.all_boards.push( board );
 
     //if we are not caught up, we only need to update on the final move known about
-    if( mv.id == this.last_move_id){
-      my_index = this.all_boards.indexOf(board)
-      this.add_to_move_list( mv, my_index );
-      this.display_board( my_index );
+    if( mv.id == view.last_move_id){
+      my_index = view.all_boards.indexOf(board)
+      view.add_to_move_list( mv, my_index );
+      view.display_board( my_index );
     }
 
-    this.reset_poller();
+    view.reset_poller();
   },
 
   add_to_move_list:         function( mv, index ) {
     console.log('adding move ' + mv.notation + ' to move list at index ' + index);
     mv.index = index;
     if( index % 2 == 1 ){
-      mv.ply_count = Math.ceil(index/2); mv.index = index
-      template = '<div class="move_w" id="move_list_${index}" onclick="game_view_model.display_board(${index})">${ply_count}. ${notation}</div>';
+      mv.ply_count = Math.ceil(index/2)
+      template = '<div class="move_w" id="move_list_${index}" onclick="view.display_board(${index})" title="${friendly_time}">${ply_count}. ${notation}</div>';
     } 
     else{
-      template = '<div class="move_b" id="move_list_${index}" onclick="game_view_model.display_board(${index})">${notation}</div>';
+      template = '<div class="move_b" id="move_list_${index}" onclick="view.display_board(${index})" title="${friendly_time}">${notation}</div>';
     }
     $("#move_list").append( $.tmpl( template, mv ) )
     moveDiv = document.getElementById('move_list');
@@ -74,7 +88,7 @@ var game_view_model = {
     console.log('Laying out board ' + board_idx  );
     $('td.piece_container').empty();
     $('td.piece_container').append("&nbsp;");
-    $.each( game_view_model.all_boards()[board_idx], function (pos, piece) { 
+    $.each( view.all_boards()[board_idx], function (pos, piece) { 
 
         //TODO use template
         var img = '<img id="' + piece.board_id + '" class="piece" src="/images/sets/default/' + piece.img + '.png" />';
@@ -86,13 +100,13 @@ var game_view_model = {
 
   // Lays out the board and enables/disables moves via drag/drop mediated thru CSS
   set_display_board:         function(mvidx) {
-     game_view_model.layout_board(mvidx);
+     view.layout_board(mvidx);
 
      //get rid of, then replace draggables
      $('td.piece_container img').draggable("destroy");
      
      //if this is the latest move and your turn, rebind allowed moves/draggables
-     if( mvidx == game_view_model.all_boards().length-1 && game_view_model.your_turn()){
+     if( mvidx == view.all_boards().length-1 && view.your_turn()){
         console.log('rebinding draggables')
         $('td.piece_container img').removeClass();
         
@@ -102,7 +116,7 @@ var game_view_model = {
             sq_id = $(this).attr('id')
 
             //set the piece therein to have css classes for each allowed move
-            allowed = game_view_model.allowed_moves[sq_id]
+            allowed = view.allowed_moves[sq_id]
             allowed = allowed == undefined ? '' : allowed.join(' ')
             $('img', this).addClass( "piece " + allowed );
             $('img', this).draggable( {revert: 'invalid', grid: [42, 42] } );
@@ -113,7 +127,7 @@ var game_view_model = {
      // show the move that brought this board to this state
      $('td.piece_container').removeClass('last-move-from last-move-to last-move-to-x');
      if(mvidx > 0){
-       mv = game_view_model.all_moves()[mvidx - 1];
+       mv = view.all_moves()[mvidx - 1];
        $('#' + mv.from_coord ).addClass('last-move-from')
        $('#' + mv.to_coord   ).addClass('last-move-to' + (mv.captured_piece_coord == undefined ? '' : '-x') )
      }
@@ -123,90 +137,90 @@ var game_view_model = {
      $("#move_list_" + mvidx).addClass('move_list_current');
   },
   can_play_previous:         function(){
-    return (game_view_model.display_board() > 0);
+    return (view.display_board() > 0);
   },
   can_play_next:             function(){
-    return (game_view_model.display_board() < game_view_model.all_boards().length-1);
+    return (view.display_board() < view.all_boards().length-1);
   },
   decrement_displayed_move:  function(){
-    cur_mvidx = game_view_model.display_board();
+    cur_mvidx = view.display_board();
     mvidx = cur_mvidx == 0 ? 0 : cur_mvidx - 1;
     console.log("Setting move to " + mvidx);
-    game_view_model.display_board(mvidx);
+    view.display_board(mvidx);
   },
   increment_displayed_move:  function(){
-    cur_mvidx = game_view_model.display_board();
-    mvidx = (cur_mvidx == game_view_model.all_boards().length-1) ? game_view_model.all_boards().length-1 : cur_mvidx + 1
+    cur_mvidx = view.display_board();
+    mvidx = (cur_mvidx == view.all_boards().length-1) ? view.all_boards().length-1 : cur_mvidx + 1
     console.log("Setting move to " + mvidx)
-    game_view_model.display_board(mvidx);
+    view.display_board(mvidx);
   },
   display_first_move:        function(){
-    game_view_model.display_board(0);
+    view.display_board(0);
   },
   display_last_move:         function(){
-    game_view_model.display_board(game_view_model.all_boards().length-1);
+    view.display_board(view.all_boards().length-1);
   },
   submit_chat:               function(){
     $.post( "<%= match_chat_path(match) %>",
         { 
-          'chat[text]':         game_view_model.chat_msg(),
+          'chat[text]':         view.chat_msg(),
           authenticity_token: '<%= form_authenticity_token %>' 
         },
         function(data){
-          game_view_model.chat_msg('');
-          game_view_model.reset_poller();
+          view.chat_msg('');
+          view.reset_poller();
         } 
     );   
   },
   
   add_chat:                 function( ch ){
-    if ( game_view_model.all_chats().map( function(ch){ return ch.id } ).indexOf(ch.id) > -1 ){
+    if ( view.all_chats().map( function(ch){ return ch.id } ).indexOf(ch.id) > -1 ){
       console.log('already have chat ' + ch.id + ', skipping ..')
       return;
     }
     
     console.log('adding chat ' + ch.id)
-    this.all_chats.push(ch);
+    view.all_chats.push(ch);
     var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
     render  = $.tmpl( chatTemplate, ch );
 		$('#chat_window').append( render );
-    this.scroll_chat('bottom')
-    this.reset_poller();
+    view.scroll_chat('bottom')
+    view.reset_poller();
   },
   scroll_chat:              function(where){
     chatDiv = document.getElementById('chat_window');
     chatDiv.scrollTop = (where=="bottom") ? chatDiv.scrollHeight : 0;
   },
   increment_poll:           function(){
-    game_view_model.poll_count += 1;
+    view.poll_count += 1;
     
-    if ( game_view_model.poll_count <=  15 )
-      game_view_model.next_poll_in = clientConfig.initial_poll_interval;
-    else if (game_view_model.poll_count <= 30 )
-      game_view_model.next_poll_in = 5;
-    else if (game_view_model.poll_count <= 50 )
-      game_view_model.next_poll_in = 30;
-      else if (game_view_model.poll_count <= 100 )
-        game_view_model.next_poll_in = 60;
+    if ( view.poll_count <=  15 )
+      view.next_poll_in = clientConfig.initial_poll_interval;
+    else if (view.poll_count <= 30 )
+      view.next_poll_in = 5;
+    else if (view.poll_count <= 50 )
+      view.next_poll_in = 30;
+      else if (view.poll_count <= 1000 )
+        view.next_poll_in = 60;
     else 
-      game_view_model.next_poll_in = 3600;
+      view.next_poll_in = 3600;
   },
 
   reset_poller:           function(){
-    this.poll_count = 0;
-    this.next_poll_in = clientConfig.initial_poll_interval;
-    window.setTimeout( game_view_model.poll,  game_view_model.next_poll_in * 1000);
+    view.poll_count = 0;
+    view.next_poll_in = clientConfig.initial_poll_interval;
+    window.setTimeout( view.poll,  view.next_poll_in * 1000);
   },
 
   // Performs a poll, evaling what comes back, and schedules the next poll.
   poll:                     function(){
-    game_view_model.increment_poll();
-    console.log('initiating poll num: ' + game_view_model.poll_count + ' - next poll in ' + game_view_model.next_poll_in + ' seconds')
+    view.increment_poll();
+    console.log('initiating poll num: ' + view.poll_count + ' - next poll in ' + view.next_poll_in + ' seconds')
     
     $.get( "<%= url_for :action => 'update_view', :format => :js %>",
         { 
-          last_move_id:       game_view_model.last_move_id, 
-          last_chat_id:       game_view_model.last_chat_id,
+          last_move_id:       view.last_move_id, 
+          last_chat_id:       view.last_chat_id,
           authenticity_token: '<%= form_authenticity_token %>' 
         },
         function(data){
@@ -214,7 +228,7 @@ var game_view_model = {
         }    
     ); 
 
-    window.setTimeout( game_view_model.poll,  game_view_model.next_poll_in * 1000);
+    window.setTimeout( view.poll,  view.next_poll_in * 1000);
   },
   submit_move:              function(from, to){
     $("#board_table").addClass('busy');
@@ -226,16 +240,56 @@ var game_view_model = {
           authenticity_token: '<%= form_authenticity_token %>' 
         },
         function(data){
-          console.log('AJAX POST returned: ' + data);
-          game_view_model.poll();
-          game_view_model.reset_poller();
+          if (data.errors){
+            view.server_messages( data.errors )
+            view.display_last_move();
+          }else{
+            view.server_messages( '' )
+          }
+          
+          view.poll();
+          view.reset_poller();
           $("#board_table").removeClass('busy');
         }    
     ); 
+  },
+  side_occupying:          function(coord){
+    piece_id = $('#' + coord + ' img').attr('id')
+    if(piece_id == undefined) return null;
     
+    if( piece_id.match( /_w$/ ) )
+      return 'white'
+    if( piece_id.match( /_b$/ ) )
+      return 'black'
   }
 };
 
+// Add functions that are dependent upon the values of other view model fields
+// (and which will be memoized until their dependents change)
+view.has_message =     new ko.dependentObservable(
+  function(){
+    return !(view.server_messages() == "")
+  }
+);
+
+view.selected_piece_side = new ko.dependentObservable(
+  function(){
+    coord = view.selected_piece_coord();
+    if( coord == null)
+      return null
+    else 
+      return view.side_occupying(coord);
+  }
+)
+
+view.match_status = new ko.dependentObservable(
+  function(){
+    if (view.active()){
+      return '(' + view.side_to_move() + ' to move)'
+    }
+    return view.outcome();
+  }
+)
 // Allow for droppability
 $('td.piece_container').each( 
   function() {
@@ -247,50 +301,98 @@ $('td.piece_container').each(
           from = ui.draggable.parent().attr('id');
           to = $(this).attr('id');
           console.log(from  + ' dropped on ' + to );
-          game_view_model.submit_move( from, to )
+          view.submit_move( from, to )
         }
     });
   });
+
+// Allow for click-click moving
+$('td.piece_container').click( 
+  function() {
+    clicked_id = $(this).attr('id')
+    from_piece_coord = view.selected_piece_coord();
+    
+    if( from_piece_coord != null){
+      if (view.side_occupying(clicked_id) == view.selected_piece_side() ){
+        view.selected_piece_coord(clicked_id);        
+      }
+      else{
+        view.selected_piece_coord(null);
+        view.submit_move( from_piece_coord, clicked_id );
+      }
+    }
+    else{
+      if( view.your_turn() &&  
+          $(this).has('img').length > 0 && 
+          view.side_occupying(clicked_id) == view.side_to_move().toLowerCase() ){
+        // console.log('selected piece ' + $(this).has('img').first().attr('id') );
+        view.selected_piece_coord(clicked_id);
+      }
+      else {
+        console.log('clicked sq ' + clicked_id);
+      } // ignore it
+    }
+  }
+);
 
 // Allow for keyboard handling - arrow keys move back/forth through history
 // If focused in a text field, hit Esc to return to general keyboard mode
 $('body').keyup(function(event) {
     if ($(event.target).is(':not(:text)')) {
       if (event.keyCode == 37) // left
-        game_view_model.decrement_displayed_move();
+        view.decrement_displayed_move();
       if (event.keyCode == 39) // right
-        game_view_model.increment_displayed_move();
+        view.increment_displayed_move();
     }
 });
 $('body').keypress(function(event) {
     if ($(event.target).is(':not(input, textarea)')) {
       if (event.keyCode == 97) // 'c' for chat
-        $('#chat_msg').focus();
+        { $('#chat_msg').focus(); return false; }
       if (event.keyCode == 109) // 'm' for move
-        $('#move_notation').focus();
-        
-      return false; //dont register the keypress in the field
+        { $('#move_notation').focus(); return false; }
+      if (event.keyCode == 110) { // 'n' for next game
+          next_match = $('#my_next_matches a:first').attr('href')
+          if( next_match ) document.location = next_match;
+      }
     }
 });
 
 // Start knockout's tracking of auto-updating items
-ko.applyBindings(document.body, game_view_model);
+ko.applyBindings(document.body, view);
 
 // Set up subscriptions on interesting items
-game_view_model.display_board.subscribe( game_view_model.set_display_board );
-game_view_model.all_moves.subscribe( function(){
+view.display_board.subscribe( view.set_display_board );
+view.all_moves.subscribe( function(){
   document.title = document.title.replace( clientConfig.your_turn_msg, '' );
+  if( view.your_turn() )
+    document.title = clientConfig.your_turn_msg + document.title;
+});
 
-  if( game_view_model.your_turn() ){
-    document.title = clientConfig.your_turn_msg + document.title
-  }
+view.selected_piece_coord.subscribe( function(val) {
+  $('td.piece_container').removeClass('selected-piece');
+  $('#' + val).addClass('selected-piece');
+  //HACK
+  $('td.piece_container').css('background-color', '')
+  $('#' + val).css('background-color', '#c6f1c6')
+});
+
+view.my_next_matches.subscribe( function(){
+  next_matches = '';
+  $.each( view.my_next_matches(), function(idx, match_id){
+    next_matches += '<a href="<%= match_url(314) %>">314</a>'.replace(/314/g, match_id)
+    next_matches += (idx < view.my_next_matches().length-1) ? ',' : ''
+  })
+  $("#my_next_matches").html(
+     next_matches
+  )
 })
 
 // Show first move
-game_view_model.display_board( game_view_model.all_boards().length - 1 );
+view.display_board( view.all_boards().length - 1 );
 
 // Make sure latest chat is in focus
-game_view_model.scroll_chat('bottom');
+view.scroll_chat('bottom');
 	
 // Kickoff polling loop
-window.setTimeout( game_view_model.poll, game_view_model.next_poll_in * 1000 )
+window.setTimeout( view.poll, view.next_poll_in * 1000 )

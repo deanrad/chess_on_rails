@@ -1,7 +1,7 @@
 # The Daddy-O, move_directions :diagonal, :straight, :limit => 1
 class King < Piece
   move_directions :diagonal, :straight, :limit => 1
-
+  POINT_VALUE='∞'
   def initialize(side, discriminator=nil)
     super(side, :king, discriminator)
   end
