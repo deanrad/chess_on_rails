@@ -19,13 +19,6 @@ ActiveRecord::Schema.define(:version => 20090424042453) do
     t.datetime "updated_at"
   end
 
-  create_table "fbusers", :force => true do |t|
-    t.integer  "facebook_user_id", :null => false
-    t.integer  "playing_as"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "gameplays", :force => true do |t|
     t.integer  "player_id",                                   :null => false
     t.integer  "match_id",                                    :null => false

@@ -4,8 +4,6 @@
 class ApplicationController < ActionController::Base
   helper :all 
 
-  # helper_attr :current_fbuser  #attr_accessor and helper_method
-
   before_filter :extend_session_and_request
 
   def extend_session_and_request
@@ -30,30 +28,7 @@ class ApplicationController < ActionController::Base
     return u && u.playing_as
   end
 
-  # if this request is coming from facebook- its been seen while testing match_controller_fb_spec
-  # that sometimes facebook_session is nil in test mode. We'll extend the definition for now to
-  # also allow for hacked-on fb_sig_user as well
-  def is_facebook?
-    return false unless defined? facebook_session
-    !! ( facebook_session || params[:fb_sig_user] )
-  end
-
-  # # if accessed over facebook, the player referenced
-  def player_in_facebook
-    fb_id = nil
-    if defined? facebook_session
-       fb_id = facebook_session ? facebook_session.user.id : params[:fb_sig_user]
-    end
-    return unless fb_id
-    fbuser = Fbuser.find_by_facebook_user_id(fb_id)
-    return fbuser.playing_as if fbuser
-  end
-
-
-  #only use layout if not a facebook request - todo - standardize the 'is_facebook' test
-  # layout proc{ |c| c.params[:fb_sig] ? false : 'application' }
-
-  # the player this request is being processed for
+  # the player this request is being processed for - should be request.player but...
   def current_player
     p = request.player || player_over_http
     request.player = p if p
@@ -65,7 +40,7 @@ class ApplicationController < ActionController::Base
     unless current_player
       flash[:notice] = "Login is required in order to take this action."
       session[:original_uri] = request.request_uri
-      redirect_to is_facebook? ? register_url : login_url
+      redirect_to login_url
     end
   end
   

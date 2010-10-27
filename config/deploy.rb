@@ -54,9 +54,6 @@ namespace :configure do
     run "rm -f #{release_path}/config/environments/production.rb"
     run "ln -s #{shared_path}/production.rb #{release_path}/config/environments/production.rb"
   end
-  task :remove_fb do
-    run "rm -rf #{release_path}/vendor/plugins/facebooker"
-  end
   task :update_rev do
     run "cp #{release_path}/REVISION #{release_path}/public/REVISION"
   end
@@ -68,6 +65,6 @@ namespace :deploy do
     run "touch #{current_path}/tmp/restart.txt"
   end
 
-  after "deploy:update_code", "configure:db", "configure:env", "configure:remove_fb", "configure:update_rev"
+  after "deploy:update_code", "configure:db", "configure:env", "configure:update_rev"
 end
 

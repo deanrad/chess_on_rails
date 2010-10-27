@@ -2,9 +2,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # The priority is based upon order of creation: first created -> highest priority.
 
-  # Default routes - facebook or not
-  map.facebook_root '', :controller => "match", :conditions => {:canvas => true}
-  map.root :controller => "authentication", :conditions => {:canvas => false}
+  map.root :controller => "authentication"
 
   map.auth       'authentication/:action',  :controller => 'authentication'
   map.login      'authentication/login',    :controller => 'authentication', :action => 'login'
@@ -20,10 +18,6 @@ ActionController::Routing::Routes.draw do |map|
     match.resources :moves, :controller => :move, :collection => { :create => :post }
     match.resource :chat
   end
-
-
-  #sets controller courtesy of Sean
-  map.resource :set, :member => {:change => :post}
 
   # Install the default routes as the lowest priority.
   map.connect ':controller/:id/:action'
