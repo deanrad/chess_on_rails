@@ -9,8 +9,7 @@ class MoveController < ApplicationController
     raise ArgumentError, "You are trying to move on a match you either don't own or is not active" unless @match
     raise ArgumentError, "It is your not your turn to move yet" unless request.your_turn?
 
-    @move = @match.moves.build( params[:move] )
-    @move.save
+    @match.moves << @move = Move.new( params[:move] )
     flash[:error] = @move.errors.full_messages unless @move.id
 
     # unceremonious way of saying you just ended the game 
