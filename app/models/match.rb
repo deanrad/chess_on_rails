@@ -69,7 +69,7 @@ class Match < ActiveRecord::Base
   end
 
   def name
-    self[:name] || lineup
+    self[:name] || "#{white.name} vs. #{black.name}"
   end
   
   def outcome
@@ -82,21 +82,6 @@ class Match < ActiveRecord::Base
     end
   end
 
-  # cache this board and make it the most recent one
-  def save_board( last_move )
-    @boards << boards.last.clone.toggle_side_to_move!.play_move!( last_move )
-  end
-
-  def check_for_checkmate(last_move)
-    me, other_guy =  last_move.side == :black ? [:black, :white] : [:white, :black]
-    #checkmate_by( me ) if board.in_checkmate?( other_guy )
-  end
-    
-  # for purposes of move validation it's handy to have access to such a variable
-  def current_player
-    side_to_move == :black ? self.black : self.white
-  end
-  
   def is_self_play? 
     @self_play ||= (self.white == self.black) 
   end
@@ -116,10 +101,6 @@ class Match < ActiveRecord::Base
   def side_of( plyr ) 
     return :white if plyr == self.white
     return :black if plyr == self.black
-  end
-
-  def lineup
-    "#{white.name} vs. #{black.name}"
   end
 
   def resign( plyr )

@@ -1,4 +1,4 @@
-%h3= match.lineup
+%h3= match.name
 - if your_turn?
   .mobi_last_move= "Last move: #{match.moves.last.try(:notation)}"
 .board= render :partial => 'board'
