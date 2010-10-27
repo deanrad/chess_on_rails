@@ -7,13 +7,12 @@ class AuthenticationController < ApplicationController
       user.update_attribute(:auth_token, Digest::MD5.hexdigest(Time.now.to_s) )
       cookies[:auth_token] = { :value => user.auth_token, :expires => 1.year.from_now }
       request.player = user.playing_as
-    else
-      flash[:notice] = "Your credentials do not check out."
-      return
+
+      #return them to original page requested, or their homepage
+      redirect_to session[:original_uri] || match_index_url
     end
 
-    #return them to original page requested, or their homepage
-    redirect_to session[:original_uri] || match_index_url
+    flash[:notice] = "Your credentials do not check out."
   end
   
   def logout

@@ -26,6 +26,11 @@ module RequestSmarts
     session[:player_id] = p.id
   end
 
+  def opponent( match = self.match)
+    return match.black if match.white == self.player 
+    return match.white if match.black == self.player 
+  end
+
   # any http request is for only one match
   def match
     the_id = params[:id] || params[:match_id] 

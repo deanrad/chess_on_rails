@@ -1,16 +1,9 @@
 class ChatsController < ApplicationController
   before_filter :authorize
-  layout false
 
-  # POST /match/N/chat
   def create
-    chat = Chat.new(params[:chat])
-    chat.text.gsub!( '<', '&lt;' ).gsub!( '>', '&gt;' ) rescue nil
-    chat.match_id = params[:match_id]
-    chat.player_id = current_player.id
-
-    chat.save! 
-    render :text => 'ok'
+    request.match.chats.create( params[:chat].merge(:player_id => current_player.id)  )
+    render :text => 'ok', :layout => false
   end
 
 end
