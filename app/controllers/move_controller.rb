@@ -10,9 +10,10 @@ class MoveController < ApplicationController
     match.moves << @move = Move.new( params[:move] )
     flash[:error] = @move.errors.full_messages unless @move.id
 
-    [:black, :white].each do |side| 
-      match.checkmate_by(side.opposite) if match.reload.board.in_checkmate?(side)
-    end
+    # not working ! see checks in prod matches 75/78
+    # [:black, :white].each do |side| 
+    #  match.checkmate_by(side.opposite) if match.reload.board.in_checkmate?(side)
+    # end
     ChessNotifier.deliver_player_moved(request.opponent, request.player, @move)
     
     
