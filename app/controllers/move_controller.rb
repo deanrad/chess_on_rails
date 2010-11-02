@@ -11,6 +11,7 @@ class MoveController < ApplicationController
     flash[:error] = @move.errors.full_messages unless @move.id
 
     # not working ! see checks in prod matches 75/78
+    # HA ! memoization screwed it up !
     # [:black, :white].each do |side| 
     #  match.checkmate_by(side.opposite) if match.reload.board.in_checkmate?(side)
     # end

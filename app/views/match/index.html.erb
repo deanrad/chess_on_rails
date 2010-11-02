@@ -1,9 +1,9 @@
 <h1>Your current duels</h1>
-Welcome, <%= current_player.name %>.
+Welcome, <%= request.player.name %>.
 
 <h3>Active Matches - Your Turn</h3>
 <ul>
-	<% current_player.matches.where_turn_of(current_player).each do |m| %>
+	<% request.player.matches.where_turn_of(request.player).each do |m| %>
 		<li>
 			<%= link_to m.name, match_url(m)  %> 
 		</li>
@@ -12,14 +12,14 @@ Welcome, <%= current_player.name %>.
 
 <h3>Active Matches - Their Turn</h3>
 <ul>
-	<% ( current_player.matches.active.to_a - current_player.matches.where_turn_of(current_player) ).each do |m| %>
+	<% ( request.player.matches.active.to_a - request.player.matches.where_turn_of(request.player) ).each do |m| %>
 		<li><%= link_to m.name, match_url(m)  %></li>
 	<% end %>
 </ul>
 
 <h3>Completed Matches</h3>
 <ul>
-<% current_player.matches.completed.each do |m| %>
+<% request.player.matches.completed.each do |m| %>
 	<li>
 		<%= link_to m.name, match_url(m) %> 
 		(<%=  m.outcome %>)

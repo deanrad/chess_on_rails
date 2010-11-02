@@ -1,14 +1,6 @@
-<h1>Authenticate#index</h1>
+<h1>Login</h1>
 
-<% if @current_player -%>
-  Logged in 
-<% else -%>
-  You must login below to use this app.
-<% end -%>
-
-<div>
-  <a href="http://apps.facebook.com/enpassant/">Login through Facebook</a>.
-</div>
+<%= request.player ? "Logged In" : "You must login below to use this app." %>
 
 <% form_tag(login_path) do %>
   <p>

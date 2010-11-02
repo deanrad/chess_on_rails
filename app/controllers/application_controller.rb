@@ -28,16 +28,10 @@ class ApplicationController < ActionController::Base
     return u && u.playing_as
   end
 
-  # the player this request is being processed for - should be request.player but...
-  def current_player
-    p = request.player || player_over_http
-    request.player = p if p
-  end
-  helper_method :current_player
-
   # descendant controllers call authorize to ensure player is logged in, or redirect them to login
   def authorize
-    unless current_player
+    request.player ||= player_over_http
+    unless request.player
       flash[:notice] = "Login is required in order to take this action."
       session[:original_uri] = request.request_uri
       redirect_to login_url

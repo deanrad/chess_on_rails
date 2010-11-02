@@ -27,7 +27,7 @@ var view = {
   selected_piece_coord:     new ko.observable(null),
   my_next_matches:          new ko.observableArray( <%= my_next_matches %> ),
   
-  display_board:            new ko.observable(<%= match.moves.count %>),
+  display_board:            new ko.observable(<%= match.moves.length %>),
   chat_msg:                 new ko.observable(''), //the message the user is entering
 
   all_moves:                new ko.observableArray([

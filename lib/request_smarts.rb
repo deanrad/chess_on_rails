@@ -23,7 +23,7 @@ module RequestSmarts
     player_in_session || player_in_cookie
   end
   def player= p
-    session[:player_id] = p.id
+    session[:player_id] = p && p.id
   end
 
   def opponent( match = self.match)

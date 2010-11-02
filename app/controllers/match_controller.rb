@@ -5,6 +5,8 @@ class MatchController < ApplicationController
   def index; end
   def show; end
   def new; end
+  def update_view; Rails.logger.silence{ render :action => 'update_view' } ; end
+  def viewmodel;   Rails.logger.silence{ render :action => 'viewmodel' } ; end
 
   # json for autocomplete
   def players
@@ -13,7 +15,7 @@ class MatchController < ApplicationController
 
   # give up the ghost
   def resign
-    request.match.resign( current_player )
+    request.match.resign( request.player )
     redirect_to :action => 'index'
   end
 

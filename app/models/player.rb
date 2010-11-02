@@ -3,7 +3,7 @@ class Player < ActiveRecord::Base
   has_many  :gameplays
   has_many  :matches, :through => :gameplays do
     def where_turn_of(player)
-      self.select{ |m| m.active? && (m.side_to_move == m.side_of(player)) }
+      self.select{ |m| m.active? && (m.side_to_move(:count) == m.side_of(player)) }
     end
   end
 

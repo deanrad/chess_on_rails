@@ -39,7 +39,7 @@ module MatchHelper
   end
   
   def my_next_matches
-    my_other_matches = current_player.matches.where_turn_of(current_player).reject do |m| 
+    my_other_matches = request.player.matches(:include => [:gameplays, :players], :conditions => 'active = true').where_turn_of(request.player).reject do |m| 
       m == match
     end
     my_other_matches.map(&:id).map(&:to_s).to_json

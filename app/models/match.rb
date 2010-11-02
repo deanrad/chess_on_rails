@@ -6,6 +6,8 @@ class Match < ActiveRecord::Base
   has_many :chats
   belongs_to :winner, :class_name => 'Player', :foreign_key => 'winning_player'
 
+  default_scope :include => :gameplays
+  
   named_scope :active,    :conditions => { :active => 1 }
   named_scope :completed, :conditions => { :active => 0 }
 
@@ -93,14 +95,14 @@ class Match < ActiveRecord::Base
   end
 
   # Returns the symbol :white or :black of the next to move in this match
-  def side_to_move
+  def side_to_move( method = :length )
     s = initial_board.side_to_move
-    moves.count % 2 == 0 ? s : s.opposite
+    moves.send(method) % 2 == 0 ? s : s.opposite
   end
 
   def side_of( plyr ) 
-    return :white if plyr == self.white
-    return :black if plyr == self.black
+    return :white if plyr.id == gameplays.white.player_id
+    return :black if plyr.id == gameplays.black.player_id
   end
 
   def resign( plyr )
