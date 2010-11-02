@@ -5,6 +5,7 @@ class CreateGameplays < ActiveRecord::Migration
       t.integer :match_id, :null => false
       t.boolean :black, :default => false
       t.string  :move_queue, :limit => 20
+      t.boolean :email_notify, :default => true
       t.timestamps
     end
   end
