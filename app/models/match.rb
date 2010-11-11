@@ -81,6 +81,8 @@ class Match < ActiveRecord::Base
       "Checkmate by #{winner.name}"
     when "Resigned"
       "Resigned. Winner #{winner.name}"
+    else
+      result.humanize
     end
   end
 
