@@ -15,8 +15,20 @@ class MatchController < ApplicationController
 
   # give up the ghost
   def resign
-    request.match.resign( request.player )
+    match.resign( request.player )
+    match.save!
     redirect_to :action => 'index'
+  end
+  
+  def offer_draw
+    match.draw_offerer = request.player
+    match.save!
+  end
+  
+  def accept_draw
+    return unless match.side_of( request.player ) && match.draw_offerer != request.player
+    match.result, match.active = ['Draw by Agreement', 0]
+    match.save!
   end
 
   def create( switch_em = params[:opponent_side] =='white' )
@@ -28,4 +40,8 @@ class MatchController < ApplicationController
     redirect_to match_url(@match.id)
   end
 
+  # TODO make match a thread-local global variable
+  def match; request.match; end 
+  private :match
+  
 end

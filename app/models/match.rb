@@ -1,10 +1,11 @@
 class Match < ActiveRecord::Base
   
   has_many :players, :through    => :gameplays
-  has_many :moves
+  has_many :moves, :after_add => :expire_draw_offer
 
   has_many :chats
-  belongs_to :winner, :class_name => 'Player', :foreign_key => 'winning_player'
+  belongs_to :winner,       :class_name => 'Player', :foreign_key => 'winning_player'
+  belongs_to :draw_offerer, :class_name => 'Player', :foreign_key => 'draw_offerer'
 
   default_scope :include => :gameplays
   
@@ -55,9 +56,9 @@ class Match < ActiveRecord::Base
         pgn = PGN.new( setup )
         pgn.playback_against( match )
         logger.warn "Error #{pgn.playback_errors.to_a.inspect} in PGN playback of #{setup}" if pgn.playback_errors
-      elsif fen=Fen.new(setup) && fen.parse
-        
+        return match
       end
+      fen=Fen.new(setup) && fen.parse
     end
     match
   end
@@ -85,7 +86,7 @@ class Match < ActiveRecord::Base
       result.humanize
     end
   end
-
+  
   def is_self_play? 
     @self_play ||= (self.white == self.black) 
   end
@@ -110,9 +111,12 @@ class Match < ActiveRecord::Base
   def resign( plyr )
     self.result, self.active = ['Resigned', 0]
     self.winning_player = (plyr == white) ? black : white
-    save!
   end
-
+  
+  def expire_draw_offer
+    self.update_attribute(:draw_offerer, nil) if self.draw_offerer
+  end
+  
   def checkmate_by( side )
     self.reload
     self.result, self.active = ['Checkmate', 0]

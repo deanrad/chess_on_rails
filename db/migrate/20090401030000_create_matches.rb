@@ -8,6 +8,7 @@ class CreateMatches < ActiveRecord::Migration
       t.column :start_pos, :string, :limit => 100
       t.column :result, :string, :limit => 10
       t.column :winning_player, :int
+      t.column :draw_offerer, :int
       t.column :name, :string, :limit => 100
 
       t.timestamps
