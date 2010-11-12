@@ -13,7 +13,7 @@ class MatchController < ApplicationController
     render :json => Player.find(:all, :conditions => "name like '#{ params[:term] }%'" ).map(&:name)
   end
 
-  # give up the ghost
+  # TODO can consolidate these match actions into one method for nice LOC savings - delegate actions to model
   def resign
     match.resign( request.player )
     match.save!
@@ -23,6 +23,10 @@ class MatchController < ApplicationController
   def offer_draw
     match.draw_offerer = request.player
     match.save!
+  end
+
+  def decline_draw
+    match.update_attribute(:draw_offerer, nil)
   end
   
   def accept_draw
@@ -41,7 +45,6 @@ class MatchController < ApplicationController
   end
 
   # TODO make match a thread-local global variable
-  def match; request.match; end 
-  private :match
+  def match; request.match; end;  private :match
   
 end

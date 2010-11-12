@@ -29,6 +29,7 @@ var view = {
   
   display_board:            new ko.observable(<%= match.moves.length %>),
   chat_msg:                 new ko.observable(''), //the message the user is entering
+  opponents_draw_offer:     new ko.observable(''), //the message shown to the recipient of a draw offer
 
   all_moves:                new ko.observableArray([
     <%= match.moves.map(&:to_json).join(",\n    ") %>
@@ -261,6 +262,16 @@ var view = {
       return 'white'
     if( piece_id.match( /_b$/ ) )
       return 'black'
+  },
+  decline_draw:           function(){
+    $.post( '<%= url_for(:action => 'decline_draw') %>',
+        { authenticity_token: '<%= form_authenticity_token %>' }
+    )
+  },
+  accept_draw:           function(){
+    $.post( '<%= url_for(:action => 'accept_draw') %>',
+        { authenticity_token: '<%= form_authenticity_token %>'}
+    )
   }
 };
 
@@ -386,6 +397,10 @@ view.my_next_matches.subscribe( function(){
   $("#my_next_matches").html(
      next_matches
   )
+})
+
+view.opponents_draw_offer.subscribe( function(){
+  $("#opponents_draw_offer").html( view.opponents_draw_offer() )
 })
 
 // Show first move

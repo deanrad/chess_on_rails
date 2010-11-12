@@ -20,10 +20,11 @@ ActiveRecord::Schema.define(:version => 20090424042453) do
   end
 
   create_table "gameplays", :force => true do |t|
-    t.integer  "player_id",                                   :null => false
-    t.integer  "match_id",                                    :null => false
-    t.boolean  "black",                    :default => false
-    t.string   "move_queue", :limit => 20
+    t.integer  "player_id",                                     :null => false
+    t.integer  "match_id",                                      :null => false
+    t.boolean  "black",                      :default => false
+    t.string   "move_queue",   :limit => 20
+    t.boolean  "email_notify",               :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -33,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20090424042453) do
     t.string   "start_pos",      :limit => 100
     t.string   "result",         :limit => 10
     t.integer  "winning_player"
+    t.integer  "draw_offerer"
     t.string   "name",           :limit => 100
     t.datetime "created_at"
     t.datetime "updated_at"

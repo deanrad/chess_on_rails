@@ -30,6 +30,8 @@ en:
   actions:
     resign: 
       confirmation: Are you truly ready to accept disgrace and sulk back to the rock from under which you came ?
+    draw:
+      offer: This draw offer will be available until either accepted or your opponent moves. Ok ?
 
   chat_actions:
     script: '/script:'
