@@ -23,16 +23,19 @@ class MatchController < ApplicationController
   def offer_draw
     match.draw_offerer = request.player
     match.save!
+    render :text => 'OK'
   end
 
   def decline_draw
     match.update_attribute(:draw_offerer, nil)
+    render :text => 'OK'
   end
   
   def accept_draw
     return unless match.side_of( request.player ) && match.draw_offerer != request.player
     match.result, match.active = ['Draw by Agreement', 0]
     match.save!
+    render :text => 'OK'
   end
 
   def create( switch_em = params[:opponent_side] =='white' )

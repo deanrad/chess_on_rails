@@ -263,6 +263,11 @@ var view = {
     if( piece_id.match( /_b$/ ) )
       return 'black'
   },
+  offer_draw:           function(){
+    $.post( '<%= url_for(:action => 'offer_draw') %>',
+        { authenticity_token: '<%= form_authenticity_token %>' }
+    )
+  },
   decline_draw:           function(){
     $.post( '<%= url_for(:action => 'decline_draw') %>',
         { authenticity_token: '<%= form_authenticity_token %>' }

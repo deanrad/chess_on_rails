@@ -9,7 +9,7 @@
 	<%= link_to "Resign", url_for(:action => 'resign'), :confirm => I18n.t('actions.resign.confirmation') %>
 	
 	<% unless match.draw_offerer %>
-	<%= link_to "Offer Draw", url_for(:action => 'offer_draw'), :confirm => I18n.t('actions.draw.offer') %>
+	<a href="#" onclick="view.offer_draw(); return false;">Offer Draw</a>
 	<% end %>
 	
 	<%= link_to "PGN", match_url(request.match, :format=>'pgn') %>
