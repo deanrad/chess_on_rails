@@ -113,7 +113,7 @@ class Match < ActiveRecord::Base
     self.winning_player = (plyr == white) ? black : white
   end
   
-  def expire_draw_offer
+  def expire_draw_offer m=nil
     self.update_attribute(:draw_offerer, nil) if self.draw_offerer
   end
   
