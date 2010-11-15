@@ -83,7 +83,7 @@ class Match < ActiveRecord::Base
     when "Resigned"
       "Resigned. Winner #{winner.name}"
     else
-      result.humanize
+      result && result.humanize
     end
   end
   
