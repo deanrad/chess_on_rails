@@ -267,11 +267,13 @@ var view = {
     $.post( '<%= url_for(:action => 'offer_draw') %>',
         { authenticity_token: '<%= form_authenticity_token %>' }
     )
+    view.poll(); view.reset_poller();
   },
   decline_draw:           function(){
     $.post( '<%= url_for(:action => 'decline_draw') %>',
         { authenticity_token: '<%= form_authenticity_token %>' }
     )
+    view.poll(); view.reset_poller();
   },
   accept_draw:           function(){
     $.post( '<%= url_for(:action => 'accept_draw') %>',

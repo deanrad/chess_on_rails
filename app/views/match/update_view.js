@@ -14,8 +14,14 @@ view.allowed_moves = <%= board.allowed_moves.to_json %>;
 view.my_next_matches( <%= my_next_matches %> )
 
 // Let them act on any draw they've been offered
-<% if match.active && match.draw_offerer && match.draw_offerer != request.player -%>
-view.opponents_draw_offer( "Draw offered!: <a href='#' onclick='view.accept_draw();return false;'>Accept</a> <a href='#' onclick='view.decline_draw();return false;'>Decline</a>" )
+<% if match.active && match.draw_offerer -%>
+  <% if match.draw_offerer != request.player %>
+    view.opponents_draw_offer( "Draw offered!: <a href='#' onclick='view.accept_draw();return false;'>Accept</a> <a href='#' onclick='view.decline_draw();return false;'>Decline</a>" )
+  <% else %>
+    view.opponents_draw_offer( "Your opponent is considering your draw offer." )
+  <% end %>
+<% else %>
+view.opponents_draw_offer( "" );
 <% end -%>
 
 // Update any moves/boards they haven't seen;
