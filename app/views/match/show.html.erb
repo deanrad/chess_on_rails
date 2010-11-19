@@ -8,7 +8,7 @@
 	<span id="match_actions">
 	<%= link_to "Resign", url_for(:action => 'resign'), :confirm => I18n.t('actions.resign.confirmation') %>
 	
-	<a href="#" onclick="view.offer_draw(); return false;" data-bind="visible:opponents_draw_offer().length == 0">Offer Draw</a>
+	<a href="#" onclick="view.offer_draw(); return false;" data-bind="visible:draw_offer().length == 0">Offer Draw</a>
 	
 	<%= link_to "PGN", match_url(request.match, :format=>'pgn') %>
 	</span>
@@ -29,7 +29,7 @@
 	</div>
 	<div id="my_next_matches_div" data-bind="visible:my_next_matches().length > 0">Your turn in matches: <span id="my_next_matches"></span></div>
 	<div id="server_msg" data-bind="visible:has_message(), text:server_messages()"></div>
-	<div id="opponents_draw_offer" data-bind="visible:opponents_draw_offer().length >=1"></div>
+	<div id="draw_offer" data-bind="visible:draw_offer().length >=1"></div>
 </span>
 
 <div id="board_parent" style="float:left; clear:left">
