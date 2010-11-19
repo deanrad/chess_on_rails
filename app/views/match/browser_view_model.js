@@ -3,9 +3,9 @@ var clientConfig= {
   your_turn_msg: 'Your Turn - '
 }
 // Because client state will change while the page is loaded, we set up an object
-// with fields to track it, and methods to manipulate it. This is called a viewmodel.
+// with fields to track it, and methods to manipulate it. This is called a browser_view_model.
 // Then we bind (using HTML5 data-bind attributes and knockout syntax) DOM elements
-// to the viewmodel, and updating happens automatically as the viewmodel is changed
+// to the browser_view_model, and updating happens automatically as the browser_view_model is changed
 // whether by user-interaction, or AJAX polls.
 var view = {
   
