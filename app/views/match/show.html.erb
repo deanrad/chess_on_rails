@@ -8,7 +8,7 @@
 	<span id="match_actions">
 	<%= link_to "Resign", url_for(:action => 'resign'), :confirm => I18n.t('actions.resign.confirmation') %>
 	
-	<a href="#" onclick="view.offer_draw(); return false;" data-bind="visible:opponents_draw_offer().length >=1">Offer Draw</a>
+	<a href="#" onclick="view.offer_draw(); return false;" data-bind="visible:opponents_draw_offer().length == 0">Offer Draw</a>
 	
 	<%= link_to "PGN", match_url(request.match, :format=>'pgn') %>
 	</span>
