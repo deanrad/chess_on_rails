@@ -12,6 +12,18 @@ class Match < ActiveRecord::Base
   named_scope :active,    :conditions => { :active => 1 }
   named_scope :completed, :conditions => { :active => 0 }
 
+  # Match statemachine (not implemented, but this is the intent)
+  # State      Event        Destination    Note
+  # nil        start        active         a match is begun
+  # active     resign       inactive
+  # active     move         active         normal, but a check for checkmate must be done immediately
+  # active     checkmate    inactive
+  # active     draw_offer   draw_pending   draw_pending is still active for the sake of move making
+  # draw_offer accept_draw  inactive
+  # draw_offer decline_draw active
+  # draw_offer move         active         moving declines a draw, then check for checkmate 
+  
+
   # fetches the first and second joins to player, which are white,black respectively
   has_many :gameplays do
     def white; self[0]; end
