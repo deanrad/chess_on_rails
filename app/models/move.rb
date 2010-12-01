@@ -45,7 +45,7 @@ class Move < ActiveRecord::Base
 
     if @board.en_passant_square == self.to_coord_sym
       coord = @board.en_passant_square ^ ( @piece_moving.side == :white  ? [0,-1]  : [0,1] )
-      self.captured_piece_coord = coord.to_s
+      self.captured_piece_coord = coord.to_s if @piece_moving.function == :pawn
     end
 
   end
