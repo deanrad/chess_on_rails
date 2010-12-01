@@ -3,9 +3,9 @@ var clientConfig= {
   your_turn_msg: 'Your Turn - '
 }
 // Because client state will change while the page is loaded, we set up an object
-// with fields to track it, and methods to manipulate it. This is called a viewmodel.
+// with fields to track it, and methods to manipulate it. This is called a browser_view_model.
 // Then we bind (using HTML5 data-bind attributes and knockout syntax) DOM elements
-// to the viewmodel, and updating happens automatically as the viewmodel is changed
+// to the browser_view_model, and updating happens automatically as the browser_view_model is changed
 // whether by user-interaction, or AJAX polls.
 var view = {
   
@@ -29,7 +29,7 @@ var view = {
   
   display_board:            new ko.observable(<%= match.moves.length %>),
   chat_msg:                 new ko.observable(''), //the message the user is entering
-  opponents_draw_offer:     new ko.observable(''), //the message shown to the recipient of a draw offer
+  draw_offer:               new ko.observable(''), 
 
   all_moves:                new ko.observableArray([
     <%= match.moves.map(&:to_json).join(",\n    ") %>
@@ -39,11 +39,11 @@ var view = {
     <%= match.chats.map(&:to_json).join(",\n    ") %>
   ]),
 
-  all_boards:                new ko.observableArray([
+  all_boards:               new ko.observableArray([
     <%= match.boards.map(&:to_json).join(",\n    ") %>
   ]),
   
-  all_graveyards:            new ko.observableArray([
+  all_graveyards:           new ko.observableArray([
     <%= match.boards.map{|b| b.graveyard.to_json}.join(",\n   ") %>
   ]),
 
@@ -100,7 +100,7 @@ var view = {
   },
 
   // Lays out the board and enables/disables moves via drag/drop mediated thru CSS
-  set_display_board:         function(mvidx) {
+  set_display_board:        function(mvidx) {
      view.layout_board(mvidx);
 
      //get rid of, then replace draggables
@@ -137,31 +137,31 @@ var view = {
      $("#move_list div").removeClass('move_list_current');
      $("#move_list_" + mvidx).addClass('move_list_current');
   },
-  can_play_previous:         function(){
+  can_play_previous:        function(){
     return (view.display_board() > 0);
   },
-  can_play_next:             function(){
+  can_play_next:            function(){
     return (view.display_board() < view.all_boards().length-1);
   },
-  decrement_displayed_move:  function(){
+  decrement_displayed_move: function(){
     cur_mvidx = view.display_board();
     mvidx = cur_mvidx == 0 ? 0 : cur_mvidx - 1;
     console.log("Setting move to " + mvidx);
     view.display_board(mvidx);
   },
-  increment_displayed_move:  function(){
+  increment_displayed_move: function(){
     cur_mvidx = view.display_board();
     mvidx = (cur_mvidx == view.all_boards().length-1) ? view.all_boards().length-1 : cur_mvidx + 1
     console.log("Setting move to " + mvidx)
     view.display_board(mvidx);
   },
-  display_first_move:        function(){
+  display_first_move:       function(){
     view.display_board(0);
   },
-  display_last_move:         function(){
+  display_last_move:        function(){
     view.display_board(view.all_boards().length-1);
   },
-  submit_chat:               function(){
+  submit_chat:              function(){
     $.post( "<%= match_chat_path(match) %>",
         { 
           'chat[text]':         view.chat_msg(),
@@ -207,7 +207,7 @@ var view = {
       view.next_poll_in = 3600;
   },
 
-  reset_poller:           function(){
+  reset_poller:             function(){
     view.poll_count = 0;
     view.next_poll_in = clientConfig.initial_poll_interval;
     window.setTimeout( view.poll,  view.next_poll_in * 1000);
@@ -254,7 +254,7 @@ var view = {
         }    
     ); 
   },
-  side_occupying:          function(coord){
+  side_occupying:           function(coord){
     piece_id = $('#' + coord + ' img').attr('id')
     if(piece_id == undefined) return null;
     
@@ -263,17 +263,19 @@ var view = {
     if( piece_id.match( /_b$/ ) )
       return 'black'
   },
-  offer_draw:           function(){
+  offer_draw:               function(){
     $.post( '<%= url_for(:action => 'offer_draw') %>',
         { authenticity_token: '<%= form_authenticity_token %>' }
     )
+    view.poll(); view.reset_poller();
   },
-  decline_draw:           function(){
+  decline_draw:             function(){
     $.post( '<%= url_for(:action => 'decline_draw') %>',
         { authenticity_token: '<%= form_authenticity_token %>' }
     )
+    view.poll(); view.reset_poller();
   },
-  accept_draw:           function(){
+  accept_draw:              function(){
     $.post( '<%= url_for(:action => 'accept_draw') %>',
         { authenticity_token: '<%= form_authenticity_token %>'}
     )
@@ -404,8 +406,8 @@ view.my_next_matches.subscribe( function(){
   )
 })
 
-view.opponents_draw_offer.subscribe( function(){
-  $("#opponents_draw_offer").html( view.opponents_draw_offer() )
+view.draw_offer.subscribe( function(){
+  $("#draw_offer").html( view.draw_offer() )
 })
 
 // Show first move

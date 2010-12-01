@@ -1,6 +1,8 @@
 <h1>Your current duels</h1>
 Welcome, <%= request.player.name %>.
 
+<%= link_to "Start a New Match", new_match_url %>
+
 <h3>Active Matches - Your Turn</h3>
 <ul>
 	<% request.player.matches.where_turn_of(request.player).each do |m| %>
@@ -28,4 +30,3 @@ Welcome, <%= request.player.name %>.
 <% end%>
 </ul>	
 
-<%= link_to "New Match", new_match_url %>

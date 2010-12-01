@@ -6,7 +6,7 @@ class MatchController < ApplicationController
   def show; end
   def new; end
   def update_view; Rails.logger.silence{ render :action => 'update_view' } ; end
-  def viewmodel;   Rails.logger.silence{ render :action => 'viewmodel' } ; end
+  def browser_view_model;   Rails.logger.silence{ render :action => 'browser_view_model' } ; end
 
   # json for autocomplete
   def players
