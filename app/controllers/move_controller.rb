@@ -15,7 +15,17 @@ class MoveController < ApplicationController
     # [:black, :white].each do |side| 
     #  match.checkmate_by(side.opposite) if match.reload.board.in_checkmate?(side)
     # end
-    ChessNotifier.deliver_player_moved(request.opponent, request.player, @move)
+    
+    # TODO abstract out this chat/email communication system. Mock during dev/tests
+    chat_successful = false
+    if Rails.env.production? && request.opponent.email =~ /gmail.com/
+      h = Net::HTTP.new('xmppfu.appspot.com')
+      case h.get("/?recipient=#{request.opponent.email}&notation=#{@move.notation}&match_id=#{@move.match.id}")
+      when Net::HTTPSuccess
+        chat_successful = true
+      end
+    end
+    ChessNotifier.deliver_player_moved(request.opponent, request.player, @move) unless chat_successful
     
     
     return render :json => @move.to_json if request.xhr?
