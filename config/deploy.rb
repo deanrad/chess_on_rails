@@ -28,7 +28,7 @@ ssh_options[:forward_agent] = true
 set :deploy_via, :remote_cache
 set :copy_compression, :gzip
 
-set :deploy_to, "/home/chicagogrooves/www.chessonrails.com"
+set :deploy_to, "/home/chicagogrooves/chess.chicagogrooves.com"
 
 #############################################################
 #	Servers
@@ -48,7 +48,7 @@ set :user, 'chicagogrooves'
 namespace :configure do
   task :db do
     run "rm -f #{release_path}/config/database.yml"
-    run "ln -s #{shared_path}/chess_on_rails_database.yml #{release_path}/config/database.yml"
+    run "ln -s #{shared_path}/database.yml #{release_path}/config/database.yml"
   end
   task :env do
     run "rm -f #{release_path}/config/environments/production.rb"

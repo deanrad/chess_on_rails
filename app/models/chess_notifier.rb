@@ -1,7 +1,7 @@
 class ChessNotifier < ActionMailer::Base
 
   MINIMUM_TIME_BETWEEN_MOVE_NOTIFICATIONS = 1.0/24
-  SENDER = "ChessOnRails Games<games@chessonrails.com>"
+  SENDER = "Chicagogrooves Games<chess@chicagogrooves.com>"
 
   # notifies @recipient that their opponent, @initiator, made move @move
   def player_moved(recipient, initiator, move)
