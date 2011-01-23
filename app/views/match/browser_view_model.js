@@ -182,7 +182,7 @@ var view = {
     
     console.log('adding chat ' + ch.id)
     view.all_chats.push(ch);
-    var chatTemplate = '<div class="chat_line"><b title="${time}">${player}:</b> ${text} </div>';
+    var chatTemplate = '<div class="chat_line" onclick="view.display_board(${board_num})"><b title="${time}">${player}:</b> ${text} </div>';
     render  = $.tmpl( chatTemplate, ch );
 		$('#chat_window').append( render );
     view.scroll_chat('bottom')

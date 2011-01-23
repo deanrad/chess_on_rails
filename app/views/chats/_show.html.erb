@@ -1,5 +1,5 @@
 <% chats.each do |chat| %>
-  <div class='chat_line'><b title="<%= chat.created_at.strftime("%a %H:%M") %>"><%= chat.player.name %>: </b><%= chat.text %></div>
+  <div class='chat_line' onclick="view.display_board(<%= chat.board_num %>)"><b title="<%= chat.created_at.strftime("%a %H:%M") %>"><%= chat.player.name %>: </b><%= chat.text %></div>
 <% end %>
 
 <script language="javascript">
