@@ -15,11 +15,14 @@ class Chat < ActiveRecord::Base
     return @board_num+1
   end
 
+  def created_at_local
+    created_at.in_time_zone( 'America/Chicago' )
+  end
   def to_json
     {
       :id         => id, 
       :player     => player.name,
-      :time       => created_at.strftime("%a %H:%M"),
+      :time       => created_at_local.strftime("%a %H:%M"),
       :text       => text,
       :board_num  => board_num
     }.to_json
