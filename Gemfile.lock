@@ -40,6 +40,8 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    factory_girl (4.2.0)
+      activesupport (>= 3.0.0)
     haml (4.0.2)
       tilt
     hike (1.2.2)
@@ -107,9 +109,10 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
+  factory_girl
   haml
   jquery-rails
-  rails (= 3.2.13)
+  rails (~> 3.2.13)
   sass-rails (~> 3.2.3)
   sqlite3
   uglifier (>= 1.0.3)
