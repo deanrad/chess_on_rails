@@ -1,6 +1,0 @@
-<h3>Available Chess Sets</h3>
-<%- set = session[:set] || "default" %>
-<%- form_for :set, :url => {:controller => "sets", :action => "change"} do |f| %>
-    <%= select_tag "set", options_for_select(available_sets, set) %>
-    <%= submit_tag 'Change' %>
-<%- end %>

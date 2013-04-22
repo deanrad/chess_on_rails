@@ -1,2 +1,2 @@
-RailsChess is all about using the power of Ruby and the Rails framework to concisely create an exciting, playable, and Web 3.0 user experience. Clients can range from command line tools for Ruby and .Net platforms, Continuously tested and completely covered code, with automatic documentation generation.
-
+Use this README file to introduce your application and point to useful places in the API for learning more.
+Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.

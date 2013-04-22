@@ -1,27 +1,11 @@
- dean:
-   id:      1
-   name:    Dean
- maria:
-   id:      2
-   name:    Maria
- paul:
-   id:      3
-   name:    Paul
- rich:
-   id:      4
-   name:    Bignz
- chris:
-   id:      5
-   name:    Chris
- milan:
-   id:      6
-   name:    Milan
- miles:
-   id:      7
-   name:    Miles
- stephen:
-   id:      8
-   name:    Stephen
- brian:
-   id:      9
-   name:    Brian
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  id: 1
+  name: MyString
+  active: false
+
+two:
+  id: 1
+  name: MyString
+  active: false
