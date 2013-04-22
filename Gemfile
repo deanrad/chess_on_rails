@@ -1,10 +1,21 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~>3.2.13'
+gem 'jquery-rails'
 gem 'sqlite3'
 gem 'haml'
 gem 'factory_girl'
 
+group :development, :test do
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'faker'
+  
+  gem 'guard-rspec', require: false
+  gem 'guard-livereload', require: false
+  gem 'rack-livereload'
+  gem 'rb-fsevent',       require: false
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -18,7 +29,6 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
