@@ -10,6 +10,8 @@ ChessOnRails::Application.routes.draw do
   match ':controller/:id/:action'
   match ':controller(/:action)'
 
+  # map.login      'authentication/login',    :controller => 'authentication', :action => 'login'
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -7,6 +7,11 @@ class ApplicationController < ActionController::Base
 
   before_filter :extend_session_and_request
 
+  # hacks..
+  def login_url
+    '/authentication/login'
+  end
+
   def extend_session_and_request
     s, r, c, p  = session, request, cookies, params
     r.extend(::RequestSmarts)
@@ -63,7 +68,7 @@ class ApplicationController < ActionController::Base
   def authorize
     unless current_player
       flash[:notice] = "Login is required in order to take this action."
-      session[:original_uri] = request.request_uri
+      session[:original_uri] = request.fullpath
       redirect_to is_facebook? ? register_url : login_url
     end
   end
