@@ -7,4 +7,7 @@ FactoryGirl.define do
   factory :match do
     players { [FactoryGirl.create(:player), FactoryGirl.create(:player)] }
   end
+  
+  factory :gameplay do
+  end
 end

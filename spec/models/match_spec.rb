@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Match do
   subject(:match) { FactoryGirl.create(:match) }
-  
-  context 'default values' do
+
+  context 'players' do
     it 'should have 2 players' do
       match.players.count.should == 2
     end
