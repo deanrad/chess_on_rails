@@ -2,7 +2,10 @@ source 'https://rubygems.org'
 
 gem 'rails', '~>3.2.13'
 gem 'jquery-rails'
-gem 'sqlite3'
+
+gem 'mongoid'
+gem 'bson_ext'
+
 gem 'haml'
 gem 'factory_girl'
 
