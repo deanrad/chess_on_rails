@@ -6,11 +6,10 @@ dean =   FactoryGirl.create(:player, id: 314, name: 'Dean')
 paul =   FactoryGirl.create(:player, id: 271, name: 'Paul')
 miles =  FactoryGirl.create(:player, id: 111, name: 'Miles')
 
+FactoryGirl.create(:match) # proves default factories work
+
 FactoryGirl.create(:match) do |m|
-  m.gameplays {[
-    FactoryGirl.create(:gameplay, player_id: dean.id),
-    FactoryGirl.create(:gameplay, player_id: paul.id)
-  ]}
+  white = dean
+  black = paul
 end
 
-FactoryGirl.create(:match) # random 
