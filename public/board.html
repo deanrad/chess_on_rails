@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+</html>
+  <head>
+    <title>Chess Board Awesomeness</title>
+    <style>
+    #viewport{
+      border:3px solid #00a; 
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+      -webkit-perspective: 400; 
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .chess-board { 
+        border:1px solid #000; 
+      
+        height: 512px;
+        left: 50%;
+        margin-left: -256px;
+        margin-top: -256px;
+        position: absolute;
+        top: 50%;
+        
+        -webkit-transform: rotateX(45deg)
+        transform-style: preserve-3d;
+        
+        width: 512px;
+    }
+    
+    .chess-board td {
+    	background:#fff;
+    	background:-moz-linear-gradient(top, #fff, #eee);
+    	background:-webkit-gradient(linear,0 0, 0 100%, from(#fff), to(#eee));
+    	box-shadow:inset 0 0 0 1px #fff;
+    	-moz-box-shadow:inset 0 0 0 1px #fff;
+    	-webkit-box-shadow:inset 0 0 0 1px #fff;
+    	height:40px;
+    	text-align:center;
+    	vertical-align:middle;
+    	width:40px;
+    }
+    .chess-board a {
+    	color:#000;
+    	display:block;
+    	font-size:30px;
+    	height:40px;
+    	position:relative;
+    	text-decoration:none;
+    	text-shadow:0 1px #fff;
+    	width:40px;
+    }
+    .chess-board tr:nth-child(odd) td:nth-child(even),
+    .chess-board tr:nth-child(even) td:nth-child(odd) {
+    	background:#ccc;
+    	background:-moz-linear-gradient(top, #ccc, #eee);
+    	background:-webkit-gradient(linear,0 0, 0 100%, from(#ccc), to(#eee));
+    	box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    	-moz-box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    	-webkit-box-shadow:inset 0 0 10px rgba(0,0,0,.4);
+    }    
+    
+    /* .sq{ border: solid 1px black; height: 30px; width: 30px;}
+    .sq-b{ background-color: #aaa }
+    .sq-w{ background-color: #fff } */
+    </style>
+  </head>
+  <body>
+  <!--script type="text/javascript" src="//searls.github.io/jasmine-all/jasmine-all-min.js"></script-->
+  <!--script type="text/javascript" src="//zeptojs.com/zepto.min.js"></script-->
+  <!--script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js"></script-->
+  
+  <script type="text/javascript" src="/js/jasmine-all-min.js"></script>
+  <script type="text/javascript" src="/js/zepto.min.js"></script>
+  <!--script type="text/javascript" src="/js/handlebars.min.js"></script-->
+
+    <script type="text/javascript">
+      window.spaceKitty = function(){ return "meow!"; };
+
+      /* begin chess code */
+      function Position(file,rank, fileidx,rankidx){
+        if(fileidx >= 0 && rankidx >= 0){
+            this.fileidx = fileidx;
+            this.rankidx = rankidx;
+            this.file = String.fromCharCode(fileidx + 97);
+            this.rank = (rankidx+1).toString();
+            return;
+        }
+        
+        if(!rank){
+          if(!file || file.length != 2) return null;
+          this.file = file.substr(0,1);
+          this.rank = file.substr(1,1);
+        }
+        
+        this.fileidx = this.file.charCodeAt(0) - 97;
+        this.rankidx = this.rank - 1;
+      };
+      Position.prototype.initialize = function(fileidx, rankidx){
+        this.fileidx = fileidx;
+        this.rankidx = rankidx;
+        this.file = String.fromCharCode(fileidx + 97);
+        this.rank = rankidx+1+"";
+        
+        return this;
+      }
+      Position.prototype.toString = function(){
+        return this.file + this.rank;
+      }
+      Position.prototype.minus = function(other){
+        return [this.fileidx-other.fileidx, this.rankidx-other.rankidx];
+      }
+      Position.prototype.plus = function(filerank_vector){
+        var newpos = new Position('a1'); //ignored
+        return newpos.initialize(this.fileidx + filerank_vector[0], this.rankidx + filerank_vector[1]);
+      }
+      Position.prototype.color = function(){
+        return ((this.fileidx+this.rankidx) % 2 == 0 ) ? 'black' : 'white';
+      }
+      
+      //see FEN
+      function Board(pieceMap){ 
+        this.nextToMove = 'white';
+        this.castleAvailableWhiteKing = true;
+        this.castleAvailableWhiteQueen = true;
+        this.castleAvailableBlackKing = true;
+        this.castleAvailableBlackQueen = true;
+        
+        for(key in pieceMap){
+          this[key] = pieceMap[key];
+        }
+      }
+      
+      Board.xSize = 8;
+      Board.ySize = 8;
+      Board.validPosition = function(pos){
+        p = new Position(pos);
+        return p.fileidx >= 0 && p.fileidx < this.xSize &&
+               p.rankidx >= 0 && p.rankidx < this.ySize ;
+      }
+      Board.advanceVector = function(side){
+        if(side.indexOf('w') > -1)
+          return [0,1];
+        else
+          return [0,-1];
+      }
+      Board.prototype.turnToMove = function(side){
+        return (side==this.nextToMove);
+      }
+      Board.prototype.indexOf = function(p){
+        for(var key in this){
+          if(this[key]==p)
+            return new Position(key);
+        }        
+        return undefined;
+      }
+      Board.prototype.keysFromSide = function(side){
+        var ranks = (side=='white') ? [7,6,5,4,3,2,1,0] : [0,1,2,3,4,5,6,7];
+        var files = (side=='white') ? [0,1,2,3,4,5,6,7] : [7,6,5,4,3,2,1,0];
+        var keys = [];
+        for(var r=0; r<ranks.length; r++)
+          for(var f=0; f<files.length; f++)
+            keys.push(new Position(null,null,files[f],ranks[r]).toString());
+        return keys;
+      }
+      
+      function Piece(side){
+        this.side = side;
+        this.maxMoveLength = 1;
+        this.isBlockedAlong = function(vector, blocker){
+          return blocker && (blocker.side == this.side);
+        }
+      }
+      
+      function SlidingPiece(){
+        this.maxMoveLength = Board.xSize;
+      }
+      
+      function King(side){
+        this.side = side;
+        this.role = 'king';
+      }
+      function Queen(side){
+        this.side = side;
+        this.role = 'queen';
+      }
+      function Rook(side){
+        this.side = side;
+        this.role = 'rook';
+        this.liberties = [[1,0],[-1,0],[0,1],[0,-1]];
+      }
+      function Bishop(side){
+        this.side = side;
+        this.role = 'bishop';
+        this.liberties = [[1,1],[1,-1],[-1,1],[-1,-1]];
+      }
+      function Knight(side){
+        this.side = side;
+        this.role = 'knight';
+        this.liberties = [[2,1],[2,-1],[1,2],[1,-2],[-1,2],[-1,-2]];
+      }
+
+      function Pawn(side){
+        var fwd = Board.advanceVector(side)[1];
+        
+        this.side = side;
+        this.role = 'pawn';
+        this.liberties = [ [-1,fwd], [0,fwd], [1,fwd] ];
+
+        // a pawn is blocked by:
+        //   - in the reverse direction, anything
+        //   - in the forward non-diagonal, any piece
+        //   - in the forward diagonal, emptiness or his own piece
+        this.isBlockedAlong = function(vector, blocker){
+          var advancing = (vector[1] / Math.abs(vector[1]))==fwd;
+          if(!advancing) return true;
+          if(vector[0]==0)
+            return !!blocker;
+          else
+            return !blocker || blocker.side==this.side;
+        }
+      }
+      
+      SlidingPiece.prototype = new Piece();
+
+      Queen.prototype = new SlidingPiece();
+      Rook.prototype = new SlidingPiece();
+      Bishop.prototype = new SlidingPiece();
+      
+      King.prototype = new Piece();
+      Knight.prototype = new Piece();
+      Pawn.prototype = new Piece();
+      
+      function MoveJudge(ruleset){
+        this.ruleset = ruleset;
+      }
+      
+      function ChessJudge(){
+        this.ruleset = [
+          {one: 'two'}
+        ]
+      }
+      
+      ChessJudge.prototype = new MoveJudge();
+      
+      ChessJudge.prototype.openMoves = function(piece, board){
+        var pos = board.indexOf(piece);
+        var moves = [];
+        piece.liberties.forEach(function(line){
+          for(i=1; i<=piece.maxMoveLength; i++){
+            var newpos = pos.plus(line.times(i)).toString();
+            if( board[newpos] ) //occupied
+              return;
+            if( Board.validPosition(newpos) )
+              moves.push( newpos );
+          }
+        });
+        return moves;
+      }
+      // A subset of the 'openMoves' list, the 'unblockedMoves' list indicates
+      // your possible moves, taking into account captures, and blocking of 
+      // lines of attack, but not of castling or other exceptional moves. 
+      ChessJudge.prototype.unblockedMoves = function(piece, board){
+        var moves = []; 
+
+        var pos = board.indexOf(piece);
+        piece.liberties.forEach(function(line){
+          for(i=1; i<=piece.maxMoveLength; i++){
+            var newpos = pos.plus(line.times(i)).toString();
+            if( ! Board.validPosition(newpos))
+              return;
+
+            var blocker = board[newpos];
+            var vector = new Position(newpos).minus(pos);
+            if( ! piece.isBlockedAlong(vector, blocker) ){
+              moves.push( newpos );
+            }
+            if(blocker) return;
+          }
+        });
+        return moves;
+      }
+      
+      function PieceRenderer(piece){
+        this.render = function(){
+          var imgclass = 'img';
+          var glyph = this.getGlyph(piece);
+          return $("<div/>", {class: ['piece', 'img'].join(' ') })
+             .append( $("<a/>", {href: '#'}).append(glyph) );
+             
+        }
+        this.getGlyph = function(piece){
+          // '♔' : '♚'  // '♕' : '♛' // '♖' : '♜'
+          // '♗' : '♝'  // '♘' : '♞' // '♙' : '♟'
+          if(piece.role=='king')
+            return piece.side=='white' ? '&#9812;' : '&#9818;';
+          if(piece.role=='queen')
+            return piece.side=='white' ? '&#9813;' : '&#9819;';
+          if(piece.role=='rook')
+            return piece.side=='white' ? '&#9814;' : '&#9820;';
+          if(piece.role=='bishop')
+            return piece.side=='white' ? '&#9815;' : '&#9821;';
+          if(piece.role=='knight')
+            return piece.side=='white' ? '&#9816;' : '&#9822;';
+          if(piece.role=='pawn')
+            return piece.side=='white' ? '&#9817;' : '&#9823;';
+        }
+      }
+
+      function BoardRenderer(board){
+        //maybe this will use templates instead of code at one point
+        this.render = function(){ 
+          var b = board;
+          var mover = b.nextToMove;
+          var table=$("<table/>", {class:'chess-board'});
+          
+          keys = board.keysFromSide(mover)
+          for(var r=0; r<Board.xSize; r++){
+            var row = $("<tr/>");
+            for(var f=0; f<Board.xSize; f++ ){
+              var pos = keys[r*8+f];
+              var sqcolor = (r*8+f) % 2 ? 'sq-w' : 'sq-b';
+              var piece = board[pos];
+              var sq = $("<td/>", {title: pos, class: ['sq', sqcolor, pos].join(' ')});
+              if(piece)
+                sq.append( new PieceRenderer(piece).render() );
+              else
+                sq.append( "x" );
+              row.append(sq);
+            }
+            table.append(row);
+          }
+          return table;
+        }
+      }
+
+      /* easy but dirty monkey-patches */
+      String.prototype.opposite = function(){
+        if (this.toString()=='white') return 'black';
+        if (this.toString()=='black') return 'white';
+        return null;
+      }
+      Array.prototype.times = function(factor){
+        return [this[0]*factor, this[1]*factor];
+      }
+      /* end chess code */
+
+    </script>
+
+    <script type="text/javascript">
+    describe("Positions Vectors and Sides, oh my", function(){
+      it("are indexed a1-h8", function(){
+        var p = new Position('a1');
+        expect(p.file).toEqual('a');
+        expect(p.rank).toEqual('1');
+        expect(p.fileidx).toEqual( 0 );
+        expect(p.rankidx).toEqual( 0 );
+        expect(p.toString()).toEqual('a1');
+
+        var p = new Position('h8');
+        expect(p.file).toEqual('h');
+        expect(p.rank).toEqual('8');
+        expect(p.fileidx).toEqual( 7 );
+        expect(p.rankidx).toEqual( 7 );
+        expect(p.toString()).toEqual('h8');
+      });
+      it("Can be created from indices", function(){
+        var p = new Position(null,null,0,0);
+        expect(p.file).toEqual('a');
+        expect(p.rank).toEqual('1');
+        expect(p.fileidx).toEqual( 0 );
+        expect(p.rankidx).toEqual( 0 );
+        expect(p.toString()).toEqual('a1');
+
+        var p = new Position(null,null,7,7);
+        expect(p.file).toEqual('h');
+        expect(p.rank).toEqual('8');
+        expect(p.fileidx).toEqual( 7 );
+        expect(p.rankidx).toEqual( 7 );
+        expect(p.toString()).toEqual('h8');
+      })
+      
+      it("calls the vector from d2 to d4 [0,2]", function(){
+        var d2 = new Position('d2'), d4 = new Position('d4');
+        expect(d4.minus(d2)).toEqual([0,2]);
+      });
+      it("Asserts that d2 + [0,2] is d4", function(){
+        var d2 = new Position('d2'), d4 = new Position('d4');
+        expect(d2.plus([0,2])).toEqual( d4 );
+      });
+      it("Asserts that d2 + [1,1] is e3", function(){
+        var d2 = new Position('d2'), e3 = new Position('e3');
+        expect(d2.plus([1,1])).toEqual( e3 );
+      });
+      it("Asserts that a8 is colored white (aka 'white on right' rule)", function(){
+        var a8 = new Position('a8');
+        var a1 = new Position('a1');
+        expect(a8.color()).toEqual('white');
+        expect(a1.color()).toEqual('black');
+      });
+      it("Asserts that black is the opposite of white", function(){
+        expect('white'.opposite()).toEqual('black');
+        expect('black'.opposite()).toEqual('white');
+      });
+    });
+    
+    describe("The Board", function(){
+      it("calls the advance direction of white [0,1]", function(){
+        expect(Board.advanceVector('white')).toEqual([0,1]);
+      });
+      it("calls the advance direction of black [0,-1]", function(){
+        expect(Board.advanceVector('black')).toEqual([0, -1]);
+      });
+      it("has a configurable size, set to 8 for chess", function(){
+        expect(Board.xSize).toEqual(8);
+        expect(Board.ySize).toEqual(8);
+      });
+      it("detects invalid positions", function(){
+        expect(Board.validPosition('a1')).toEqual(true);
+        expect(Board.validPosition('d2')).toEqual(true);
+        expect(Board.validPosition('h8')).toEqual(true);
+
+        expect(Board.validPosition('B8')).toEqual(false);
+        expect(Board.validPosition('a9')).toEqual(false);
+        expect(Board.validPosition('Q11')).toEqual(false);
+        expect(Board.validPosition('')).toEqual(false);
+        expect(Board.validPosition(null)).toEqual(false);
+        expect(Board.validPosition(undefined)).toEqual(false);
+      });
+
+      it("knows either black or white is next to move", function(){
+        var b = new Board();
+        expect(b.turnToMove('white')).toEqual(true);
+      });
+      
+      it("knows whether white/black king/queenside castling is available", function(){
+        var b = new Board();
+        //initially true, until a move makes it so (to be implemented later, just a field now)
+        expect(b.castleAvailableWhiteKing).toEqual(true);
+        expect(b.castleAvailableWhiteQueen).toEqual(true);
+        expect(b.castleAvailableBlackKing).toEqual(true);
+        expect(b.castleAvailableBlackQueen).toEqual(true);
+        //can change any of them
+        b.castleAvailableWhiteKing = false;
+        expect( b.castleAvailableWhiteKing ).toEqual(false);
+      });
+      it("has or does not have an enpassant square", function(){
+        var b = new Board();
+        expect(b.enPassantSquare).toBeUndefined();
+        b.enPassantSquare = 'e4';
+        expect(b.enPassantSquare).toEqual('e4');
+      });
+      it("can be initialized with an index-piece map", function(){
+        var r = new Rook('white');
+        var b = new Board({a1: r});
+        expect(b.a1).toEqual(r)
+      });
+      it("can return the position of a piece on it", function(){
+        var r = new Rook('white');
+        var b = new Board({a1: r});
+        var p = b.indexOf(r);
+        expect(p.toString()).toEqual('a1');
+        expect(b.indexOf(new Rook('black'))).toBeUndefined();
+      });
+      it("can return the keys in whites rendering order", function(){
+        var b = new Board();
+        var keys = b.keysFromSide('white');
+        expect(keys).toEqual([
+          'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8',
+          'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7',
+          'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6', 'h6',
+          'a5', 'b5', 'c5', 'd5', 'e5', 'f5', 'g5', 'h5',
+          'a4', 'b4', 'c4', 'd4', 'e4', 'f4', 'g4', 'h4',
+          'a3', 'b3', 'c3', 'd3', 'e3', 'f3', 'g3', 'h3',
+          'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2',
+          'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1' ]);
+      });
+      it("can return the keys in blacks rendering order", function(){
+        var b = new Board();
+        var keys = b.keysFromSide('black');
+        expect(keys).toEqual([
+          'h1', 'g1', 'f1', 'e1', 'd1', 'c1', 'b1', 'a1',
+          'h2', 'g2', 'f2', 'e2', 'd2', 'c2', 'b2', 'a2',
+          'h3', 'g3', 'f3', 'e3', 'd3', 'c3', 'b3', 'a3',
+          'h4', 'g4', 'f4', 'e4', 'd4', 'c4', 'b4', 'a4',
+          'h5', 'g5', 'f5', 'e5', 'd5', 'c5', 'b5', 'a5',
+          'h6', 'g6', 'f6', 'e6', 'd6', 'c6', 'b6', 'a6',
+          'h7', 'g7', 'f7', 'e7', 'd7', 'c7', 'b7', 'a7',
+          'h8', 'g8', 'f8', 'e8', 'd8', 'c8', 'b8', 'a8' ]);
+      });
+    });
+
+    describe("Pieces - Any", function(){
+      it("has a side", function(){
+        var p = new Piece();
+        p.side = 'white';
+        expect(p.side).toEqual('white');
+      });
+    });
+    
+    describe("Pieces - Rook", function(){
+      it("has a side", function(){
+        var r = new Rook('white');
+        expect(r.side).toEqual('white');
+      });
+      it("has the liberties [+/-1, 0], [0, +-1]", function(){
+        var r = new Rook();
+        expect(r.liberties).toEqual( [[1,0],[-1,0],[0,1],[0,-1]] );
+      });
+      it("has the board length as its maximum move length", function(){
+        var r = new Rook();
+        expect(r.maxMoveLength).toEqual(Board.xSize);
+      });
+    });
+
+    describe("Pieces - Pawn", function(){
+      it("has a side", function(){
+        var p = new Pawn('white');
+        expect(p.side).toEqual('white');
+      });
+      it("can advance by 1 in 3 directions (the ChessJudge later refines this)", function(){
+        var p = new Pawn('white');
+        expect(p.liberties).toEqual([[ -1, 1 ], [ 0, 1 ], [ 1, 1 ]] );
+        var p = new Pawn('black');
+        expect(p.liberties).toEqual([[ -1, -1 ], [ 0, -1 ], [ 1, -1 ]]);
+        expect(p.maxMoveLength).toEqual(1);
+      });
+    });    
+    
+    describe("The Chess Judge", function(){
+      it("has a ruleset", function(){
+        //todo
+      });
+      
+      it("knows a piece's open moves on an open board", function(){
+        var r = new Rook();
+        var b = new Board({a1: r});
+        var j = new ChessJudge();
+
+        var moves = j.openMoves(r, b);
+        expect(moves).toEqual([ 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8' ]);
+      });
+      
+      it("subtracts occupied extrema from the open moves list", function(){
+        var r = new Rook();
+        var b = new Board({a1: r, a8: new Rook()});
+        var j = new ChessJudge();
+
+        var moves = j.openMoves(r, b);
+        expect(moves).toEqual([ 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7']);
+      });
+      
+      it("subtracts occupied, and positions beyond them from the open moves list", function(){
+        var r = new Rook();
+        var b = new Board({a1: r, a3: new Rook()});
+        var j = new ChessJudge();
+
+        var moves = j.openMoves(r, b);
+        expect(moves).toEqual([ 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'a2']);
+      });
+
+      it("implements same-color blocking", function(){
+        var r = new Rook('white');
+        var b = new Board({a1: r, a7: new Rook('white')});
+        var j = new ChessJudge();
+
+        var moves = j.unblockedMoves(r, b);
+        expect(moves).toEqual([ 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'a2', 'a3', 'a4', 'a5', 'a6']);
+      });
+
+      it("allows opposite-color capture", function(){
+        var r = new Rook('white');
+        var b = new Board({a1: r, a7: new Rook('black')});
+        var j = new ChessJudge();
+
+        var moves = j.unblockedMoves(r, b);
+        expect(moves).toEqual([ 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7']);
+      });
+      
+      it("denies a pawn forward-capture (he must move off his file to capture)", function(){
+        var pw = new Pawn('white');
+        var pb = new Pawn('black');
+        var b = new Board({
+          d2: pw,
+          d3: pb
+        });
+        var j = new ChessJudge();
+
+        var moves = j.unblockedMoves(pw, b);
+        expect(moves).toEqual([]);
+      });
+
+      it("allows a pawn its forward-diagonal capture", function(){
+        var pw = new Pawn('white');
+        var pb = new Pawn('black');
+        var b = new Board({
+          d2: pw,
+          e3: pb
+        });
+        var j = new ChessJudge();
+
+        var moves = j.unblockedMoves(pw, b);
+        expect(moves).toEqual(['d3', 'e3']);
+      });
+      
+      it("denies a pawn a diagonal move (unless capturing)", function(){
+        var pw = new Pawn('white');
+        var b = new Board({
+          d2: pw
+        });
+        var j = new ChessJudge();
+
+        var moves = j.unblockedMoves(pw, b);
+        expect(moves).toEqual(['d3']);
+      });
+    });
+    
+    /*
+       Board state
+         - See FEN - the following fields define the complete state of a game, for resume purposes
+         - Pieces positions, who to move, castling avail w/b k/q, ep target, 1/2 move clock, 1 move clock
+         
+       Liberties 
+         - piece.liberties(board): those moves a piece is capable of regardless of game state
+           - board.positionOf(piece) must be defined
+           - passing board allows answer to be relative to a forward direction / the boards edges
+         - example: for a pawn, only the three forward single-steps are liberties
+         
+       Blocking/Capturing rules
+         - piece.blocked?(board, from, to)
+         - eg. a piece's 'to' is blocked by its own color, can capture if the other color
+         - except a pawn, whose diagonal liberties are 'blocked' by emptiness also, and whose forward liberty is blocked by anything
+         - intervening pieces of any color matter, except for knights whose crooked liberties define no intervening pieces
+         
+       Special cases
+         - for a pawn, moving double is an option if on its home rank, but it must set EP on the board
+         - 
+    */
+
+    /*
+      describe("", function(){
+        it("", function(){
+          expect(hugPanda()).toEqual("");
+        });
+      });
+    */  
+
+    describe("Space Kitty", function(){
+      it("meows, of course", function(){
+        expect( spaceKitty()).toEqual("meow!");
+      });
+    });
+
+    </script>
+    
+    <div id='viewport'>
+      <div class='chess-board'/>
+    </div>
+    
+    <script type='text/javascript'>
+      $('.chess-board').append( 
+        new BoardRenderer(
+          new Board(
+            {
+              a8: new Rook('black'),
+              h8: new Rook('black'),
+              a1: new Rook('white'),
+              h1: new Rook('white')
+            })).render() );
+    </script>
+  </body>
+</html>
