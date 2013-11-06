@@ -13,8 +13,8 @@ Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
 
-  config.fixture_path = Dir.join(RAILS_ROOT,  'test/fixtures')
-  config.global_fixtures = :all
+  config.fixture_path = RAILS_ROOT + '/test/fixtures/'
+  config.global_fixtures = :all # :matches, :players, :moves, :users, :fbusers
 
   # == Mock Framework
   #
