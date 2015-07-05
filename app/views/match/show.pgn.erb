@@ -1,7 +1,0 @@
-[Event "Match"]
-[White "<%= match.white.name rescue '' %>"]
-[Black "<%= match.black.name rescue '' %>"]
-
-<% match.moves.each_with_index do |m, i| -%>
-<%=  (i%2)==0 ? ( ((i+2)/2).to_s + ". " + m.notation ).ljust(10) : "#{m.notation}\n" -%>
-<% end %>
